@@ -1,0 +1,14 @@
+[tool.mypy]
+python_version = 3.8
+disallow_untyped_defs = true
+ignore_missing_imports = true
+
+[tool.isort]
+profile = "black"
+line_length = 100
+
+[tool.flake]
+max-line-length = 100
+
+[tool.black]
+line-length = 100
