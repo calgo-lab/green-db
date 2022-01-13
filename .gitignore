@@ -1,0 +1,12 @@
+# Editor
+.DS_Store
+.vscode
+.linked_env
+
+# Python
+*.pyc
+.mypy_cache
+__pycache__
+*.iml
+.[v]env
+.ipynb_checkpoints
