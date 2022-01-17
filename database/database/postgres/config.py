@@ -29,7 +29,7 @@ GREEN_DB_POSTGRES_PORT = os.environ.get("POSTGRES_PORT", None)
 GREEN_DB_POSTGRES_URL = f"postgresql://{GREEN_DB_POSTGRES_USER}:{GREEN_DB_POSTGRES_PASSWORD}@{GREEN_DB_POSTGRES_HOST}:{GREEN_DB_POSTGRES_PORT}/{GREEN_DB_DB_NAME}"  # noqa
 
 
-############################
+##########################
 ###### Dependencies ###### # noqa
 POSTGRES_URL_FOR = {
     SCRAPING_DB_NAME: SCRAPING_POSTGRES_URL,

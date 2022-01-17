@@ -3,8 +3,8 @@ from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.sql.sqltypes import INTEGER, TEXT, TIMESTAMP, VARCHAR
 
 from database.domain import ScrapedPage
-from database.postgres import PostgresBaseClass
-from database.postgres.config import SCRAPING_DB_OTTO_TABLE_NAME, SCRAPING_DB_ZALANDO_TABLE_NAME
+from . import PostgresBaseClass
+from .config import SCRAPING_DB_OTTO_TABLE_NAME, SCRAPING_DB_ZALANDO_TABLE_NAME
 
 
 class __Scraping:

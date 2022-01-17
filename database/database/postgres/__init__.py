@@ -5,7 +5,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Session, sessionmaker
 
-from database.postgres.config import POSTGRES_URL_FOR
+from .config import POSTGRES_URL_FOR
 
 logger = getLogger(__name__)
 
