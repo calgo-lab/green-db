@@ -1,14 +1,20 @@
-from typing import Any, List, Optional
+from datetime import datetime
+from enum import Enum
+from typing import List, Optional
 
 from pydantic import BaseModel, conlist
 
 
+class PageType(str, Enum):
+    SERP = "SERP"
+    PRODUCT = "PRODUCT"
+
+
 class ScrapedPage(BaseModel):
-    shop: str
-    start_timestamp: str
+    start_timestamp: datetime
     url: str
     html: str
-    page_type: str
+    page_type: PageType
     category: str
     meta_information: dict
 
@@ -16,10 +22,14 @@ class ScrapedPage(BaseModel):
         orm_mode = True
 
 
+class ScrapedPageGet(ScrapedPage):
+    shop: str
+
+
 class Product(BaseModel):
     url: str
     shop: str
-    categories: List[str]
+    category: str
     name: str
     description: str
     brand: str
