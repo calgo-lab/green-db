@@ -10,6 +10,10 @@ class PageType(str, Enum):
     PRODUCT = "PRODUCT"
 
 
+class CurrencyType(str, Enum):
+    EUR = "EUR"
+
+
 class ScrapedPage(BaseModel):
     start_timestamp: datetime
     url: str
@@ -27,6 +31,7 @@ class ScrapedPageGet(ScrapedPage):
 
 
 class Product(BaseModel):
+    start_timestamp: datetime
     url: str
     merchant: str
     category: str
@@ -35,7 +40,7 @@ class Product(BaseModel):
     brand: str
     sustainability_labels: conlist(str, min_items=1)
     price: float
-    currency: str
+    currency: CurrencyType
     image_urls: List[str]
 
     color: Optional[str]
