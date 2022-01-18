@@ -23,12 +23,12 @@ class ScrapedPage(BaseModel):
 
 
 class ScrapedPageGet(ScrapedPage):
-    shop: str
+    from_table: str
 
 
 class Product(BaseModel):
     url: str
-    shop: str
+    merchant: str
     category: str
     name: str
     description: str

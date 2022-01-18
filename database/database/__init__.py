@@ -17,12 +17,12 @@ logger = getLogger(__name__)
 
 
 class Scraping:
-    def __init__(self, shop: str):
-        if shop not in SCRAPING_DB_CLASS_FOR.keys():
-            logger.error(f"Can't handle shop: '{shop}'")
+    def __init__(self, table: str):
+        if table not in SCRAPING_DB_CLASS_FOR.keys():
+            logger.error(f"Can't handle table: '{table}'")
 
-        self.__shop = shop
-        self.__database_class = SCRAPING_DB_CLASS_FOR[self.__shop]
+        self.__table = table
+        self.__database_class = SCRAPING_DB_CLASS_FOR[self.__table]
         self.__session_factory = get_session_factory(SCRAPING_DB_NAME)
 
         bootstrap_tables(SCRAPING_DB_NAME)
@@ -40,4 +40,4 @@ class Scraping:
                 .first()
             )
 
-        return ScrapedPageGet(shop=self.__shop, **scraped_page.dict())
+        return ScrapedPageGet(from_table=self.__table, **scraped_page.dict())
