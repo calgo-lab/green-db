@@ -1,3 +1,6 @@
+from redis import Redis
+from rq import Connection, Queue, Retry, Worker
+
 from core.constants import (
     RQ_QUEUE_EXTRACT,
     RQ_QUEUE_SCRAPING,
@@ -6,8 +9,6 @@ from core.constants import (
 )
 from database.connection import Scraping
 from database.domain import ScrapedPage
-from redis import Redis
-from rq import Connection, Queue, Retry, Worker
 
 from .config import REDIS_HOST, REDIS_PASSWORD, REDIS_PORT, REDIS_USER
 

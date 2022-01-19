@@ -1,12 +1,13 @@
 from datetime import datetime
 from typing import Dict, List, Type
 
+from sqlalchemy import ARRAY, INTEGER, JSON, NUMERIC, TEXT, TIMESTAMP, VARCHAR, Column
+
 from core.constants import (
     TABLE_NAME_GREEN_DB,
     TABLE_NAME_SCRAPING_OTTO,
     TABLE_NAME_SCRAPING_ZALANDO,
 )
-from sqlalchemy import ARRAY, INTEGER, JSON, NUMERIC, TEXT, TIMESTAMP, VARCHAR, Column
 
 # TODO: Here decide which database to use
 from .postgres import BaseTable, bootstrap_tables, get_session_factory
@@ -16,6 +17,7 @@ class __TableMixin:
 
     id = Column(INTEGER, nullable=False, autoincrement=True, primary_key=True)
     start_timestamp = Column(TIMESTAMP, nullable=False)
+    merchant = Column(TEXT, nullable=False)
     category = Column(TEXT, nullable=False)
     url = Column(TEXT, nullable=False)
 
@@ -64,7 +66,6 @@ SCRAPING_TABLE_CLASS_FOR: Dict[str, Type[ScrapingTable]] = {
 class GreenDBTable(BaseTable, __TableMixin):
     __tablename__ = TABLE_NAME_GREEN_DB
 
-    merchant = Column(TEXT, nullable=False)
     name = Column(TEXT, nullable=False)
     description = Column(TEXT, nullable=False)
     brand = Column(TEXT, nullable=False)

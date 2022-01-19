@@ -1,7 +1,8 @@
-from core.constants import RQ_QUEUE_EXTRACT, TABLE_NAME_SCRAPING_OTTO, TABLE_NAME_SCRAPING_ZALANDO
-from database.connection import GreenDB, Scraping
 from redis import Redis
 from rq import Connection, Worker
+
+from core.constants import RQ_QUEUE_EXTRACT, TABLE_NAME_SCRAPING_OTTO, TABLE_NAME_SCRAPING_ZALANDO
+from database.connection import GreenDB, Scraping
 
 from .config import REDIS_HOST, REDIS_PASSWORD, REDIS_PORT, REDIS_USER
 
