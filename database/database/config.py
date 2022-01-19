@@ -1,0 +1,6 @@
+SCRAPING_DB_NAME = "scraping"
+SCRAPING_DB_ZALANDO_TABLE_NAME = "zalando"
+SCRAPING_DB_OTTO_TABLE_NAME = "otto"
+
+GREEN_DB_DB_NAME = "green-db"
+GREEN_DB_TABLE_NAME = "green-db"
