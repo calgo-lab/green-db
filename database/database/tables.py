@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List
+from typing import Dict, List, Type
 
 from sqlalchemy import ARRAY, INTEGER, JSON, NUMERIC, TEXT, TIMESTAMP, VARCHAR, Column
 
@@ -38,21 +38,21 @@ class __TableMixin:
         return f"{self.__class__.__name__}({', '.join(column_values_string)})"
 
 
-class __BaseScrapingTable(__TableMixin):
+class ScrapingTable(__TableMixin):
     html = Column(TEXT, nullable=False)
     page_type = Column(VARCHAR(length=10), nullable=False)
     meta_information = Column(JSON, nullable=True)
 
 
-class ZalandoScrapingTable(BaseTable, __BaseScrapingTable):
+class ZalandoScrapingTable(BaseTable, ScrapingTable):
     __tablename__ = SCRAPING_DB_ZALANDO_TABLE_NAME
 
 
-class OTTOScrapingTable(BaseTable, __BaseScrapingTable):
+class OTTOScrapingTable(BaseTable, ScrapingTable):
     __tablename__ = SCRAPING_DB_OTTO_TABLE_NAME
 
 
-SCRAPING_TABLE_CLASS_FOR = {
+SCRAPING_TABLE_CLASS_FOR: Dict[str, Type[ScrapingTable]] = {
     SCRAPING_DB_ZALANDO_TABLE_NAME: ZalandoScrapingTable,
     SCRAPING_DB_OTTO_TABLE_NAME: OTTOScrapingTable,
 }
