@@ -67,6 +67,7 @@ class GreenDBTable(BaseTable, __TableMixin):
     brand = Column(TEXT, nullable=False)
     sustainability_labels = Column(ARRAY(TEXT), nullable=False)
     price = Column(NUMERIC, nullable=False)
+    currency = Column(TEXT, nullable=False)
     image_urls = Column(ARRAY(TEXT), nullable=False)
 
     color = Column(TEXT, nullable=True)
