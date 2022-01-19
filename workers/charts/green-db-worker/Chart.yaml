@@ -1,0 +1,6 @@
+apiVersion: v2
+name: green-db-worker
+description: A Helm chart to deploy green-db-worker on Kubernetes
+type: application
+version: 0.1.0
+appVersion: "0.1.0"

@@ -1,0 +1,7 @@
+**.git
+**.mypy_cache
+**.venv
+**.vscode
+**build
+**__pycache__
+**project.egg_info

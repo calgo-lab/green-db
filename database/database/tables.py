@@ -3,7 +3,11 @@ from typing import Dict, List, Type
 
 from sqlalchemy import ARRAY, INTEGER, JSON, NUMERIC, TEXT, TIMESTAMP, VARCHAR, Column
 
-from .config import GREEN_DB_TABLE_NAME, SCRAPING_DB_OTTO_TABLE_NAME, SCRAPING_DB_ZALANDO_TABLE_NAME
+from core.constants import (
+    TABLE_NAME_GREEN_DB,
+    TABLE_NAME_SCRAPING_OTTO,
+    TABLE_NAME_SCRAPING_ZALANDO,
+)
 
 # TODO: Here decide which database to use
 from .postgres import BaseTable, bootstrap_tables, get_session_factory
@@ -13,6 +17,7 @@ class __TableMixin:
 
     id = Column(INTEGER, nullable=False, autoincrement=True, primary_key=True)
     start_timestamp = Column(TIMESTAMP, nullable=False)
+    merchant = Column(TEXT, nullable=False)
     category = Column(TEXT, nullable=False)
     url = Column(TEXT, nullable=False)
 
@@ -45,23 +50,22 @@ class ScrapingTable(__TableMixin):
 
 
 class ZalandoScrapingTable(BaseTable, ScrapingTable):
-    __tablename__ = SCRAPING_DB_ZALANDO_TABLE_NAME
+    __tablename__ = TABLE_NAME_SCRAPING_ZALANDO
 
 
 class OTTOScrapingTable(BaseTable, ScrapingTable):
-    __tablename__ = SCRAPING_DB_OTTO_TABLE_NAME
+    __tablename__ = TABLE_NAME_SCRAPING_OTTO
 
 
 SCRAPING_TABLE_CLASS_FOR: Dict[str, Type[ScrapingTable]] = {
-    SCRAPING_DB_ZALANDO_TABLE_NAME: ZalandoScrapingTable,
-    SCRAPING_DB_OTTO_TABLE_NAME: OTTOScrapingTable,
+    TABLE_NAME_SCRAPING_ZALANDO: ZalandoScrapingTable,
+    TABLE_NAME_SCRAPING_OTTO: OTTOScrapingTable,
 }
 
 
 class GreenDBTable(BaseTable, __TableMixin):
-    __tablename__ = GREEN_DB_TABLE_NAME
+    __tablename__ = TABLE_NAME_GREEN_DB
 
-    merchant = Column(TEXT, nullable=False)
     name = Column(TEXT, nullable=False)
     description = Column(TEXT, nullable=False)
     brand = Column(TEXT, nullable=False)
