@@ -81,12 +81,12 @@ class Scraping(Connection):
 
     def write_scraped_page(self, scraped_page: ScrapedPage) -> ScrapingTable:
         with self._session_factory() as db_session:
-            page = self._database_class(**scraped_page.dict())
-            db_session.add(page)
+            db_scraped_page = self._database_class(**scraped_page.dict())
+            db_session.add(db_scraped_page)
             db_session.commit()
-            db_session.refresh(page)
+            db_session.refresh(db_scraped_page)
 
-        return page
+        return db_scraped_page
 
     def get_scraped_page(self, id: int) -> ScrapedPageGet:
         with self._session_factory() as db_session:
