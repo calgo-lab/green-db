@@ -128,13 +128,17 @@ class GreenDB(Connection):
     def __init__(self):
         super().__init__(GreenDBTable, GREEN_DB_DB_NAME)
 
+    def write_product(self, product: Product) -> GreenDBTable:
+        with self._session_factory() as db_session:
+            db_product = self._database_class(**product.dict())
+            db_session.add(db_product)
+            db_session.commit()
+            db_session.refresh(db_product)
+
+        return db_product
+
     def get_product(self, id: int) -> Product:
         with self._session_factory() as db_session:
             return Product.from_orm(
                 db_session.query(self._database_class).filter(self._database_class.id == id).first()
             )
-
-    def write_product(self, product: Product) -> None:
-        with self._session_factory() as db_session:
-            db_session.add(self._database_class(**product.dict()))
-            db_session.commit()
