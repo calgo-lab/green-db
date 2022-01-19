@@ -6,7 +6,7 @@ from sqlalchemy import Column
 from sqlalchemy.orm import Query, Session
 
 from .config import GREEN_DB_DB_NAME, SCRAPING_DB_NAME
-from .domain import Product, ScrapedPage, ScrapedPageGet
+from .domain import Product, ScrapedPage
 from .tables import (
     SCRAPING_TABLE_CLASS_FOR,
     GreenDBTable,
@@ -87,13 +87,12 @@ class Scraping(Connection):
 
         return db_scraped_page
 
-    def get_scraped_page(self, id: int) -> ScrapedPageGet:
+    def get_scraped_page(self, id: int) -> ScrapedPage:
         with self._session_factory() as db_session:
-            scraped_page = ScrapedPage.from_orm(
+            return ScrapedPage.from_orm(
                 db_session.query(self._database_class).filter(self._database_class.id == id).first()
             )
 
-        return ScrapedPageGet(from_table=self.__table, **scraped_page.dict())
     def get_latest_timestamp(self) -> datetime:
         with self._session_factory() as db_session:
             return self.__get_latest_timestamp(db_session)
@@ -112,7 +111,7 @@ class Scraping(Connection):
                 batch_size=batch_size,
             )
 
-    def get_latest_scraped_pages(self, batch_size=1000) -> Iterator[ScrapedPageGet]:
+    def get_latest_scraped_pages(self, batch_size: int = 1000) -> Iterator[ScrapedPage]:
         return self.get_scraped_pages_for_timestamp(
             self.get_latest_timestamp(), batch_size=batch_size
         )

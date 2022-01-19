@@ -16,6 +16,7 @@ class CurrencyType(str, Enum):
 
 class ScrapedPage(BaseModel):
     start_timestamp: datetime
+    merchant: str
     url: str
     html: str
     page_type: PageType
@@ -24,10 +25,6 @@ class ScrapedPage(BaseModel):
 
     class Config:
         orm_mode = True
-
-
-class ScrapedPageGet(ScrapedPage):
-    from_table: str
 
 
 class Product(BaseModel):
