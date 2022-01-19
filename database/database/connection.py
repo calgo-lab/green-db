@@ -35,6 +35,18 @@ class Connection:
         return_class: Type[Product] | Type[ScrapedPage],
         batch_size: int = 1000,
     ) -> Iterator[BaseModel]:
+        """
+        Idea from here: https://github.com/sqlalchemy/sqlalchemy
+
+        Args:
+            query (Query): [description]
+            id_column (Column): [description]
+            return_class (Type[Product]): [description]
+            batch_size (int, optional): [description]. Defaults to 1000.
+
+        Yields:
+            Iterator[BaseModel]: [description]
+        """
 
         last_id = None
 
