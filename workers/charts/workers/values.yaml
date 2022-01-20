@@ -1,4 +1,4 @@
-# Default values for green-db-worker.
+# Default values for workers.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
@@ -10,7 +10,10 @@ image:
   # Overrides the image tag whose default is the chart appVersion.
   tag:
 
-queue:
+config:
+  queues: # defined in 'core' package 'constants.py' prefix: 'WORKER_QUEUE_<...>'
+    - scraping
+    - extract
 
 env:
   - name: TZ

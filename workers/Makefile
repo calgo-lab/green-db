@@ -1,4 +1,4 @@
-DOCKER_IMAGE_NAME=calgo-lab/green-db-worker
+DOCKER_IMAGE_NAME=calgo-lab/workers
 PACKAGE_VERSION=$(shell poetry version -s)
 
 .PHONY: build-docker
