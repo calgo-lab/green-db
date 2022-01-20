@@ -1,0 +1,39 @@
+[tool.poetry]
+name = "scraping"
+version = "0.1.0"
+description = ""
+authors = ["Sebastian Jäger <message@sebastian-jaeger.me>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+core = {path = "../core", develop = true}
+message_queue = {path = "../message-queue", develop = true}
+Scrapy = "^2.5.1"
+scrapy-splash = "^0.8.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+flake8 = "^3.9.2"
+mypy = "^0.910"
+isort = "^5.10.1"
+black = "^21.12b0"
+scrapyd-client = "^1.2.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.mypy]
+python_version = 3.9
+disallow_untyped_defs = true
+ignore_missing_imports = true
+
+[tool.isort]
+profile = "black"
+line_length = 100
+
+[tool.flake]
+max-line-length = 100
+
+[tool.black]
+line-length = 100
