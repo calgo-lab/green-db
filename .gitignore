@@ -10,3 +10,6 @@ __pycache__
 *.iml
 .[v]env
 .ipynb_checkpoints
+dist
+build
+project.egg-info
