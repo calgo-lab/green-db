@@ -6,6 +6,7 @@ authors = ["Sebastian Jäger <message@sebastian-jaeger.me>"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
+pydantic = "^1.9.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
