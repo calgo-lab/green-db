@@ -4,10 +4,11 @@ from datetime import datetime
 from logging import getLogger
 from typing import Dict, Iterator, List, Optional, Union
 
-from core.domain import PageType, ScrapedPage
 from message_queue import MessageQueue
 from scrapy import Spider
-from scrapy_splash import SplashRequest, SplashJsonResponse
+from scrapy_splash import SplashJsonResponse, SplashRequest
+
+from core.domain import PageType, ScrapedPage
 
 from ..splash import scroll_end_of_page_script
 

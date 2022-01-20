@@ -1,3 +1,7 @@
+from message_queue import MessageQueue
+from redis import Redis
+from rq import Connection, Worker
+
 from core.constants import (
     TABLE_NAME_SCRAPING_OTTO,
     TABLE_NAME_SCRAPING_ZALANDO,
@@ -6,9 +10,6 @@ from core.constants import (
 from core.domain import ScrapedPage
 from core.redis import REDIS_HOST, REDIS_PASSWORD, REDIS_PORT, REDIS_USER
 from database.connection import Scraping
-from message_queue import MessageQueue
-from redis import Redis
-from rq import Connection, Worker
 
 CONNECTION_FOR_TABLE = {
     TABLE_NAME_SCRAPING_ZALANDO: Scraping(TABLE_NAME_SCRAPING_ZALANDO),

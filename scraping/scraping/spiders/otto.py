@@ -3,9 +3,9 @@ from logging import getLogger
 from typing import Iterator
 from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 
-from ..splash import scroll_end_of_page_script
-from scrapy_splash import SplashRequest, SplashJsonResponse
+from scrapy_splash import SplashJsonResponse, SplashRequest
 
+from ..splash import scroll_end_of_page_script
 from ._base import BaseSpider
 
 logger = getLogger(__name__)

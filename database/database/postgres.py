@@ -1,6 +1,10 @@
 from logging import getLogger
 from typing import Callable, Iterator
 
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import Session, sessionmaker
+
 from core.postgres import (
     GREEN_DB_POSTGRES_HOST,
     GREEN_DB_POSTGRES_PASSWORD,
@@ -11,9 +15,6 @@ from core.postgres import (
     SCRAPING_POSTGRES_PORT,
     SCRAPING_POSTGRES_USER,
 )
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import Session, sessionmaker
 
 from .config import GREEN_DB_DB_NAME, SCRAPING_DB_NAME
 
