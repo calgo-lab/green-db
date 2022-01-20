@@ -1,6 +1,6 @@
 from argparse import ArgumentParser
 
-from workers.extraction import run as run_extraction
+from workers.extract import run as run_extract
 from workers.scraping import run as run_scraping
 
 if __name__ == "__main__":
@@ -11,9 +11,9 @@ if __name__ == "__main__":
     scraping_parser = subparsers.add_parser("scraping")
     scraping_parser.set_defaults(command_function=run_scraping)
 
-    # extraction
-    extraction_parser = subparsers.add_parser("extraction")
-    extraction_parser.set_defaults(command_function=run_extraction)
+    # extract
+    extract_parser = subparsers.add_parser("extract")
+    extract_parser.set_defaults(command_function=run_extract)
 
     args = parser.parse_args()
     args.command_function(
