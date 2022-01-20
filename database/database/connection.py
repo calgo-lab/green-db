@@ -5,8 +5,9 @@ from typing import Iterator, Type
 from sqlalchemy import Column
 from sqlalchemy.orm import Query, Session
 
+from core.domain import Product, ScrapedPage
+
 from .config import GREEN_DB_DB_NAME, SCRAPING_DB_NAME
-from .domain import Product, ScrapedPage
 from .tables import (
     SCRAPING_TABLE_CLASS_FOR,
     GreenDBTable,

@@ -1,4 +1,4 @@
-DOCKER_IMAGE_NAME=calgo-lab/workers
+DOCKER_IMAGE_NAME=calgo-lab/scrapyd
 PACKAGE_VERSION=$(shell poetry version -s)
 
 .PHONY: build-docker

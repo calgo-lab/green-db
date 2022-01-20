@@ -1,14 +1,14 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "green-db-worker.fullname" . }}
+  name: {{ include "splash.fullname" . }}
   labels:
-    {{- include "green-db-worker.labels" . | nindent 4 }}
+    {{- include "splash.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "green-db-worker.selectorLabels" . | nindent 6 }}
+      {{- include "splash.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -16,7 +16,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "green-db-worker.selectorLabels" . | nindent 8 }}
+        {{- include "splash.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -24,16 +24,38 @@ spec:
       {{- end }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      topologySpreadConstraints:
+      - maxSkew: 5
+        topologyKey: kubernetes.io/hostname
+        whenUnsatisfiable: DoNotSchedule
+        labelSelector:
+          matchLabels:
+            app.kubernetes.io/name: {{ .Chart.Name }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.config.maxTimeout }}
           args:
-          - {{ .Values.queue }}
+            - --max-timeout
+            - '{{ .Values.config.maxTimeout }}'
+          {{- end }}
           env:
             {{- toYaml .Values.env | nindent 12 }}
+          ports:
+            - name: http
+              containerPort: 8050
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

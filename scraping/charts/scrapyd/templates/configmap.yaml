@@ -1,0 +1,18 @@
+{{- if .Values.config }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "scrapyd.fullname" . }}-config-map
+  labels:
+    {{- include "scrapyd.labels" . | nindent 4 }}
+data:
+  .scrapyd.conf: |
+    [scrapyd]
+      {{- range $key, $val := .Values.config.scrapyd }}
+      {{ $key }}={{ $val }}
+      {{- end }}
+    [services]
+      {{- range $key, $val := .Values.config.services }}
+      {{ $key }}={{ $val }}
+      {{- end }}
+{{- end }}

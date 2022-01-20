@@ -1,4 +1,4 @@
-# Default values for green-db-worker.
+# Default values for scrapyd.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
@@ -10,20 +10,15 @@ image:
   # Overrides the image tag whose default is the chart appVersion.
   tag:
 
-queue:
+# creates the file: ~/.scrapyd.conf
+config:
+  scrapyd:
+    max_proc: 15 # should be set to the same value as splash's replicaCount
+  services: {}
 
 env:
   - name: TZ
     value: Europe/Berlin
-  - name: POSTGRES_HOST
-    value: postgres-postgresql
-  - name: POSTGRES_PORT
-    value: "5432"
-  - name: POSTGRES_PASSWORD
-    valueFrom:
-      secretKeyRef:
-        name: postgres-secret
-        key: postgresql-password
   - name: REDIS_HOST
     value: redis-master
   - name: REDIS_PORT
@@ -52,6 +47,10 @@ securityContext:
   # readOnlyRootFilesystem: true
   # runAsNonRoot: true
   # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 6800
 
 resources:
   {}

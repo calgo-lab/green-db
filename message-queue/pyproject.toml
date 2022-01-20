@@ -1,19 +1,17 @@
 [tool.poetry]
-name = "core"
+name = "message-queue"
 version = "0.1.0"
 description = ""
 authors = ["Sebastian Jäger <message@sebastian-jaeger.me>"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
-pydantic = "^1.9.0"
+core = {path = "../core", develop = true}
+redis = "^4.1.1"
+rq = "^1.10.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
-flake8 = "^3.9.2"
-mypy = "^0.910"
-isort = "^5.10.1"
-black = "^21.12b0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

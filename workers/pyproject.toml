@@ -8,6 +8,7 @@ authors = ["Sebastian Jäger <message@sebastian-jaeger.me>"]
 python = "^3.10"
 core = {path = "../core", develop = true}
 database = {path = "../database", develop = true}
+message_queue = {path = "../message-queue", develop = true}
 redis = "^4.1.1"
 rq = "^1.10.1"
 
