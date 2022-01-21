@@ -10,7 +10,7 @@ from core.constants import (
 )
 
 # TODO: Here decide which database to use
-from .postgres import BaseTable, bootstrap_tables, get_session_factory
+from .postgres import GreenDBBaseTable, ScrapingBaseTable, bootstrap_tables, get_session_factory
 
 
 class __TableMixin:
@@ -49,11 +49,11 @@ class ScrapingTable(__TableMixin):
     meta_information = Column(JSON, nullable=True)
 
 
-class ZalandoScrapingTable(BaseTable, ScrapingTable):
+class ZalandoScrapingTable(ScrapingBaseTable, ScrapingTable):
     __tablename__ = TABLE_NAME_SCRAPING_ZALANDO
 
 
-class OTTOScrapingTable(BaseTable, ScrapingTable):
+class OTTOScrapingTable(ScrapingBaseTable, ScrapingTable):
     __tablename__ = TABLE_NAME_SCRAPING_OTTO
 
 
@@ -63,7 +63,7 @@ SCRAPING_TABLE_CLASS_FOR: Dict[str, Type[ScrapingTable]] = {
 }
 
 
-class GreenDBTable(BaseTable, __TableMixin):
+class GreenDBTable(GreenDBBaseTable, __TableMixin):
     __tablename__ = TABLE_NAME_GREEN_DB
 
     name = Column(TEXT, nullable=False)
