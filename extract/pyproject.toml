@@ -1,0 +1,46 @@
+[tool.poetry]
+name = "extract"
+version = "0.1.0"
+description = ""
+license = "Apache-2.0"
+authors = ["Sebastian Jäger <message@sebastian-jaeger.me>"]
+readme = "README.md"
+repository = "https://github.com/calgo-lab/green-db"
+keywords = ["GreenDB", "database", "scraping", "sustainable", "green"]
+classifiers = [
+    "Framework :: Scrapy",
+    "Topic :: Database"
+]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+core = {path = "../core", develop = true}
+database = {path = "../database", develop = true}
+beautifulsoup4 = "^4.10.0"
+extruct = "^0.13.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+flake8 = "^3.9.2"
+mypy = "^0.910"
+isort = "^5.10.1"
+black = "^21.12b0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.mypy]
+python_version = 3.10
+disallow_untyped_defs = true
+ignore_missing_imports = true
+
+[tool.isort]
+profile = "black"
+line_length = 100
+
+[tool.flake]
+max-line-length = 100
+
+[tool.black]
+line-length = 100
