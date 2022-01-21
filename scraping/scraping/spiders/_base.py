@@ -28,7 +28,7 @@ class BaseSpider(Spider):
     ) -> None:
         # set default value
         self.request_timeout = getattr(self, "request_timeout", 0.5)
-        self.table: str = getattr(self, "table", self.name)  # type: ignore
+        self.table_name: str = getattr(self, "table_name", self.name)  # type: ignore
 
         super().__init__(name=self.name, **kwargs)
 
@@ -90,7 +90,7 @@ class BaseSpider(Spider):
             meta_information=self.meta_data,
         )
 
-        self.message_queue.add_scraping(table_name=self.table, scraped_page=scraped_page)
+        self.message_queue.add_scraping(table_name=self.table_name, scraped_page=scraped_page)
 
     def parse_PRODUCT(self, response: SplashJsonResponse) -> None:
         scraped_page = ScrapedPage(
@@ -103,7 +103,7 @@ class BaseSpider(Spider):
             meta_information=self.meta_data,
         )
 
-        self.message_queue.add_scraping(table_name=self.table, scraped_page=scraped_page)
+        self.message_queue.add_scraping(table_name=self.table_name, scraped_page=scraped_page)
 
     @abstractmethod
     def parse_SERP(self, response: SplashJsonResponse) -> Iterator[SplashRequest]:
