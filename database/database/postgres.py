@@ -5,6 +5,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Session, sessionmaker
 
+from core.constants import DATABASE_NAME_GREEN_DB, DATABASE_NAME_SCRAPING
 from core.postgres import (
     GREEN_DB_POSTGRES_HOST,
     GREEN_DB_POSTGRES_PASSWORD,
@@ -16,32 +17,30 @@ from core.postgres import (
     SCRAPING_POSTGRES_USER,
 )
 
-from .config import GREEN_DB_DB_NAME, SCRAPING_DB_NAME
-
 logger = getLogger(__name__)
 
 
 ScrapingBaseTable = declarative_base()
 GreenDBBaseTable = declarative_base()
 
-SCRAPING_POSTGRES_URL = f"postgresql://{SCRAPING_POSTGRES_USER}:{SCRAPING_POSTGRES_PASSWORD}@{SCRAPING_POSTGRES_HOST}:{SCRAPING_POSTGRES_PORT}/{SCRAPING_DB_NAME}"  # noqa
-GREEN_DB_POSTGRES_URL = f"postgresql://{GREEN_DB_POSTGRES_USER}:{GREEN_DB_POSTGRES_PASSWORD}@{GREEN_DB_POSTGRES_HOST}:{GREEN_DB_POSTGRES_PORT}/{GREEN_DB_DB_NAME}"  # noqa
+SCRAPING_POSTGRES_URL = f"postgresql://{SCRAPING_POSTGRES_USER}:{SCRAPING_POSTGRES_PASSWORD}@{SCRAPING_POSTGRES_HOST}:{SCRAPING_POSTGRES_PORT}/{DATABASE_NAME_SCRAPING}"  # noqa
+GREEN_DB_POSTGRES_URL = f"postgresql://{GREEN_DB_POSTGRES_USER}:{GREEN_DB_POSTGRES_PASSWORD}@{GREEN_DB_POSTGRES_HOST}:{GREEN_DB_POSTGRES_PORT}/{DATABASE_NAME_GREEN_DB}"  # noqa
 
 POSTGRES_URL_FOR = {
-    SCRAPING_DB_NAME: SCRAPING_POSTGRES_URL,
-    GREEN_DB_DB_NAME: GREEN_DB_POSTGRES_URL,
+    DATABASE_NAME_SCRAPING: SCRAPING_POSTGRES_URL,
+    DATABASE_NAME_GREEN_DB: GREEN_DB_POSTGRES_URL,
 }
 
 POSTGRES_BASE_CLASS_FOR = {
-    SCRAPING_DB_NAME: ScrapingBaseTable,
-    GREEN_DB_DB_NAME: GreenDBBaseTable,
+    DATABASE_NAME_SCRAPING: ScrapingBaseTable,
+    DATABASE_NAME_GREEN_DB: GreenDBBaseTable,
 }
 
 
 def __check_database(database_name: str) -> None:
     if database_name not in POSTGRES_URL_FOR.keys():
         logger.error(
-            f"'database' not valid! Need to be one of: {', '.join(POSTGRES_URL_FOR.keys())}"
+            f"'database_name' not valid! Need to be one of: {', '.join(POSTGRES_URL_FOR.keys())}"
         )
 
 

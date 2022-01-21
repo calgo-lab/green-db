@@ -5,9 +5,9 @@ from typing import Iterator, Type
 from sqlalchemy import Column
 from sqlalchemy.orm import Query, Session
 
+from core.constants import DATABASE_NAME_GREEN_DB, DATABASE_NAME_SCRAPING
 from core.domain import Product, ScrapedPage
 
-from .config import GREEN_DB_DB_NAME, SCRAPING_DB_NAME
 from .tables import (
     SCRAPING_TABLE_CLASS_FOR,
     GreenDBTable,
@@ -65,12 +65,12 @@ class Connection:
 
 
 class Scraping(Connection):
-    def __init__(self, table: str):
-        if table not in SCRAPING_TABLE_CLASS_FOR.keys():
-            logger.error(f"Can't handle table: '{table}'")
+    def __init__(self, table_name: str):
+        if table_name not in SCRAPING_TABLE_CLASS_FOR.keys():
+            logger.error(f"Can't handle table: '{table_name}'")
 
-        self.__table = table
-        super().__init__(SCRAPING_TABLE_CLASS_FOR[self.__table], SCRAPING_DB_NAME)
+        self.__table_name = table_name
+        super().__init__(SCRAPING_TABLE_CLASS_FOR[self.__table_name], DATABASE_NAME_SCRAPING)
 
     def __get_latest_timestamp(self, db_session: Session) -> datetime:
         return (
@@ -122,7 +122,7 @@ class Scraping(Connection):
 
 class GreenDB(Connection):
     def __init__(self):
-        super().__init__(GreenDBTable, GREEN_DB_DB_NAME)
+        super().__init__(GreenDBTable, DATABASE_NAME_GREEN_DB)
 
     def write_product(self, product: Product) -> GreenDBTable:
         with self._session_factory() as db_session:
