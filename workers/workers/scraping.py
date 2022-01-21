@@ -23,7 +23,7 @@ redis_connection = Redis(
 message_queue = MessageQueue()
 
 
-def run() -> None:
+def start() -> None:
     with Connection(redis_connection):
         worker = Worker(WORKER_QUEUE_SCRAPING)
         worker.work(with_scheduler=True)

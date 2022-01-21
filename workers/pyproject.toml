@@ -12,6 +12,9 @@ classifiers = [
     "Topic :: Database"
 ]
 
+[tool.poetry.scripts]
+worker = "workers.main:start"
+
 [tool.poetry.dependencies]
 python = "^3.10"
 core = {path = "../core", develop = true}
