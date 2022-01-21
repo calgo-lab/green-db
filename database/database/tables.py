@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Dict, List, Type
 
-from sqlalchemy import ARRAY, INTEGER, JSON, NUMERIC, TEXT, TIMESTAMP, VARCHAR, Column
+from sqlalchemy import ARRAY, BIGINT, INTEGER, JSON, NUMERIC, TEXT, TIMESTAMP, VARCHAR, Column
 
 from core.constants import (
     TABLE_NAME_GREEN_DB,
@@ -77,5 +77,5 @@ class GreenDBTable(GreenDBBaseTable, __TableMixin):
     color = Column(TEXT, nullable=True)
     size = Column(TEXT, nullable=True)
 
-    gtin = Column(INTEGER, nullable=True)
+    gtin = Column(BIGINT, nullable=True)
     asin = Column(TEXT, nullable=True)
