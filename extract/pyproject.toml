@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "workers"
+name = "extract"
 version = "0.1.0"
 description = ""
 license = "Apache-2.0"
@@ -12,17 +12,12 @@ classifiers = [
     "Topic :: Database"
 ]
 
-[tool.poetry.scripts]
-worker = "workers.main:start"
-
 [tool.poetry.dependencies]
 python = "^3.10"
 core = {path = "../core", develop = true}
 database = {path = "../database", develop = true}
-extract = {path = "../extract", develop = true}
-message_queue = {path = "../message-queue", develop = true}
-redis = "^4.1.1"
-rq = "^1.10.1"
+beautifulsoup4 = "^4.10.0"
+extruct = "^0.13.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
@@ -30,7 +25,7 @@ flake8 = "^3.9.2"
 mypy = "^0.910"
 isort = "^5.10.1"
 black = "^21.12b0"
-types-redis = "^4.1.10"
+types-requests = "^2.27.7"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
