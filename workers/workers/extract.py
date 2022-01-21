@@ -16,7 +16,7 @@ CONNECTION_FOR_TABLE = {
 }
 
 
-def run() -> None:
+def start() -> None:
     redis_connection = Redis(
         host=REDIS_HOST, port=REDIS_PORT, password=REDIS_PASSWORD, username=REDIS_USER
     )
