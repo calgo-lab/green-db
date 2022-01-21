@@ -36,6 +36,8 @@ class Connection:
         batch_size: int = 1000,
     ) -> Iterator[Product | ScrapedPage]:
         """
+        TODO: PyDoc ..
+
         Idea from here: https://github.com/sqlalchemy/sqlalchemy
 
         Args:
