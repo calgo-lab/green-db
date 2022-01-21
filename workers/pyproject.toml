@@ -2,7 +2,15 @@
 name = "workers"
 version = "0.1.0"
 description = ""
+license = "Apache-2.0"
 authors = ["Sebastian Jäger <message@sebastian-jaeger.me>"]
+readme = "README.md"
+repository = "https://github.com/calgo-lab/green-db"
+keywords = ["GreenDB", "database", "scraping", "sustainable", "green"]
+classifiers = [
+    "Framework :: Scrapy",
+    "Topic :: Database"
+]
 
 [tool.poetry.dependencies]
 python = "^3.10"
