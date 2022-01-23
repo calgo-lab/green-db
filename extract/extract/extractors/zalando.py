@@ -97,7 +97,7 @@ _LABEL_MAPPING = {
     "Cradle to Cradle Certified™ Gold": "CRADLE",
     "Hergestellt aus mindestens 50% nachhaltigerer Baumwolle": "OTHER",
     "Zum Wohl der Tierwelt": "OTHER",
-    "Hergestellt aus mindestens 20% innovativen ökologischen Alternativen zu fossilen Brennstoffen": "OTHER",  # type: ignore
+    "Hergestellt aus mindestens 20% innovativen ökologischen Alternativen zu fossilen Brennstoffen": "OTHER",  # noqa
     "Natürlich": "OTHER",
     "Hergestellt aus recyceltem Gummi": "OTHER",
     "Hergestellt aus LENZING™ TENCEL™, einem Eco-Material": "OTHER",

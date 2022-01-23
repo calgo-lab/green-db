@@ -10,7 +10,7 @@ from core.constants import (
 )
 
 # TODO: Here decide which database to use
-from .postgres import (  # type: ignore
+from .postgres import (  # noqa
     GreenDBBaseTable,
     ScrapingBaseTable,
     bootstrap_tables,
