@@ -2,7 +2,7 @@ import json
 from abc import abstractmethod
 from datetime import datetime
 from logging import getLogger
-from typing import Dict, Iterator, List, Optional, Union
+from typing import Any, Dict, Iterator, List, Optional, Union
 
 from message_queue import MessageQueue
 from scrapy import Spider
@@ -24,7 +24,7 @@ class BaseSpider(Spider):
         search_term: Optional[str] = None,
         meta_data: Optional[Union[str, Dict[str, str]]] = None,
         products_per_page: Optional[int] = None,
-        **kwargs
+        **kwargs: Dict[str, Any]
     ) -> None:
         # set default value
         self.request_timeout = getattr(self, "request_timeout", 0.5)
@@ -41,7 +41,7 @@ class BaseSpider(Spider):
             logger.error("It's necessary to set the Spider's 'name' attribute.")
 
         if meta_data:
-            meta_data = json.loads(meta_data) if type(meta_data) == str else meta_data  # type: ignore
+            meta_data = json.loads(meta_data) if type(meta_data) == str else meta_data  # type: ignore # noqa
 
             if type(meta_data) == dict:
                 self.meta_data = meta_data  # type: ignore
@@ -60,7 +60,7 @@ class BaseSpider(Spider):
                 "Argument 'start_urls' need to be of type list or (comma-separated) string."
             )
 
-        self.start_urls = start_urls.split(",") if type(start_urls) == str else start_urls  # type: ignore
+        self.start_urls = start_urls.split(",") if type(start_urls) == str else start_urls  # type: ignore # noqa
 
         # By default there will be no limit to the amount of products scraped per page
         self.products_per_page = int(products_per_page) if products_per_page else products_per_page

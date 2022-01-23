@@ -1,3 +1,4 @@
+from logging import getLogger
 from typing import Dict, List, Optional
 
 from bs4 import BeautifulSoup
@@ -7,6 +8,8 @@ from core.domain import Product
 
 from ..parse import JSON_LD, ParsedPage
 from ..utils import safely_return_first_element
+
+logger = getLogger(__name__)
 
 
 def extract_zalando(parsed_page: ParsedPage) -> Optional[Product]:
@@ -50,6 +53,7 @@ def extract_zalando(parsed_page: ParsedPage) -> Optional[Product]:
     except ValidationError as error:
         # TODO Handle Me!!
         # error contains relatively nice report why data ist not valid
+        logger.info(error)
         return None
 
 
@@ -93,7 +97,7 @@ _LABEL_MAPPING = {
     "Cradle to Cradle Certified™ Gold": "CRADLE",
     "Hergestellt aus mindestens 50% nachhaltigerer Baumwolle": "OTHER",
     "Zum Wohl der Tierwelt": "OTHER",
-    "Hergestellt aus mindestens 20% innovativen ökologischen Alternativen zu fossilen Brennstoffen": "OTHER",
+    "Hergestellt aus mindestens 20% innovativen ökologischen Alternativen zu fossilen Brennstoffen": "OTHER",  # noqa
     "Natürlich": "OTHER",
     "Hergestellt aus recyceltem Gummi": "OTHER",
     "Hergestellt aus LENZING™ TENCEL™, einem Eco-Material": "OTHER",

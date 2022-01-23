@@ -58,11 +58,12 @@ def get_session_factory(database_name: str) -> Callable[[], Session]:
     PostgresSession = sessionmaker(bind=create_engine(POSTGRES_URL_FOR[database_name]))
 
     def _get_postgres_session() -> Iterator[Session]:
-        _get_postgres_session.session_number += 1
+        _get_postgres_session.session_number += 1  # type: ignore
 
         session = PostgresSession()
         logger.debug(
-            f"Created new postgres session #{_get_postgres_session.session_number} for database '{database_name}'."
+            f"Created new postgres session #{_get_postgres_session.session_number} "  # type: ignore
+            f"for database '{database_name}'."
         )
 
         try:
@@ -70,9 +71,10 @@ def get_session_factory(database_name: str) -> Callable[[], Session]:
         finally:
             session.close()
             logger.debug(
-                f"Closed postgres session #{_get_postgres_session.session_number} for database '{database_name}'."
+                f"Closed postgres session #{_get_postgres_session.session_number} "  # type: ignore
+                f"or database '{database_name}'."
             )
 
-    _get_postgres_session.session_number = 0
+    _get_postgres_session.session_number = 0  # type: ignore
 
     return lambda: next(_get_postgres_session())

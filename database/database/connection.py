@@ -22,7 +22,7 @@ logger = getLogger(__name__)
 class Connection:
     def __init__(
         self, database_class: Type[GreenDBTable] | Type[ScrapingTable], database_name: str
-    ):
+    ) -> None:
         self._database_class = database_class
         self._session_factory = get_session_factory(database_name)
 
@@ -63,6 +63,15 @@ class Connection:
             for row in chunk:
                 yield DomainClass.from_orm(row)
 
+    def write(self, domain_object: ScrapedPage | Product) -> ScrapingTable | GreenDBTable:
+        with self._session_factory() as db_session:
+            db_object = self._database_class(**domain_object.dict())
+            db_session.add(db_object)
+            db_session.commit()
+            db_session.refresh(db_object)
+
+        return db_object
+
 
 class Scraping(Connection):
     def __init__(self, table_name: str):
@@ -80,15 +89,6 @@ class Scraping(Connection):
             .first()
             .start_timestamp
         )
-
-    def write_scraped_page(self, scraped_page: ScrapedPage) -> ScrapingTable:
-        with self._session_factory() as db_session:
-            db_scraped_page = self._database_class(**scraped_page.dict())
-            db_session.add(db_scraped_page)
-            db_session.commit()
-            db_session.refresh(db_scraped_page)
-
-        return db_scraped_page
 
     def get_scraped_page(self, id: int) -> ScrapedPage:
         with self._session_factory() as db_session:
@@ -121,17 +121,8 @@ class Scraping(Connection):
 
 
 class GreenDB(Connection):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(GreenDBTable, DATABASE_NAME_GREEN_DB)
-
-    def write_product(self, product: Product) -> GreenDBTable:
-        with self._session_factory() as db_session:
-            db_product = self._database_class(**product.dict())
-            db_session.add(db_product)
-            db_session.commit()
-            db_session.refresh(db_product)
-
-        return db_product
 
     def get_product(self, id: int) -> Product:
         with self._session_factory() as db_session:

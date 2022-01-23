@@ -31,6 +31,6 @@ def start() -> None:
 
 def write_to_scraping_database(table_name: str, scraped_page: ScrapedPage) -> None:
 
-    row = CONNECTION_FOR_TABLE[table_name].write_scraped_page(scraped_page)
+    row = CONNECTION_FOR_TABLE[table_name].write(scraped_page)
 
     message_queue.add_extract(table_name=table_name, row_id=row.id)
