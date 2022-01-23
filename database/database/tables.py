@@ -10,7 +10,12 @@ from core.constants import (
 )
 
 # TODO: Here decide which database to use
-from .postgres import GreenDBBaseTable, ScrapingBaseTable, bootstrap_tables, get_session_factory
+from .postgres import (  # type: ignore
+    GreenDBBaseTable,
+    ScrapingBaseTable,
+    bootstrap_tables,
+    get_session_factory,
+)
 
 
 class __TableMixin:
@@ -25,7 +30,7 @@ class __TableMixin:
     def get_columns(cls) -> List[str]:
         return [a for a in cls.__dict__.keys() if not a.startswith("_")]
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         columns = self.get_columns()
 
         def get_value_depending_on_type(column: str) -> str:

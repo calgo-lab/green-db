@@ -30,7 +30,7 @@ def extract_and_write_to_green_db(table_name: str, row_id: int) -> None:
     scraped_page = CONNECTION_FOR_TABLE[table_name].get_scraped_page(id=row_id)
 
     if product := extract_product(table_name=table_name, scraped_page=scraped_page):
-        green_db_connection.write_product(product)
+        green_db_connection.write(product)
 
     else:
         # TODO: what to do when extract fails? -> "failed" queue?

@@ -35,7 +35,7 @@ class Product(BaseModel):
     name: str
     description: str
     brand: str
-    sustainability_labels: conlist(str, min_items=1)
+    sustainability_labels: conlist(str, min_items=1)  # type: ignore
     price: float
     currency: CurrencyType
     image_urls: List[str]

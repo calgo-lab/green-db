@@ -1,4 +1,5 @@
 import json
+from logging import getLogger
 from typing import List, Optional
 from urllib.parse import ParseResult, urlparse
 
@@ -10,6 +11,8 @@ from core.domain import Product
 
 from ..parse import DUBLINCORE, MICRODATA, ParsedPage
 from ..utils import safely_return_first_element
+
+logger = getLogger(__name__)
 
 NUM_IMAGE_URLS = 3
 
@@ -65,6 +68,7 @@ def extract_otto(parsed_page: ParsedPage) -> Optional[Product]:
     except ValidationError as error:
         # TODO Handle Me!!
         # error contains relatively nice report why data ist not valid
+        logger.info(error)
         return None
 
 
