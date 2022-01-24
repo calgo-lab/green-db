@@ -7,5 +7,5 @@
 2. Then run the following command to install scrapyd.
    ```bash
    # install scrapyd
-   helm install scrapyd charts/scrapyd
+   helm install scrapyd --set image.tag=<version> .
    ```

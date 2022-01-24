@@ -9,5 +9,5 @@
 
 2. Then run the following command.
    ```bash
-   helm install workers charts/workers
+   helm install workers --set image.tag=<version> .
    ```
