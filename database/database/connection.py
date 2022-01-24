@@ -83,11 +83,11 @@ class Scraping(Connection):
 
     def __get_latest_timestamp(self, db_session: Session) -> datetime:
         return (
-            db_session.query(self._database_class.start_timestamp)
+            db_session.query(self._database_class.timestamp)
             .distinct()
-            .order_by(self._database_class.start_timestamp.desc())
+            .order_by(self._database_class.timestamp.desc())
             .first()
-            .start_timestamp
+            .timestamp
         )
 
     def get_scraped_page(self, id: int) -> ScrapedPage:
@@ -105,7 +105,7 @@ class Scraping(Connection):
     ) -> Iterator[ScrapedPage]:
         with self._session_factory() as db_session:
             query = db_session.query(self._database_class).filter(
-                self._database_class.start_timestamp == timestamp
+                self._database_class.timestamp == timestamp
             )
             return self._batching_query(
                 db_query=query,

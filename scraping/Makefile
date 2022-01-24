@@ -1,5 +1,5 @@
-DOCKER_IMAGE_NAME=calgo-lab/scrapyd
-PACKAGE_VERSION=$(shell poetry version -s)
+DOCKER_IMAGE_NAME=ghcr.io/calgo-lab/green-db/scrapyd
+PACKAGE_VERSION=test
 
 .PHONY: build-docker
 

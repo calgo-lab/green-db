@@ -48,7 +48,7 @@ def extract_otto(parsed_page: ParsedPage) -> Optional[Product]:
 
     try:
         return Product(
-            start_timestamp=parsed_page.scraped_page.start_timestamp,
+            timestamp=parsed_page.scraped_page.timestamp,
             url=parsed_page.scraped_page.url,
             merchant=parsed_page.scraped_page.merchant,
             category=parsed_page.scraped_page.category,

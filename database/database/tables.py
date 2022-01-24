@@ -21,7 +21,7 @@ from .postgres import (  # noqa
 class __TableMixin:
 
     id = Column(INTEGER, nullable=False, autoincrement=True, primary_key=True)
-    start_timestamp = Column(TIMESTAMP, nullable=False)
+    timestamp = Column(TIMESTAMP, nullable=False)
     merchant = Column(TEXT, nullable=False)
     category = Column(TEXT, nullable=False)
     url = Column(TEXT, nullable=False)

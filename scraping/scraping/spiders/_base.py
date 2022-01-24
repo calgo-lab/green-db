@@ -20,7 +20,7 @@ class BaseSpider(Spider):
         self,
         start_urls: Union[str, List[str]],
         category: str,
-        start_timestamp: datetime,
+        timestamp: datetime,
         search_term: Optional[str] = None,
         meta_data: Optional[Union[str, Dict[str, str]]] = None,
         products_per_page: Optional[int] = None,
@@ -33,7 +33,7 @@ class BaseSpider(Spider):
         super().__init__(name=self.name, **kwargs)
 
         self.meta_data: Optional[Dict[str, str]] = {}
-        self.start_timestamp = start_timestamp
+        self.timestamp = timestamp
         self.category = category
         self.message_queue = MessageQueue()
 
@@ -81,7 +81,7 @@ class BaseSpider(Spider):
 
     def _save_SERP(self, response: SplashJsonResponse) -> None:
         scraped_page = ScrapedPage(
-            start_timestamp=self.start_timestamp,
+            timestamp=self.timestamp,
             merchant=self.name,
             url=response.url,
             html=response.body.decode("utf-8"),
@@ -94,7 +94,7 @@ class BaseSpider(Spider):
 
     def parse_PRODUCT(self, response: SplashJsonResponse) -> None:
         scraped_page = ScrapedPage(
-            start_timestamp=self.start_timestamp,
+            timestamp=self.timestamp,
             merchant=self.name,
             url=response.url,
             html=response.body.decode("utf-8"),
