@@ -1,24 +1,34 @@
-# Default values for scrapyd.
+# Default values for workers.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
 replicaCount: 1
 
 image:
-  repository:
+  repository: ghcr.io/calgo-lab/green-db/workers
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag:
 
-# creates the file: ~/.scrapyd.conf
 config:
-  scrapyd:
-    max_proc: 15 # should be set to the same value as splash's replicaCount
-  services: {}
+  queues: # defined in 'core' package 'constants.py' prefix: 'WORKER_QUEUE_<...>'
+    - scraping
+    - extract
 
 env:
   - name: TZ
     value: Europe/Berlin
+  - name: POSTGRES_HOST
+    value: postgres-postgresql
+  - name: POSTGRES_PORT
+    value: "5432"
+  - name: POSTGRES_USER
+    value: calgolab
+  - name: POSTGRES_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: postgres-secret
+        key: postgresql-password
   - name: REDIS_HOST
     value: redis-master
   - name: REDIS_PORT
@@ -47,10 +57,6 @@ securityContext:
   # readOnlyRootFilesystem: true
   # runAsNonRoot: true
   # runAsUser: 1000
-
-service:
-  type: ClusterIP
-  port: 6800
 
 resources:
   {}
