@@ -1,0 +1,10 @@
+volumePermissions:
+  enabled: true
+primary:
+persistence:
+  size: 100Gi
+  existingClaim: postgres-pvc
+existingSecret: postgres-secret
+extraEnv:
+  - name: TZ
+    value: Europe/Berlin
