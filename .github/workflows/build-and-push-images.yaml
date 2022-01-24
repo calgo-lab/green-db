@@ -1,4 +1,4 @@
-name: Build Workers Image
+name: Build Docker Images
 
 on:
   push:
@@ -70,7 +70,7 @@ jobs:
         uses: docker/build-push-action@v2.8.0
         with:
           context: .
-          file: ./${{ env.IMAGE_NAME_SCRAPYD }}/Dockerfile
+          file: ./scraping/Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
