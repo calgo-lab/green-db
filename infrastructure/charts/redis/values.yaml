@@ -1,0 +1,12 @@
+architecture: standalone
+volumePermissions:
+  enabled: true
+auth:
+  existingSecret: redis-secret
+  existingSecretPasswordKey: root-password
+master:
+  persistence:
+    existingClaim: redis-pvc
+  extraEnvVars:
+    - name: TZ
+      value: Europe/Berlin
