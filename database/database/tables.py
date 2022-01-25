@@ -7,6 +7,7 @@ from core.constants import (
     TABLE_NAME_GREEN_DB,
     TABLE_NAME_SCRAPING_OTTO,
     TABLE_NAME_SCRAPING_ZALANDO,
+    TABLE_NAME_SUSTAINABILITY_LABELS,
 )
 
 # TODO: Here decide which database to use
@@ -19,13 +20,6 @@ from .postgres import (  # noqa
 
 
 class __TableMixin:
-
-    id = Column(INTEGER, nullable=False, autoincrement=True, primary_key=True)
-    timestamp = Column(TIMESTAMP, nullable=False)
-    merchant = Column(TEXT, nullable=False)
-    category = Column(TEXT, nullable=False)
-    url = Column(TEXT, nullable=False)
-
     @classmethod
     def get_columns(cls) -> List[str]:
         return [a for a in cls.__dict__.keys() if not a.startswith("_")]
@@ -49,6 +43,11 @@ class __TableMixin:
 
 
 class ScrapingTable(__TableMixin):
+    id = Column(INTEGER, nullable=False, autoincrement=True, primary_key=True)
+    timestamp = Column(TIMESTAMP, nullable=False)
+    merchant = Column(TEXT, nullable=False)
+    category = Column(TEXT, nullable=False)
+    url = Column(TEXT, nullable=False)
     html = Column(TEXT, nullable=False)
     page_type = Column(VARCHAR(length=10), nullable=False)
     meta_information = Column(JSON, nullable=True)
@@ -71,10 +70,15 @@ SCRAPING_TABLE_CLASS_FOR: Dict[str, Type[ScrapingTable]] = {
 class GreenDBTable(GreenDBBaseTable, __TableMixin):
     __tablename__ = TABLE_NAME_GREEN_DB
 
+    id = Column(INTEGER, nullable=False, autoincrement=True, primary_key=True)
+    timestamp = Column(TIMESTAMP, nullable=False)
+    merchant = Column(TEXT, nullable=False)
+    category = Column(TEXT, nullable=False)
+    url = Column(TEXT, nullable=False)
     name = Column(TEXT, nullable=False)
     description = Column(TEXT, nullable=False)
     brand = Column(TEXT, nullable=False)
-    sustainability_labels = Column(ARRAY(TEXT), nullable=False)
+    sustainability_labels = Column(ARRAY(TEXT), nullable=False)  # TODO foreign keys to labels
     price = Column(NUMERIC, nullable=False)
     currency = Column(TEXT, nullable=False)
     image_urls = Column(ARRAY(TEXT), nullable=False)
@@ -84,3 +88,15 @@ class GreenDBTable(GreenDBBaseTable, __TableMixin):
 
     gtin = Column(BIGINT, nullable=True)
     asin = Column(TEXT, nullable=True)
+
+
+class SustainabilityLabelsTable(GreenDBBaseTable, __TableMixin):
+    __tablename__ = TABLE_NAME_SUSTAINABILITY_LABELS
+
+    id = Column(TEXT, nullable=False, autoincrement=False, primary_key=True)
+    timestamp = Column(TIMESTAMP, nullable=False)
+    name = Column(TEXT, nullable=False)
+    description = Column(TEXT, nullable=False)
+    ecological_evaluation = Column(INTEGER, nullable=True)
+    social_evaluation = Column(INTEGER, nullable=True)
+    credibility_evaluation = Column(INTEGER, nullable=True)

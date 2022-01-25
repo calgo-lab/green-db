@@ -10,3 +10,4 @@ TABLE_NAME_SCRAPING_OTTO = "otto"
 
 DATABASE_NAME_GREEN_DB = "green-db"
 TABLE_NAME_GREEN_DB = "green-db"
+TABLE_NAME_SUSTAINABILITY_LABELS = "sustainability-labels"
