@@ -1,17 +1,18 @@
 from datetime import datetime
 from logging import getLogger
-from typing import Iterator, Type
+from typing import Iterator, List, Type
 
 from sqlalchemy import Column
 from sqlalchemy.orm import Query, Session
 
 from core.constants import DATABASE_NAME_GREEN_DB, DATABASE_NAME_SCRAPING
-from core.domain import Product, ScrapedPage
+from core.domain import Product, ScrapedPage, SustainabilityLabel
 
 from .tables import (
     SCRAPING_TABLE_CLASS_FOR,
     GreenDBTable,
     ScrapingTable,
+    SustainabilityLabelsTable,
     bootstrap_tables,
     get_session_factory,
 )
@@ -124,8 +125,30 @@ class GreenDB(Connection):
     def __init__(self) -> None:
         super().__init__(GreenDBTable, DATABASE_NAME_GREEN_DB)
 
+        from .sustainability_labels import sustainability_labels
+
+        with self._session_factory() as db_session:
+            # NOTE: this is slowly..
+            # if we have many more labels to bootstrap, we should refactor it.
+            for label in sustainability_labels:
+                if (  # If label does not exist
+                    not db_session.query(SustainabilityLabelsTable.id)
+                    .filter(SustainabilityLabelsTable.id == label.id)
+                    .first()
+                ):
+                    db_session.add(SustainabilityLabelsTable(**label.dict()))
+
+            db_session.commit()
+
     def get_product(self, id: int) -> Product:
         with self._session_factory() as db_session:
             return Product.from_orm(
-                db_session.query(self._database_class).filter(self._database_class.id == id).first()
+                db_session.query(GreenDBTable).filter(GreenDBTable.id == id).first()
             )
+
+    def get_sustainability_labels(self) -> List[SustainabilityLabel]:
+        with self._session_factory() as db_session:
+            return [
+                SustainabilityLabel.from_orm(row)
+                for row in db_session.query(SustainabilityLabelsTable).all()
+            ]
