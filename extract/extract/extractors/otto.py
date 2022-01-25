@@ -7,7 +7,7 @@ import requests
 from bs4 import BeautifulSoup
 from pydantic import ValidationError
 
-from core.domain import Product
+from core.domain import LabelIDType, Product
 
 from ..parse import DUBLINCORE, MICRODATA, ParsedPage
 from ..utils import safely_return_first_element
@@ -74,36 +74,36 @@ def extract_otto(parsed_page: ParsedPage) -> Optional[Product]:
 
 # TODO: How can we do this smart?
 _LABEL_MAPPING = {
-    "Global Recycled Standard": "GRS",
-    "Vegetabil gegerbtes Leder": "OTHER",
-    "[REE]CYCLED": "OTHER",
-    "Recyceltes Material": "OTHER",
-    "bluesign® APPROVED": "BlueS",
-    "Primegreen": "OTHER",
-    "bluesign® PRODUCT": "BlueS",
-    "Grüner Knopf": "GK",
-    "Organic Content Standard blended": "OCS",
-    "Bio-Baumwolle": "OTHER",
-    "Unterstützt Cotton made in Africa": "CmiA",
-    "Primeblue": "OTHER",
-    "Fairtrade Cotton": "FT",
-    "Responsible Down Standard": "RDS",
-    "BIONIC-FINISH®ECO (Rudolf Chemie)": "OTHER",
-    "GOTS organic": "GOTS",
-    "Umweltfreundlicher Färbeprozess": "OTHER",
-    "TENCEL™ Lyocell": "OTHER",
-    "MADE IN GREEN by OEKO-TEX®": "OEKOTEX",
-    "LENZING™ ECOVERO™": "OTHER",
-    "REPREVE®": "OTHER",
-    "Nachhaltige Viskose": "OTHER",
-    "ECONYL©": "OTHER",
-    "GOTS made with organic materials": "GOTS",
-    "Blauer Engel": "BE",
-    "Recycled Claim Standard blended": "RCS",
-    "Recycled Claim Standard 100": "RCS",
-    "Recycelter Kunststoff (Hartwaren)": "OTHER",
-    "Bio-Siegel": "OTHER",
-    "": "OTHER",
+    "Global Recycled Standard": LabelIDType.GRS.value,
+    "Vegetabil gegerbtes Leder": LabelIDType.OTHER.value,
+    "[REE]CYCLED": LabelIDType.OTHER.value,
+    "Recyceltes Material": LabelIDType.OTHER.value,
+    "bluesign® APPROVED": LabelIDType.BLUES_P.value,
+    "Primegreen": LabelIDType.OTHER.value,
+    "bluesign® PRODUCT": LabelIDType.BLUES_P.value,
+    "Grüner Knopf": LabelIDType.GK.value,
+    "Organic Content Standard blended": LabelIDType.OCS_BLENDED.value,
+    "Bio-Baumwolle": LabelIDType.OTHER.value,
+    "Unterstützt Cotton made in Africa": LabelIDType.CMIA.value,
+    "Primeblue": LabelIDType.OTHER.value,
+    "Fairtrade Cotton": LabelIDType.FT.value,
+    "Responsible Down Standard": LabelIDType.RDS.value,
+    "BIONIC-FINISH®ECO (Rudolf Chemie)": LabelIDType.OTHER.value,
+    "GOTS organic": LabelIDType.GOTS.value,
+    "Umweltfreundlicher Färbeprozess": LabelIDType.OTHER.value,
+    "TENCEL™ Lyocell": LabelIDType.OTHER.value,
+    "MADE IN GREEN by OEKO-TEX®": LabelIDType.MIG_OEKO_TEX.value,
+    "LENZING™ ECOVERO™": LabelIDType.OTHER.value,
+    "REPREVE®": LabelIDType.OTHER.value,
+    "Nachhaltige Viskose": LabelIDType.OTHER.value,
+    "ECONYL©": LabelIDType.OTHER.value,
+    "GOTS made with organic materials": LabelIDType.GOTS.value,
+    "Blauer Engel": LabelIDType.BE.value,
+    "Recycled Claim Standard blended": LabelIDType.RCS_BLENDED.value,
+    "Recycled Claim Standard 100": LabelIDType.RCS_100.value,
+    "Recycelter Kunststoff (Hartwaren)": LabelIDType.OTHER.value,
+    "Bio-Siegel": LabelIDType.OTHER.value,
+    "": LabelIDType.OTHER.value,
 }
 
 
@@ -194,5 +194,4 @@ def _get_sustainability(product_data: dict, parsed_url: ParseResult) -> List[str
         sustainable_soup = BeautifulSoup(label_info_url, "html.parser")
         labels.update(_get_sustainability_info(sustainable_soup))
 
-    # TODO: At least we should know when something is found we did not mapped manually..
-    return sorted({_LABEL_MAPPING.get(label, "OTHER") for label in labels.keys()})
+    return sorted({_LABEL_MAPPING.get(label, LabelIDType.UNKNOWN.value) for label in labels.keys()})
