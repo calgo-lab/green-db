@@ -129,3 +129,9 @@ class GreenDB(Connection):
             return Product.from_orm(
                 db_session.query(self._database_class).filter(self._database_class.id == id).first()
             )
+    def get_sustainability_labels(self) -> List[SustainabilityLabel]:
+        with self._session_factory() as db_session:
+            return [
+                SustainabilityLabel.from_orm(row)
+                for row in db_session.query(SustainabilityLabelsTable).all()
+            ]
