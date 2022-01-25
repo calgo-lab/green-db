@@ -5,6 +5,7 @@ from core.domain import LabelIDType, SustainabilityLabel
 
 information_from = datetime(2022, 1, 25, 12)
 
+# flake8: noqa
 __label_information: Dict[str, Dict[str, Union[str, int]]] = {
     LabelIDType.BE_L_CO.name: {
         "name": "Blauer Engel - Laptops & Co.",

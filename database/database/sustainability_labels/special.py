@@ -8,11 +8,11 @@ information_from = datetime(2022, 1, 25, 12)
 __label_information: Dict[str, Dict[str, str]] = {
     LabelIDType.OTHER.name: {
         "name": "OTHER",
-        "description": "Dieses 'Label' ist GreenDB intern. Es wird verwendet, wenn ein Shop das Produkt als nachhaltig listet, unsere Nachhlatigkeitsexpert*innen dies aber nicht nachvollziehen können. Es handelt sich also um falsche oder nicht belastbare Informationen",
+        "description": "Dieses 'Label' ist GreenDB intern. Es wird verwendet, wenn ein Shop das Produkt als nachhaltig listet, unsere Nachhlatigkeitsexpert*innen dies aber nicht nachvollziehen können. Es handelt sich also um falsche oder nicht belastbare Informationen",  # noqa
     },
     LabelIDType.UNKNOWN.name: {
         "name": "UNKNOWN",
-        "description": "Dieses 'Label' ist GreenDB intern. Es wird verwendet, wenn die Angaben des Shops von uns (noch) nicht überprüft wurden.",
+        "description": "Dieses 'Label' ist GreenDB intern. Es wird verwendet, wenn die Angaben des Shops von uns (noch) nicht überprüft wurden.",  # noqa
     },
 }
 
