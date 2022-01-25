@@ -142,7 +142,7 @@ class GreenDB(Connection):
     def get_product(self, id: int) -> Product:
         with self._session_factory() as db_session:
             return Product.from_orm(
-                db_session.query(self._database_class).filter(self._database_class.id == id).first()
+                db_session.query(GreenDBTable).filter(GreenDBTable.id == id).first()
             )
 
     def get_sustainability_labels(self) -> List[SustainabilityLabel]:
