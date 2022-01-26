@@ -169,6 +169,7 @@ class ScrapedPage(BaseModel):
 
     class Config:
         orm_mode = True
+        use_enum_values = True
 
 
 class Product(BaseModel):
@@ -196,6 +197,7 @@ class Product(BaseModel):
 
     class Config:
         orm_mode = True
+        use_enum_values = True
 
 
 class SustainabilityLabel(BaseModel):
@@ -209,3 +211,4 @@ class SustainabilityLabel(BaseModel):
 
     class Config:
         orm_mode = True
+        use_enum_values = True
