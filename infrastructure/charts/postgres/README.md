@@ -26,7 +26,7 @@ EOF
 ## Create Secrets
 
 ```
-kubectl create secret generic postgres-secret -n <namespace> --from-file=postgresql-postgres-password=../credentials/postgresql-postgres-password --from-file=postgresql-password=../credentials/postgresql-password --from-file=postgresql-replication-password=../credentials/postgresql-replication-password
+kubectl create secret generic postgres-secret -n <namespace> --from-file=postgresql-postgres-password=../../.credentials/postgresql-postgres-password --from-file=postgresql-password=../../.credentials/postgresql-password --from-file=postgresql-replication-password=../../.credentials/postgresql-replication-password --from-file=postgresql-user=../../.credentials/postgresql-user
 ```
 
 

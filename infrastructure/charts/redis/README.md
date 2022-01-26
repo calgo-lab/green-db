@@ -28,7 +28,7 @@ EOF
 Make sure you replace all the `<...>` placeholders.
 
 ```
-kubectl create secret generic redis-secret -n <namespace> --from-file=root-password=../credentials/redis-root-password
+kubectl create secret generic redis-secret -n <namespace> --from-file=root-password=../../.credentials/redis-root-password
 ```
 
 

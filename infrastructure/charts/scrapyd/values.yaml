@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: ghcr.io/calgo-lab/green-db/scrapyd
-  pullPolicy: Always
+  pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag:
 

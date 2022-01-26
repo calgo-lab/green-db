@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: ghcr.io/calgo-lab/green-db/workers
-  pullPolicy: Always
+  pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag:
 
@@ -23,7 +23,10 @@ env:
   - name: POSTGRES_PORT
     value: "5432"
   - name: POSTGRES_USER
-    value: calgolab
+    valueFrom:
+      secretKeyRef:
+        name: postgres-secret
+        key: postgresql-user
   - name: POSTGRES_PASSWORD
     valueFrom:
       secretKeyRef:
