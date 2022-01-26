@@ -73,15 +73,6 @@ class Connection:
 
         return db_object
 
-
-class Scraping(Connection):
-    def __init__(self, table_name: str):
-        if table_name not in SCRAPING_TABLE_CLASS_FOR.keys():
-            logger.error(f"Can't handle table: '{table_name}'")
-
-        self.__table_name = table_name
-        super().__init__(SCRAPING_TABLE_CLASS_FOR[self.__table_name], DATABASE_NAME_SCRAPING)
-
     def __get_latest_timestamp(self, db_session: Session) -> datetime:
         return (
             db_session.query(self._database_class.timestamp)
@@ -91,15 +82,32 @@ class Scraping(Connection):
             .timestamp
         )
 
+    def get_latest_timestamp(self) -> datetime:
+        with self._session_factory() as db_session:
+            return self.__get_latest_timestamp(db_session)
+
+    def is_timestamp_available(self, timestamp: datetime) -> bool:
+        with self._session_factory() as db_session:
+            return (
+                db_session.query(self._database_class.timestamp)
+                .filter(self._database_class.timestamp == timestamp)
+                .first()
+            )
+
+
+class Scraping(Connection):
+    def __init__(self, table_name: str):
+        if table_name not in SCRAPING_TABLE_CLASS_FOR.keys():
+            logger.error(f"Can't handle table: '{table_name}'")
+
+        self.__table_name = table_name
+        super().__init__(SCRAPING_TABLE_CLASS_FOR[self.__table_name], DATABASE_NAME_SCRAPING)
+
     def get_scraped_page(self, id: int) -> ScrapedPage:
         with self._session_factory() as db_session:
             return ScrapedPage.from_orm(
                 db_session.query(self._database_class).filter(self._database_class.id == id).first()
             )
-
-    def get_latest_timestamp(self) -> datetime:
-        with self._session_factory() as db_session:
-            return self.__get_latest_timestamp(db_session)
 
     def get_scraped_pages_for_timestamp(
         self, timestamp: datetime, batch_size: int = 1000
@@ -146,9 +154,38 @@ class GreenDB(Connection):
                 db_session.query(GreenDBTable).filter(GreenDBTable.id == id).first()
             )
 
-    def get_sustainability_labels(self) -> List[SustainabilityLabel]:
+    def get_sustainability_labels(
+        self, iterator: bool = False
+    ) -> List[SustainabilityLabel] | Iterator[SustainabilityLabel]:
         with self._session_factory() as db_session:
-            return [
-                SustainabilityLabel.from_orm(row)
-                for row in db_session.query(SustainabilityLabelsTable).all()
-            ]
+
+            sustainability_labels = db_session.query(SustainabilityLabelsTable).all()
+
+            if iterator:
+                return (
+                    SustainabilityLabel.from_orm(sustainability_label)
+                    for sustainability_label in sustainability_labels
+                )
+
+            else:
+                return [
+                    SustainabilityLabel.from_orm(sustainability_label)
+                    for sustainability_label in sustainability_labels
+                ]
+
+    def get_products_for_timestamp(
+        self, timestamp: datetime, batch_size: int = 1000
+    ) -> Iterator[Product]:
+        with self._session_factory() as db_session:
+            query = db_session.query(self._database_class).filter(
+                self._database_class.timestamp == timestamp
+            )
+            return self._batching_query(
+                db_query=query,
+                id_column=self._database_class.id,
+                DomainClass=Product,
+                batch_size=batch_size,
+            )
+
+    def get_latest_products(self, batch_size: int = 1000) -> Iterator[Product]:
+        return self.get_products_for_timestamp(self.get_latest_timestamp(), batch_size=batch_size)
