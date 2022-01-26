@@ -59,49 +59,49 @@ def extract_zalando(parsed_page: ParsedPage) -> Optional[Product]:
 
 # TODO: How can we do this smart?
 _LABEL_MAPPING = {
-    "Responsible Wool Standard": LabelIDType.RWS.value,
-    "GOTS - organic": LabelIDType.GOTS.value,
-    "Hergestellt aus Wolle aus verantwortungsbewusster Landwirtschaft": LabelIDType.OTHER.value,
-    "Hergestellt aus mindestens 20% recycelter Baumwolle": LabelIDType.OTHER.value,
-    "Hergestellt aus 70-100% recycelten Materialien": LabelIDType.OTHER.value,
-    "Organisch": LabelIDType.OTHER.value,
-    "Hergestellt aus 50-70% biologischen Materialien": LabelIDType.OTHER.value,
-    "Hergestellt aus recyceltem Polyester": LabelIDType.OTHER.value,
-    "Weniger Verpackung": LabelIDType.OTHER.value,
-    "Better Cotton Initiative": LabelIDType.BCI.value,
-    "Hergestellt aus 50-70% recycelten Materialien": LabelIDType.OTHER.value,
-    "Hergestellt aus mindestens 50% verantwortungsbewussten forstbasierten Materialien": LabelIDType.OTHER.value,  # noqa
-    "Hergestellt aus 30-50% recycelten Materialien": LabelIDType.OTHER.value,
-    "Sustainable Textile Production (STeP) by OEKO-TEX®": LabelIDType.STEP_OEKO_TEX.value,
-    "Global Recycled Standard": LabelIDType.GRS.value,
-    "Hergestellt aus mindestens 50% Lyocell": LabelIDType.OTHER.value,
-    "Biologisch abbaubar": LabelIDType.OTHER.value,
-    "GOTS - made with organic materials": LabelIDType.GOTS.value,
-    "bluesign®": LabelIDType.BLUES_P.value,
-    "Hergestellt mit recyceltem Plastik": LabelIDType.OTHER.value,
-    "Fairtrade Certified Cotton": LabelIDType.FT.value,
-    "Hergestellt aus Daunen aus verantwortungsbewusster Landwirtschaft": LabelIDType.OTHER.value,
-    "Responsible Down Standard": LabelIDType.RDS.value,
-    "Hergestellt aus 70-100% biologischen Materialien": LabelIDType.OTHER.value,
-    "Hergestellt aus recycelter Wolle": LabelIDType.OTHER.value,
-    "OCS - Organic Blended Content Standard": LabelIDType.OCS_BLENDED.value,
-    "OEKO-TEX® Made in Green": LabelIDType.MIG_OEKO_TEX.value,
-    "Cradle to Cradle Certified™ Silver": LabelIDType.CTC_T_SILVER.value,
-    "Waldschonend": LabelIDType.OTHER.value,
-    "Hergestellt aus recyceltem Nylon": LabelIDType.OTHER.value,
-    "Leather Working Group": LabelIDType.LWG.value,
-    "Hergestellt aus mindestens 20% innovativen Leder-Alternativen": LabelIDType.OTHER.value,
-    "Hergestellt aus mindestens 50% Polyurethanen auf Wasserbasis": LabelIDType.OTHER.value,
-    "Hergestellt aus mindestens 20% innovativen Materialien aus recyceltem Müll": LabelIDType.OTHER.value,  # noqa
-    "OCS - Organic Content Standard": LabelIDType.OCS.value,
-    "Cradle to Cradle Certified™ Gold": LabelIDType.CTC_T_GOLD.value,
-    "Hergestellt aus mindestens 50% nachhaltigerer Baumwolle": LabelIDType.OTHER.value,
-    "Zum Wohl der Tierwelt": LabelIDType.OTHER.value,
-    "Hergestellt aus mindestens 20% innovativen ökologischen Alternativen zu fossilen Brennstoffen": LabelIDType.OTHER.value,  # noqa
-    "Natürlich": LabelIDType.OTHER.value,
-    "Hergestellt aus recyceltem Gummi": LabelIDType.OTHER.value,
-    "Hergestellt aus LENZING™ TENCEL™, einem Eco-Material": LabelIDType.OTHER.value,
-    "": LabelIDType.OTHER.value,
+    "Responsible Wool Standard": LabelIDType.RWS,
+    "GOTS - organic": LabelIDType.GOTS,
+    "Hergestellt aus Wolle aus verantwortungsbewusster Landwirtschaft": LabelIDType.OTHER,
+    "Hergestellt aus mindestens 20% recycelter Baumwolle": LabelIDType.OTHER,
+    "Hergestellt aus 70-100% recycelten Materialien": LabelIDType.OTHER,
+    "Organisch": LabelIDType.OTHER,
+    "Hergestellt aus 50-70% biologischen Materialien": LabelIDType.OTHER,
+    "Hergestellt aus recyceltem Polyester": LabelIDType.OTHER,
+    "Weniger Verpackung": LabelIDType.OTHER,
+    "Better Cotton Initiative": LabelIDType.BCI,
+    "Hergestellt aus 50-70% recycelten Materialien": LabelIDType.OTHER,
+    "Hergestellt aus mindestens 50% verantwortungsbewussten forstbasierten Materialien": LabelIDType.OTHER,  # noqa
+    "Hergestellt aus 30-50% recycelten Materialien": LabelIDType.OTHER,
+    "Sustainable Textile Production (STeP) by OEKO-TEX®": LabelIDType.STEP_OEKO_TEX,
+    "Global Recycled Standard": LabelIDType.GRS,
+    "Hergestellt aus mindestens 50% Lyocell": LabelIDType.OTHER,
+    "Biologisch abbaubar": LabelIDType.OTHER,
+    "GOTS - made with organic materials": LabelIDType.GOTS,
+    "bluesign®": LabelIDType.BLUES_P,
+    "Hergestellt mit recyceltem Plastik": LabelIDType.OTHER,
+    "Fairtrade Certified Cotton": LabelIDType.FT,
+    "Hergestellt aus Daunen aus verantwortungsbewusster Landwirtschaft": LabelIDType.OTHER,
+    "Responsible Down Standard": LabelIDType.RDS,
+    "Hergestellt aus 70-100% biologischen Materialien": LabelIDType.OTHER,
+    "Hergestellt aus recycelter Wolle": LabelIDType.OTHER,
+    "OCS - Organic Blended Content Standard": LabelIDType.OCS_BLENDED,
+    "OEKO-TEX® Made in Green": LabelIDType.MIG_OEKO_TEX,
+    "Cradle to Cradle Certified™ Silver": LabelIDType.CTC_T_SILVER,
+    "Waldschonend": LabelIDType.OTHER,
+    "Hergestellt aus recyceltem Nylon": LabelIDType.OTHER,
+    "Leather Working Group": LabelIDType.LWG,
+    "Hergestellt aus mindestens 20% innovativen Leder-Alternativen": LabelIDType.OTHER,
+    "Hergestellt aus mindestens 50% Polyurethanen auf Wasserbasis": LabelIDType.OTHER,
+    "Hergestellt aus mindestens 20% innovativen Materialien aus recyceltem Müll": LabelIDType.OTHER,  # noqa
+    "OCS - Organic Content Standard": LabelIDType.OCS,
+    "Cradle to Cradle Certified™ Gold": LabelIDType.CTC_T_GOLD,
+    "Hergestellt aus mindestens 50% nachhaltigerer Baumwolle": LabelIDType.OTHER,
+    "Zum Wohl der Tierwelt": LabelIDType.OTHER,
+    "Hergestellt aus mindestens 20% innovativen ökologischen Alternativen zu fossilen Brennstoffen": LabelIDType.OTHER,  # noqa
+    "Natürlich": LabelIDType.OTHER,
+    "Hergestellt aus recyceltem Gummi": LabelIDType.OTHER,
+    "Hergestellt aus LENZING™ TENCEL™, einem Eco-Material": LabelIDType.OTHER,
+    "": LabelIDType.OTHER,
 }
 
 
@@ -160,8 +160,5 @@ def _get_sustainability(
     }
 
     return sorted(
-        {
-            _LABEL_MAPPING.get(label, LabelIDType.UNKNOWN.value)
-            for label in data.get("labels", {}).keys()
-        }
+        {_LABEL_MAPPING.get(label, LabelIDType.UNKNOWN) for label in data.get("labels", {}).keys()}
     )
