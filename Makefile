@@ -34,3 +34,9 @@ patch-version: patch-all
 	# push everything
 	git push
 	git push origin ${VERSION}
+
+scrapyd-test-deploy:
+	$(MAKE) -C scraping deploy-test
+
+workers-test-deploy:
+	$(MAKE) -C workers deploy-test
