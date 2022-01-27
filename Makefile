@@ -1,24 +1,25 @@
 SCRAPYD_CHART=infrastructure/charts/scrapyd
 WORKERS_CHART=infrastructure/charts/workers
+
 .PHONY: patch-core-version patch-database-version patch-extract-version patch-message-queue-version patch-scraping-version patch-workers-version patch-all patch-version
 
 patch-core-version:
-	$(MAKE) -C core
+	$(MAKE) -C core patch-version
 
 patch-database-version:
-	$(MAKE) -C database
+	$(MAKE) -C database patch-version
 
 patch-extract-version:
-	$(MAKE) -C extract
+	$(MAKE) -C extract patch-version
 
 patch-message-queue-version:
-	$(MAKE) -C message-queue
+	$(MAKE) -C message-queue patch-version
 
 patch-scraping-version:
-	$(MAKE) -C scraping
+	$(MAKE) -C scraping patch-version
 
 patch-workers-version:
-	$(MAKE) -C workers
+	$(MAKE) -C workers patch-version
 
 patch-all: patch-core-version patch-database-version patch-extract-version patch-message-queue-version patch-scraping-version patch-workers-version
 
