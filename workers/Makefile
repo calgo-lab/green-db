@@ -1,4 +1,4 @@
-WORKER_CHART=../infrastructure/charts/workers
+WORKERS_CHART=../infrastructure/charts/workers
 
 .PHONY: patch-version patch-package patch-chart patch-chart check-docker-prerequisites build-docker push-docker docker helm-delete helm-install helm deploy-test
 
@@ -10,7 +10,7 @@ patch-package:
 
 patch-chart:
 	$(eval NEW_VERSION=$(shell poetry version -s))
-	sed -i '' -e 's/${OLD_VERSION}/${NEW_VERSION}/' ${WORKER_CHART}/Chart.yaml
+	sed -i '' -e 's/${OLD_VERSION}/${NEW_VERSION}/' ${WORKERS_CHART}/Chart.yaml
 
 check-docker-prerequisites:
 ifndef DOCKER_IMAGE_NAME
@@ -34,11 +34,11 @@ helm-delete:
 	-helm delete workers
 
 helm-install:
-	helm install workers ${WORKER_CHART}
+	helm install workers ${WORKERS_CHART}
 
 helm: helm-delete helm-install
 
 deploy-test: docker helm-delete
 	# for private docker registry, we need 'private-registry-auth' imagePullSecrets
-	helm install workers --set image.repository=${DOCKER_IMAGE_NAME} --set image.tag=test --set imagePullSecrets[0].name=private-registry-auth ${WORKER_CHART}
+	helm install workers --set image.repository=${DOCKER_IMAGE_NAME} --set image.tag=test --set imagePullSecrets[0].name=private-registry-auth ${WORKERS_CHART}
 	
