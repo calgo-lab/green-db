@@ -16,16 +16,12 @@ check-docker-prerequisites:
 ifndef DOCKER_IMAGE_NAME
 	$(error DOCKER_IMAGE_NAME is not set)
 endif
-ifndef DOCKER_IMAGE_TAG
-	DOCKER_IMAGE_TAG=test
-	$(info DOCKER_IMAGE_TAG is not set. Using ${DOCKER_IMAGE_TAG})
-endif
 
 build-docker: check-docker-prerequisites
-	docker build -t ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG} -f Dockerfile ..
+	docker build -t ${DOCKER_IMAGE_NAME}:test -f Dockerfile ..
 
 push-docker: check-docker-prerequisites
-	docker push ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}
+	docker push ${DOCKER_IMAGE_NAME}:test
 
 docker: build-docker push-docker
 
