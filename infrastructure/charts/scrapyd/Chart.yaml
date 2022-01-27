@@ -3,4 +3,4 @@ name: scrapyd
 description: A Helm chart to deploy scrapyd on Kubernetes
 type: application
 version: 0.1.2
-appVersion: "v0.1.2"
+appVersion: "0.1.2"
