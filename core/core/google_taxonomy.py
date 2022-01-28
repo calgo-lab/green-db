@@ -15,7 +15,6 @@ _taxonomy_lines = lines[1:]
 
 logger.info(f"Version of the Google Taxonomy from: {_version_from}")
 
-
 # Create mapping from category name to category id
 # preprocess names because special characters can cause problems:
 # 1. all upper case
@@ -33,11 +32,24 @@ _name_2_id = {
 
 
 class _CategoryTypeBase(int, Enum):
+    """
+    We use the `Enum` Functional API: https://docs.python.org/3/library/enum.html#functional-api
+    to construct an Enum based on the Google Taxonomy.
+
+    This class defines the necessary function to create custom values, here the category IDs
+    """
+
     def _generate_next_value_(name: str, start, count, last_values):  # type: ignore
         return _name_2_id[name]
 
 
 def get_taxonomy_enum() -> Type[Enum]:
+    """
+    Factory function to construct the `Enum` that contains the Google Taxonomy
+
+    Returns:
+        Type[Enum]: `CategoryType` `Enum` use for the domain.
+    """
     return _CategoryTypeBase(  # type: ignore
         value="CategoryType",
         names=list(_name_2_id.keys()),
