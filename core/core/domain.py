@@ -4,6 +4,10 @@ from typing import List, Optional
 
 from pydantic import BaseModel, conint, conlist
 
+from .google_taxonomy import get_taxonomy_enum
+
+CategoryType = get_taxonomy_enum()
+
 
 class LabelIDType(str, Enum):
     # These two are special "labels"
