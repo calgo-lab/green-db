@@ -16,15 +16,20 @@ _taxonomy_lines = lines[1:]
 logger.info(f"Version of the Google Taxonomy from: {_version_from}")
 
 
-_id_2_name = {
-    int(id): category_string.split(" > ")[-1]
+# Create mapping from category name to category id
+# preprocess names because special characters can cause problems:
+# 1. all upper case
+# 2. do not contain commas
+# 3. blanks are replaced with underscores
+# 4. ampersand (&) is replaced with 'AND'
+_name_2_id = {
+    category_string.split(" > ")[-1]
     .upper()
     .replace(",", "")
     .replace(" ", "_")
-    .replace("_&_", "_AND_")
+    .replace("_&_", "_AND_"): int(id)
     for id, category_string in [taxonomy_line.split(" - ") for taxonomy_line in _taxonomy_lines]
 }
-_name_2_id = {value: key for key, value in _id_2_name.items()}
 
 
 class _CategoryTypeBase(int, Enum):
