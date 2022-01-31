@@ -36,5 +36,5 @@ helm: helm-delete helm-install
 
 deploy-test: docker helm-delete
 	# for private docker registry, we need 'private-registry-auth' imagePullSecrets
-	helm install workers --set image.repository=${DOCKER_IMAGE_NAME} --set image.tag=test --set imagePullSecrets[0].name=private-registry-auth ${WORKERS_CHART}
+	helm install workers --set image.pullPolicy=Always --set image.repository=${DOCKER_IMAGE_NAME} --set image.tag=test --set imagePullSecrets[0].name=private-registry-auth ${WORKERS_CHART}
 	
