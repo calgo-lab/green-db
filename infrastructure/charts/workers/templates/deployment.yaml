@@ -1,8 +1,8 @@
-{{- range .Values.config.queues }}
+{{- range $queue, $queueEnvNames := .Values.queues }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ . }}-{{ include "workers.fullname" $ }}
+  name: {{ $queue }}-{{ include "workers.fullname" $ }}
   labels:
     {{- include "workers.labels" $ | nindent 4 }}
 spec:
@@ -32,9 +32,10 @@ spec:
           image: "{{  $.Values.image.repository }}:{{  $.Values.image.tag | default  $.Chart.AppVersion }}"
           imagePullPolicy: {{  $.Values.image.pullPolicy }}
           args:
-          - {{ . }}
+          - {{ $queue }}
           env:
-            {{- toYaml  $.Values.env | nindent 12 }}
+            {{- toYaml $.Values.env | nindent 12 }}
+            {{- (include "workers.getEnvForDB" (dict "queueEnvNames" $queueEnvNames "Values" $.Values)) | nindent 12 }}
           resources:
             {{- toYaml  $.Values.resources | nindent 12 }}
       {{- with  $.Values.nodeSelector }}

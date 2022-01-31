@@ -10,28 +10,49 @@ image:
   # Overrides the image tag whose default is the chart appVersion.
   tag:
 
-config:
-  queues: # defined in 'core' package 'constants.py' prefix: 'WORKER_QUEUE_<...>'
+queues: # defined in 'core' package 'constants.py' prefix: 'WORKER_QUEUE_<...>'
+  scraping:
+    # references `DBEnv`
     - scraping
-    - extract
+  extract:
+    - scraping
+    - greenDb
+
+DBEnv:
+  scraping:
+    - name: POSTGRES_SCRAPING_HOST
+      value: postgresql
+    - name: POSTGRES_SCRAPING_PORT
+      value: "5432"
+    - name: POSTGRES_SCRAPING_USER
+      valueFrom:
+        secretKeyRef:
+          name: scraping-secret
+          key: postgres-user
+    - name: POSTGRES_SCRAPING_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: scraping-secret
+          key: postgres-password
+  greenDb:
+    - name: POSTGRES_GREEN_DB_HOST
+      value: postgresql
+    - name: POSTGRES_GREEN_DB_PORT
+      value: "5432"
+    - name: POSTGRES_GREEN_DB_USER
+      valueFrom:
+        secretKeyRef:
+          name: green-db-secret
+          key: postgres-user
+    - name: POSTGRES_GREEN_DB_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: green-db-secret
+          key: postgres-password
 
 env:
   - name: TZ
     value: Europe/Berlin
-  - name: POSTGRES_HOST
-    value: postgres-postgresql
-  - name: POSTGRES_PORT
-    value: "5432"
-  - name: POSTGRES_USER
-    valueFrom:
-      secretKeyRef:
-        name: postgres-secret
-        key: postgresql-user
-  - name: POSTGRES_PASSWORD
-    valueFrom:
-      secretKeyRef:
-        name: postgres-secret
-        key: postgresql-password
   - name: REDIS_HOST
     value: redis-master
   - name: REDIS_PORT

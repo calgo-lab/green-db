@@ -51,12 +51,10 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
-Create the name of the service account to use
+Get env variables for a database
 */}}
-{{- define "workers.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create }}
-{{- default (include "workers.fullname" .) .Values.serviceAccount.name }}
-{{- else }}
-{{- default "default" .Values.serviceAccount.name }}
+{{- define "workers.getEnvForDB" -}}
+{{- range $queueEnvName := .queueEnvNames}}
+{{ toYaml (get $.Values.DBEnv $queueEnvName) }}
 {{- end }}
 {{- end }}
