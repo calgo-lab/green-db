@@ -1,7 +1,16 @@
 from argparse import ArgumentParser
 
-from workers.extract import start as start_extract
-from workers.scraping import start as start_scraping
+
+def start_extract() -> None:
+    from workers.extract import start
+
+    start()
+
+
+def start_scraping() -> None:
+    from workers.scraping import start
+
+    start()
 
 
 def start() -> None:

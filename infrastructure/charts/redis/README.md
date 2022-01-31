@@ -1,41 +1,38 @@
 # `redis` Helm Chart
 
+## Installation
+
+### Create Persistent Volume Claim
 
 
-## Create Persistent Volume Claim
-
-Make sure you replace all the `<...>` placeholders.
-
-```
+```bash
 cat <<EOF | kubectl create -f -
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: redis-pvc
-  namespace: <namespace>
+  namespace: greendb
 spec:
   accessModes:
   - ReadWriteOnce
   resources:
     requests:
-      storage: 1Gi
+      storage: 10Gi
 EOF
 ```
 
 
-## Create Secrets
+### Create Secrets
 
-Make sure you replace all the `<...>` placeholders.
-
-```
-kubectl create secret generic redis-secret -n <namespace> --from-file=root-password=../../.credentials/redis-root-password
+```bash
+kubectl create secret generic redis-secret -n greendb --from-file=root-password=../../.credentials/redis-root-password
 ```
 
 
-## Install Bitnami Redis With Custom Values
+### Install Bitnami Redis With Custom Values
 
-```
+```bash
 helm repo add bitnami https://charts.bitnami.com/bitnami
 helm repo update
-helm install redis bitnami/redis --values values.yaml --namespace <namespace>
+helm install redis bitnami/redis --values values.yaml --namespace greendb
 ```
