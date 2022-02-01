@@ -29,6 +29,8 @@ class Connection:
 
         bootstrap_tables(database_name)
 
+    # TODO: calling this one multiple times returns fewer and fewer examples...
+    # TODO: Test and revise this!
     def _batching_query(
         self,
         db_query: Query,
@@ -116,12 +118,7 @@ class Scraping(Connection):
             query = db_session.query(self._database_class).filter(
                 self._database_class.timestamp == timestamp
             )
-            return self._batching_query(
-                db_query=query,
-                id_column=self._database_class.id,
-                DomainClass=ScrapedPage,
-                batch_size=batch_size,
-            )
+            return (ScrapedPage.from_orm(row) for row in query.all())
 
     def get_latest_scraped_pages(self, batch_size: int = 1000) -> Iterator[ScrapedPage]:
         return self.get_scraped_pages_for_timestamp(
@@ -180,12 +177,7 @@ class GreenDB(Connection):
             query = db_session.query(self._database_class).filter(
                 self._database_class.timestamp == timestamp
             )
-            return self._batching_query(
-                db_query=query,
-                id_column=self._database_class.id,
-                DomainClass=Product,
-                batch_size=batch_size,
-            )
+            return (Product.from_orm(row) for row in query.all())
 
     def get_latest_products(self, batch_size: int = 1000) -> Iterator[Product]:
         return self.get_products_for_timestamp(self.get_latest_timestamp(), batch_size=batch_size)
