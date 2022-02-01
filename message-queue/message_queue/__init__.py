@@ -1,5 +1,8 @@
 from logging import getLogger
 
+from redis import Redis
+from rq import Queue, Retry
+
 from core import log
 from core.constants import (
     WORKER_FUNCTION_EXTRACT,
@@ -9,8 +12,6 @@ from core.constants import (
 )
 from core.domain import ScrapedPage
 from core.redis import REDIS_HOST, REDIS_PASSWORD, REDIS_PORT, REDIS_USER
-from redis import Redis
-from rq import Queue, Retry
 
 log.setup_logger(__name__)
 logger = getLogger(__name__)
