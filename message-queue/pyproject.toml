@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "message-queue"
-version = "0.1.4"
+version = "0.1.5"
 description = ""
 license = "Apache-2.0"
 authors = ["Sebastian Jäger <message@sebastian-jaeger.me>"]
