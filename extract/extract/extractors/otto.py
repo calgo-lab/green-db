@@ -18,6 +18,16 @@ NUM_IMAGE_URLS = 3
 
 
 def extract_otto(parsed_page: ParsedPage) -> Optional[Product]:
+    """
+    Extracts information of interest from HTML (and other intermediate representations)
+    and returns `Product` object or `None` if anything failed. Works for otto.de
+
+    Args:
+        parsed_page (ParsedPage): Intermediate representation of `ScrapedPage` domain object
+
+    Returns:
+        Optional[Product]: Valid `Product` object or `None` if extraction failed
+    """
     microdata = parsed_page.schema_org.get(MICRODATA, [{}])
     microdata = safely_return_first_element(microdata)
 
@@ -108,6 +118,15 @@ _LABEL_MAPPING = {
 
 
 def _get_product_data(beautiful_soup: BeautifulSoup) -> dict:
+    """
+    Helper function to extract the embedded product data JSON.
+
+    Args:
+        beautiful_soup (BeautifulSoup): Parsed HTML
+
+    Returns:
+        dict: Representation of the product data JSON
+    """
     product_data = beautiful_soup.find(attrs={"id": "productDataJson"})
 
     if product_data is None:
@@ -118,6 +137,16 @@ def _get_product_data(beautiful_soup: BeautifulSoup) -> dict:
 
 
 def _get_image_urls(product_data: dict, parsed_url: ParseResult) -> List[str]:
+    """
+    Helper function to extract the image URLs.
+
+    Args:
+        product_data (dict): Representation of the product data JSON
+        parsed_url (ParseResult): Parsed URL
+
+    Returns:
+        List[str]: `list` of image URLs
+    """
     image_ids = [
         image["id"]
         for variation in product_data.get("variations", {}).values()
@@ -136,8 +165,19 @@ def _get_image_urls(product_data: dict, parsed_url: ParseResult) -> List[str]:
     return [url.geturl() for url in image_urls]
 
 
-def _get_sustainability_info_urls(product_data: dict, parsed_url: ParseResult) -> List[str]:
+def _get_sustainability_info_htmls(product_data: dict, parsed_url: ParseResult) -> List[str]:
+    """
+    Helper function to get the sustainability information (as HTML). Otto fetches the sustainability
+    information when the button is clicked. Therefore, we need to, firstly, find the URLs
+    and, secondly, send a request to get the actual sustainability information (as HTMLs).
 
+    Args:
+        product_data (dict): Representation of the product data JSON
+        parsed_url (ParseResult): Parsed URL
+
+    Returns:
+        List[str]: `list` of sustainability information as HTMLs
+    """
     sustainabilities = [
         variation.get("sustainability", {})
         for variation in product_data.get("variations", {}).values()
@@ -159,10 +199,22 @@ def _get_sustainability_info_urls(product_data: dict, parsed_url: ParseResult) -
     ]
 
 
-def _get_sustainability_info(soup: BeautifulSoup) -> dict:
+def _get_sustainability_info(beautiful_soup: BeautifulSoup) -> dict:
+    """
+    Helper function that extracts the sustainability information from the parsed HTML.
+
+    Args:
+        beautiful_soup (BeautifulSoup): Parsed HTML of sustainability information
+
+    Returns:
+        dict: Mapping from name to description and license of the sustainability information.
+            If nothing was found, empty `dict`.
+    """
     return_value = dict()
 
-    for label_html in soup.find_all("div", attrs={"class": "prd_sustainabilityLayer__label"}):
+    for label_html in beautiful_soup.find_all(
+        "div", attrs={"class": "prd_sustainabilityLayer__label"}
+    ):
         name = label_html.find("div", attrs={"class": "prd_sustainabilityLayer__caption"})
         description = label_html.find(
             "div", attrs={"class": "prd_sustainabilityLayer__description"}
@@ -183,15 +235,25 @@ def _get_sustainability_info(soup: BeautifulSoup) -> dict:
 
 
 def _get_sustainability(product_data: dict, parsed_url: ParseResult) -> List[str]:
-    sustainability_information_urls = _get_sustainability_info_urls(product_data, parsed_url)
+    """
+    Helper function that extracts the product's sustainability information.
 
-    if sustainability_information_urls is None:
+    Args:
+        product_data (dict): Representation of the product data JSON
+        parsed_url (ParseResult): Parsed URL
+
+    Returns:
+        List[str]: Sorted `list` of found sustainability labels
+    """
+    sustainability_information_htmls = _get_sustainability_info_htmls(product_data, parsed_url)
+
+    if sustainability_information_htmls is None:
         return []
 
     labels = {}
 
-    for label_info_url in sustainability_information_urls:
-        sustainable_soup = BeautifulSoup(label_info_url, "html.parser")
+    for sustainability_information_html in sustainability_information_htmls:
+        sustainable_soup = BeautifulSoup(sustainability_information_html, "html.parser")
         labels.update(_get_sustainability_info(sustainable_soup))
 
     return sorted({_LABEL_MAPPING.get(label, LabelIDType.UNKNOWN) for label in labels.keys()})

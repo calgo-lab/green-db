@@ -19,6 +19,10 @@ logger = getLogger(__name__)
 
 class MessageQueue:
     def __init__(self) -> None:
+        """
+        This `class` is for convenience and to avoid duplicated implementations of the same thing.
+        It offers simple access to enqueue jobs.
+        """
         self.__redis_connection = Redis(
             host=REDIS_HOST, port=REDIS_PORT, password=REDIS_PASSWORD, username=REDIS_USER
         )
@@ -29,6 +33,13 @@ class MessageQueue:
         logger.info("Redis connection established and message queues initialized.")
 
     def add_scraping(self, table_name: str, scraped_page: ScrapedPage) -> None:
+        """
+        Enqueue job to "scraping" `Queue`.
+
+        Args:
+            table_name (str): Table name to insert the given `scraped_page`
+            scraped_page (ScrapedPage): Domain object representation to add to scraping table
+        """
         self.__scraping_queue.enqueue(
             WORKER_FUNCTION_SCRAPING,
             args=(table_name, scraped_page),
@@ -38,6 +49,13 @@ class MessageQueue:
         )
 
     def add_extract(self, table_name: str, row_id: int) -> None:
+        """
+        Enqueue job to "extract" `Queue`.
+
+        Args:
+            table_name (str): Table name to fetch the `ScrapedPage` from
+            row_id (int): id of the to-be-extracted-row
+        """
         self.__extract_queue.enqueue(
             WORKER_FUNCTION_EXTRACT,
             args=(table_name, row_id),

@@ -20,11 +20,27 @@ from .postgres import (  # noqa
 
 
 class __TableMixin:
+    """
+    Mixin `class` to add some convenience methods to table implementations.
+    """
+
     @classmethod
     def get_columns(cls) -> List[str]:
+        """
+        Get the table's column names.
+
+        Returns:
+            List[str]: `list` of table's columns
+        """
         return [a for a in cls.__dict__.keys() if not a.startswith("_")]
 
     def __repr__(self) -> str:
+        """
+        For convenience: `print` table object shows content.
+
+        Returns:
+            str: `str` representation of the table object.
+        """
         columns = self.get_columns()
 
         def get_value_depending_on_type(column: str) -> str:
@@ -43,6 +59,13 @@ class __TableMixin:
 
 
 class ScrapingTable(__TableMixin):
+    """
+    Base `class` for Scraping tables that defined the columns.
+
+    Args:
+        __TableMixin ([type]): Mixin that implements some convenience methods
+    """
+
     id = Column(INTEGER, nullable=False, autoincrement=True, primary_key=True)
     timestamp = Column(TIMESTAMP, nullable=False)
     merchant = Column(TEXT, nullable=False)
@@ -54,13 +77,30 @@ class ScrapingTable(__TableMixin):
 
 
 class ZalandoScrapingTable(ScrapingBaseTable, ScrapingTable):
+    """
+    The actual scraping table for Zalando.
+
+    Args:
+        ScrapingBaseTable ([type]): `sqlalchemy` base class for the Scraping database
+        ScrapingTable ([type]): To inherit the table definition
+    """
+
     __tablename__ = TABLE_NAME_SCRAPING_ZALANDO
 
 
 class OTTOScrapingTable(ScrapingBaseTable, ScrapingTable):
+    """
+    The actual scraping table for Otto.
+
+    Args:
+        ScrapingBaseTable ([type]): `sqlalchemy` base class for the Scraping database
+        ScrapingTable ([type]): To inherit the table definition
+    """
+
     __tablename__ = TABLE_NAME_SCRAPING_OTTO
 
 
+# Used to dynamically map a table name to the correct Table class.
 SCRAPING_TABLE_CLASS_FOR: Dict[str, Type[ScrapingTable]] = {
     TABLE_NAME_SCRAPING_ZALANDO: ZalandoScrapingTable,
     TABLE_NAME_SCRAPING_OTTO: OTTOScrapingTable,
@@ -68,6 +108,14 @@ SCRAPING_TABLE_CLASS_FOR: Dict[str, Type[ScrapingTable]] = {
 
 
 class GreenDBTable(GreenDBBaseTable, __TableMixin):
+    """
+    Defines the GreenDB columns.
+
+    Args:
+        GreenDBBaseTable ([type]): `sqlalchemy` base class for the GreenDB database
+        __TableMixin ([type]): Mixin that implements some convenience methods
+    """
+
     __tablename__ = TABLE_NAME_GREEN_DB
 
     id = Column(INTEGER, nullable=False, autoincrement=True, primary_key=True)
@@ -91,6 +139,14 @@ class GreenDBTable(GreenDBBaseTable, __TableMixin):
 
 
 class SustainabilityLabelsTable(GreenDBBaseTable, __TableMixin):
+    """
+    Defines the SustainabilityLabels columns.
+
+    Args:
+        GreenDBBaseTable ([type]): `sqlalchemy` base class for the GreenDB database
+        __TableMixin ([type]): Mixin that implements some convenience methods
+    """
+
     __tablename__ = TABLE_NAME_SUSTAINABILITY_LABELS
 
     id = Column(TEXT, nullable=False, autoincrement=False, primary_key=True)

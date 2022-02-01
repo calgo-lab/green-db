@@ -38,6 +38,12 @@ POSTGRES_BASE_CLASS_FOR = {
 
 
 def __check_database(database_name: str) -> None:
+    """
+    Checks whether `database_name` is defined. If not, logs an error.
+
+    Args:
+        database_name (str): Name of database to check
+    """
     if database_name not in POSTGRES_URL_FOR.keys():
         logger.error(
             f"'database_name' not valid! Need to be one of: {', '.join(POSTGRES_URL_FOR.keys())}"
@@ -45,6 +51,12 @@ def __check_database(database_name: str) -> None:
 
 
 def bootstrap_tables(database_name: str) -> None:
+    """
+    Creates all defined tables (if they do not exist) for the `database_name`.
+
+    Args:
+        database_name (str): Name of database to bootstrap
+    """
     __check_database(database_name)
 
     POSTGRES_BASE_CLASS_FOR[database_name].metadata.create_all(
@@ -53,11 +65,29 @@ def bootstrap_tables(database_name: str) -> None:
 
 
 def get_session_factory(database_name: str) -> Callable[[], Session]:
+    """
+    Creates a `Session` factory for the `database_name`.
+    When the `Session` factory is called it returns a `Session` and makes sure it will be closed.
+
+    Args:
+        database_name (str): Name of database to create a `Session` factory for
+
+    Returns:
+        Callable[[], Session]: `Session` factory for the `database_name`
+    """
     __check_database(database_name)
 
     PostgresSession = sessionmaker(bind=create_engine(POSTGRES_URL_FOR[database_name]))
 
     def _get_postgres_session() -> Iterator[Session]:
+        """
+        Helper function that yields a `Session` and makes sure it will be closed.
+        Additionally, it logs when a `Session` is created and closed. For this,
+            we use function attributes.
+
+        Yields:
+            Iterator[Session]: Generator with exactly one `Session`
+        """
         _get_postgres_session.session_number += 1  # type: ignore
 
         session = PostgresSession()

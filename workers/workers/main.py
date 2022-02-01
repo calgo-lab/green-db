@@ -2,18 +2,27 @@ from argparse import ArgumentParser
 
 
 def start_extract() -> None:
-    from workers.extract import start
+    """
+    This indirection is necessary to "lazy" load the `extract` module.
+    """
+    from .extract import start
 
     start()
 
 
 def start_scraping() -> None:
-    from workers.scraping import start
+    """
+    This indirection is necessary to "lazy" load the `scraping` module.
+    """
+    from .scraping import start
 
     start()
 
 
 def start() -> None:
+    """
+    CLI implementation of the `worker` command.
+    """
     parser = ArgumentParser(description="CLI to start a RQ-Worker process.")
     subparsers = parser.add_subparsers()
 
