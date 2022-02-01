@@ -1,3 +1,6 @@
+# This Lua script uses the splash API to scroll to the bottom of a webpage.
+# This helps to trigger some dynamic JS based requests and get
+# a full fletched HTML.
 scroll_end_of_page_script = """
 function main(splash, args)
     local num_scrolls = 10

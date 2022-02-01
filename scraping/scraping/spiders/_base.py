@@ -4,11 +4,10 @@ from datetime import datetime
 from logging import getLogger
 from typing import Any, Dict, Iterator, List, Optional, Union
 
+from core.domain import PageType, ScrapedPage
 from message_queue import MessageQueue
 from scrapy import Spider
 from scrapy_splash import SplashJsonResponse, SplashRequest
-
-from core.domain import PageType, ScrapedPage
 
 from ..splash import scroll_end_of_page_script
 
@@ -26,6 +25,23 @@ class BaseSpider(Spider):
         products_per_page: Optional[int] = None,
         **kwargs: Dict[str, Any]
     ) -> None:
+        """
+        Base `class` for all spiders.
+        It implements a bunch of methods that are re-used by child classes.
+        Also, defines an `abstractmethod` that needs to implemented.
+
+        Args:
+            start_urls (Union[str, List[str]]): URL the spider should start at
+            category (str): All products found belong to this category
+            timestamp (datetime): When was this scraping run started
+            search_term (Optional[str], optional): Meta information about this scraping run.
+                Defaults to None.
+            meta_data (Optional[Union[str, Dict[str, str]]], optional): Additional meta information
+                that could be useful downstream. Defaults to None.
+            products_per_page (Optional[int], optional): Limits how many products should be
+                scraped for each starting page. Defaults to None.
+        """
+
         # set default value
         self.request_timeout = getattr(self, "request_timeout", 0.5)
         self.table_name: str = getattr(self, "table_name", self.name)  # type: ignore
@@ -66,6 +82,12 @@ class BaseSpider(Spider):
         self.products_per_page = int(products_per_page) if products_per_page else products_per_page
 
     def start_requests(self) -> Iterator[SplashRequest]:
+        """
+        The `Scrapy` framework executes this method.
+
+        Yields:
+            Iterator[SplashRequest]: Requests that will be performed
+        """
         for start_url in self.start_urls:
             yield SplashRequest(
                 url=start_url,
@@ -80,6 +102,13 @@ class BaseSpider(Spider):
             )
 
     def _save_SERP(self, response: SplashJsonResponse) -> None:
+        """
+        Helper method for child classes. Simply instantiates a `SrapedPage` object
+            and enqueues this to the scraping `Queue`.
+
+        Args:
+            response (SplashJsonResponse): Response from a performed request
+        """
         scraped_page = ScrapedPage(
             timestamp=self.timestamp,
             merchant=self.name,
@@ -93,6 +122,13 @@ class BaseSpider(Spider):
         self.message_queue.add_scraping(table_name=self.table_name, scraped_page=scraped_page)
 
     def parse_PRODUCT(self, response: SplashJsonResponse) -> None:
+        """
+        Helper method for child classes. Simply instantiates a `SrapedPage` object
+            and enqueues this to the scraping `Queue`.
+
+        Args:
+            response (SplashJsonResponse): Response from a performed request
+        """
         scraped_page = ScrapedPage(
             timestamp=self.timestamp,
             merchant=self.name,
@@ -107,4 +143,14 @@ class BaseSpider(Spider):
 
     @abstractmethod
     def parse_SERP(self, response: SplashJsonResponse) -> Iterator[SplashRequest]:
-        pass
+        """
+        Abstract method forces child classes to implement this.
+        It is responsible for yielding new `SplashRequest` for each product on the `response` page
+            and use pagination to the new result page (a.k.a `SERP`).
+
+        Args:
+            response (SplashJsonResponse): Response from a performed request
+
+        Yields:
+            Iterator[SplashRequest]: New request for each product on `response` page and pagination
+        """
