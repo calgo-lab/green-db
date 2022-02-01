@@ -13,6 +13,16 @@ logger = getLogger(__name__)
 
 
 def extract_zalando(parsed_page: ParsedPage) -> Optional[Product]:
+    """
+    Extracts information of interest from HTML (and other intermediate representations)
+    and returns `Product` object or `None` if anything failed. Works for zalando.de.
+
+    Args:
+        parsed_page (ParsedPage): Intermediate representation of `ScrapedPage` domain object
+
+    Returns:
+        Optional[Product]: Valid `Product` object or `None` if extraction failed
+    """
     if "/outfits/" in parsed_page.scraped_page.url:
         return None
 
@@ -111,6 +121,19 @@ def __get_sustainability_info(
     description_attr: str,
     headline: str = "Dieser Artikel erfüllt die folgenden Nachhaltigkeits-Kriterien:",
 ) -> Dict[str, str]:
+    """
+    Helper function to extract sustainability information.
+
+    Args:
+        beautiful_soup (BeautifulSoup): Parsed HTML
+        title_attr (str): HTML attr of title
+        description_attr (str): HTML attr of description
+        headline (str, optional): Headline on webpage. Defaults to
+            "Dieser Artikel erfüllt die folgenden Nachhaltigkeits-Kriterien:".
+
+    Returns:
+        Dict[str, str]: `dict` with name and description of found sustainability information
+    """
 
     # this area is hidden by default, so we need to find the right one
     hidden_areas = [
@@ -137,6 +160,17 @@ def _get_sustainability(
     beautiful_soup: BeautifulSoup,
     headline: str = "Dieser Artikel erfüllt die folgenden Nachhaltigkeits-Kriterien:",
 ) -> List[str]:
+    """
+    Extracts the sustainability information from HTML.
+
+    Args:
+        beautiful_soup (BeautifulSoup): Parsed HTML
+        headline (str, optional): Headline on webpage. Defaults to
+            "Dieser Artikel erfüllt die folgenden Nachhaltigkeits-Kriterien:".
+
+    Returns:
+        List[str]: Ordered `list` of found sustainability labels
+    """
 
     data = {
         "labels": __get_sustainability_info(
