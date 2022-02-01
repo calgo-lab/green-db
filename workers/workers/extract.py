@@ -1,3 +1,6 @@
+from redis import Redis
+from rq import Connection, Worker
+
 from core.constants import (
     TABLE_NAME_SCRAPING_OTTO,
     TABLE_NAME_SCRAPING_ZALANDO,
@@ -6,8 +9,6 @@ from core.constants import (
 from core.redis import REDIS_HOST, REDIS_PASSWORD, REDIS_PORT, REDIS_USER
 from database.connection import GreenDB, Scraping
 from extract import extract_product
-from redis import Redis
-from rq import Connection, Worker
 
 green_db_connection = GreenDB()
 CONNECTION_FOR_TABLE = {
