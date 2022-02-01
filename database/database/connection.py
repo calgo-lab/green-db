@@ -24,6 +24,16 @@ class Connection:
     def __init__(
         self, database_class: Type[GreenDBTable] | Type[ScrapingTable], database_name: str
     ) -> None:
+        """
+        Base `class` of connections.
+        Makes sure the tables exists, offers `Session` factory and some basic methods.
+
+        Args:
+            database_class (Type[GreenDBTable] | Type[ScrapingTable]): Table class,
+                necessary to write objects into database
+            database_name (str): Name of the database,
+                necessary for boostrapping and `Session` factory
+        """
         self._database_class = database_class
         self._session_factory = get_session_factory(database_name)
 
@@ -38,21 +48,6 @@ class Connection:
         DomainClass: Type[Product] | Type[ScrapedPage],
         batch_size: int = 1000,
     ) -> Iterator[Product | ScrapedPage]:
-        """
-        TODO: PyDoc ..
-
-        Idea from here: https://github.com/sqlalchemy/sqlalchemy
-
-        Args:
-            db_query (Query): [description]
-            id_column (Column): [description]
-            DomainClass (Type[Product] | Type[ScrapedPage]): [description]
-            batch_size (int, optional): [description]. Defaults to 1000.
-
-        Yields:
-            Iterator[Product | ScrapedPage]: [description]
-        """
-
         last_id = None
 
         while True:
@@ -67,6 +62,13 @@ class Connection:
                 yield DomainClass.from_orm(row)
 
     def write(self, domain_object: ScrapedPage | Product) -> ScrapingTable | GreenDBTable:
+        """
+        Writes a `domain_object` into the database and returns an updated Table object.
+        This is useful if, e.g., the `id` of the database row is necessary in the future.
+
+        Returns:
+            [ScrapingTable | GreenDBTable]: Updated Table object representing the database row
+        """
         with self._session_factory() as db_session:
             db_object = self._database_class(**domain_object.dict())
             db_session.add(db_object)
@@ -76,6 +78,15 @@ class Connection:
         return db_object
 
     def __get_latest_timestamp(self, db_session: Session) -> datetime:
+        """
+        Helper method to fetch the latest available timestamp.
+
+        Args:
+            db_session (Session): `db_session` use for the query
+
+        Returns:
+            datetime: Latest timestamp available in database
+        """
         return (
             db_session.query(self._database_class.timestamp)
             .distinct()
@@ -85,10 +96,25 @@ class Connection:
         )
 
     def get_latest_timestamp(self) -> datetime:
+        """
+        Fetch the latest available timestamp.
+
+        Returns:
+            datetime: Latest timestamp available in database
+        """
         with self._session_factory() as db_session:
             return self.__get_latest_timestamp(db_session)
 
     def is_timestamp_available(self, timestamp: datetime) -> bool:
+        """
+        Check whether the given `timestamp` is available in database.
+
+        Args:
+            timestamp (datetime): `timestamp` to check availability
+
+        Returns:
+            bool: Whether `timestamp` is available
+        """
         with self._session_factory() as db_session:
             return (
                 db_session.query(self._database_class.timestamp)
@@ -99,6 +125,12 @@ class Connection:
 
 class Scraping(Connection):
     def __init__(self, table_name: str):
+        """
+        `Connection` for scraping table defined by `table_name`.
+
+        Args:
+            table_name (str): Scraping `table_name` to connect to
+        """
         if table_name not in SCRAPING_TABLE_CLASS_FOR.keys():
             logger.error(f"Can't handle table: '{table_name}'")
 
@@ -106,6 +138,15 @@ class Scraping(Connection):
         super().__init__(SCRAPING_TABLE_CLASS_FOR[self.__table_name], DATABASE_NAME_SCRAPING)
 
     def get_scraped_page(self, id: int) -> ScrapedPage:
+        """
+        Fetch `ScrapedPage` with given `id`.
+
+        Args:
+            id (int): Row `id` to fetch
+
+        Returns:
+            ScrapedPage: Domain object representation of table row
+        """
         with self._session_factory() as db_session:
             return ScrapedPage.from_orm(
                 db_session.query(self._database_class).filter(self._database_class.id == id).first()
@@ -114,6 +155,16 @@ class Scraping(Connection):
     def get_scraped_pages_for_timestamp(
         self, timestamp: datetime, batch_size: int = 1000
     ) -> Iterator[ScrapedPage]:
+        """
+        Fetch all `ScrapedPage`s for given `timestamp`.
+
+        Args:
+            timestamp (datetime): Defines which rows to fetch
+            batch_size (int, optional): How many rows to fetch simultaneously. Defaults to 1000.
+
+        Yields:
+            Iterator[ScrapedPage]: Iterator over the domain object representations
+        """
         with self._session_factory() as db_session:
             query = db_session.query(self._database_class).filter(
                 self._database_class.timestamp == timestamp
@@ -121,6 +172,15 @@ class Scraping(Connection):
             return (ScrapedPage.from_orm(row) for row in query.all())
 
     def get_latest_scraped_pages(self, batch_size: int = 1000) -> Iterator[ScrapedPage]:
+        """
+        Fetch all `ScrapedPage`s for latest available `timestamp`.
+
+        Args:
+            batch_size (int, optional): How many rows to fetch simultaneously. Defaults to 1000.
+
+        Yields:
+            Iterator[ScrapedPage]: Iterator over the domain object representations
+        """
         return self.get_scraped_pages_for_timestamp(
             self.get_latest_timestamp(), batch_size=batch_size
         )
@@ -128,6 +188,10 @@ class Scraping(Connection):
 
 class GreenDB(Connection):
     def __init__(self) -> None:
+        """
+        `Connection` for the GreenDB.
+        Automatically pre-populates the sustainability labels table.
+        """
         super().__init__(GreenDBTable, DATABASE_NAME_GREEN_DB)
 
         from .sustainability_labels import sustainability_labels
@@ -146,6 +210,15 @@ class GreenDB(Connection):
             db_session.commit()
 
     def get_product(self, id: int) -> Product:
+        """
+        Fetch `Product` with given `id`.
+
+        Args:
+            id (int): Row `id` to fetch
+
+        Returns:
+            Product: Domain object representation of table row
+        """
         with self._session_factory() as db_session:
             return Product.from_orm(
                 db_session.query(GreenDBTable).filter(GreenDBTable.id == id).first()
@@ -154,25 +227,42 @@ class GreenDB(Connection):
     def get_sustainability_labels(
         self, iterator: bool = False
     ) -> List[SustainabilityLabel] | Iterator[SustainabilityLabel]:
+        """
+        Fetch all `SustainabilityLabel`s.
+
+        Args:
+            iterator (bool): Defines whether to return an `Iterator` or `list`
+
+        Returns:
+            List[SustainabilityLabel] | Iterator[SustainabilityLabel]: `list` or `Iterator
+                of domain object representations
+        """
         with self._session_factory() as db_session:
 
             sustainability_labels = db_session.query(SustainabilityLabelsTable).all()
-
+            sustainability_labels_iterator = (
+                SustainabilityLabel.from_orm(sustainability_label)
+                for sustainability_label in sustainability_labels
+            )
             if iterator:
-                return (
-                    SustainabilityLabel.from_orm(sustainability_label)
-                    for sustainability_label in sustainability_labels
-                )
+                return sustainability_labels_iterator
 
             else:
-                return [
-                    SustainabilityLabel.from_orm(sustainability_label)
-                    for sustainability_label in sustainability_labels
-                ]
+                return list(sustainability_labels_iterator)
 
     def get_products_for_timestamp(
         self, timestamp: datetime, batch_size: int = 1000
     ) -> Iterator[Product]:
+        """
+        Fetch all `Product`s for given `timestamp`.
+
+        Args:
+            timestamp (datetime): Defines which rows to fetch
+            batch_size (int, optional): How many rows to fetch simultaneously. Defaults to 1000.
+
+        Yields:
+            Iterator[Product]: `Iterator` of domain object representations
+        """
         with self._session_factory() as db_session:
             query = db_session.query(self._database_class).filter(
                 self._database_class.timestamp == timestamp
@@ -180,4 +270,13 @@ class GreenDB(Connection):
             return (Product.from_orm(row) for row in query.all())
 
     def get_latest_products(self, batch_size: int = 1000) -> Iterator[Product]:
+        """
+        Fetch all `Product`s for latest available `timestamp`.
+
+        Args:
+            batch_size (int, optional): How many rows to fetch simultaneously. Defaults to 1000.
+
+        Yields:
+            Iterator[Product]: `Iterator` of domain object representation
+        """
         return self.get_products_for_timestamp(self.get_latest_timestamp(), batch_size=batch_size)
