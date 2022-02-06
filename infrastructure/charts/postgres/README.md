@@ -23,7 +23,7 @@ EOF
 ### Create Postgres Secrets
 
 ```bash
-kubectl create secret generic postgres-secret -n greendb --from-file=postgresql-postgres-password=../../.credentials/postgresql-postgres-password --from-file=postgresql-password=../../.credentials/postgresql-postgres-password --from-file=postgresql-replicator-password=../../.credentials/postgresql-replicator-password
+kubectl create secret generic postgres-secret -n greendb --from-file=postgres-password=../../.credentials/postgresql-postgres-password --from-file=replicator-password=../../.credentials/postgresql-replicator-password
 ```
 
 ### Install Bitnami Postgres with Custom Values
