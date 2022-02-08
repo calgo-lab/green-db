@@ -10,10 +10,6 @@ __label_information: Dict[str, Dict[str, str]] = {
         "name": "B Corporation",
         "description": "",
     },
-    LabelIDType.BE.name: {
-        "name": "Blauer Engel",
-        "description": "",
-    },
     LabelIDType.CTC_T_SILVER.name: {
         "name": "Cradle to Cradle - Silver Level",
         "description": "",
@@ -61,6 +57,26 @@ __label_information: Dict[str, Dict[str, str]] = {
     LabelIDType.SOILA.name: {
         "name": "Soil Association",
         "description": "",
+    },
+    LabelIDType.BLUES_A.name: {
+        "name": "bluesign® APPROVED",
+        "description": "",
+    },
+    LabelIDType.CTC_T_BRONZE.name: {
+        "name": "Cradle to Cradle Certified™ Platinum",
+        "description": "",
+    },
+    LabelIDType.GCS.name: {
+        "name": "The Good Cashmere Standard®",
+        "description": "Mit der Entwicklung des Good Cashmere Standards hat die Aid by Trade Foundation einen neuen Maßstab für die Produktion von nachhaltigem Kaschmir definiert. Der Standard beinhaltet die vom Farm Animal Welfare Council festgelegten Fünf Freiheiten. Der Good Cashmere Standard folgt drei Hauptprinzipien: Förderung des Tierwohls in der Kaschmirproduktion, Unterstützung der Kaschmirfarmer zur Sicherung einer nachhaltigen Einkommensquelle, sowie Umweltschutz.",
+    },
+    LabelIDType.GOTS_ORGANIC.name: {
+        "name": "GOTS - organic",
+        "description": "Der Global Organic Textile Standard ist eine der führenden und vertrauensvollsten Zertifizierungen für Textilien aus Biofasern. Produkte mit diesem Label bestehen zu mindestens 95% aus biologischem Material. Jeder Partner in der Zulieferkette wird überprüft, um eine umweltbewusste und sozial verantwortungsvolle Herstellung zu garantieren.",
+    },
+    LabelIDType.GOTS_MWOM.name: {
+        "name": "GOTS - made with organic materials",
+        "description": "Der Global Organic Textile Standard ist eine der führenden und vertrauensvollsten Zertifizierungen für Textilien aus Biofasern. Produkte mit GOTS-Zertifikat bestehen zu mindestens 70% aus organischem Material. Jeder Partner in der Zulieferkette wird überprüft, um eine umweltbewusste und sozial verantwortungsvolle Herstellung zu garantieren.",
     },
 }
 
