@@ -5,8 +5,9 @@ from urllib.parse import ParseResult, urlparse
 
 import requests
 from bs4 import BeautifulSoup
-from core.domain import LabelIDType, Product
 from pydantic import ValidationError
+
+from core.domain import LabelIDType, Product
 
 from ..parse import DUBLINCORE, MICRODATA, ParsedPage
 from ..utils import safely_return_first_element
