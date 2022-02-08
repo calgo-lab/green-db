@@ -155,7 +155,7 @@ __label_information: Dict[str, Dict[str, Union[str, int]]] = {
         "social_evaluation": 60,
     },
     LabelIDType.BLUES_P.name: {
-        "name": "bluesign® product",
+        "name": "bluesign® PRODUCT",
         "description": "Ziel des Siegels ist, die Umwelteinflüsse der Textilindustrie zu verringern. Es steht außerdem für die sichere Herstellung und Verarbeitung von Kunst- und Naturfasern.",
         "credibility_evaluation": 79,
         "ecological_evaluation": 75,
