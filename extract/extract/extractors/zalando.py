@@ -68,9 +68,11 @@ def extract_zalando(parsed_page: ParsedPage) -> Optional[Product]:
 
 
 # TODO: How can we do this smart?
+# See: https://www.zalando.de/campaigns/about-sustainability/
 _LABEL_MAPPING = {
     "Responsible Wool Standard": LabelIDType.RWS,
-    "GOTS - organic": LabelIDType.GOTS,
+    "GOTS - organic": LabelIDType.GOTS_ORGANIC,
+    "GOTS - made with organic materials": LabelIDType.GOTS_MWOM,
     "Hergestellt aus Wolle aus verantwortungsbewusster Landwirtschaft": LabelIDType.OTHER,
     "Hergestellt aus mindestens 20% recycelter Baumwolle": LabelIDType.OTHER,
     "Hergestellt aus 70-100% recycelten Materialien": LabelIDType.OTHER,
@@ -86,17 +88,19 @@ _LABEL_MAPPING = {
     "Global Recycled Standard": LabelIDType.GRS,
     "Hergestellt aus mindestens 50% Lyocell": LabelIDType.OTHER,
     "Biologisch abbaubar": LabelIDType.OTHER,
-    "GOTS - made with organic materials": LabelIDType.GOTS,
-    "bluesign®": LabelIDType.BLUES_P,
+    "bluesign®": LabelIDType.OTHER,
     "Hergestellt mit recyceltem Plastik": LabelIDType.OTHER,
-    "Fairtrade Certified Cotton": LabelIDType.FT,
+    "Fairtrade Certified Cotton": LabelIDType.FT_B,
     "Hergestellt aus Daunen aus verantwortungsbewusster Landwirtschaft": LabelIDType.OTHER,
     "Responsible Down Standard": LabelIDType.RDS,
     "Hergestellt aus 70-100% biologischen Materialien": LabelIDType.OTHER,
     "Hergestellt aus recycelter Wolle": LabelIDType.OTHER,
     "OCS - Organic Blended Content Standard": LabelIDType.OCS_BLENDED,
     "OEKO-TEX® Made in Green": LabelIDType.MIG_OEKO_TEX,
+    "Cradle to Cradle Certified™ Bronze": LabelIDType.CTC_T_BRONZE,
+    "Cradle to Cradle Certified™ Gold": LabelIDType.CTC_T_GOLD,
     "Cradle to Cradle Certified™ Silver": LabelIDType.CTC_T_SILVER,
+    "Cradle to Cradle Certified™ Platinum": LabelIDType.CTC_T_PLATIN,
     "Waldschonend": LabelIDType.OTHER,
     "Hergestellt aus recyceltem Nylon": LabelIDType.OTHER,
     "Leather Working Group": LabelIDType.LWG,
@@ -104,7 +108,6 @@ _LABEL_MAPPING = {
     "Hergestellt aus mindestens 50% Polyurethanen auf Wasserbasis": LabelIDType.OTHER,
     "Hergestellt aus mindestens 20% innovativen Materialien aus recyceltem Müll": LabelIDType.OTHER,  # noqa
     "OCS - Organic Content Standard": LabelIDType.OCS,
-    "Cradle to Cradle Certified™ Gold": LabelIDType.CTC_T_GOLD,
     "Hergestellt aus mindestens 50% nachhaltigerer Baumwolle": LabelIDType.OTHER,
     "Zum Wohl der Tierwelt": LabelIDType.OTHER,
     "Hergestellt aus mindestens 20% innovativen ökologischen Alternativen zu fossilen Brennstoffen": LabelIDType.OTHER,  # noqa
