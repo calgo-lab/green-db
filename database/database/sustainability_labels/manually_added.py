@@ -26,10 +26,6 @@ __label_information: Dict[str, Dict[str, str]] = {
         "name": "Higg Index",
         "description": "",
     },
-    LabelIDType.OCS.name: {
-        "name": "Organic Content Standard",
-        "description": "",
-    },
     LabelIDType.OCS_100.name: {
         "name": "Organic Content Standard - 100",
         "description": "",
