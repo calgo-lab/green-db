@@ -107,7 +107,7 @@ _LABEL_MAPPING = {
     "Hergestellt aus mindestens 20% innovativen Leder-Alternativen": LabelIDType.OTHER,
     "Hergestellt aus mindestens 50% Polyurethanen auf Wasserbasis": LabelIDType.OTHER,
     "Hergestellt aus mindestens 20% innovativen Materialien aus recyceltem Müll": LabelIDType.OTHER,  # noqa
-    "OCS - Organic Content Standard": LabelIDType.OCS,
+    "OCS - Organic Content Standard": LabelIDType.OCS_100,
     "Hergestellt aus mindestens 50% nachhaltigerer Baumwolle": LabelIDType.OTHER,
     "Zum Wohl der Tierwelt": LabelIDType.OTHER,
     "Hergestellt aus mindestens 20% innovativen ökologischen Alternativen zu fossilen Brennstoffen": LabelIDType.OTHER,  # noqa
