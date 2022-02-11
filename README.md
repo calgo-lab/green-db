@@ -63,10 +63,6 @@ The GreenDB schema is highly inspired by [schema.org](https://schema.org). Howev
 - [1]: Cathérine Lehmann. (2021). Scaling sustainability advice - Options for generating large-scale green consumption recommendations. URL: https://green-consumption-assistant.de/wp-content/uploads/GCA-Working-Paper-I-Scaling-Sustainability-Advice.pdf
 
 
-## Technical Details
-
-![Architecture](./docs/figures/architecture.jpg)
-
 
 ## Disclaimer!
 
