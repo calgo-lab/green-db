@@ -4,13 +4,15 @@
 
 ### Create Persistent Volume Claim
 
+Make sure you replace `<your namespace>` appropriately.
+
 ```bash
 cat <<EOF | kubectl create -f -
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: postgres-pvc
-  namespace: greendb
+  namespace: <your namespace>
 spec:
   accessModes:
   - ReadWriteOnce
@@ -23,7 +25,7 @@ EOF
 ### Create Postgres Secrets
 
 ```bash
-kubectl create secret generic postgres-secret -n greendb --from-file=postgres-password=../../.credentials/postgresql-postgres-password --from-file=replicator-password=../../.credentials/postgresql-replicator-password
+kubectl create secret generic postgres-secret --from-file=postgres-password=../../.credentials/postgresql-postgres-password --from-file=replicator-password=../../.credentials/postgresql-replicator-password
 ```
 
 ### Install Bitnami Postgres with Custom Values
@@ -33,7 +35,7 @@ This will use the above created secret to bootstrap the postgres instance. The r
 ```bash
 helm repo add bitnami https://charts.bitnami.com/bitnami
 helm repo update
-helm install postgresql bitnami/postgresql --values values.yaml --namespace greendb
+helm install postgresql bitnami/postgresql --values values.yaml
 ```
 
 ### Create the Necessary Users, Databases and Grant Privileges
@@ -76,9 +78,9 @@ GRANT SELECT, INSERT ON ALL TABLES IN SCHEMA "public" TO "scraping";
 As for the postgres secret, you need to set the referenced file contents accordingly.
 
 ```bash
-kubectl create secret generic scraping-secret -n greendb --from-file=postgres-user=../../.credentials/scraping-postgres-user --from-file=postgres-password=../../.credentials/scraping-postgres-password
+kubectl create secret generic scraping-secret --from-file=postgres-user=../../.credentials/scraping-postgres-user --from-file=postgres-password=../../.credentials/scraping-postgres-password
 ```
 
 ```bash
-kubectl create secret generic green-db-secret -n greendb --from-file=postgres-user=../../.credentials/green-db-postgres-user --from-file=postgres-password=../../.credentials/green-db-postgres-password
+kubectl create secret generic green-db-secret --from-file=postgres-user=../../.credentials/green-db-postgres-user --from-file=postgres-password=../../.credentials/green-db-postgres-password
 ```
