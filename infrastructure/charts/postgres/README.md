@@ -52,6 +52,11 @@ helm install postgresql bitnami/postgresql --values values.yaml
 
 ### Create the Necessary Users, Databases and Grant Privileges
 
+This will let you configure postgresql from your terminal.
+```bash
+kubectl exec --stdin --tty postgresql-0 -- /bin/bash -c "export PGPASSWORD=\$POSTGRES_PASSWORD; psql --host postgresql -U postgres -d postgres"
+```
+
 The standard GreenDB setup requires [two databases.](../../../core/core/constants.py) Their default names are: `scraping` and `green-db`.
 
 We recommend to use separated users for the databases and store their credentials in secrets. This is described in the following.
