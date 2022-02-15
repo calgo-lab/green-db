@@ -24,9 +24,22 @@ EOF
 
 ### Create Postgres Secrets
 
+First you will need to choose a postgres password and a replicator password.
+
+make sure to avoid non ascii characters like ö/ä/ß
+
+```bash
+umask 077
+echo "<some password>" > ../../.credentials/postgresql-postgres-password
+echo "<some other password>" > ../../.credentials/postgresql-replicator-password
+```
+
+Now you can create the secret.
 ```bash
 kubectl create secret generic postgres-secret --from-file=postgres-password=../../.credentials/postgresql-postgres-password --from-file=replicator-password=../../.credentials/postgresql-replicator-password
 ```
+Note that these paths are local to ``green-db/infrastructure/charts/postgres``.
+
 
 ### Install Bitnami Postgres with Custom Values
 
@@ -48,8 +61,8 @@ We recommend to use separated users for the databases and store their credential
 #### Create User
 
 ```sql
-CREATE USER "green-db" WITH ENCRYPTED PASSWORD '<password>';
-CREATE USER "scraping" WITH ENCRYPTED PASSWORD '<password>';
+CREATE USER "green-db" WITH ENCRYPTED PASSWORD '<green-db-password>';
+CREATE USER "scraping" WITH ENCRYPTED PASSWORD '<scraping-password>';
 ```
 
 #### Create Database
@@ -75,7 +88,17 @@ GRANT SELECT, INSERT ON ALL TABLES IN SCHEMA "public" TO "scraping";
 
 #### Create Secrets
 
-As for the postgres secret, you need to set the referenced file contents accordingly.
+As for the postgres secret, you need to set usernames and passwords.
+
+```bash
+umask 077
+echo "scraping" > ../../.credentials/scraping-postgres-user
+echo "<scraping-password>" > ../../.credentials/scraping-postgres-password
+echo "green-db" > ../../.credentials/green-db-postgres-user
+echo "<green-db-password>" > ../../.credentials/green-db-postgres-password
+```
+
+make sure that the usernames/passwords match those in the database.
 
 ```bash
 kubectl create secret generic scraping-secret --from-file=postgres-user=../../.credentials/scraping-postgres-user --from-file=postgres-password=../../.credentials/scraping-postgres-password
