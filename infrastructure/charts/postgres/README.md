@@ -24,9 +24,9 @@ EOF
 
 ### Create Postgres Secrets
 
-First you will need to choose a postgres password and a replicator password.
+First, you need to choose a postgres and a replicator password. Make sure you avoid special characters.
 
-make sure to avoid non ascii characters like ö/ä/ß
+Note that these paths are relative to ``green-db/infrastructure/charts/postgres``.
 
 ```bash
 umask 077
@@ -38,7 +38,6 @@ Now you can create the secret.
 ```bash
 kubectl create secret generic postgres-secret --from-file=postgres-password=../../.credentials/postgresql-postgres-password --from-file=replicator-password=../../.credentials/postgresql-replicator-password
 ```
-Note that these paths are local to ``green-db/infrastructure/charts/postgres``.
 
 
 ### Install Bitnami Postgres with Custom Values
