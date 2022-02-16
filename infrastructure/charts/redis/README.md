@@ -4,14 +4,12 @@
 
 ### Create Persistent Volume Claim
 
-
 ```bash
 cat <<EOF | kubectl create -f -
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: redis-pvc
-  namespace: greendb
 spec:
   accessModes:
   - ReadWriteOnce
@@ -25,7 +23,7 @@ EOF
 ### Create Secrets
 
 ```bash
-kubectl create secret generic redis-secret -n greendb --from-file=root-password=../../.credentials/redis-root-password
+kubectl create secret generic redis-secret --from-file=root-password=../../.credentials/redis-root-password
 ```
 
 
@@ -34,5 +32,5 @@ kubectl create secret generic redis-secret -n greendb --from-file=root-password=
 ```bash
 helm repo add bitnami https://charts.bitnami.com/bitnami
 helm repo update
-helm install redis bitnami/redis --values values.yaml --namespace greendb
+helm install redis bitnami/redis --values values.yaml
 ```
