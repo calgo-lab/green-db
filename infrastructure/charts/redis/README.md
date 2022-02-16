@@ -4,15 +4,12 @@
 
 ### Create Persistent Volume Claim
 
-Make sure you replace `<your namespace>` appropriately.
-
 ```bash
 cat <<EOF | kubectl create -f -
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: redis-pvc
-  namespace: <your namespace>
 spec:
   accessModes:
   - ReadWriteOnce
