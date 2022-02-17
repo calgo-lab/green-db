@@ -33,31 +33,33 @@ def combine_results(
 def male() -> List[dict]:
     path_2_category = {
         "herrenbekleidung-shirts": "SHIRT",
-        "sports-herren-shirts": ("SHIRT", {"type": "SPORT"}),
         "herrenbekleidung-hemden": "SHIRT",
         "herrenbekleidung-sweatshirts-hoodies": "SWEATER",
-        "sports-herren-pullover-sweater": ("SWEATER", {"type": "SPORT"}),
         "herrenbekleidung-pullover-strickjacken": "SWEATER",
         "herrenbekleidung-jacken": "JACKET",
-        "sports-herren-jacken": ("JACKET", {"type": "SPORT"}),
         "herrenbekleidung-maentel": "JACKET",
         "herrenbekleidung-anzuege": "SUIT",
         "herrenbekleidung-jeans": "JEANS",
         "herrenbekleidung-hosen": "PANT",
-        "sporthosen-herren": ("PANT", {"type": "SPORT"}),
-        "herrenbekleidung-hosen-shorts": ("PANT", {"type": "SHORTS"}),
+        "herrenbekleidung-hosen-shorts": "PANT",
         "herrenbekleidung-trainingsanzuege-jogger": "TRACKSUIT",
-        "trainingsanzug-herren": ("TRACKSUIT", {"type": "SPORT"}),
         "herrenbekleidung-waesche": "UNDERWEAR",
         "herrenbekleidung-nachtwaesche": "NIGHTWEAR",
         "herrenbekleidung-bademode": "SWIMMWEAR",
+        # Shoes and Bags
+        "herrenschuhe": "SHOES",
+        "taschen-accessoires-taschen-herren": "BAG",
+        # Sport
+        "sports-herren-shirts": ("SHIRT", {"type": "SPORT"}),
+        "sports-herren-jacken": ("JACKET", {"type": "SPORT"}),
+        "sporthosen-herren": ("PANT", {"type": "SPORT"}),
+        "sports-herren-pullover-sweater": ("SWEATER", {"type": "SPORT"}),
+        "trainingsanzug-herren": ("TRACKSUIT", {"type": "SPORT"}),
         "funktionsunterwaesche-herren": ("UNDERWEAR", {"type": "SPORT"}),
         "sports-herren-struempfe": ("UNDERWEAR", {"type": "SPORT"}),
         "sports-bademode-herren": ("SWIMMWEAR", {"type": "SPORT"}),
         "sportschuhe-herren": ("SHOES", {"type": "SPORT"}),
-        "herrenschuhe": "SHOES",
-        "sports-taschen-rucksaecke-herren": ("BACKPACK", {"type": "SPORT"}),
-        "taschen-accessoires-taschen-herren": "BAG",
+        "sports-taschen-rucksaecke-herren": ("BAG", {"type": "SPORT"}),
     }
 
     return combine_results(path_2_category, sex="MALE")
@@ -71,15 +73,20 @@ def female() -> List[dict]:
         "damenbekleidung-pullover-und-strickjacken": "SWEATER",
         "damenbekleidung-sweatshirts-hoodies": "SWEATER",
         "damenbekleidung-jacken": "JACKET",
+        "damenbekleidung-maentel": "JACKET",
         "damenbekleidung-jeans": "JEANS",
         "damenbekleidung-hosen": "PANT",
-        "damenbekleidung-hosen-shorts": ("PANT", {"type": "SHORTS"}),
+        "damenbekleidung-hosen-shorts": "PANT",
         "damenbekleidung-hosen-overalls-jumpsuit": "OVERALL",
         "damenbekleidung-roecke": "SKIRT",
         "damenbekleidung-waesche": "UNDERWEAR",
         "nachtwaesche": "NIGHTWEAR",
         "damenbekleidung-struempfe": "UNDERWEAR",
         "damenbekleidung-bademode": "SWIMMWEAR",
+        # Shoes and Bags
+        "damenschuhe": "SHOES",
+        "taschen-accessoires-taschen-damen": "BAG",
+        # Sport
         "sports-damen-shirts": ("SHIRT", {"type": "SPORT"}),
         "sports-jacken-damen": ("JACKET", {"type": "SPORT"}),
         "sporthosen-damen": ("PANT", {"type": "SPORT"}),
@@ -91,9 +98,7 @@ def female() -> List[dict]:
         "sportanzuege-damen": ("TRACKSUIT", {"type": "SPORT"}),
         "sports-bademode-damen": ("SWIMMWEAR", {"type": "SPORT"}),
         "sportschuhe-damen": ("SHOES", {"type": "SPORT"}),
-        "damenschuhe": "SHOES",
-        "sports-taschen-rucksaecke-damen": ("BACKPACK", {"type": "SPORT"}),
-        "taschen-accessoires-taschen-damen": "BAG",
+        "sports-taschen-rucksaecke-damen": ("BAG", {"type": "SPORT"}),
     }
 
     return combine_results(path_2_category, sex="FEMALE")

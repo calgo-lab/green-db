@@ -7,6 +7,7 @@ def female_clothes() -> List[dict]:
     filter = "?nachhaltigkeit=alle-nachhaltigen-artikel"
 
     path_2_category = {
+        "blazer": "SWEATER",
         "blusen": "BLOUSE",
         "hosen": "PANT",
         "jacken": "JACKET",
