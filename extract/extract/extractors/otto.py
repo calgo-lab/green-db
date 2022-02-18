@@ -5,9 +5,8 @@ from urllib.parse import ParseResult, urlparse
 
 import requests
 from bs4 import BeautifulSoup
-from pydantic import ValidationError
-
 from core.domain import LabelIDType, Product
+from pydantic import ValidationError
 
 from ..parse import DUBLINCORE, MICRODATA, ParsedPage
 from ..utils import safely_return_first_element
@@ -122,6 +121,8 @@ _LABEL_MAPPING = {
     "ECOCERT": LabelIDType.ECOCERT,
     "EU Ecolabel": LabelIDType.EU_ECO_T,
     "The Good Cashmere Standard®": LabelIDType.GCS,
+    "Energieeffizientes Gerät": LabelIDType.OTHER,
+    "Birla Viscose": LabelIDType.OTHER,
     "": LabelIDType.OTHER,
 }
 
