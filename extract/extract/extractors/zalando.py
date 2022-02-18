@@ -160,8 +160,8 @@ def __get_sustainability_info(
 
 
 def _get_sustainability(
-        beautiful_soup: BeautifulSoup,
-        certificate_attr: str = "cluster-certificates",
+    beautiful_soup: BeautifulSoup,
+    certificate_attr: str = "cluster-certificates",
 ) -> List[str]:
     """
     Extracts the sustainability information from HTML.
