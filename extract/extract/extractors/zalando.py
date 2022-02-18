@@ -110,7 +110,8 @@ _LABEL_MAPPING = {
     "OCS - Organic Content Standard": LabelIDType.OCS_100,
     "Hergestellt aus mindestens 50% nachhaltigerer Baumwolle": LabelIDType.OTHER,
     "Zum Wohl der Tierwelt": LabelIDType.OTHER,
-    "Hergestellt aus mindestens 20% innovativen ökologischen Alternativen zu fossilen Brennstoffen": LabelIDType.OTHER,  # noqa
+    "Hergestellt aus mindestens 20% innovativen ökologischen Alternativen zu fossilen Brennstoffen": LabelIDType.OTHER,
+    # noqa
     "Natürlich": LabelIDType.OTHER,
     "Hergestellt aus recyceltem Gummi": LabelIDType.OTHER,
     "Hergestellt aus LENZING™ TENCEL™, einem Eco-Material": LabelIDType.OTHER,
@@ -122,7 +123,7 @@ def __get_sustainability_info(
     beautiful_soup: BeautifulSoup,
     title_attr: str,
     description_attr: str,
-    headline: str = "Dieser Artikel erfüllt die folgenden Nachhaltigkeits-Kriterien:",
+    certificate_attr: str = "cluster-certificates",
 ) -> Dict[str, str]:
     """
     Helper function to extract sustainability information.
@@ -131,8 +132,8 @@ def __get_sustainability_info(
         beautiful_soup (BeautifulSoup): Parsed HTML
         title_attr (str): HTML attr of title
         description_attr (str): HTML attr of description
-        headline (str, optional): Headline on webpage. Defaults to
-            "Dieser Artikel erfüllt die folgenden Nachhaltigkeits-Kriterien:".
+        certificate_attr (str, optional): HTML attr of certificate. Defaults to
+            "cluster-certificates".
 
     Returns:
         Dict[str, str]: `dict` with name and description of found sustainability information
@@ -141,8 +142,7 @@ def __get_sustainability_info(
     # this area is hidden by default, so we need to find the right one
     hidden_areas = [
         div
-        for div in beautiful_soup.find_all("div", attrs={"style": "max-height:0"})
-        if headline in div.text
+        for div in beautiful_soup.find_all("div", attrs={"data-testid": certificate_attr})
     ]
 
     if hidden_areas:
@@ -160,16 +160,16 @@ def __get_sustainability_info(
 
 
 def _get_sustainability(
-    beautiful_soup: BeautifulSoup,
-    headline: str = "Dieser Artikel erfüllt die folgenden Nachhaltigkeits-Kriterien:",
+        beautiful_soup: BeautifulSoup,
+        certificate_attr: str = "cluster-certificates",
 ) -> List[str]:
     """
     Extracts the sustainability information from HTML.
 
     Args:
         beautiful_soup (BeautifulSoup): Parsed HTML
-        headline (str, optional): Headline on webpage. Defaults to
-            "Dieser Artikel erfüllt die folgenden Nachhaltigkeits-Kriterien:".
+        certificate_attr (str, optional): HTML attr of certificate. Defaults to
+            "cluster-certificates".
 
     Returns:
         List[str]: Ordered `list` of found sustainability labels
@@ -180,19 +180,19 @@ def _get_sustainability(
             beautiful_soup=beautiful_soup,
             title_attr="certificate__title",
             description_attr="certificate__description",
-            headline=headline,
+            certificate_attr=certificate_attr,
         ),
         "impact": __get_sustainability_info(
             beautiful_soup=beautiful_soup,
             title_attr="cluster-causes__title",
             description_attr="cluster-causes__intro-statement",
-            headline=headline,
+            certificate_attr=certificate_attr,
         ),
         "aspects": __get_sustainability_info(
             beautiful_soup=beautiful_soup,
             title_attr="cause__title",
             description_attr="cause__description",
-            headline=headline,
+            certificate_attr=certificate_attr,
         ),
     }
 
