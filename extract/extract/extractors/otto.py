@@ -103,6 +103,8 @@ _LABEL_MAPPING = {
     "Recycled Claim Standard 100": LabelIDType.RCS_100,
     "Recycelter Kunststoff (Hartwaren)": LabelIDType.OTHER,
     "Bio-Siegel": LabelIDType.OTHER,
+    "Energieeffizientes Gerät": LabelIDType.OTHER,
+    "Birla Viscose": LabelIDType.OTHER,
     "": LabelIDType.OTHER,
 }
 
