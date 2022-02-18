@@ -1,20 +1,14 @@
 from redis import Redis
 from rq import Connection, Worker
 
-from core.constants import (
-    TABLE_NAME_SCRAPING_OTTO,
-    TABLE_NAME_SCRAPING_ZALANDO,
-    WORKER_QUEUE_EXTRACT,
-)
+from core.constants import WORKER_QUEUE_EXTRACT
 from core.redis import REDIS_HOST, REDIS_PASSWORD, REDIS_PORT, REDIS_USER
-from database.connection import GreenDB, Scraping
+from database.connection import GreenDB
 from extract import extract_product
 
+from . import CONNECTION_FOR_TABLE
+
 green_db_connection = GreenDB()
-CONNECTION_FOR_TABLE = {
-    TABLE_NAME_SCRAPING_ZALANDO: Scraping(TABLE_NAME_SCRAPING_ZALANDO),
-    TABLE_NAME_SCRAPING_OTTO: Scraping(TABLE_NAME_SCRAPING_OTTO),
-}
 
 
 def start() -> None:

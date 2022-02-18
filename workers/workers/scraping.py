@@ -2,19 +2,12 @@ from message_queue import MessageQueue
 from redis import Redis
 from rq import Connection, Worker
 
-from core.constants import (
-    TABLE_NAME_SCRAPING_OTTO,
-    TABLE_NAME_SCRAPING_ZALANDO,
-    WORKER_QUEUE_SCRAPING,
-)
+from core.constants import WORKER_QUEUE_SCRAPING
 from core.domain import PageType, ScrapedPage
 from core.redis import REDIS_HOST, REDIS_PASSWORD, REDIS_PORT, REDIS_USER
 from database.connection import Scraping
 
-CONNECTION_FOR_TABLE = {
-    TABLE_NAME_SCRAPING_ZALANDO: Scraping(TABLE_NAME_SCRAPING_ZALANDO),
-    TABLE_NAME_SCRAPING_OTTO: Scraping(TABLE_NAME_SCRAPING_OTTO),
-}
+from . import CONNECTION_FOR_TABLE
 
 redis_connection = Redis(
     host=REDIS_HOST, port=REDIS_PORT, password=REDIS_PASSWORD, username=REDIS_USER
