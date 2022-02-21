@@ -122,6 +122,8 @@ _LABEL_MAPPING = {
     "ECOCERT": LabelIDType.ECOCERT,
     "EU Ecolabel": LabelIDType.EU_ECO_T,
     "The Good Cashmere Standard®": LabelIDType.GCS,
+    "Energieeffizientes Gerät": LabelIDType.OTHER,
+    "Birla Viscose": LabelIDType.OTHER,
     "": LabelIDType.OTHER,
 }
 
