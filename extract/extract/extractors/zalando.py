@@ -2,9 +2,8 @@ from logging import getLogger
 from typing import Dict, List, Optional
 
 from bs4 import BeautifulSoup
-from pydantic import ValidationError
-
 from core.domain import LabelIDType, Product
+from pydantic import ValidationError
 
 from ..parse import JSON_LD, ParsedPage
 from ..utils import safely_return_first_element
@@ -82,8 +81,7 @@ _LABEL_MAPPING = {
     "Weniger Verpackung": LabelIDType.OTHER,
     "Better Cotton Initiative": LabelIDType.BCI,
     "Hergestellt aus 50-70% recycelten Materialien": LabelIDType.OTHER,
-    "Hergestellt aus mindestens 50% verantwortungsbewussten forstbasierten Materialien":
-        LabelIDType.OTHER, # noqa
+    "Hergestellt aus mindestens 50% verantwortungsbewussten forstbasierten Materialien": LabelIDType.OTHER,  # noqa
     "Hergestellt aus 30-50% recycelten Materialien": LabelIDType.OTHER,
     "Sustainable Textile Production (STeP) by OEKO-TEX®": LabelIDType.STEP_OEKO_TEX,
     "Global Recycled Standard": LabelIDType.GRS,
@@ -107,13 +105,11 @@ _LABEL_MAPPING = {
     "Leather Working Group": LabelIDType.LWG,
     "Hergestellt aus mindestens 20% innovativen Leder-Alternativen": LabelIDType.OTHER,
     "Hergestellt aus mindestens 50% Polyurethanen auf Wasserbasis": LabelIDType.OTHER,
-    "Hergestellt aus mindestens 20% innovativen Materialien aus recyceltem Müll":
-        LabelIDType.OTHER,  # noqa
+    "Hergestellt aus mindestens 20% innovativen Materialien aus recyceltem Müll": LabelIDType.OTHER,  # noqa
     "OCS - Organic Content Standard": LabelIDType.OCS_100,
     "Hergestellt aus mindestens 50% nachhaltigerer Baumwolle": LabelIDType.OTHER,
     "Zum Wohl der Tierwelt": LabelIDType.OTHER,
-    "Hergestellt aus mindestens 20% innovativen ökologischen Alternativen zu fossilen Brennstoffen":
-        LabelIDType.OTHER,  # noqa
+    "Hergestellt aus mindestens 20% innovativen ökologischen Alternativen zu fossilen Brennstoffen": LabelIDType.OTHER,  # noqa
     "Natürlich": LabelIDType.OTHER,
     "Hergestellt aus recyceltem Gummi": LabelIDType.OTHER,
     "Hergestellt aus LENZING™ TENCEL™, einem Eco-Material": LabelIDType.OTHER,
