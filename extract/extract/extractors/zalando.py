@@ -3,6 +3,7 @@ from typing import Dict, List, Optional
 
 from bs4 import BeautifulSoup
 from pydantic import ValidationError
+
 from core.domain import LabelIDType, Product
 
 from ..parse import JSON_LD, ParsedPage
