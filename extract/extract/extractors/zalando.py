@@ -142,13 +142,10 @@ def __get_sustainability_info(
     """
 
     # this area is hidden by default, so we need to find the right one
-    hidden_areas = [
-        div
-        for div in beautiful_soup.find_all("div", attrs={"data-testid": certificate_attr})
-    ]
+    hidden_area = beautiful_soup.find("div", attrs={"data-testid": certificate_attr})
 
-    if hidden_areas:
-        sustainability_info_parsed = hidden_areas[0]
+    if hidden_area:
+        sustainability_info_parsed = hidden_area
 
         titles = sustainability_info_parsed.find_all(attrs={"data-testid": title_attr})
         descriptions = sustainability_info_parsed.find_all(attrs={"data-testid": description_attr})
@@ -157,8 +154,7 @@ def __get_sustainability_info(
             title.string: description.string for title, description in zip(titles, descriptions)
         }
 
-    else:
-        return {}
+    return {}
 
 
 def _get_sustainability(
