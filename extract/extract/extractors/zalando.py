@@ -2,8 +2,8 @@ from logging import getLogger
 from typing import Dict, List, Optional
 
 from bs4 import BeautifulSoup
-from core.domain import LabelIDType, Product
 from pydantic import ValidationError
+from core.domain import LabelIDType, Product
 
 from ..parse import JSON_LD, ParsedPage
 from ..utils import safely_return_first_element
