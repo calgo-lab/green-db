@@ -122,7 +122,7 @@ def __get_sustainability_info(
     beautiful_soup: BeautifulSoup,
     title_attr: str,
     description_attr: str,
-    certificate_attr: str = "cluster-certificates",
+    certificate_attr: str,
 ) -> Dict[str, str]:
     """
     Helper function to extract sustainability information.
@@ -131,18 +131,15 @@ def __get_sustainability_info(
         beautiful_soup (BeautifulSoup): Parsed HTML
         title_attr (str): HTML attr of title
         description_attr (str): HTML attr of description
-        certificate_attr (str, optional): HTML attr of certificate. Defaults to
-            "cluster-certificates".
+        certificate_attr (str, optional): HTML attr of certificate.
 
     Returns:
         Dict[str, str]: `dict` with name and description of found sustainability information
     """
 
     # this area is hidden by default, so we need to find the right one
-    hidden_area = beautiful_soup.find("div", attrs={"data-testid": certificate_attr})
-
-    if hidden_area:
-        sustainability_info_parsed = hidden_area
+    if sustainability_info_parsed := beautiful_soup.find("div",
+                                                         attrs={"data-testid": certificate_attr}):
 
         titles = sustainability_info_parsed.find_all(attrs={"data-testid": title_attr})
         descriptions = sustainability_info_parsed.find_all(attrs={"data-testid": description_attr})
@@ -150,8 +147,8 @@ def __get_sustainability_info(
         return {
             title.string: description.string for title, description in zip(titles, descriptions)
         }
-
-    return {}
+    else:
+        return {}
 
 
 def _get_sustainability(
