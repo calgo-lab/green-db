@@ -138,8 +138,9 @@ def __get_sustainability_info(
     """
 
     # this area is hidden by default, so we need to find the right one
-    if sustainability_info_parsed := beautiful_soup.find("div",
-                                                         attrs={"data-testid": certificate_attr}):
+    if sustainability_info_parsed := beautiful_soup.find(
+        "div", attrs={"data-testid": certificate_attr}
+    ):
 
         titles = sustainability_info_parsed.find_all(attrs={"data-testid": title_attr})
         descriptions = sustainability_info_parsed.find_all(attrs={"data-testid": description_attr})
