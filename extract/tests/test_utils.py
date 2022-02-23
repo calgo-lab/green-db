@@ -1,19 +1,23 @@
 from pathlib import Path
+from datetime import datetime
 
-# from green_db_integration.domain import Page
 from core.domain import ScrapedPage
 from core.domain import PageType
 
-TEST_DATA_DIR = Path(__file__).parent.parent.parent / "test-data"
+TEST_DATA_DIR = Path(__file__).parent
 
 
-def read_test_html(merchant: str, file_name: str, category: str, url: str = "dummy_url") -> ScrapedPage:
+def read_test_html(
+    timestamp: datetime, merchant: str, file_name: str, category: str, meta_information: dict, url: str = "dummy_url",
+) -> ScrapedPage:
     path = TEST_DATA_DIR / merchant / file_name
     with open(path) as f:
         return ScrapedPage(
-            html=f.read(),
+            timestamp=timestamp,
             merchant=merchant,
-            category=category,
             url=url,
+            html=f.read(),
+            category=category,
             page_type=PageType("PRODUCT"),
+            meta_information=meta_information,
         )
