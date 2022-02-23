@@ -119,10 +119,7 @@ _LABEL_MAPPING = {
 
 
 def __get_sustainability_info(
-    beautiful_soup: BeautifulSoup,
-    title_attr: str,
-    description_attr: str,
-    certificate_attr: str
+    beautiful_soup: BeautifulSoup, title_attr: str, description_attr: str, certificate_attr: str
 ) -> Dict[str, str]:
     """
     Helper function to extract sustainability information.
@@ -144,10 +141,7 @@ def __get_sustainability_info(
     titles = sustainability_info_parsed.find_all(attrs={"data-testid": title_attr})
     descriptions = sustainability_info_parsed.find_all(attrs={"data-testid": description_attr})
 
-    return {
-        title.string: description.string for title, description in zip(titles, descriptions)
-    }
-
+    return {title.string: description.string for title, description in zip(titles, descriptions)}
 
 
 def _get_sustainability(
