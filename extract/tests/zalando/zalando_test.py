@@ -1,19 +1,29 @@
+from datetime import datetime
+
+from core.constants import TABLE_NAME_SCRAPING_ZALANDO
 from core.domain import Product
 from extract import extract_product
 from tests.test_utils import read_test_html
-from extract.extractors.zalando import extract_zalando
 
 
 def test_zalando_basic() -> None:
-    page = read_test_html("zalando", "t-shirt.html", "TSHIRT")
-    actual = extract_product(extract_zalando, page)
+    timestamp = datetime.strptime("2022-02-17 12:49", '%Y-%m-%d %H:%M')
+    scraped_page = read_test_html(timestamp,
+                                  "zalando",
+                                  "t-shirt.html",
+                                  "TSHIRT",
+                                  {"family": "FASHION",
+                                   "sustainability": "reusing_materials",
+                                   "sex": "MALE"})
+    actual = extract_product(TABLE_NAME_SCRAPING_ZALANDO, scraped_page)
     expected = Product(
+        timestamp=timestamp,
         url="dummy_url",
         merchant="zalando",
-        categories="TSHIRT",
+        category="TSHIRT",
         name="JAAMES TURNTABLES - T-Shirt print - acid black",
         description=" ARMEDANGELS JAAMES TURNTABLES - T-Shirt print - acid black f\u00fcr "
-        "14,90\u00a0\u20ac (2021-12-21) versandkostenfrei bei Zalando bestellen.",
+                    "14,90\u00a0\u20ac (2021-12-21) versandkostenfrei bei Zalando bestellen.",
         brand="ARMEDANGELS",
         sustainability_labels=["GOTS"],
         price=14.90,
@@ -28,3 +38,4 @@ def test_zalando_basic() -> None:
         asin=None,
     )
     assert actual == expected
+
