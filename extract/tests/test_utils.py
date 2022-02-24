@@ -11,7 +11,7 @@ def read_test_html(
     timestamp: datetime, merchant: str, file_name: str, category: str, meta_information: dict, url: str = "dummy_url",
 ) -> ScrapedPage:
     path = TEST_DATA_DIR / merchant / file_name
-    with open(path) as f:
+    with open(path, encoding='utf-8') as f:
         return ScrapedPage(
             timestamp=timestamp,
             merchant=merchant,
