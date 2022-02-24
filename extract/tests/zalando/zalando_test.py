@@ -22,10 +22,10 @@ def test_zalando_basic() -> None:
         merchant="zalando",
         category="TSHIRT",
         name="JAAMES TURNTABLES - T-Shirt print - acid black",
-        description=" ARMEDANGELS JAAMES TURNTABLES - T-Shirt print - acid black f\u00fcr "
-                    "14,90\u00a0\u20ac (2021-12-21) versandkostenfrei bei Zalando bestellen.",
+        description=" ARMEDANGELS JAAMES TURNTABLES - T-Shirt print - acid black für "
+                    "14,90\xa0€ (2021-12-21) versandkostenfrei bei Zalando bestellen.",
         brand="ARMEDANGELS",
-        sustainability_labels=["GOTS"],
+        sustainability_labels=["GOTS_ORGANIC"],
         price=14.90,
         currency="EUR",
         image_urls=[
@@ -38,4 +38,5 @@ def test_zalando_basic() -> None:
         asin=None,
     )
     assert actual == expected
+
 
