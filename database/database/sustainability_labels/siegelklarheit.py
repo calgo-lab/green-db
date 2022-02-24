@@ -566,8 +566,8 @@ __label_information: Dict[str, Dict[str, Union[str, int]]] = {
         "description": "Ziel ist eine sozialverantwortliche Produktion. Das Siegel verlangt die Einhaltung von Sozialstandards sowie der Arbeitsschutz- und -sicherheitsgesetze in den jeweiligen Produktionsländern. Die WRAP- Prinzipien basieren auf internationalen Arbeitsplatzstandards und lokalen Gesetzen. Sie orientieren sich außerdem an den Konventionen der Internationalen Arbeitsorganisation.",
     },
     LabelIDType.RA.name: {
-        "name": "ASDF",
-        "description": "ASDF",
+        "name": "Rainforest Alliance",
+        "description": "Die Rainforest Alliance ist eine internationale gemeinnützige Organisation, die an der Schnittstelle von Handel, Land- und Forstwirtschaft arbeitet, um eine Welt zu schaffen, in der Mensch und Natur gemeinsam wachsen können. Unser Bündnis setzt sich für den Schutz von Wäldern und Artenvielfalt ein, handelt für das Klima und fördert die Verbesserung der Existenzgrundlagen für die Landbevölkerung.",
     },
     LabelIDType.BIORE.name: {
         "name": "bioRe",
