@@ -1,4 +1,4 @@
-from tests.test_utils import read_test_html
+from ..test_utils import read_test_html
 
 from core.constants import TABLE_NAME_SCRAPING_ZALANDO
 from core.domain import Product
