@@ -5,7 +5,6 @@ on:
 
 jobs:
   pytest:
-    needs: [black, isort, flake8, mypy]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
