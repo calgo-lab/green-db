@@ -7,7 +7,7 @@ TEST_DATA_DIR = Path(__file__).parent
 
 
 def read_test_html(
-    timestamp: datetime,
+    timestamp: str,
     merchant: str,
     file_name: str,
     category: str,
@@ -17,7 +17,7 @@ def read_test_html(
     path = TEST_DATA_DIR / merchant / file_name
     with open(path, encoding="utf-8") as f:
         return ScrapedPage(
-            timestamp=timestamp,
+            timestamp=datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S"),
             merchant=merchant,
             url=url,
             html=f.read(),
