@@ -1,9 +1,10 @@
 from requests_mock import Adapter
-from ..utils import read_test_html
 
 from core.constants import TABLE_NAME_SCRAPING_OTTO
 from core.domain import Product
 from extract import extract_product
+
+from ..utils import read_test_html
 
 
 def test_otto_basic(requests_mock: Adapter) -> None:
