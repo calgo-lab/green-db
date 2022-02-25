@@ -1,17 +1,21 @@
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 
-from core.domain import ScrapedPage
-from core.domain import PageType
+from core.domain import PageType, ScrapedPage
 
 TEST_DATA_DIR = Path(__file__).parent
 
 
 def read_test_html(
-    timestamp: datetime, merchant: str, file_name: str, category: str, meta_information: dict, url: str = "dummy_url",
+    timestamp: datetime,
+    merchant: str,
+    file_name: str,
+    category: str,
+    meta_information: dict,
+    url: str = "dummy_url",
 ) -> ScrapedPage:
     path = TEST_DATA_DIR / merchant / file_name
-    with open(path, encoding='utf-8') as f:
+    with open(path, encoding="utf-8") as f:
         return ScrapedPage(
             timestamp=timestamp,
             merchant=merchant,
