@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from requests_mock import Adapter
 from tests.test_utils import read_test_html
 
@@ -18,14 +16,19 @@ def test_otto_basic(requests_mock: Adapter) -> None:
     """
     requests_mock.register_uri("GET", "/product/sustainability/layerContent", text=label_html)
 
-    timestamp = datetime.strptime("2022-02-17 12:49", "%Y-%m-%d %H:%M")
     url = "https://www.otto.mock/"
+    timestamp = "2022-02-17 12:49:00"
+    merchant = "otto"
+    file_name = "damen-pullover.html"
+    category = "SWEATER"
+    meta_information = {"sex": "FEMALE", "family": "FASHION"}
+
     scraped_page = read_test_html(
-        timestamp,
-        "otto",
-        "damen-pullover.html",
-        "SWEATER",
-        {"sex": "FEMALE", "family": "FASHION"},
+        timestamp=timestamp,
+        merchant=merchant,
+        file_name=file_name,
+        category=category,
+        meta_information=meta_information,
         url=url,
     )
 
@@ -33,8 +36,8 @@ def test_otto_basic(requests_mock: Adapter) -> None:
     expected = Product(
         timestamp=timestamp,
         url=url,
-        merchant="otto",
-        category="SWEATER",
+        merchant=merchant,
+        category=category,
         name="s.Oliver Strickpullover »Pullover« (1-tlg)",
         description="s.Oliver Strickpullover »Pullover« (1-tlg) für 29,99€. mit regulärer Passform,"
         " hat einen V-Ausschnitt, hat eine Rippblende am Ausschnitt bei OTTO",
