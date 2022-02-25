@@ -1,5 +1,5 @@
 from requests_mock import Adapter
-from ..test_utils import read_test_html
+from ..utils import read_test_html
 
 from core.constants import TABLE_NAME_SCRAPING_OTTO
 from core.domain import Product
