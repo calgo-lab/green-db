@@ -23,7 +23,7 @@ def test_zalando_basic() -> None:
         file_name=file_name,
         category=category,
         meta_information=meta_information,
-        url=url
+        url=url,
     )
     actual = extract_product(TABLE_NAME_SCRAPING_ZALANDO, scraped_page)
     expected = Product(
