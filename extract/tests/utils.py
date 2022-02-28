@@ -14,7 +14,7 @@ def read_test_html(
     meta_information: dict,
     url: str = "dummy_url",
 ) -> ScrapedPage:
-    path = TEST_DATA_DIR / merchant / file_name
+    path = TEST_DATA_DIR / merchant / "data" / file_name
     with open(path, encoding="utf-8") as f:
         return ScrapedPage(
             timestamp=datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S"),
