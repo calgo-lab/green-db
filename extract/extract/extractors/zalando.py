@@ -118,68 +118,18 @@ _LABEL_MAPPING = {
 }
 
 
-def __get_sustainability_info(
-    beautiful_soup: BeautifulSoup, title_attr: str, description_attr: str, certificate_attr: str
-) -> Dict[str, str]:
-    """
-    Helper function to extract sustainability information.
-
-    Args:
-        beautiful_soup (BeautifulSoup): Parsed HTML
-        title_attr (str): HTML attr of title
-        description_attr (str): HTML attr of description
-        certificate_attr (str): HTML attr of certificate section
-
-    Returns:
-        Dict[str, str]: `dict` with name and description of found sustainability information
-    """
-
-    sustainability_info_parsed = beautiful_soup.find("div", attrs={"data-testid": certificate_attr})
-    if not sustainability_info_parsed:
-        return {}
-
-    titles = sustainability_info_parsed.find_all(attrs={"data-testid": title_attr})
-    descriptions = sustainability_info_parsed.find_all(attrs={"data-testid": description_attr})
-
-    return {title.string: description.string for title, description in zip(titles, descriptions)}
-
-
-def _get_sustainability(
-    beautiful_soup: BeautifulSoup,
-) -> List[str]:
+def _get_sustainability(beautiful_soup: BeautifulSoup) -> List[str]:
     """
     Extracts the sustainability information from HTML.
 
     Args:
         beautiful_soup (BeautifulSoup): Parsed HTML
-        headline (str, optional): Headline on webpage. Defaults to
-            "Dieser Artikel erfüllt die folgenden Nachhaltigkeits-Kriterien:".
 
     Returns:
         List[str]: Ordered `list` of found sustainability labels
     """
 
-    data = {
-        "labels": __get_sustainability_info(
-            beautiful_soup=beautiful_soup,
-            title_attr="certificate__title",
-            description_attr="certificate__description",
-            certificate_attr="cluster-certificates",
-        ),
-        "impact": __get_sustainability_info(
-            beautiful_soup=beautiful_soup,
-            title_attr="cluster-causes__title",
-            description_attr="cluster-causes__intro-statement",
-            certificate_attr="cluster-certificates",
-        ),
-        "aspects": __get_sustainability_info(
-            beautiful_soup=beautiful_soup,
-            title_attr="cause__title",
-            description_attr="cause__description",
-            certificate_attr="cluster-certificates",
-        ),
-    }
-
-    return sorted(
-        {_LABEL_MAPPING.get(label, LabelIDType.UNKNOWN) for label in data.get("labels", {}).keys()}
-    )
+    if cluster := beautiful_soup.find("div", attrs={"data-testid": "cluster-certificates"}):
+        labels = cluster.find_all(attrs={"data-testid": "certificate__title"})
+        return sorted({_LABEL_MAPPING.get(label, LabelIDType.UNKNOWN) for label in labels})
+    return {}
