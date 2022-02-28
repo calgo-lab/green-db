@@ -131,5 +131,5 @@ def _get_sustainability(beautiful_soup: BeautifulSoup) -> List[str]:
 
     if cluster := beautiful_soup.find("div", attrs={"data-testid": "cluster-certificates"}):
         labels = cluster.find_all(attrs={"data-testid": "certificate__title"})
-        return sorted({_LABEL_MAPPING.get(label, LabelIDType.UNKNOWN) for label in labels})
+        return sorted({_LABEL_MAPPING.get(label.string, LabelIDType.UNKNOWN) for label in labels})
     return []
