@@ -1,0 +1,592 @@
+{
+    "BLUE_ANGEL_LAPTOPS": {
+        "name": "Blauer Engel - Laptops & Co.",
+        "description": "Ziel dieses Blauen Engel f\u00fcr Computer (DE-UZ 78,) ist es, Ger\u00e4te auszuzeichnen, die einen geringen Energieverbrauch haben, langlebige und recyclinggerechte Konstruktion aufweisen und umweltbelastende Materien vermeiden.",
+        "credibility_evaluation": 73,
+        "ecological_evaluation": 61,
+        "social_evaluation": 0
+    },
+    "BLUE_ANGEL_PAPER": {
+        "name": "Blauer Engel - Papier",
+        "description": "Das Siegel kennzeichnet Papier, welches zu 100% aus Altpapier hergestellt ist (DE-UZ 14a). Beim \u00f6kologischen Systemvergleich schneiden Papierprodukte aus Altpapier gegen\u00fcber Papierprodukten aus Prim\u00e4rfasern, die Holz als Faserrohstoffquelle nutzen, im Hinblick auf Ressourcenverbrauch, Abwasserbelastung, Wasser- und Energieverbrauch wesentlich besser ab \u2013 bei vergleichbaren Gebrauchseigenschaften der Produkte. Zus\u00e4tzlich werden Anforderungen an den Chemikalieneinsatz gestellt, so sind beispielsweise bei der Herstellung der Einsatz von Chlor, halogenierten Bleichmitteln und biologisch schwer abbaubaren Komplexbildnern verboten.",
+        "credibility_evaluation": 79,
+        "ecological_evaluation": 60,
+        "social_evaluation": 0
+    },
+    "BLUE_ANGEL_TEXTILES": {
+        "name": "Blauer Engel - Textilien",
+        "description": "Das Siegel kennzeichnet Textilien, die ohne gesundheitsgef\u00e4hrdende Chemikalien und unter Einhaltung hoher Umweltstandards hergestellt wurden. Die Produkte m\u00fcssen au\u00dferdem gute Gebrauchseigenschaften aufweisen. Das Siegel f\u00fcr Textilien basiert auf der Vergabekriterien DE-UZ 154.",
+        "credibility_evaluation": 93,
+        "ecological_evaluation": 78,
+        "social_evaluation": 39
+    },
+    "BLUE_ANGEL_DETERGENTS": {
+        "name": "Blauer Engel - Wasch- & Reinigungsmittel",
+        "description": "Das Siegel kennzeichnet Wasch- und Reinigungsmittel, die so hergestellt wurden, dass sie in ihrer Erzeugung, Verwendung und Entsorgung m\u00f6glichst umwelt- und gesundheitsvertr\u00e4glich sind ohne Sie sollen dazu beitragen, Risiken f\u00fcr die Umwelt und die menschliche Gesundheit bei der Verwendung gef\u00e4hrlicher Stoffe zu verringern und zu verh\u00fcten, sowie den Verpackungsabfall zu minimieren. Die Schonung nat\u00fcrlicher Ressourcen ist ebenfalls ein wichtiges Anliegen des Umweltzeichens. Reinigungsmittel mit dem Blauen Engel sollen dadurch einen Beitrag leisten, indem bei ihrer Herstellung nachwachsende Rohstoffe eingesetzt werden, die unter nachhaltigen Bedingungen angebaut wurden bzw. die den nachhaltigen Anbau f\u00f6rdern.",
+        "credibility_evaluation": 73,
+        "ecological_evaluation": 72,
+        "social_evaluation": 0
+    },
+    "ECOCERT": {
+        "name": "ECOCERT",
+        "description": "Der Standard hat zum Ziel, ein Set anspruchsvoller Kriterien zu definieren, die Umwelt- und Nachhaltigkeitsanforderungen an den Herstellungsprozess und das gesamte Produkt beinhalten, insbesondere im Hinblick auf Rohstoffe nat\u00fcrlichen Ursprungs und recycelbare Verpackungen.",
+        "credibility_evaluation": 64,
+        "ecological_evaluation": 84,
+        "social_evaluation": 0
+    },
+    "EU_ECOLABEL_TEXTILES": {
+        "name": "EU Ecolabel - Textilien",
+        "description": "Ziel des EU Ecolabels ist, Verbraucher:innen einen Hinweis auf umweltfreundlichere Produkte und Dienstleistungen zu geben. Das Siegel kennzeichnet sowohl Natur- als auch Kunstfasertextilien. Alle Anforderungen m\u00fcssen unmittelbar erf\u00fcllt werden. Das Siegel definiert Anforderungen an umweltfreundliche Prozesse entlang des gesamten Produktionsweges.",
+        "credibility_evaluation": 92,
+        "ecological_evaluation": 73,
+        "social_evaluation": 32
+    },
+    "FAIR_STONE": {
+        "name": "Fair Stone",
+        "description": "Schwerpunkt ist die Verbesserung der Arbeitsbedingungen in Steinbr\u00fcchen und steinverarbeitenden Betrieben in Entwicklungs- und Schwellenl\u00e4ndern.",
+        "credibility_evaluation": 61,
+        "ecological_evaluation": 52,
+        "social_evaluation": 71
+    },
+    "FAIR_WEAR_FOUNDATION": {
+        "name": "Fair Wear Foundation",
+        "description": "Ziel ist, die Arbeitsbedingungen in Unternehmen der Textilindustrie weltweit zu verbessern. Der Schwerpunkt liegt dabei auf Betrieben, in denen Textilien gen\u00e4ht werden.",
+        "credibility_evaluation": 95,
+        "ecological_evaluation": 0,
+        "social_evaluation": 79
+    },
+    "FAIRTRADE_COTTON": {
+        "name": "Fairtrade - Baumwolle",
+        "description": "Das Siegel \u201eFairtrade Baumwolle\u201c steht f\u00fcr sozialvertr\u00e4gliche Lebens- und Arbeitsbedingungen in der Baumwollproduktion. Es richtet sich insbesondere an Kleinbauern. Die Lizenzgeb\u00fchren und ein Anteil des Fairtrade-Aufpreises werden f\u00fcr Projekte in den Produktionsl\u00e4ndern genutzt. Das Siegel stellt au\u00dferdem Anforderungen an einen umweltvertr\u00e4glichen Baumwollanbau.",
+        "credibility_evaluation": 91,
+        "ecological_evaluation": 56,
+        "social_evaluation": 72
+    },
+    "FAIRTRADE_TEXTILE_PRODUCTION": {
+        "name": "Fairtrade Textile Production",
+        "description": "Das Siegel \u201eFairtrade - Textilien\u201c zielt darauf ab, die Lebens- und Arbeitsbedingungen der Arbeiterinnen und Arbeiter in der Textilindustrie zu verbessern. Au\u00dferdem unterst\u00fctzt es eine umweltvertr\u00e4gliche Produktion. Das Siegel beinhaltet auch, H\u00e4ndler von Textilien mit Hilfe von Lizenzvertr\u00e4gen zu fairen Handelsbedingungen zu verpflichten.",
+        "credibility_evaluation": 93,
+        "ecological_evaluation": 35,
+        "social_evaluation": 70
+    },
+    "GLOBAL_ORGANIC_TEXTILE_STANDARD": {
+        "name": "Global Organic Textile Standard",
+        "description": "Ziel des Standards ist es, entlang der gesamten textilen Lieferkette strenge Anforderungen an die \u00f6kologischen und sozialen Bedingungen bei der Textil- und Bekleidungsherstellung mit \u00f6kologisch erzeugten Rohstoffen festzulegen.",
+        "credibility_evaluation": 89,
+        "ecological_evaluation": 75,
+        "social_evaluation": 66
+    },
+    "IVN_NATURLEDER": {
+        "name": "IVN Naturleder",
+        "description": "Ziel des IVN Naturleder Siegels ist es, die Herstellung von Lederwaren \u00f6kologischer, sozialvertr\u00e4glicher und ges\u00fcnder zu gestalten. Anforderungen stellt das Siegel deshalb vor allem in den Bereichen Umweltbelastung, Gefahrenstoffe, Entsorgung und Recyclingf\u00e4higkeit des Leders, Gesundheit sowie gerechten Arbeitsbedingungen. Das Siegel deckt alle Herstellungsstufen von der Rohware bis zum Verkauf und Gebrauch des fertigen Leders (jedoch nicht des verarbeiteten Lederprodukts) ab.",
+        "credibility_evaluation": 82,
+        "ecological_evaluation": 87,
+        "social_evaluation": 73
+    },
+    "NATURE_CARE_PRODUCTS_STANDARD": {
+        "name": "Nature Care Products Standard ",
+        "description": "NCP (Nature-Care-Product-Standard) bietet eine einfache Umwelt-Kennzeichnung f\u00fcr Gegenst\u00e4nde des t\u00e4glichen Bedarfs. Das Siegel ist f\u00fcr alle Non-Food-Produkte aus nachwachsenden Rohstoffen, wie Wasch- und Reinigungsmittel, Hygieneartikel, Pflegemittel f\u00fcr Gegenst\u00e4nde, Spielzeug, Kerzen oder D\u00fcngemittel, die aus nat\u00fcrlichen Inhaltstoffen bestehen und die Umwelt nicht unn\u00f6tig belasten, konzipiert. Diese Zertifizierung schlie\u00dft die Regelungsl\u00fccke im \u00f6kologischen Non-Food-Bereich und definiert so notwendige Ma\u00dfst\u00e4be f\u00fcr echte nachhaltige Naturprodukte.",
+        "credibility_evaluation": 73,
+        "ecological_evaluation": 72,
+        "social_evaluation": 8
+    },
+    "NATURLAND_TEXTILES": {
+        "name": "Naturland - Textilien",
+        "description": "Naturland verbindet \u00d6kologischen Landbau mit Sozialer Verantwortung und Fairem Handel - regional und weltweit. Das Ziel ist der Erhalt einer gemeinsamen Lebensgrundlage durch umfassende Nachhaltigkeit entlang der gesamten Wertsch\u00f6pfungskette - ganz im Sinne der globalen Nachhaltigkeitsziele der UN (SDGs). Im Textil-Bereich kennzeichnet das Naturland-Siegel Produkte aus Bio-Baumwolle, bei deren Produktion und Verarbeitung \u00f6kologische, aber auch soziale Anforderungen erf\u00fcllt werden. Textilien, die mit dem Naturland Siegel zertifiziert sind, m\u00fcssen zu mindestens 95% aus \u00f6kologisch erzeugten Naturfasern bestehen.",
+        "credibility_evaluation": 83,
+        "ecological_evaluation": 88,
+        "social_evaluation": 61
+    },
+    "IVN_NATURTEXTIL": {
+        "name": "Naturtextil IVN zertifiziert BEST",
+        "description": "Der Standard spiegelt seit 2000 die IVN entworfenen Richtlinien f\u00fcr Naturtextilien wider und bildet die gesamte textile Produktionskette ab, in \u00f6kologischer und sozialverantwortlicher Hinsicht. Schwerpunkt ist der Einsatz von 100% nat\u00fcrlichen Bio-Fasern.",
+        "credibility_evaluation": 82,
+        "ecological_evaluation": 96,
+        "social_evaluation": 72
+    },
+    "NORDIC_ECOLABEL_DETERGENTS": {
+        "name": "Nordic Ecolabel - Wasch- & Reinigungsmittel",
+        "description": "Das Nordic Swan Ecolabel verfolgt das Ziel, die Umweltbelastung durch die Produktion und den Konsum von Waren und Dienstleistungen zu reduzieren - und es Verbrauchern und professionellen Eink\u00e4ufern leicht zu machen, die umweltfreundlichsten Waren und Dienstleistungen auszuw\u00e4hlen. Das Nordic Ecolabel zeichnet auch umweltfreundliche Wasch- und Reinigungsmittel aus. Die ausgezeichneten Produkte haben beispielsweise eine hohe Abbaubarkeit im Wasser und beinhalten wenige gef\u00e4hrliche Materialien.",
+        "credibility_evaluation": 75,
+        "ecological_evaluation": 80,
+        "social_evaluation": 8
+    },
+    "MADE_IN_GREEN_OEKO_TEX": {
+        "name": "OEKO-TEX Made in Green",
+        "description": "MADE IN GREEN by OEKO-TEX\u00ae ist ein nachverfolgbares Produktsiegel f\u00fcr alle Arten von Textilien und Lederartikel, die in umweltfreundlichen Betrieben und an sicheren und sozialvertr\u00e4glichen Arbeitspl\u00e4tzen produziert wurden. Zudem gibt das MADE IN GREEN Siegel Konsument:innen die Gewissheit, dass das das Textil- oder Lederprodukt aus schadstoffgepr\u00fcften Materialien besteht.",
+        "credibility_evaluation": 76,
+        "ecological_evaluation": 80,
+        "social_evaluation": 80
+    },
+    "SA8000": {
+        "name": "SA8000",
+        "description": "Die Norm SA8000 und das Zertifizierungssystem bieten einen Rahmen f\u00fcr Organisationen aller Art, in jeder Branche und in jedem Land, um ihre Gesch\u00e4fte in einer Weise zu f\u00fchren, die fair und menschenw\u00fcrdig f\u00fcr die Arbeitnehmer:innen ist, und um ihre Einhaltung h\u00f6chster Sozialstandards zu demonstrieren. Die SA8000-Norm basiert auf international anerkannten Standards f\u00fcr menschenw\u00fcrdige Arbeit, einschlie\u00dflich der Allgemeinen Erkl\u00e4rung der Menschenrechte, der IAO-Konventionen und der nationalen Gesetze. SA8000 wendet einen Managementsystem-Ansatz auf die soziale Leistung an und legt den Schwerpunkt auf kontinuierliche Verbesserung, nicht auf eine Pr\u00fcfung nach Checklisten.",
+        "credibility_evaluation": 90,
+        "ecological_evaluation": 2,
+        "social_evaluation": 74
+    },
+    "TCO_8_NOTEBOOKS": {
+        "name": "TCO Certified Notebooks 8.0",
+        "description": "Ziel von TCO ist es, den Fortschritt hin zu nachhaltigen IT-Produkten voranzutreiben. Zertifizierte Produkte m\u00fcssen w\u00e4hrend des gesamten Lebenszyklus umfassende \u00f6kologische und soziale Kriterien erf\u00fcllen. So m\u00fcssen die Fabriken, in denen zertifizierte Produkte hergestellt werden, Kriterien zu Arbeitszeiten, Arbeitsumgebung und L\u00f6hnen einhalten. Die Produkte m\u00fcssen Kriterien f\u00fcr Energieeffizienz, ergonomisches Design und einen begrenzten Gehalt an gef\u00e4hrlichen Stoffen erf\u00fcllen. Unabh\u00e4ngige, akkreditierte Organisationen verifizieren, dass Fabriken und Produkte alle Kriterien in TCO Certified erf\u00fcllen. Die Verifizierung erfolgt sowohl vor als auch nach der Ausstellung des Zertifikats und deckt den gesamten G\u00fcltigkeitszeitraum ab.",
+        "credibility_evaluation": 80,
+        "ecological_evaluation": 68,
+        "social_evaluation": 45
+    },
+    "TCO_8_SMARTPHONES": {
+        "name": "TCO Certified Smartphones 8.0",
+        "description": "Ziel von TCO ist es, den Fortschritt hin zu nachhaltigen IT-Produkten voranzutreiben. Zertifizierte Produkte m\u00fcssen w\u00e4hrend des gesamten Lebenszyklus umfassende \u00f6kologische und soziale Kriterien erf\u00fcllen. So m\u00fcssen die Fabriken, in denen zertifizierte Produkte hergestellt werden, Kriterien zu Arbeitszeiten, Arbeitsumgebung und L\u00f6hnen einhalten. Die Produkte m\u00fcssen Kriterien f\u00fcr Energieeffizienz, ergonomisches Design und einen begrenzten Gehalt an gef\u00e4hrlichen Stoffen erf\u00fcllen. Unabh\u00e4ngige, akkreditierte Organisationen verifizieren, dass Fabriken und Produkte alle Kriterien in TCO Certified erf\u00fcllen. Die Verifizierung erfolgt sowohl vor als auch nach der Ausstellung des Zertifikats und deckt den gesamten G\u00fcltigkeitszeitraum ab.",
+        "credibility_evaluation": 80,
+        "ecological_evaluation": 62,
+        "social_evaluation": 52
+    },
+    "XERTIFIX_PLUS": {
+        "name": "Xertifix PLUS",
+        "description": "XertifiX \u00fcberpr\u00fcft regelm\u00e4\u00dfig Fabriken und Steinbr\u00fcche in Indien, China und Vietnam, um sicherzustellen, dass die Standardkriterien erf\u00fcllt werden: Der Standard umfasst die IAO-Kernarbeitsabkommen, darunter das Verbot von Kinderarbeit und Sklaverei, einen besseren Schutz der Gesundheit und Sicherheit von erwachsenen Arbeitnehmer:innen, gerechte L\u00f6hne und Arbeitszeiten, Umweltschutz und Rechtm\u00e4\u00dfigkeit. Wenn die Anforderungen erf\u00fcllt sind, stellt XertifiX Zertifikate f\u00fcr die Steine aus.",
+        "credibility_evaluation": 64,
+        "ecological_evaluation": 80,
+        "social_evaluation": 60
+    },
+    "BLUESIGN_PRODUCT": {
+        "name": "bluesign\u00ae PRODUCT",
+        "description": "Ziel des Siegels ist, die Umwelteinfl\u00fcsse der Textilindustrie zu verringern. Es steht au\u00dferdem f\u00fcr die sichere Herstellung und Verarbeitung von Kunst- und Naturfasern.",
+        "credibility_evaluation": 79,
+        "ecological_evaluation": 75,
+        "social_evaluation": 52
+    },
+    "AUSTRIAN_ECOLABEL": {
+        "name": "Austrian Ecolabel (\u00d6UZ)",
+        "description": "Die Auszeichnung erhalten nur jene Produkte und Dienstleistungen, die neben einer Vielzahl an Umweltkriterien auch Anforderungen an Qualit\u00e4t und Langlebigkeit erf\u00fcllen. Papier f\u00fcr B\u00fcrokommunikation, Zeitungen und Magazine muss hohe Qualit\u00e4tsanforderungen erf\u00fcllen - mit dem Umweltzeichen erf\u00fcllt es auch den besten Stand der Umwelttechnik. Es besteht zu 100 Prozent aus Recycling- oder g\u00e4nzlich chlorfrei gebleichtem Papier und bei der Herstellung wird auf optimale und umweltgerechte Nutzung der Rohstoffe geachtet: - Der Faserstoff von Schreib-, Kopier, EDV- und Druckpapier besteht zur G\u00e4nze aus Altpapier, 60 Prozent davon aus unteren und mittleren Sorten was dazu beitr\u00e4gt, dass auch mindere Papierqualit\u00e4ten wiederverwertet werden - Hochqualitatives Papier f\u00fcr Tintenstrahl- und Hochleistungslaserdrucker sowie Papier f\u00fcr Zeitungen, Zeitschriften und Magazine wird nur aus Holz hergestellt, das zu 50 Prozent aus nachhaltiger Forstwirtschaft stammt - Bei der Herstellung aller Papiersorten gibt es strikte Beschr\u00e4nkungen f\u00fcr den Einsatz von gesundheits- oder umweltgef\u00e4hrdenden Chemikalien sowie strenge Grenzwerte f\u00fcr die Schadstoff-Belastung von Luft und Wasser. - F\u00fcr Produkte aus Recyclingpapier muss der Faserstoff zu 100 % aus Altpapier bestehen. Je nach Produktgruppe wird der Einsatz von mindestens 50 % Unteren und Mittleren Sorten gefordert. Dies tr\u00e4gt dazu bei, dass auch haushalts\u00fcbliche Papierqualit\u00e4ten einem Recyclingprozess zugef\u00fchrt werden.",
+        "credibility_evaluation": 30,
+        "ecological_evaluation": 53,
+        "social_evaluation": 5
+    },
+    "BLUE_ANGEL_LEATHER": {
+        "name": "Blauer Engel - Leder",
+        "description": "Das Siegel f\u00fcr Leder basiert auf den Vergabekriterien DE-UZ 148. Leder k\u00f6nnen aufgrund ihrer gro\u00dfen Oberfl\u00e4che und ihrer langen Lebensdauer eine wesentliche Quelle f\u00fcr Schadstoffe in Innenr\u00e4umen sein. Schadstoffe, die die Gesundheit und Umwelt belasten k\u00f6nnen, stammen in der Regel vom Gerbprozess und von der Konservierung des Leders. Der Blaue Engel f\u00fcr emissionsarme Leder signalisiert, dass bei den ausgezeichneten Ledern die Umwelt- und Gesundheitsbelastungen von der Produktion \u00fcber die gesamte Nutzungsdauer, bis hin zur Verwertung und Entsorgung minimiert sind. Das Umweltzeichen er\u00f6ffnet z. B. die M\u00f6glichkeit, dass Polsterm\u00f6belhersteller und auch der handwerkliche Polsterer f\u00fcr ihre Produkte gezielt emissionsarmen Polsterleder mit dem Blauen Engel ausw\u00e4hlen und damit dem Verbraucher ein gesundheitlich unbedenkliches Polsterm\u00f6bel anbieten k\u00f6nnen.",
+        "credibility_evaluation": 73,
+        "ecological_evaluation": 50,
+        "social_evaluation": 16
+    },
+    "CRADLE_TO_CRADLE_PLATINUM": {
+        "name": "Cradle to Cradle - Textilien - Platin Level",
+        "description": "Materialien und Produkte, die die Anforderungen des Cradle to Cradle Certified Product Standard erf\u00fcllen, k\u00f6nnen die Cradle to Cradle-Zertifizierung erhalten. Der Cradle to Cradle Certified Product Standard bewertet die Sicherheit, Kreislauff\u00e4higkeit und Verantwortung von Materialien und Produkten in f\u00fcnf Kategorien der Nachhaltigkeitsleistung: Materialgesundheit, Kreislauff\u00e4higkeit des Produkts, saubere Luft und Klimaschutz, Wasser- und Bodenverantwortung sowie soziale Fairness. Um eine Produktzertifizierung zu erhalten, m\u00fcssen die Unternehmen mit einem unabh\u00e4ngigen Pr\u00fcfer zusammenarbeiten, um den Leistungsgrad eines Produkts in den f\u00fcnf Nachhaltigkeitskategorien zu ermitteln. Dem Produkt wird dann f\u00fcr jede Kategorie eine Leistungsstufe zugewiesen (Bronze, Silber, Gold, Platin).",
+        "credibility_evaluation": 85,
+        "ecological_evaluation": 59,
+        "social_evaluation": 1
+    },
+    "EU_ECOLABEL_PAPER": {
+        "name": "EU Ecolabel - Papier",
+        "description": "Das Siegel stellt Anforderungen an den gesamten Herstellungsprozess des Papiers. Um Wasser und Luft zu schonen, wird der Chemikalieneinsatz beschr\u00e4nkt. Das verwendete Material muss au\u00dferdem zu mindestens 70% recycelt sein und/oder von externen Zertifizierungssystemen, wie beispielsweise FSC und PEFC, zertifiziert sein.",
+        "credibility_evaluation": 61,
+        "ecological_evaluation": 51,
+        "social_evaluation": 0
+    },
+    "ECOGARANTIE": {
+        "name": "Ecogarantie \u00ae",
+        "description": "Das Siegel kennzeichnet Wasch- und Reinigungsmittel, die \u00fcberwiegend aus \u00f6kologisch angebauten Inhaltsstoffen bestehen. Zudem werden weitere umweltschonende Anforderungen gestellt. Diese beziehen sich zum Beispiel auf die Abbaubarkeit und die Toxizit\u00e4t des Produkts.",
+        "credibility_evaluation": 64,
+        "ecological_evaluation": 74,
+        "social_evaluation": 2
+    },
+    "FAIR_LABOR_ASSOCIATION": {
+        "name": "Fair Labor Association",
+        "description": "Der FLA-Verhaltenskodex f\u00fcr Arbeitspl\u00e4tze legt Arbeitsstandards fest, die darauf abzielen, menschenw\u00fcrdige Arbeitsbedingungen in Fabriken und auf Farmen zu erreichen. Die FLA-Prinzipien f\u00fcr faire Arbeitsbedingungen und verantwortungsvolle Beschaffung und Produktion definieren wesentliche Praktiken auf Unternehmensebene zur Gew\u00e4hrleistung sicherer und nachhaltiger Lieferketten. Alle FLA-Standards basieren auf den Normen der Internationalen Arbeitsorganisation (ILO-Kernkonventionen) und international anerkannten guten Arbeitspraktiken. Jedes Mitgliedsunternehmen verpflichtet sich zur Umsetzung der FLA-Grunds\u00e4tze in seinen eigenen Gesch\u00e4ftspraktiken und zur Einhaltung des FLA-Verhaltenskodexes in seiner Lieferkette. Die FLA bewertet ihre Mitgliedsunternehmen fortlaufend und verleiht die Akkreditierung an Unternehmen, die nachweislich die FLA-Standards einhalten.",
+        "credibility_evaluation": 85,
+        "ecological_evaluation": 11,
+        "social_evaluation": 62
+    },
+    "IGEP": {
+        "name": "IGEP",
+        "description": "Ziel des Siegels ist es, Kinderarbeit in der Natursteinindustrie in Indien und China zu verhindern und die Eignung f\u00fcr den europ\u00e4ischen Markt sicherzustellen. Dies geschieht durch den ISES 2020-Standard, der zus\u00e4tzlich zu Kinderarbeit Managementsysteme, Zwangsarbeit, Gesundheit und Sicherheit an Arbeitsplatz, Vereinigungsfreiheit und Recht auf Kollektivverhandlungen, Diskriminierung, Disziplinarpraktiken, Arbeitszeiten, Verg\u00fctung, Zulieferer und Umweltaspekte umfasst. IGEP f\u00fchrt diese Audits und Zertifizierungen auch in vielen anderen Industrien jeweils f\u00fcr die gesamte Lieferkette durch.",
+        "credibility_evaluation": 37,
+        "ecological_evaluation": 64,
+        "social_evaluation": 56
+    },
+    "AISE_GREEN": {
+        "name": "Nachhaltigkeitsinitiative der A.I.S.E. - Logo mit gr\u00fcnem Siegel",
+        "description": "Ziel ist es, den gesamten Industriesektor zu best\u00e4rken, kontinuierliche Verbesserungen im Hinblick auf Nachhaltigkeit anzustrengen. Zudem sollen Endverbraucher:innen dazu ermuntert werden, nachhaltiger zu waschen und zu reinigen. Die A.I.S.E.-Charter ist ein wissenschaftlich fundiertes Rahmenwerk, welches zudem auf Lebenszyklus-Analysen basiert. Es erleichtert einen gemeinschaftlichen Industrie-Ansatz hinsichtlich nachhaltiger Praktiken und Berichterstattung. Dieser beinhaltet u.a. Produktsicherheit, soziale Unternehmensverantwortung, Gesundheit und Sicherheit am Arbeitsplatz, effiziente Ressourcen-Nutzung sowie Endverbraucher:innen-Informationen.",
+        "credibility_evaluation": 59,
+        "ecological_evaluation": 64,
+        "social_evaluation": 31
+    },
+    "TUEV_RHEINLAND_GREEN_PRODUCT_MARK_LAPTOPS": {
+        "name": "T\u00dcV Rheinland Green Product Mark (Laptops)",
+        "description": "Ziel des T\u00dcV Rheinland Green Product Mark Siegels ist es, zur Reduktion negativer Umwelteinfl\u00fcsse, die bei der Herstellung und dem Gebrauch von Laptops entstehen k\u00f6nnen, beizutragen. Dazu stellt der Standard Anforderungen an den Umgang mit chemischen Inhaltsstoffen, die Wiederverwendbarkeit und Wiederverwendung recycelter Materialien, den Carbon Footprint/die CO2-Bilanz, und den Energieverbrauch/die Energieeffizienz.",
+        "credibility_evaluation": 72,
+        "ecological_evaluation": 50,
+        "social_evaluation": 18
+    },
+    "TUEV_RHEINLAND_GREEN_PRODUCT_MARK_SMARTPHONES": {
+        "name": "T\u00dcV Rheinland Green Product Mark (Smartphones)",
+        "description": "Ziel des T\u00dcV Rheinland Green Product Mark Siegels ist es, zur Reduktion negativer Umwelteinfl\u00fcsse, die bei der Herstellung und dem Gebrauch von Mobiltelefonen entstehen k\u00f6nnen, beizutragen. Dazu stellt der Standard Anforderungen an den Umgang mit chemischen Inhaltsstoffen, die Wiederverwendbarkeit und Wiederverwendung recycelter Materialien, den Carbon Footprint/die CO2-Bilanz, und den Energieverbrauch/die Energieeffizienz.",
+        "credibility_evaluation": 72,
+        "ecological_evaluation": 43,
+        "social_evaluation": 19
+    },
+    "WORLD_FAIR_TRADE_ORGANIZATION": {
+        "name": "World Fair Trade Organization ",
+        "description": "Die WFTO zeichnet Unternehmen aus, die sich f\u00fcr eine Verbesserung der Lebens- und Arbeitsbedingungen von Produzent:innen in Entwicklungsl\u00e4ndern einsetzen. Die WFTO verifiziert, dass Mitgliedsunternehmen sich an den zehn Prinzipien des fairen Handels ausrichten.",
+        "credibility_evaluation": 54,
+        "ecological_evaluation": 5,
+        "social_evaluation": 64
+    },
+    "XERTIFIX": {
+        "name": "XertifiX",
+        "description": "XertifiX \u00fcberpr\u00fcft regelm\u00e4\u00dfig Fabriken und Steinbr\u00fcche in Indien, China und Vietnam, um sicherzustellen, dass die Standardkriterien erf\u00fcllt werden: Der Standard umfasst die IAO-Kernarbeitsabkommen, darunter das Verbot von Kinderarbeit und Sklaverei, einen besseren Schutz der Gesundheit und Sicherheit von erwachsenen Arbeitnehmer:innen, gerechte L\u00f6hne und Arbeitszeiten, Umweltschutz und Rechtm\u00e4\u00dfigkeit. Wenn die Anforderungen erf\u00fcllt sind, stellt XertifiX Zertifikate f\u00fcr die Steine aus.",
+        "credibility_evaluation": 66,
+        "ecological_evaluation": 20,
+        "social_evaluation": 47
+    },
+    "COMMON_CODE_COFFEE_COMMUNITY": {
+        "name": "4C - Common Code for the Coffee Community",
+        "description": "Als unabh\u00e4ngiger und Stakeholder:innen getragener Standard f\u00fcr den gesamten Kaffeesektor zielt 4C auf die weltweite St\u00e4rkung der Produktion von umweltfreundlichem, sozial gerechtem und wirtschaftlich tragf\u00e4higem Kaffee ab."
+    },
+    "AQUACULTURE_STEWARDSHIP_COUNCIL": {
+        "name": "Aquaculture Stewardship Council ",
+        "description": "Ziel ist es die konventionelle Aquakultur auf globaler Ebene nachhaltiger zu machen. Das ASC-Zertifizierungsprogramm zeichnet dabei verantwortungsvolle Fischzuchten und Futtermittelproduzenten aus die, die ASC Standards einhalten. Die Standards umfassen sowohl umweltbezogene als auch soziale Auswirkungen der Zucht und Produktion. F\u00fcr die R\u00fcckverfolgbarkeit des zertifizierten Aquakulturprodukte m\u00fcssen sich die Unternehmen der Lieferkette einem Produktkettenaudit (Chain of Custody) unterziehen"
+    },
+    "BETTER_COTTON_INITIATIVE": {
+        "name": "Better Cotton Initiative",
+        "description": "Ziel ist die Verbesserung der Umwelt- und Arbeitsbedingungen im Baumwollanbau. Die Anbaubetriebe m\u00fcssen Einstiegskriterien erf\u00fcllen und dann Verbesserungen nachweisen. Rund 12 Prozent der weltweiten Baumwollproduktion waren 2016 BCI zertifiziert."
+    },
+    "BIO_SIEGEL": {
+        "name": "Bio-Siegel (deutsch)",
+        "description": "Das Bio-Siegel kennzeichnet Produkte aus kontrolliert biologischem Anbau (kbA). Ziel ist die F\u00f6rderung der biologischen Landwirtschaft \u00fcber klar definierte gesetzliche Regelungen. F\u00fcr das Bio-Siegel gelten auf Grundlage der EU-\u00d6koverordnung dieselben Kriterien wie f\u00fcr das EU-Bio-Siegel. Das Bio-Siegel kann zus\u00e4tzlich zum (verpflichtenden) EU-Bio-Siegel auf Produkten abgebildet werden. Die EU-\u00d6koverordnung umfasst keine gesonderten sozialrechtlichen Regelungen."
+    },
+    "BIOKREIS_REGIONAL_FAIR": {
+        "name": "Biokreis - regional & fair",
+        "description": "Kurze Wege, Marktpartnerschaften, die auf Vertrauen statt auf anonymen Marktmechanismen beruhen, eine ehrliche Entlohnung der B\u00e4uer:innen, gute Rohstoffe und die F\u00f6rderung der regionalen Kulturlandschaften."
+    },
+    "BIOKREIS": {
+        "name": "Biokreis-Siegel",
+        "description": "Biokreis steht seit 1979 f\u00fcr regionale, vertrauensvolle Netzwerke, f\u00fcr Tierwohl und handwerkliche Lebensmittelverarbeitung im Einklang mit der Natur. Biokreis gestaltet kreativ und konsequent den \u00f6kologischen Landbau."
+    },
+    "BIOLAND": {
+        "name": "Bioland",
+        "description": "Das Bioland-Markenzeichen steht f\u00fcr Tierwohl, Artenvielfalt und klimafreundliche Landwirtschaft mit Herkunft Deutschland oder S\u00fcdtirol. Das Ziel des Verbandes ist es die nat\u00fcrlichen Lebensgrundlagen auf der Erde zu sch\u00fctzen und die Umgestaltung der Land- und Lebensmittelwirtschaft auf \u00f6kologische Kriterien voranzutreiben. Bioland hat strenge Richtlinien, beispielsweise zur F\u00f6rderung der Biodiversit\u00e4t und zur Aufzucht der m\u00e4nnlichen K\u00fcken in der Legehennenhaltung."
+    },
+    "BIOPARK": {
+        "name": "Biopark",
+        "description": "Ziel des seit 1991 vergebenen Biopark-Siegels ist, den \u00f6kologischen Landbau zu f\u00f6rdern. Angestrebt wird ein m\u00f6glichst in sich geschlossener Betriebskreislauf. Dabei geht es um den Schutz der Umwelt, Landschaftspflege und artgerechte Tierhaltung."
+    },
+    "BIOCYCLIC_VEGAN_AGRICULTURE": {
+        "name": "Biozyklisch-Veganer Anbau",
+        "description": "Das Siegel kennzeichnet Produkte aus biozyklisch-veganem Anbau, einer \u00f6kologischen Landwirtschaft auf rein pflanzlicher Grundlage. Diese Anbauform schlie\u00dft jegliche kommerzielle Nutz- und Schlachttierhaltung aus und verwendet keinerlei Betriebsmittel tierischen Ursprungs. Besonderer Wert wird dabei auf die F\u00f6rderung der Artenvielfalt und eines gesunden Bodenlebens, auf die Schlie\u00dfung von Stoffkreisl\u00e4ufen sowie auf einen gezielten Humusaufbau gelegt. Verbraucher:innen erhalten die Gew\u00e4hrleistung, dass mit diesem Siegel ausgezeichnete Produkte nach \u00f6kologischen und veganen Prinzipien erzeugt und verarbeitet wurden."
+    },
+    "BONSUCRO": {
+        "name": "Bonsucro",
+        "description": "Bonsucros Vision ist ein Zuckersektor mit nachhaltigen Erzeuger:innengemeinschaften und widerstandsf\u00e4higen und gesicherten Lieferketten f\u00fcr die Erzeuger:innen. Bonsucro arbeitet mit weltweit anerkannten Standards f\u00fcr die soziale, \u00f6kologische und wirtschaftliche Nachhaltigkeit der Zuckerrohrproduktion und -verarbeitung. Damit soll sichergestellt werden, dass die aus Zuckerrohr hergestellten Produkte einen Mehrwert f\u00fcr die Landwirte und Gemeinschaften in den Zuckerrohranbaul\u00e4ndern schaffen, die Umwelt sch\u00fctzen und die Menschen- und Arbeitsrechte wahren."
+    },
+    "BUSINESS_SOCIAL_COMPLIANCE_INITIATIVE": {
+        "name": "Business Social Compliance Initiative",
+        "description": "Ziel des amfori BSCI-Systems ist die schrittweise Verbesserung der Arbeitsbedingungen und der Schutz der Menschenrechte in der globalen Lieferkette der amfori-Mitglieder, die amfori BSCI nutzen. Unabh\u00e4ngige amfori-BSCI-Sozialaudits sind ein Instrument zur Risikoanalyse und Messung der Situation in Produktionsst\u00e4tten. Ein breites Schulungsangebot f\u00fcr amfori-Mitglieder und insbesondere Produktionsst\u00e4tten bietet eine gute M\u00f6glichkeit, mit der Unternehmen ihre Kenntnisse und die Praxis verbessern k\u00f6nnen, damit die Kriterien des amfori BSCI-Verhaltenskodizes eingehalten werden."
+    },
+    "CA_BIOCOTTON": {
+        "name": "C&A Biocotton",
+        "description": "C&A nutzt das unternehmenseigene Siegel \u201cC&A BIO COTTON\u201d f\u00fcr C&A-Produkte, die mit Baumwolle aus zertifiziertem Anbau hergestellt werden. F\u00fcr jedes C&A-Produkt mit dem BIO COTTON-Siegel gilt, dass es nach OCS (Organic Content Standard) oder GOTS (Global Organic Textiles Standard) zertifiziert ist und dass die Lieferkette der Baumwolle von der Quelle bis zum Endprodukt gr\u00fcndlich \u00fcberwacht wurde."
+    },
+    "CARBON_TRUST_FOOTPRINT": {
+        "name": "Carbon Trust Footprint Label",
+        "description": "Das Carbon Trust Footprint Label wird an Produkte verliehen, deren CO2-Fu\u00dfabdruck von Carbon Trust im Einklang mit international anerkannten Standards (PAS2050, GHG Product Standard und ISO14067) zertifiziert wurde. Das Siegel belegt die Messung, Reduzierung oder Klimaneutralit\u00e4t des Produktfu\u00dfabdrucks von Produkten aus allen Branchen. Es steht f\u00fcr das Engagement f\u00fcr \u00f6kologische Nachhaltigkeit."
+    },
+    "CERTIFIED_SUSTAINABLE_ECONOMICS": {
+        "name": "Certified Sustainable Economics (CSE)",
+        "description": "Die CSE-Zertifizierung ist eine branchen\u00fcbergreifende Nachhaltigkeitszertifizierung f\u00fcr Unternehmen und nachhaltig orientierte Organisationen. Das CSE-Siegel ist ein Qualit\u00e4tssiegel f\u00fcr Produkte aus einem gepr\u00fcft nachhaltig wirtschaftenden Unternehmen. Der CSE-Standard wird regelm\u00e4\u00dfig \u00fcberpr\u00fcft und entwickelt sich fortlaufend weiter. Aktuell gibt es den CSE-Standard f\u00fcr diese Branchen: Bio-Lebensmittel, Naturkosmetik, \u00f6kologische Wasch- und Reinigungsmittel, Naturprodukte, Produkte aus einer Kreislaufwirtschaft (z.B. Recyclingplastik), Handel, Dienstleister:innen, Banken. CSE m\u00f6chte Verbraucher:innen ein Unterscheidungsmerkmal geben, damit Produkte aus einem ganzheitlich nachhaltig wirtschaftenden Unternehmen erkannt werden k\u00f6nnen. CSE umfasst die Einhaltung der Menschenrechte, F\u00f6rderung des \u00d6ko-Landbaus, klimaneutrale Produktion, ethisches Finanzwesen und weitere Mindestanforderungen."
+    },
+    "CLIMATE_NEUTRAL_STANDARD": {
+        "name": "Climate Neutral Standard",
+        "description": "Das Ziel des Standards ist es, Unternehmen, Regierungsorganisationen und Organisationen in die Lage zu versetzen, sich dem Ziel des Pariser Abkommens anzun\u00e4hern, indem sie ihre Scope-1-, -2- und -3-THG-Emissionen schrittweise auf ein absolutes Null reduzieren und die verbleibenden Emissionen durch glaubw\u00fcrdige und zertifizierte Ausgleichsprojekte kompensieren. Unternehmen k\u00f6nnen sich f\u00fcr ihre Organisation, Produkte, Verpackungen und Dienstleistungen klimaneutral zertifizieren lassen."
+    },
+    "CLIMATE_PARTNER": {
+        "name": "ClimatePartner",
+        "description": "Das ClimatePartner-Siegel kennzeichnet klimaneutrale Produkte oder dessen Verpackungen, Dienstleistungen oder Unternehmen. Hierf\u00fcr werden die CO2 -Emissionen berechnet und die Emissionen durch die Unterst\u00fctzung eines Klimaschutzprojektes ausgeglichen. So sollen Unternehmen f\u00fcr den Klimaschutz sensibilisiert werden und Verbraucher:innen die M\u00f6glichkeit erhalten, klimaneutral zu konsumieren."
+    },
+    "CONTENT_CLAIM_STANDARD": {
+        "name": "Content Claim Standard",
+        "description": "Im Mittelpunkt stehen R\u00fcckverfolgbarkeit und Transparenz in der Produktionskette. Mit dem Content Claim Standard k\u00f6nnen Unternehmen nachweisen, wie hoch der Anteil eines bestimmten Materials im Endprodukt ist."
+    },
+    "COTTON_MADE_IN_AFRICA": {
+        "name": "Cotton made in Africa",
+        "description": "CmiA bietet mit CmiA und CmiA-Organic zwei international anerkannte Standards f\u00fcr nachhaltige Baumwolle aus Afrika. Ziel von CmiA ist es durch die Aktivierung von Marktkr\u00e4ften Lizenzeinnahmen zu generieren, die Textilunternehmen und Brands f\u00fcr den Einsatz des Cotton made in Africa Labels bezahlen. Ausschlie\u00dflich Unternehmen mit Lizenzvertrag d\u00fcrfen CmiA ausgezeichnete Produkte vertreiben. Die Einnahmen werden in Afrika reinvestiert und erm\u00f6glichen Baumwollb\u00e4uer:innen in Afrika bessere Lebens- und Arbeitsbedingungen und f\u00f6rdern den Schutz unserer Umwelt. Um die Umsetzung dieser Ziele und die weltweite Verarbeitung des Rohstoffs sicherzustellen, arbeitet die Initiative mit einem weitreichenden Netzwerk in den afrikanischen Anbaul\u00e4ndern der Baumwolle, zahlreichen Partner:innen weltweit entlang der textilen Lieferkette sowie Regierungs- und Nichtregierungsorganisationen zusammen."
+    },
+    "CRADLE_TO_CRADLE_DETERGENTS": {
+        "name": "Cradle to Cradle - Wasch- & Reinigungsmittel",
+        "description": "Ziel ist die F\u00f6rderung eines Wirtschaftssystems ohne Abfall. Das hei\u00dft, dass alle Materialien, die in einem Produkt eingesetzt werden, wiederverwertet oder biologisch abgebaut werden k\u00f6nnen. Das Siegel zeichnet Produkte aus, die umweltsichere, gesundheitlich unbedenkliche und kreislauff\u00e4hige Materialien verwenden."
+    },
+    "DEMETER": {
+        "name": "Demeter",
+        "description": "Das Demeter Siegel zielt darauf ab, die biologisch-dynamische Wirtschaftsweise in landwirtschaftlichen Betrieben zu f\u00f6rdern und zu verbreiten. Diese geht zur\u00fcck auf Rudolf Steiner, den Begr\u00fcnder der Anthroposophie. Sie sieht einen landwirtschaftlichen Betrieb als Organismus, der seine eigene Charakteristik hat."
+    },
+    "ECO_PASSPORT_OEKO_TEX": {
+        "name": "ECO PASSPORT by OEKO-TEX",
+        "description": "ECO PASSPORT by OEKO-TEX ist eine unabh\u00e4ngige Zertifizierung f\u00fcr Chemikalien, Farbmittel und Hilfsstoffe, die in der Herstellung von Textilien und Lederartikeln eingesetzt werden. Dabei wird \u00fcberpr\u00fcft, ob jeder einzelne Inhaltsstoff der chemischen Produkte die gesetzlichen Anforderungen erf\u00fcllt und unsch\u00e4dlich f\u00fcr die menschliche Gesundheit ist. Der Nachweis daf\u00fcr erfolgt \u00fcber die Untersuchung der Endprodukte auf sch\u00e4dliche Chemikalien."
+    },
+    "ECOVIN": {
+        "name": "ECOVIN",
+        "description": "Das ECOVIN Siegel kennzeichnet Weine und andere Traubenerzeugnisse aus kontrolliert \u00f6kologischem Anbau. ECOVIN Weing\u00fcter f\u00f6rdern die biologische Vielfalt, lebendige B\u00f6den und das \u00f6kologische Gleichgewicht auf ihren Fl\u00e4chen. Der Standard umfasst auch soziale und wirtschaftliche Kriterien."
+    },
+    "EPEAT_MOBILE_PHONES": {
+        "name": "EPEAT - Mobile Phones",
+        "description": "Das EPEAT-Siegel zeichnet Mobiltelefone aus, die weniger Umweltbelastung verursachen als herk\u00f6mmliche Produkte. Beispielsweise verbrauchen die Ger\u00e4te weniger Strom w\u00e4hrend der Nutzung und haben eine l\u00e4ngere Lebensdauer. EPEAT f\u00fchrt drei verschiede Siegel: EPEAT Bronze, EPEAT Silber und EPEAT Gold."
+    },
+    "EPEAT_LAPTOPS": {
+        "name": "EPEAT Laptops & Co.",
+        "description": "Das EPEAT-Siegel zeichnet Computer aus, die weniger Umweltbelastung verursachen als herk\u00f6mmliche Produkte. Beispielsweise verbrauchen die Ger\u00e4te weniger Strom w\u00e4hrend der Nutzung und haben eine l\u00e4ngere Lebensdauer. EPEAT f\u00fchrt drei verschiede Siegel: EPEAT Bronze, EPEAT Silber und EPEAT Gold."
+    },
+    "EU_ECOLABEL_HARD_SURFACES": {
+        "name": "EU Ecolabel - Hartbel\u00e4ge",
+        "description": "Die Produktgruppe Hartbel\u00e4ge umfasst unter anderem Waschtischplatten und K\u00fcchenarbeitsplatten aus Naturstein sowie Zwischenprodukte, insbesondere Bl\u00f6cke und Platten aus Naturstein. Das Siegel stellt Anforderungen an den gesamten Lebenszyklus der Produkte und stellt sicher, dass die mit dem EU Ecolabel ausgezeichneten Hartbelagsprodukte in Bezug auf ihre Umweltvert\u00e4glichkeit zu den besten auf dem Markt geh\u00f6ren. Konkret f\u00fchren die EU Ecolabel Kriterien zu: einer Verringerung der Landnutzungsauswirkungen des Rohstoffabbaus; einer Beschr\u00e4nkung der Verwendung von gef\u00e4hrlichen Substanzen; effizienten Produktionsprozessen; einem verst\u00e4rkten Einsatz erneuerbarer Energien; einer hohen Materialeffizienz, einschlie\u00dflich der Wiederverwendung/Recycling von Prozessabf\u00e4llen; einer Begrenzung der Emissionen von Schadstoffen, die zur globalen Erw\u00e4rmung, Versauerung und Eutrophierung beitragen und die f\u00fcr die menschliche Gesundheit sch\u00e4dlich sind."
+    },
+    "EU_ECOLABEL_LAPTOPS": {
+        "name": "EU Ecolabel - Laptops & Co.",
+        "description": "Die EU Ecolabel Produktgruppe Elektronische Displays umfasst Fernsehger\u00e4te, Computermonitore und digitale Anzeigesysteme. Strenge Kriterien, die sich auf die wichtigsten Umweltauswirkungen w\u00e4hrend des gesamten Lebenszyklus der Produkte konzentrieren, stellen sicher, dass die mit dem EU Ecolabel ausgezeichneten elektronischen Displays energieeffizient sind, ein Mindestma\u00df an recycelten Materialien beinhalten, einfach reparierbar sind, leicht zu demontieren sind (um die R\u00fcckgewinnung von Ressourcen aus dem Recycling am Ende ihrer Nutzungsphase zu erm\u00f6glichen) und nur eine klar begrenzte Menge an gef\u00e4hrlichen Substanzen enthalten."
+    },
+    "EU_ECOLABEL_DETERGENTS": {
+        "name": "EU Ecolabel - Wasch- & Reinigungsmittel",
+        "description": "Mit dem EU-Umweltzeichen zertifizierte Wasch- und Reinigungsmittel erf\u00fcllen hohe Standards, die ihre Umweltauswirkungen \u00fcber mehrere Stufen des Produktlebenszyklus, von der Rohstoffgewinnung \u00fcber die Produktion bis hin zur Verwendung und Entsorgung, verringern. Das EU-Umweltzeichen wird an Produkte vergeben, die besonders nachhaltig gestaltet sind, Innovationen f\u00f6rdern und zum EU-Ziel der Klimaneutralit\u00e4t bis 2050 sowie zur Kreislaufwirtschaft beitragen."
+    },
+    "EU_BIO": {
+        "name": "EU-Bio-Siegel",
+        "description": "Das EU-Bio-Siegel kennzeichnet Produkte aus kontrolliert biologischem Anbau (kbA). Ziel ist die F\u00f6rderung der biologischen Landwirtschaft \u00fcber klar definierte gesetzliche Regelungen. Die Regelungen der EU-\u00d6koverordnung umfassen keine gesonderten sozialrechtlichen Regelungen."
+    },
+    "ECOVEG": {
+        "name": "EcoVeg",
+        "description": "EcoVeg ist das erste unabh\u00e4ngig kontrollierte G\u00fctesiegel f\u00fcr vegane Lebensmittel in Bio-Qualit\u00e4t."
+    },
+    "ENERGY_STAR": {
+        "name": "Energy Star",
+        "description": "Das Siegel zeichnet besonders energieeffiziente Produkte aus. Basis hierf\u00fcr sind die Stromspar-Kriterien der EPA und des US-Energieministeriums. Sie beziehen sich vor allem auf den Energieverbrauch der Ger\u00e4te. Hersteller, die das Siegel nutzen, pr\u00fcfen selbst, ob ihr Produkt den Anforderungen entspricht. Die Messergebnisse werden der zust\u00e4ndigen Beh\u00f6rde (in EU-L\u00e4ndern der Europ\u00e4ischen Kommission) mitgeteilt. Sie werden stichprobenartig gepr\u00fcft."
+    },
+    "ETHICAL_TRADING_INITIATIVE": {
+        "name": "Ethical Trading Initiative",
+        "description": "Ziel der Initiative ist die Verbesserung von Arbeitsbedingungen weltweit. Zu den Mitgliedsunternehmen geh\u00f6ren Einzelh\u00e4ndler, Superm\u00e4rkte, Kaufhausketten und Zulieferer. Sie verpflichten sich, den ETI Verhaltenskodex im Unternehmen und bei ihren Zulieferern schrittweise umzusetzen."
+    },
+    "FAIR_N_GREEN": {
+        "name": "FAIR 'N GREEN",
+        "description": "Ziel des Siegels ist es, Winzer:innen dabei zu helfen, nachhaltig zu wirtschaften. Au\u00dferdem sollen nachhaltige Weine anhand des Siegels auf der Flasche f\u00fcr Konsument:innen kenntlich gemacht werden."
+    },
+    "FAIR_FOR_LIFE": {
+        "name": "Fair For Life Programme",
+        "description": "Das Siegel kennzeichnet Produkte aus sozialvertr\u00e4glichem und umweltfreundlichem Anbau, die zus\u00e4tzlich unter fairen Bedingungen gehandelt wurden."
+    },
+    "FAIRCHOICE": {
+        "name": "FairChoice",
+        "description": "Das Siegel kennzeichnet landwirtschaftliche Erzeugnisse aus nachhaltiger Produktion mit Schwerpunkt im Bereich Wein- und Getr\u00e4nkewirtschaft. Es umfasst 44 Kriterien in den Bereichen \u00d6kologie, \u00d6konomie und Soziales, die auf dem UN Global Compact und der Global Reporting Initiative (GRI) basieren. Voraussetzung ist die Selbstverpflichtung zu einer \u00f6kologisch vertr\u00e4glichen, sozial gerechten und wirtschaftlich tragf\u00e4higen Produktion und Vermarktung."
+    },
+    "FAIRTRADE": {
+        "name": "Fairtrade",
+        "description": "Ziel von Fairtrade ist es, Handelsbedingungen f\u00fcr benachteiligte landwirtschaftliche Produzenten und Arbeiter in Entwicklungsl\u00e4ndern zu verbessern. Die Produzenten sollen zum Beispiel von fairen Preisen und der Etablierung langfristiger Handelsbeziehungen profitieren. Um eine Fairtrade-Zertifizierung zu erhalten, m\u00fcssen Produzenten, H\u00e4ndler und Unternehmen soziale, \u00f6kologische und wirtschaftliche Standards einhalten."
+    },
+    "FAIRTRADE_COTTON_PROGRAM": {
+        "name": "Fairtrade-Baumwollprogramm",
+        "description": "Es liegen dieselben Anforderungen an die Baumwollproduktion zugrunde wie beim Siegel Fairtrade - Baumwolle. Das Fairtrade-Baumwollprogramm richtet sich an Unternehmen in der Textilproduktion. Diese verpflichten sich, einen bestimmten Anteil der Baumwolle in Fairtrade-Qualit\u00e4t einzukaufen. Dieser Anteil wird schrittweise gesteigert."
+    },
+    "FLUSTIX_RECYCLED": {
+        "name": "Flustix Recycled",
+        "description": "Durch Vor-Ort-Audit und Analyse der gesamten Lieferkette und des Fertigungsprozesses ermittelt DIN CERTCO die Echtheit und Herkunft sowie den Anteil von Kunststoff-Rezyklaten (PCR/PIR/MIX) in Rohstoffen und Produkten."
+    },
+    "FOREST_STEWARDSHIP_COUNCIL": {
+        "name": "Forest Stewardship Council",
+        "description": "Das FSC-Siegel steht f\u00fcr die umweltfreundliche, sozial f\u00f6rderliche und zugleich wirtschaftlich tragf\u00e4hige Bewirtschaftung von W\u00e4ldern. Der FSC entwickelt international einheitliche Anforderungen. Auf nationaler Ebene werden diese auf das jeweilige Land angepasst."
+    },
+    "FOREST_STEWARDSHIP_COUNCIL_MIX": {
+        "name": "Forest Stewardship Council - Mix",
+        "description": "Das \u201eFSC Mix\u201c-Siegel gew\u00e4hrleistet, dass mindestens 70 Prozent der Fasern von Holz- oder Papierprodukten aus FSC-Holz und /oder Altpapier stammen."
+    },
+    "FOREST_STEWARDSHIP_COUNCIL_RECYCLED": {
+        "name": "Forest Stewardship Council - Recycled",
+        "description": "Das \u201eFSC Recycled\u201c-Siegel gew\u00e4hrleistet, dass ein Holz- oder Papierprodukt ausschlie\u00dflich aus Recyclingmaterial besteht."
+    },
+    "FUJITSU_GREEN_IT": {
+        "name": "Fujitsu - Green IT",
+        "description": "Besonders umweltvertr\u00e4gliche Produkte von Fujitsu erhalten die Auszeichnung. Ihr liegt ein dreistufiges Bewertungssystem zugrunde. Ein bis drei Sterne stellen die Umweltvertr\u00e4glichkeit dar. Die Bewertung bezieht sich auf das verwendete Material, die Recyclingf\u00e4higkeit und den Energieverbrauch eines Ger\u00e4tes."
+    },
+    "GGN": {
+        "name": "GGN Certified",
+        "description": "Das GGN Label steht f\u00fcr zertifizierte, verantwortungsvolle Landwirtschaft und Transparenz. Ein ganzheitlicher Ansatz einschlie\u00dflich Lebensmittelsicherheit und R\u00fcckverfolgbarkeit stellt sicher, dass die Lebensmittel und Pflanzen, auf denen das Label zu finden ist, unter verantwortungsvollen Bedingungen produziert wurden, durch die Boden und Wasser geschont, Energie effizient genutzt, Abfall reduziert, die biologische Vielfalt gef\u00f6rdert und sowohl Menschen als auch Tiere in den Betrieben gesch\u00fctzt werden. F\u00fcr GLOBALG.A.P. sind all diese Aspekte der Schl\u00fcssel zur guten landwirtschaftlichen Praxis, der auf Transparenz und eine nachhaltige Zukunft abzielt."
+    },
+    "GREEN_BRANDS": {
+        "name": "GREEN BRANDS",
+        "description": "Die Kriterien der Validierungsverfahren ber\u00fccksichtigen alle Dimensionen der \u00f6kologischen Nachhaltigkeit eines Unternehmens bzw. der Produkte, von der Logistik bis hin zum Abfall-, Energie und Wassermanagement, Transport, Ressourcenverbrauch, Verpackung, dem Mitarbeiterbewusstsein und vieles mehr. Die Validierungsergebnisse sind Grundlage einer finalen Jury-Entscheidung zur Auszeichnung."
+    },
+    "GEPA": {
+        "name": "Gepa fair+",
+        "description": "Als Pionier des Fairen Handels ist es unser Ziel, mehr zu leisten und \u00fcber die allgemeinen Fair- Handelskriterien hinauszugehen. \u201efair +\u201c macht zus\u00e4tzlich zum GEPA-Logo unsere Einzigartigkeit deutlich. Es ist kein zus\u00e4tzliches Siegel, sondern darf nur in Kombination mit unserem Markenlogo \u201eGEPA\u201c abgedruckt werden."
+    },
+    "GLOBAL_RECYCLED_STANDARD": {
+        "name": "Global Recycled Standard",
+        "description": "Der GRS verfolgt das Ziel, den Anteil an recycelten Materialien in einem Produkt zu erh\u00f6hen. Der Standard erm\u00f6glicht es Unternehmen, den genauen Anteil an recyceltem Material in einem Produkt zu erfassen und durch die Produktionskette weiter zu verfolgen. Der GRS enth\u00e4lt zudem Anforderungen zu den verwendeten Zusatzstoffen bei GRS Produkten sowie Richtlinien zu Umweltmanagement und sozialer Verantwortung im Unternehmen. Die R\u00fcckverfolgbarkeit von recycelten Materialien sowie die Transparenz in der Produktionskette geschieht mit Hilfe des \u00fcbergeordneten Content Claim Standard (CCS). Die Unternehmen, die mit diesem Standard arbeiten, m\u00fcssen gew\u00e4hrleisten, dass mindestens 20 Prozent des Produkts aus recycelten Materialien besteht. Das GRS Logo hingegen darf nur dann auf einem Endprodukt verwendet werden, wenn das Produkt mindestens zu 50 Prozent aus recycelten Materialien besteht."
+    },
+    "GAEA_ECOLOGICAL_AGRICULTURE": {
+        "name": "G\u00e4a - \u00d6kologischer Landbau",
+        "description": "Das Siegel hat zum Ziel, den \u00f6kologischen Landbau zu f\u00f6rdern. Angestrebt wird dabei ein m\u00f6glichst in sich geschlossener Betriebskreislauf. Dieser deckt die Bereiche Landschaftspflege, Pflanzenbau und Tierhaltung ab. Er soll die Fruchtbarkeit der B\u00f6den erhalten und verbessern. Daneben soll er den Schutz und die Z\u00fcchtung von Pflanzenarten und Tierrassen f\u00f6rdern."
+    },
+    "HM_CONSCIOUS": {
+        "name": "H&M Conscious",
+        "description": "H&M setzt auf Selbstverpflichtungen, um Mode nachhaltiger zu gestalten. So hat sich das Unternehmen zum Beispiel darauf verpflichtet, bis zum Jahr 2020 ausschlie\u00dflich Baumwolle zu nutzen, die entweder bio-zertifiziert, recycelt oder im Rahmen der Better Cotton Initiative (BCI) angebaut ist."
+    },
+    "HAND_IN_HAND_RAPUNZEL": {
+        "name": "HAND IN HAND - Rapunzel",
+        "description": "HAND IN HAND verkn\u00fcpft die Idee des kontrolliert biologischen Anbaus mit der des Fairen Handels und soll dies f\u00fcr Verbraucher:innen auch sichtbar machen. Das Siegel zeichnet Produkte aus, deren Rohstoffe zu mehr als 50% von HAND IN HAND-Partner:innen stammen und die zu HAND IN HAND-Konditionen gehandelt wurden. Langj\u00e4hrige Zusammenarbeit, stetiger Austausch sowie pers\u00f6nliche Besuche sollen h\u00f6chste Produkt-Qualit\u00e4t garantieren. Unabh\u00e4ngige Inspektor:innen sichern durch regelm\u00e4\u00dfige Kontrollen die Qualit\u00e4t und Einhaltung des Standards zus\u00e4tzlich ab."
+    },
+    "HOLZ_VON_HIER": {
+        "name": "Holz von Hier",
+        "description": "Das Siegel kennzeichnet Holzprodukte, die Holz aus nachhaltiger Waldwirtschaft enthalten und die besonders klimafreundlich durch kurze Wege vom Wald bis zum Verbraucher:in produziert worden sind. Mit dem Kauf so gekennzeichneter Holzprodukte k\u00f6nnen Verbraucher:innen einen wichtigen Beitrag zum Klimaschutz leisten."
+    },
+    "IFIXIT_REPARABILITY_INDEX": {
+        "name": "Insect Respect",
+        "description": "Insect Respect steht f\u00fcr einen neuen Umgang mit Insekten. Denn die Tiere sind wichtig, aber bedroht. Das G\u00fctezeichen INSECT RESPECT steht deshalb f\u00fcr einen Dreiklang: Insektenbek\u00e4mpfung 1) reduzieren durch Bewusstseinswandel in der Gesellschaft und Pr\u00e4ventionstipps 2) \u00f6kologisieren durch insektizidfreie, abwehrende oder rettende Produkte und 3) kompensieren durch die Anlage von insektenfreundlichen Lebensr\u00e4umen als Ausgleich."
+    },
+    "INTERNATIONAL_SUSTAINABILITY_AND_CARBON_CERTIFICATION": {
+        "name": "International Sustainability and Carbon Certification",
+        "description": "Das erkl\u00e4rte Ziel von ISCC ist der Schutz von W\u00e4ldern, die Erhaltung der Biodiversit\u00e4t, und die Einhaltung wichtiger Sozial- und Arbeitsstandards. Zudem setzt sich ISCC f\u00fcr den \u00dcbergang zu einer Kreislaufwirtschaft und nachhaltigen Bio\u00f6konomie ein. Recycelte und bio-basierte Materialien, die nach dem ISCC PLUS Standard zertifiziert sind, geben Konsument:innen die Gewissheit, dass hohe Anforderungen an die R\u00fcckverfolgbarkeit der Materialien sowie die Nachhaltigkeit der Rohstoffe eingehalten wurden."
+    },
+    "LEATHER_STANDARD_OEKO_TEX": {
+        "name": "LEATHER STANDARD by OEKO-TEX\u00ae",
+        "description": "Das Siegel zielt auf die Reduktion von Schadstoffen ab. Das LEATHER STANDARD Siegel signalisiert, dass der gekennzeichnete Artikel erfolgreich auf gesundheitsbedenkliche Chemikalien \u00fcberpr\u00fcft wurde. Der Nachweis daf\u00fcr erfolgt \u00fcber die Untersuchung der Endprodukte auf sch\u00e4dliche Chemikalien."
+    },
+    "LEVEL": {
+        "name": "LEVEL",
+        "description": "B\u00fcro- und Objektm\u00f6bel sollen unter \u00f6kologischen, sozialen und wirtschaftlichen Kriterien nachhaltig hergestellt werden. Das LEVEL-Zertifikat wird auf der Grundlage des FEMB Nachhaltigkeitsstandards f\u00fcr B\u00fcro- und Objektm\u00f6bel in Innenr\u00e4umen vergeben. Bei der Zertifizierung werden nicht nur das zu zertifizierende Produkt, sondern auch der Produktionsstandort und das Unternehmen selbst unter die Lupe genommen. Begutachtet werden Anforderungen in den vier Wirkungsbereichen Material, Energie und Atmosph\u00e4re, Gesundheit von Mensch und \u00d6kosystem (Chemikalien-Management) und soziale Verantwortung. Damit erf\u00fcllt LEVEL die Anforderungen an ein ISO 14024 Type 1 Label."
+    },
+    "LEAPING_BUNNY": {
+        "name": "Leaping-Bunny",
+        "description": "Das Siegel basiert auf dem Humane Household Products Standard. Es zeichnet Produkte aus, die ganzheitlich auf Tierversuche verzichten."
+    },
+    "LEATHER_WORKING_GROUP": {
+        "name": "Leather Working Group",
+        "description": "Ziel der LWG ist es, ein globaler Nachhaltigkeitsstandard f\u00fcr die Lederherstellung zu werden, der alle Elemente und Akteure der Lederwertsch\u00f6pfungskette abdeckt. Die Organisation konzentriert sich darauf, hohe Umweltstandards in der Lederproduktion und Transparenz innerhalb der Lederlieferkette zu gew\u00e4hrleisten. Lederherstellungsbetriebe (Gerbereien) werden auf verschiedene Aspekte ihrer Produktion gepr\u00fcft, darunter Wasser- und Energieverbrauch, Abfallwirtschaft, Luftverschmutzung und L\u00e4rmbel\u00e4stigung sowie Chemikalienmanagement. H\u00e4ndler und Lieferanten werden auf ihre F\u00e4higkeit gepr\u00fcft, ihre Produkte zur\u00fcckzuverfolgen."
+    },
+    "MARINE_STEWARDSHIP_COUNCIL": {
+        "name": "Marine Stewardship Council",
+        "description": "Das MSC-Siegel steht international f\u00fcr die Kennzeichnung von Produkten aus zertifizierter nachhaltiger Fischerei. Fisch- und Meeresfr\u00fcchte, die mit dem MSC-Siegel gekennzeichnet sind, stammen aus einer Fischerei, die ihre Fangger\u00e4te umweltvertr\u00e4glich einsetzt und Fischbest\u00e4nde verantwortungsvoll nutzt. Die Fischerei wird von unabh\u00e4ngigen Experten nach MSC-Standard gepr\u00fcft und regelm\u00e4\u00dfig kontrolliert. Ziele: 1. Erhalt von Fischbest\u00e4nden und gesunden Meeren. 2. Sicherung von Fisch als Nahrungsquelle f\u00fcr zuk\u00fcnftige Generationen und Lebensunterhalt f\u00fcr die in der weltweiten Fischerei Besch\u00e4ftigten. 3. Die globale Fischerei insgesamt in nachhaltigere Bahnen lenken."
+    },
+    "AISE_NON_GREEN": {
+        "name": "Nachhaltigkeitsinitiative der A.I.S.E. - Logo ohne gr\u00fcnes Siegel",
+        "description": "Ziel ist es, den gesamten Industriesektor zu best\u00e4rken, kontinuierliche Verbesserungen im Hinblick auf Nachhaltigkeit anzustrengen. Zudem sollen Endverbraucher dazu ermuntert werden, nachhaltiger zu waschen und zu reinigen. Die A.I.S.E.-Charter ist ein wissenschaftlich fundiertes Rahmenwerk, welches zudem auf Lebenszyklus-Analysen basiert. Es erleichtert einen gemeinschaftlichen Industrie-Ansatz hinsichtlich nachhaltiger Praktiken und Berichterstattung. Dieser beinhaltet u.a. Produktsicherheit, soziale Unternehmensverantwortung, Gesundheit und Sicherheit am Arbeitsplatz, effiziente Ressourcen-Nutzung sowie Endverbraucher-Informationen."
+    },
+    "NATURLAND_FOOD": {
+        "name": "Naturland - Lebensmittel",
+        "description": "Naturland verbindet \u00d6kologischen Landbau mit Sozialer Verantwortung und Fairem Handel - regional und weltweit. Das Ziel ist der Erhalt einer gemeinsamen Lebensgrundlage durch umfassende Nachhaltigkeit entlang der gesamten Wertsch\u00f6pfungskette - ganz im Sinne der globalen Nachhaltigkeitsziele der UN (SDGs). Ziel dieses Siegels ist es, bei Anbau und Verarbeitung von Nahrungsmitteln hohe \u00f6kologische Standards zu setzen. Es ber\u00fccksichtigt auch soziale Aspekte, wie den Ausschluss von Kinderarbeit oder die Wahrung der Menschenrechte."
+    },
+    "NATURLAND_WILD_FISH": {
+        "name": "Naturland - Wildfisch",
+        "description": "Naturland verbindet \u00d6kologischen Landbau mit Sozialer Verantwortung und Fairem Handel - regional und weltweit. Das Ziel ist der Erhalt einer gemeinsamen Lebensgrundlage durch umfassende Nachhaltigkeit entlang der gesamten Wertsch\u00f6pfungskette - ganz im Sinne der globalen Nachhaltigkeitsziele der UN (SDGs). Das Ziel dieses Siegels ist es, \u00f6kologische und soziale Nachhaltigkeit in der Fischerei und die Transparenz vom Fischfang bis zum Verbrauch zu f\u00f6rdern. Im Fokus der Naturland Wildfisch-Zertifizierung stehen vor allem kleine handwerkliche oder auch besonders vorbildliche Fischereien."
+    },
+    "NATURLAND_FAIR_FOOD": {
+        "name": "Naturland Fair - Lebensmittel",
+        "description": "Naturland verbindet \u00d6kologischen Landbau mit Sozialer Verantwortung und Fairem Handel - regional und weltweit. Das Ziel ist der Erhalt einer gemeinsamen Lebensgrundlage durch umfassende Nachhaltigkeit entlang der gesamten Wertsch\u00f6pfungskette - ganz im Sinne der globalen Nachhaltigkeitsziele der UN (SDGs). Dieses Siegel hat zum Ziel, \u00f6kologischen Anbau mit fairen Handelsbeziehungen zu verbinden."
+    },
+    "NORDIC_ECOLABEL_LEATHER": {
+        "name": "Nordic Ecolabel - Leder",
+        "description": "Das Nordic Swan Ecolabel verfolgt das Ziel, die Umweltbelastung durch die Produktion und den Konsum von Waren und Dienstleistungen zu reduzieren - und es Verbrauchern und professionellen Eink\u00e4ufern leicht zu machen, die umweltfreundlichsten Waren und Dienstleistungen auszuw\u00e4hlen."
+    },
+    "NORDIC_ECOLABEL_TEXTILES": {
+        "name": "Nordic Ecolabel - Textiles",
+        "description": "Das Nordic Swan Ecolabel verfolgt das Ziel, die Umweltbelastung durch die Produktion und den Konsum von Waren und Dienstleistungen zu reduzieren - und es Verbrauchern und professionellen Eink\u00e4ufern leicht zu machen, die umweltfreundlichsten Waren und Dienstleistungen auszuw\u00e4hlen. Textilien m\u00fcssen Umwelt-, Gesundheits- und Qualit\u00e4tskriterien erf\u00fcllen, um die Umwelteinwirkungen der verschiedenen Produktionsstufen zu vermindern und die Gesundheit von Arbeiter:innen und Konsument:innen zu sch\u00fctzen."
+    },
+    "OEKO_TEX_100": {
+        "name": "OEKO-TEX 100",
+        "description": "Das Siegel zielt auf die Reduktion von Schadstoffen ab. Ist ein textiler Artikel mit dem STANDARD 100 by OEKO-TEX Label ausgezeichnet, wurden alle Bestandteile dieses Artikels, d.h. auch alle F\u00e4den, Kn\u00f6pfe und sonstige Accessoires, auf Schadstoffe gepr\u00fcft, sodass der Artikel somit gesundheitlich unbedenklich ist. Der Nachweis daf\u00fcr erfolgt \u00fcber die Untersuchung der Endprodukte auf sch\u00e4dliche Chemikalien."
+    },
+    "PRO_PLANET": {
+        "name": "Pro Planet",
+        "description": "Als Handels- und Touristikkonzern sieht die REWE Group ihre zentrale Aufgabe darin, Kund:innen mit hochwertigen Produkten und Dienstleistungen zu versorgen. Vor diesem Hintergrund hat die REWE Group im Jahr 2010 das PRO PLANET-Label entwickelt, welches grunds\u00e4tzlich f\u00fcr alle Eigenmarkenprodukte der REWE Group anwendbar ist, sofern die entsprechenden PRO PLANET-Anforderungen erf\u00fcllt werden. PRO PLANET steht f\u00fcr das Ziel der REWE Group, Produkte nachhaltiger zu gestalten und den nachhaltigen Konsum bei einer breiten Verbrauchergruppe zu f\u00f6rdern. REWE, PENNY und toom Baumarkt kennzeichnen mit dem PRO PLANET-Label Eigenmarkenprodukte, die soziale, \u00f6kologische und Aspekte des Tierwohls ber\u00fccksichtigen."
+    },
+    "PROVEG": {
+        "name": "ProVeg",
+        "description": "Das V-Label ist eine international gesch\u00fctzte Marke zur Kennzeichnung von vegetarischen und veganen Produkten. Produkte, die mit dem V-Label lizenziert sind, werden auf ihre Zusammensetzung und jeden Produktionsschritt \u00fcberpr\u00fcft. Es dient den Endverbraucher:innen als Entscheidungshilfe und erm\u00f6glicht die sichere und bequeme Auswahl von Lebensmitteln und Non-Food-Artikeln ohne die Zutatenliste studieren oder bei einem Unternehmen anfragen zu m\u00fcssen."
+    },
+    "PROGRAMME_FOR_ENDORSEMENT_OF_FOREST_CERTIFICATION": {
+        "name": "Programme for the Endorsement of Forest Certification",
+        "description": "Waldzertifizierung nach den Standards von PEFC basiert auf Richtlinien f\u00fcr die nachhaltige Bewirtschaftung von W\u00e4ldern. Diese Bewirtschaftung wird durch kompetente und unabh\u00e4ngige Organisationen kontrolliert. Tr\u00e4gt ein Produkt aus Holz das PEFC-Siegel, dann hei\u00dft das: Die gesamte Produktherstellung - vom Rohstoff bis zum gebrauchsfertigen Endprodukt - ist zertifiziert und wird durch unabh\u00e4ngige Gutachter:innen kontrolliert."
+    },
+    "PROGRAMME_FOR_ENDORSEMENT_OF_FOREST_CERTIFICATION_RECYCELED": {
+        "name": "Programme for the Endorsement of Forest Certification Schemes - recycelt",
+        "description": "Waldzertifizierung nach den Standards von PEFC basiert auf Richtlinien f\u00fcr die nachhaltige Bewirtschaftung von W\u00e4ldern. Diese Bewirtschaftung wird durch kompetente und unabh\u00e4ngige Organisationen kontrolliert. Tr\u00e4gt ein Produkt aus Holz das PEFC-Siegel, dann hei\u00dft das: Die gesamte Produktherstellung - vom Rohstoff bis zum gebrauchsfertigen Endprodukt - ist zertifiziert und wird durch unabh\u00e4ngige Gutachter:innen kontrolliert."
+    },
+    "PROGRAMME_FOR_ENDORSEMENT_OF_FOREST_CERTIFICATION_CERTIFIED": {
+        "name": "Programme for the Endorsement of Forest Certification Schemes (PEFC) - zertifiziert",
+        "description": "Waldzertifizierung nach den Standards von PEFC basiert auf Richtlinien f\u00fcr die nachhaltige Bewirtschaftung von W\u00e4ldern. Diese Bewirtschaftung wird durch kompetente und unabh\u00e4ngige Organisationen kontrolliert. Tr\u00e4gt ein Produkt aus Holz das PEFC-Siegel, dann hei\u00dft das: Die gesamte Produktherstellung - vom Rohstoff bis zum gebrauchsfertigen Endprodukt - ist zertifiziert und wird durch unabh\u00e4ngige Gutachter:innen kontrolliert."
+    },
+    "QUL": {
+        "name": "QUL - Qualit\u00e4tsverband umweltvertr\u00e4gliche Latexmatratzen e.V.",
+        "description": "Eine hohe Produktqualit\u00e4t sowie Sicherheit und gesundheitliche Unbedenklichkeit sollen durch das Siegel zum Ausdruck kommen. Der Nachweis hierf\u00fcr sind Emissions- und Schadstoffpr\u00fcfungen der Endprodukte. Das Siegel kennzeichnet Matratzen und Kissen aus nachwachsenden Rohstoffen wie Naturlatex sowie pflanzliche und tierische Fasern. Die Baumwoll-Bezugsstoffe stammen aus kontrolliert biologischem Anbau."
+    },
+    "RAL": {
+        "name": "RAL G\u00fctezeichen \"Rezyklate aus haushaltsnahen Wertstoffsammlungen\"",
+        "description": "Das G\u00fctezeichen %-Recycling-Kunststoff steht f\u00fcr Umwelt- und Ressourcenschutz bei Verpackungen durch die F\u00f6rderung des Wertstoffkreislauf durch Recycling aus haushaltsnahen Wertstoffsammlungen. Mit dem G\u00fctezeichen k\u00f6nnen Unternehmen dokumentieren, dass Kunststoffe aus dem Gelben Sack / der Gelben Tonne (oder \u00e4hnlicher Systeme) hochwertig verwertet und in ihren Verpackungen/ Produkten wiedereingesetzt werden. Mit der Angabe des prozentualen Anteils k\u00f6nnen Verbraucher:innen nachvollziehen, zu wie viel Prozent die jeweilige Verpackung aus Recycling-Kunststoff besteht."
+    },
+    "RAINFOREST_ALLIANCE": {
+        "name": "Rainforest Alliance",
+        "description": "Die Rainforest Alliance ist eine internationale gemeinn\u00fctzige Organisation, die an der Schnittstelle von Handel, Land- und Forstwirtschaft arbeitet, um eine Welt zu schaffen, in der Mensch und Natur gemeinsam wachsen k\u00f6nnen. Unser B\u00fcndnis setzt sich f\u00fcr den Schutz von W\u00e4ldern und Artenvielfalt ein, handelt f\u00fcr das Klima und f\u00f6rdert die Verbesserung der Existenzgrundlagen f\u00fcr die Landbev\u00f6lkerung."
+    },
+    "RESPONSIBLE_DOWN_STANDARD": {
+        "name": "Responsible Down Standard",
+        "description": "Der Responsible Down Standard will sicherstellen, dass die Enten und G\u00e4nse, von denen Daunen gewonnen werden, gem\u00e4\u00df diverser Tierwohl-Kriterien gehalten werden - z.B. werden keine lebenden Tiere entfedert und es findet keine Zwangsern\u00e4hrung statt."
+    },
+    "ROUNDTABLE_ON_SUSTAINABLE_BIOMATERIALS": {
+        "name": "Roundtable on Sustainable Biomaterials",
+        "description": "Der RSB-Standard umfasst Biomasse sowie Brennstoffe und materielle Produkte aus biobasiertem und recyceltem Kohlenstoff, einschlie\u00dflich fossiler Abf\u00e4lle. Dazu geh\u00f6ren fl\u00fcssige Biokraftstoffe, gasf\u00f6rmige Biokraftstoffe, Kraftstoffe aus recyceltem Kohlenstoff, nicht-biobasierte erneuerbare Kraftstoffe, Biomasse f\u00fcr W\u00e4rme und Energie, Chemikalien und Polymere, Textilien und Fasern. Der RSB ist bestrebt, die Entwicklung nachhaltiger biobasierter und recycelter Produkte zu unterst\u00fctzen und dabei Kriterien wie Nahrungs- und Wasserunsicherheit, Klimawandel und Verlust der biologischen Vielfalt zu ber\u00fccksichtigen."
+    },
+    "ROUNDTABLE_ON_SUSTAINABLE_PALM_OIL": {
+        "name": "Roundtable on Sustainable Palm Oil",
+        "description": "Ziel ist es, nachhaltige Anbaumethoden f\u00fcr Palm\u00f6l zu f\u00f6rdern und so die Umweltsch\u00e4digung zu begrenzen. Die Richtlinien vom RSPO sollen gew\u00e4hrleisten, dass die Grundrechte der indigenen Landbesitzer:innen, der umliegenden Dorfgemeinschaften und der Mitarbeiter:innen respektiert werden. Sch\u00fctzenswerte Gebiete und Regenwaldareale d\u00fcrfen nicht f\u00fcr den Anbau von Palm\u00f6l genutzt werden. Au\u00dferdem m\u00fcssen die Anbaubetriebe und Palm\u00f6l-M\u00fchlen ihre Umweltbelastungen so niedrig wie m\u00f6glich halten."
+    },
+    "SGS_INSTITUT_FRESENIUS": {
+        "name": "SGS Institut Fresenius",
+        "description": "SGS Institut Fresenius verfolgt mit seinem Qualit\u00e4tssiegel einen strengen und ganzheitlichen Qualit\u00e4tsansatz. Dieser umfasst die gesamte Entstehung des Produkts - von der Gewinnung der Rohstoffe \u00fcber die Unternehmensgrunds\u00e4tze und Arbeitsbedingungen bis hin zur tats\u00e4chlichen Beschaffenheit. Nach der Siegelvergabe erfolgen in regelm\u00e4\u00dfigem Abstand weitere Qualit\u00e4tskontrollen."
+    },
+    "STEP_OEKO_TEX": {
+        "name": "STeP by OEKO-TEX\u00ae",
+        "description": "STeP by OEKO-TEX\u00ae unterst\u00fctzt Betriebe zielgerichtet dabei, umweltfreundliche Produktionsprozesse dauerhaft umzusetzen: vom Chemikalieneinsatz \u00fcber den verantwortlichen Umgang mit Abw\u00e4ssern und Emissionen bis hin zur Reduzierung des CO2-Fu\u00dfabdrucks. STeP tr\u00e4gt dazu bei, Produktionsprozesse kontinuierlich zu verbessern sowie Ressourcen effizient zu nutzen, und schafft damit die Grundlage f\u00fcr eine optimale Wettbewerbsposition."
+    },
+    "UTZ_RAINFOREST_ALLIANCE": {
+        "name": "UTZ",
+        "description": "Die drei wesentlichen Bestandteile von UTZ zur Erreichung dieser Ziele sind: Das UTZ-System zur R\u00fcckverfolgung, der UTZ Verhaltenskodex und die Dokumente f\u00fcr die \u00dcberwachung der Lieferkette."
+    },
+    "VAUDE_GREEN_SHAPE": {
+        "name": "Vaude Green Shape",
+        "description": "Das Siegel zertifiziert Produkte, die aus nachhaltigen Materialien ressourcenschonend und fair hergestellt wurden. Bei der Zertifizierung wird der gesamte Produktlebenszyklus erfasst. Das Siegel basiert auf verschiedenen unabh\u00e4ngigen Standards, beispielsweise bluesign\u00ae system, Global Organic Textile Standard - GOTS, EU Ecolabel - Textiles und Fair Wear Foundation."
+    },
+    "VEGANBLUME": {
+        "name": "Veganblume",
+        "description": "Das Siegel kennzeichnet vegane Produkte. Das hei\u00dft Produkte, in denen keinerlei tierische Inhaltsstoffe enthalten sind."
+    },
+    "WORLDWIDE_RESPONSIBLE_ACCREDITED_PRODUCTION": {
+        "name": "Worldwide Responsible Accredited Production",
+        "description": "Ziel ist eine sozialverantwortliche Produktion. Das Siegel verlangt die Einhaltung von Sozialstandards sowie der Arbeitsschutz- und -sicherheitsgesetze in den jeweiligen Produktionsl\u00e4ndern. Die WRAP- Prinzipien basieren auf internationalen Arbeitsplatzstandards und lokalen Gesetzen. Sie orientieren sich au\u00dferdem an den Konventionen der Internationalen Arbeitsorganisation."
+    },
+    "BIORE": {
+        "name": "bioRe",
+        "description": "Das Siegel bioRe \u00ae Sustainable Textiles bezieht sich auf die gesamte textile Produktionskette, vom Rohstoffanbau der Biobaumwolle bis zur fertigen Konfektion. Ziel ist eine umfassende \u00f6kologische und faire Modeproduktion. Grundlagen hierf\u00fcr sind die Sozialkriterien der Internationalen Arbeitsorganisation und umfassende \u00f6kologische Standards. Es wird ausschlie\u00dflich Biobaumwolle aus kontrolliertem Anbau verwendet, welche den bioRe\u00ae Sustainable Cotton Standard erf\u00fcllen. Direkte Lieferanten in Hochrisikol\u00e4ndern m\u00fcssen SA8000 zertifiziert sein. F\u00fcr deren Unterlieferanten, welche nicht SA8000 zertifiziert sind, wird das amfori BSCI Audit auf dem Weg zur SA8000 Zertifizierung genutzt. Jedes Produkt ist mit einem Code versehen, welcher den Kund:innen die R\u00fcckverfolgung der Produktion bis zum Anbaugebiet erm\u00f6glicht. Das gesamte w\u00e4hrend der Produktion entstandene CO2 wird durch CO2-Projekte in den Baumwoll-Anbaugebieten wieder eingespart. Das Siegel bioRe\u00ae Sustainable Cotton garantiert die Herkunft der Biobaumwolle aus kontrolliert biologischem Anbau durch bioRe\u00ae Bauern in Indien und Tansania. Die B\u00e4uer:innen erhalten eine Pr\u00e4mie von 15% \u00fcber dem Marktpreis und eine Abnahmegarantie f\u00fcr Ihre Produktion. Dieses G\u00fctesiegel umfasst soziale und \u00f6kologische Standards vom gentech-freien Saatgut \u00dcber die Biobaumwolle bis zur Garnherstellung."
+    },
+    "ECO_INSTITUTE": {
+        "name": "eco-INSTITUT",
+        "description": "Eine hohe Produktqualit\u00e4t sowie Sicherheit und gesundheitliche Unbedenklichkeit sollen durch das Siegel zum Ausdruck kommen. Der Nachweis hierf\u00fcr sind Emissions- und Schadstoffpr\u00fcfungen der Endprodukte. Das Siegel kennzeichnet beispielsweise. Matratzen, Bettwaren und M\u00f6bel."
+    },
+    "KLIMANEUTRAL_NATUREOFFICE": {
+        "name": "klimaneutral",
+        "description": "Das klimaneutral-Siegel der natureOffice GmbH ist auf Verpackungen, Produkten, Webseiten, Druckerzeugnissen oder Fahrzeugen zu finden. Es weist Verbraucher:innen darauf hin, dass die CO2-Emissionen, die bei der Herstellung des gekennzeichneten Produktes oder der Prozesse (Fahren, Fliegen, etc.) entstehen, ermittelt und durch ein Invest des Herstellers in ein Klimaschutzprojekt, welches CO2-Zertifikate generiert, ausgeglichen worden sind."
+    },
+    "MYCLIMATE": {
+        "name": "myclimate",
+        "description": "Das myclimate Klimaneutralit\u00e4ts-Label zeichnet Produkte, Aktivit\u00e4ten, Veranstaltungen, Standorte und Unternehmen aus, deren Emissionen in myclimate-Klimaschutzprojekten kompensiert werden. Der Kompensationsbeitrag flie\u00dft in myclimate Klimaschutzprojekte in Entwicklungs- und Schwellenl\u00e4ndern. So zielen myclimate Projekte nicht nur darauf ab Treibhausgas-Emissionen zu reduzieren, sondern auch auf darauf die soziale, \u00f6kologische und wirtschaftliche Entwicklung in der Region zu f\u00f6rdern. Die Projekte erf\u00fcllen die Qualit\u00e4ts-Standards CDM, Gold Standard und Plan Vivo."
+    },
+    "NATUREPLUS": {
+        "name": "natureplus",
+        "description": "Das Siegel natureplus zeichnet Baustoffe, Bauprodukte und Einrichtungsgegenst\u00e4nde aus. Da einige Produkte aus Holz bestehen, stellt das Siegel auch Anforderungen an die Holzgewinnung und -herkunft."
+    },
+    "OEKOPAPLUS": {
+        "name": "\u00d6KOPAplus",
+        "description": "\u00d6KOPAplus kennzeichnet umweltfreundliche Papierprodukte. Sie m\u00fcssen zu 100 Prozent aus Altpapier hergestellt sein. Das spart CO2, Energie und Wasser ein. \u00dcberdies reduziert es die Gew\u00e4sser- und Luftverschmutzung. Um das sicherzustellen, muss das verarbeitete Papier mit dem Blauen Engel ausgezeichnet sein."
+    },
+    "AUSTRIAN_ECOLABEL_DETERGENTS": {
+        "name": "\u00d6sterreichisches Umweltzeichen - Wasch- & Reinigungsmittel",
+        "description": "F\u00fcr die eingesetzten Chemikalien in Wasch- und Reinigungsmitteln gelten strenge Regeln in Bezug auf etwaige Gesundheitsbelastungen. Bei Duft- und Konservierungsstoffen wurde besonderen Wert darauf gelegt, allergieausl\u00f6sende Stoffe m\u00f6glichst zu reduzieren. Reduktion der Wasserverschmutzung: Alle eingesetzten Chemikalien m\u00fcssen m\u00f6glichst gut abbaubar sein. Chemikalien, die Wasserorganismen gef\u00e4hrden, und auch Mikroplastik sind verboten oder auf ein Minimum beschr\u00e4nkt. Verpackung sparen: Das Gewicht der Verpackung im Verh\u00e4ltnis zum Produkt muss m\u00f6glichst gering sein. Zus\u00e4tzlich sind bei Kunststoffverpackungen nur Kombinationen an Materialien erlaubt, die die Recyclingf\u00e4higkeit nicht st\u00f6ren. Trotzdem ein gut funktionierendes Produkt: Die Reinigungsmittel wurden einem Gebrauchstauglichkeitstest unterzogen. Dadurch ist mindestens die gleiche Sp\u00fclwirkung wie bei herk\u00f6mmlichen Produkten garantiert."
+    },
+    "VFI_SOZIAL_FAIR": {
+        "name": "\"sozial-fair\" VFI Sozialstandard f\u00fcr Fertigwaren",
+        "description": "Ziele des Verfahrens SocialFair ist die gr\u00f6\u00dfere Selbst\u00e4ndigkeit der Produzent:innen, die in ihrem eigenen Interesse und auf der Basis ihrer eigenen F\u00e4higkeiten Verbesserungen durchf\u00fchren. Hinzu kommt, dass die German Importers f\u00fcr ihre eigenen Betriebsst\u00e4tten (Verwaltung, Warenlager und ggf. Gesch\u00e4fte) das Initiative SocialFair Verfahren anwenden, um auch in Deutschland einen effizienten Ressourceneinsatz und weniger Umweltbelastungen zu gew\u00e4hrleisten. Und alles wird bilanziert und dokumentiert, wodurch ein faktenbasierter Dialog mit den Stakeholder:innen erm\u00f6glicht wird."
+    }
+}
