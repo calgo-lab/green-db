@@ -1,10 +1,9 @@
 import json
 from datetime import datetime
 from enum import Enum
-from typing import List, Optional
+from typing import List, Optional, Type
 
 from pydantic import BaseModel, conint, conlist
-
 
 # Parse JSON file with sustainability labels
 with open('sustainability-labels.json') as file:
