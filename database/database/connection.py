@@ -194,12 +194,12 @@ class GreenDB(Connection):
         """
         super().__init__(GreenDBTable, DATABASE_NAME_GREEN_DB)
 
-        from .sustainability_labels import sustainability_labels
+        from core.sustainability_labels import certificate_information_dense
 
         with self._session_factory() as db_session:
             # NOTE: this is slowly..
             # if we have many more labels to bootstrap, we should refactor it.
-            for label in sustainability_labels:
+            for label in certificate_information_dense:
                 if (  # If label does not exist
                     not db_session.query(SustainabilityLabelsTable.id)
                     .filter(SustainabilityLabelsTable.id == label.id)
