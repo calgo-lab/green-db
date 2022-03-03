@@ -1,5 +1,5 @@
 from logging import getLogger
-from typing import Dict, List, Optional
+from typing import List, Optional
 
 from bs4 import BeautifulSoup
 from pydantic import ValidationError
@@ -118,84 +118,18 @@ _LABEL_MAPPING = {
 }
 
 
-def __get_sustainability_info(
-    beautiful_soup: BeautifulSoup,
-    title_attr: str,
-    description_attr: str,
-    headline: str = "Dieser Artikel erfüllt die folgenden Nachhaltigkeits-Kriterien:",
-) -> Dict[str, str]:
-    """
-    Helper function to extract sustainability information.
-
-    Args:
-        beautiful_soup (BeautifulSoup): Parsed HTML
-        title_attr (str): HTML attr of title
-        description_attr (str): HTML attr of description
-        headline (str, optional): Headline on webpage. Defaults to
-            "Dieser Artikel erfüllt die folgenden Nachhaltigkeits-Kriterien:".
-
-    Returns:
-        Dict[str, str]: `dict` with name and description of found sustainability information
-    """
-
-    # this area is hidden by default, so we need to find the right one
-    hidden_areas = [
-        div
-        for div in beautiful_soup.find_all("div", attrs={"style": "max-height:0"})
-        if headline in div.text
-    ]
-
-    if hidden_areas:
-        sustainability_info_parsed = hidden_areas[0]
-
-        titles = sustainability_info_parsed.find_all(attrs={"data-testid": title_attr})
-        descriptions = sustainability_info_parsed.find_all(attrs={"data-testid": description_attr})
-
-        return {
-            title.string: description.string for title, description in zip(titles, descriptions)
-        }
-
-    else:
-        return {}
-
-
-def _get_sustainability(
-    beautiful_soup: BeautifulSoup,
-    headline: str = "Dieser Artikel erfüllt die folgenden Nachhaltigkeits-Kriterien:",
-) -> List[str]:
+def _get_sustainability(beautiful_soup: BeautifulSoup) -> List[str]:
     """
     Extracts the sustainability information from HTML.
 
     Args:
         beautiful_soup (BeautifulSoup): Parsed HTML
-        headline (str, optional): Headline on webpage. Defaults to
-            "Dieser Artikel erfüllt die folgenden Nachhaltigkeits-Kriterien:".
 
     Returns:
         List[str]: Ordered `list` of found sustainability labels
     """
 
-    data = {
-        "labels": __get_sustainability_info(
-            beautiful_soup=beautiful_soup,
-            title_attr="certificate__title",
-            description_attr="certificate__description",
-            headline=headline,
-        ),
-        "impact": __get_sustainability_info(
-            beautiful_soup=beautiful_soup,
-            title_attr="cluster-causes__title",
-            description_attr="cluster-causes__intro-statement",
-            headline=headline,
-        ),
-        "aspects": __get_sustainability_info(
-            beautiful_soup=beautiful_soup,
-            title_attr="cause__title",
-            description_attr="cause__description",
-            headline=headline,
-        ),
-    }
-
-    return sorted(
-        {_LABEL_MAPPING.get(label, Certificate.UNKNOWN) for label in data.get("labels", {}).keys()}
-    )
+    if cluster := beautiful_soup.find("div", attrs={"data-testid": "cluster-certificates"}):
+        labels = cluster.find_all(attrs={"data-testid": "certificate__title"})
+        return sorted({_LABEL_MAPPING.get(label.string, Certificate.UNKNOWN) for label in labels})
+    return []
