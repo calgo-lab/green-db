@@ -6,7 +6,8 @@ from sqlalchemy import Column
 from sqlalchemy.orm import Query, Session
 
 from core.constants import DATABASE_NAME_GREEN_DB, DATABASE_NAME_SCRAPING
-from core.domain import Product, ScrapedPage, SustainabilityLabel
+from core.domain import Product, ScrapedPage
+from core.sustainability_labels import SustainabilityLabel
 
 from .tables import (
     SCRAPING_TABLE_CLASS_FOR,

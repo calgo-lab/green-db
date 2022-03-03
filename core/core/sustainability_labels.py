@@ -1,13 +1,13 @@
 import json
 from datetime import datetime
 from enum import Enum
-from typing import Type
 from pathlib import Path
+from typing import Optional, Type
 
-from core.domain import SustainabilityLabel
+from pydantic import BaseModel, conint
 
 SUSTAINABILITY_LABELS_DATA_DIR = Path(__file__).parent / "sustainability_labels_data"
-information_from = datetime(2022, 1, 25, 12)
+information_from = datetime(2022, 3, 3, 19)
 certificate_tag = "certificate:"
 
 # Add special labels (not included in JSON) manually
@@ -74,6 +74,23 @@ def get_certificate_class() -> Type[Enum]:
     )
 
 
+Certificate = get_certificate_class()
+
+
+class SustainabilityLabel(BaseModel):
+    id: Certificate
+    timestamp: datetime
+    name: str
+    description: str
+    ecological_evaluation: Optional[conint(ge=0, le=100)]  # type: ignore
+    social_evaluation: Optional[conint(ge=0, le=100)]  # type: ignore
+    credibility_evaluation: Optional[conint(ge=0, le=100)]  # type: ignore
+
+    class Config:
+        orm_mode = True
+        use_enum_values = True
+
+
 def get_certificate_attribute(certificate_information_dict, attribute, language_preference=["de", "en", "fr"]) -> str:
     """
     Helper function to retrieve an attribute of a certificate_information_dict in one language.
@@ -84,7 +101,7 @@ def get_certificate_attribute(certificate_information_dict, attribute, language_
             return certificate_information_dict["languages"][language][attribute]
 
 
-# Create a list of SustainabilityLabels with its information in one language
+# Create a list of SustainabilityLabel with its information in one language
 certificate_information_dense = [
     SustainabilityLabel(
         id=certificate_id,

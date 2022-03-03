@@ -1,14 +1,10 @@
-import json
-import os
 from datetime import datetime
 from enum import Enum
-from typing import List, Optional, Type
+from typing import List, Optional
 
-from pydantic import BaseModel, conint, conlist
+from pydantic import BaseModel, conlist
 
-from core.sustainability_labels import get_certificate_class
-
-Certificate = get_certificate_class()
+from core.sustainability_labels import Certificate
 
 
 class PageType(str, Enum):
@@ -56,20 +52,6 @@ class Product(BaseModel):
     # str because alpha numeric
     # source: https://en.wikipedia.org/wiki/Amazon_Standard_Identification_Number
     asin: Optional[str]
-
-    class Config:
-        orm_mode = True
-        use_enum_values = True
-
-
-class SustainabilityLabel(BaseModel):
-    id: Certificate
-    timestamp: datetime
-    name: str
-    description: str
-    ecological_evaluation: Optional[conint(ge=0, le=100)]  # type: ignore
-    social_evaluation: Optional[conint(ge=0, le=100)]  # type: ignore
-    credibility_evaluation: Optional[conint(ge=0, le=100)]  # type: ignore
 
     class Config:
         orm_mode = True
