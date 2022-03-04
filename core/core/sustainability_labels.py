@@ -2,7 +2,7 @@ import json
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Optional, Type
+from typing import Any, Dict, List, Optional, Type
 
 from pydantic import BaseModel, conint
 
@@ -16,8 +16,7 @@ special_labels = {
         "languages": {
             "de": {
                 "name": "OTHER",
-                "description": "Dieses 'Label' ist GreenDB intern. Es wird verwendet, wenn ein Shop das Produkt als nachhaltig listet, unsere Nachhlatigkeitsexpert*innen dies aber nicht nachvollziehen können. Es handelt sich also um falsche oder nicht belastbare Informationen",
-                # noqa
+                "description": "Dieses 'Label' ist GreenDB intern. Es wird verwendet, wenn ein Shop das Produkt als nachhaltig listet, unsere Nachhlatigkeitsexpert*innen dies aber nicht nachvollziehen können. Es handelt sich also um falsche oder nicht belastbare Informationen",  # noqa
             }
         }
     },
@@ -25,8 +24,7 @@ special_labels = {
         "languages": {
             "de": {
                 "name": "UNKNOWN",
-                "description": "Dieses 'Label' ist GreenDB intern. Es wird verwendet, wenn die Angaben des Shops von uns (noch) nicht überprüft wurden.",
-                # noqa
+                "description": "Dieses 'Label' ist GreenDB intern. Es wird verwendet, wenn die Angaben des Shops von uns (noch) nicht überprüft wurden.",  # noqa
             }
         }
     }
@@ -36,7 +34,8 @@ special_labels = {
 with open(SUSTAINABILITY_LABELS_DATA_DIR / "sustainability-labels.json") as labels_file:
     certificate_information = json.load(labels_file)
 
-with open(SUSTAINABILITY_LABELS_DATA_DIR / "sustainability_labels_evaluation.json") as evaluation_file:
+with open(
+        SUSTAINABILITY_LABELS_DATA_DIR / "sustainability_labels_evaluation.json") as evaluation_file:  # noqa
     certificate_evaluation = json.load(evaluation_file)
 
 # Combine the two JSON files
@@ -74,7 +73,7 @@ def get_certificate_class() -> Type[Enum]:
     )
 
 
-Certificate = get_certificate_class()
+Certificate = get_certificate_class()  # type: ignore  # noqa
 
 
 class SustainabilityLabel(BaseModel):
@@ -91,10 +90,14 @@ class SustainabilityLabel(BaseModel):
         use_enum_values = True
 
 
-def get_certificate_attribute(certificate_information_dict, attribute, language_preference=["de", "en", "fr"]) -> str:
+def get_certificate_attribute(certificate_information_dict: Dict[str, Dict[str, Any]],
+                              attribute: str,
+                              language_preference: List[str] = ["de", "en", "fr"]) -> str:
     """
     Helper function to retrieve an attribute of a certificate_information_dict in one language.
     The language_preference is by default ["de", "en", "fr"].
+    Returns:
+        str: of the corresponding attribute in one language.
     """
     for language in language_preference:
         if language in certificate_information_dict["languages"].keys():
