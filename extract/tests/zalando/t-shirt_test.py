@@ -35,7 +35,7 @@ def test_zalando_basic() -> None:
         description=" ARMEDANGELS JAAMES TURNTABLES - T-Shirt print - acid black für "
         "14,90\xa0€ (2021-12-21) versandkostenfrei bei Zalando bestellen.",
         brand="ARMEDANGELS",
-        sustainability_labels=["GOTS_ORGANIC"],
+        sustainability_labels=["certificate:GOTS_ORGANIC"],
         price=14.90,
         currency="EUR",
         image_urls=[
