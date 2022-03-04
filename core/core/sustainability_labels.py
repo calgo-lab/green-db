@@ -110,6 +110,7 @@ def get_certificate_attribute(
     for language in language_preference:
         if language in certificate_information_dict["languages"].keys():
             return certificate_information_dict["languages"][language][attribute]
+    return ""
 
 
 # Create a list of SustainabilityLabel with its information in one language
