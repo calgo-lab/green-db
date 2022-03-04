@@ -12,7 +12,8 @@ certificate_tag = "certificate:"
 
 # Add special labels (not included in JSON) manually
 special_labels = {
-    certificate_tag + "OTHER": {
+    certificate_tag
+    + "OTHER": {
         "languages": {
             "de": {
                 "name": "OTHER",
@@ -20,14 +21,15 @@ special_labels = {
             }
         }
     },
-    certificate_tag + "UNKNOWN": {
+    certificate_tag
+    + "UNKNOWN": {
         "languages": {
             "de": {
                 "name": "UNKNOWN",
                 "description": "Dieses 'Label' ist GreenDB intern. Es wird verwendet, wenn die Angaben des Shops von uns (noch) nicht überprüft wurden.",  # noqa
             }
         }
-    }
+    },
 }
 
 # Load JSON files with certificate_information and certificate_evaluation
@@ -35,7 +37,8 @@ with open(SUSTAINABILITY_LABELS_DATA_DIR / "sustainability-labels.json") as labe
     certificate_information = json.load(labels_file)
 
 with open(
-        SUSTAINABILITY_LABELS_DATA_DIR / "sustainability_labels_evaluation.json") as evaluation_file:  # noqa
+    SUSTAINABILITY_LABELS_DATA_DIR / "sustainability_labels_evaluation.json"
+) as evaluation_file:
     certificate_evaluation = json.load(evaluation_file)
 
 # Combine the two JSON files
@@ -43,10 +46,13 @@ with open(
 for certificate, evaluation in certificate_evaluation.items():
     certificate_information[certificate].update(evaluation)
 
-# Create a mapping from the full certificate name to its id without the certificate_tag
 certificate_information.update(special_labels)
-_certificate_2_id = {certificate.replace(certificate_tag, ""): certificate
-                     for certificate in certificate_information.keys()}
+
+# Create a mapping from the full certificate name to its id without the certificate_tag
+_certificate_2_id = {
+    certificate.replace(certificate_tag, ""): certificate
+    for certificate in certificate_information.keys()
+}
 
 
 class _Certificate(str, Enum):
@@ -90,9 +96,11 @@ class SustainabilityLabel(BaseModel):
         use_enum_values = True
 
 
-def get_certificate_attribute(certificate_information_dict: Dict[str, Dict[str, Any]],
-                              attribute: str,
-                              language_preference: List[str] = ["de", "en", "fr"]) -> str:
+def get_certificate_attribute(
+    certificate_information_dict: Dict[str, Dict[str, Any]],
+    attribute: str,
+    language_preference: List[str] = ["de", "en", "fr"],
+) -> str:
     """
     Helper function to retrieve an attribute of a certificate_information_dict in one language.
     The language_preference is by default ["de", "en", "fr"].
