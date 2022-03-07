@@ -268,3 +268,6 @@ def _get_sustainability(product_data: dict, parsed_url: ParseResult) -> List[str
         labels.update(_get_sustainability_info(sustainable_soup))
 
     return sorted({_LABEL_MAPPING.get(label, LabelIDType.UNKNOWN) for label in labels.keys()})
+
+
+EXTRACTOR_FOR_TABLE_NAME = {TABLE_NAME_SCRAPING_OTTO: extract_otto}

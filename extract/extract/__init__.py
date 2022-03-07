@@ -1,21 +1,21 @@
 from typing import Optional
+from pkgutil import iter_modules
 
 from core import log
-from core.constants import TABLE_NAME_SCRAPING_OTTO, TABLE_NAME_SCRAPING_ZALANDO
 from core.domain import Product, ScrapedPage
 
-from .extractors.otto import extract_otto
-from .extractors.zalando import extract_zalando
+import extractors
 from .parse import parse_page
 
 log.setup_logger(__name__)
 
-
 # Maps a scraping table name to its extraction method
-EXTRACTOR_FOR_TABLE_NAME = {
-    TABLE_NAME_SCRAPING_OTTO: extract_otto,
-    TABLE_NAME_SCRAPING_ZALANDO: extract_zalando,
-}
+EXTRACTOR_FOR_TABLE_NAME = {}
+
+for module in iter_modules(extractors.__path__):
+    print(module)
+    __import__(f'extractors.{module.name}')
+    EXTRACTOR_FOR_TABLE_NAME |= getattr(extractors, module.name).EXTRACTOR_FOR_TABLE_NAME
 
 
 def extract_product(table_name: str, scraped_page: ScrapedPage) -> Optional[Product]:

@@ -133,3 +133,6 @@ def _get_sustainability(beautiful_soup: BeautifulSoup) -> List[str]:
         labels = cluster.find_all(attrs={"data-testid": "certificate__title"})
         return sorted({_LABEL_MAPPING.get(label.string, LabelIDType.UNKNOWN) for label in labels})
     return []
+
+
+EXTRACTOR_FOR_TABLE_NAME = {TABLE_NAME_SCRAPING_ZALANDO: extract_zalando}
