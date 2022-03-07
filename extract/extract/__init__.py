@@ -4,7 +4,7 @@ from core import log
 from core.domain import Product, ScrapedPage
 
 from . import extractors
-from .parse import parse_page, ParsedPage
+from .parse import ParsedPage, parse_page
 
 log.setup_logger(__name__)
 
