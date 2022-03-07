@@ -1,10 +1,10 @@
 from typing import Callable, Dict, Optional
 
 from core import log
-from core.domain import ParsedPage, Product, ScrapedPage
+from core.domain import Product, ScrapedPage
 
 from . import extractors
-from .parse import parse_page
+from .parse import parse_page, ParsedPage
 
 log.setup_logger(__name__)
 
