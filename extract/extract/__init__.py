@@ -1,7 +1,7 @@
 from pkgutil import iter_modules
 from typing import Optional
 
-import extractors
+from . import extractors
 from core import log
 from core.domain import Product, ScrapedPage
 
@@ -10,7 +10,7 @@ from .parse import parse_page
 log.setup_logger(__name__)
 
 # Maps a scraping table name to its extraction method
-EXTRACTOR_FOR_TABLE_NAME = {}
+EXTRACTOR_FOR_TABLE_NAME: Dict[str, Callable[[ParsedPage], Optional[Product]]] = {}
 
 for module in iter_modules(extractors.__path__):
     print(module)
