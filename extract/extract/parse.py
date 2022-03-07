@@ -3,7 +3,6 @@ from dataclasses import dataclass
 
 import extruct
 from bs4 import BeautifulSoup
-
 from core.domain import ScrapedPage
 
 

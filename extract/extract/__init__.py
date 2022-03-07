@@ -1,8 +1,7 @@
-from pkgutil import iter_modules
-from typing import Optional
+from typing import Callable, Dict, Optional, Product
 
 from core import log
-from core.domain import Product, ScrapedPage
+from core.domain import ParsedPage, Product, ScrapedPage
 
 from . import extractors
 from .parse import parse_page
@@ -12,10 +11,8 @@ log.setup_logger(__name__)
 # Maps a scraping table name to its extraction method
 EXTRACTOR_FOR_TABLE_NAME: Dict[str, Callable[[ParsedPage], Optional[Product]]] = {}
 
-for module in iter_modules(extractors.__path__):
-    print(module)
-    __import__(f"extractors.{module.name}")
-    EXTRACTOR_FOR_TABLE_NAME |= getattr(extractors, module.name).EXTRACTOR_FOR_TABLE_NAME
+for name in extractors.names:
+    EXTRACTOR_FOR_TABLE_NAME |= getattr(extractors, name).EXTRACTOR_FOR_TABLE_NAME
 
 
 def extract_product(table_name: str, scraped_page: ScrapedPage) -> Optional[Product]:
