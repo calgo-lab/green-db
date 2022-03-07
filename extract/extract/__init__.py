@@ -1,10 +1,10 @@
 from pkgutil import iter_modules
 from typing import Optional
 
-from . import extractors
 from core import log
 from core.domain import Product, ScrapedPage
 
+from . import extractors
 from .parse import parse_page
 
 log.setup_logger(__name__)
