@@ -1,4 +1,4 @@
-from typing import Callable, Dict, Optional, Product
+from typing import Callable, Dict, Optional
 
 from core import log
 from core.domain import ParsedPage, Product, ScrapedPage
