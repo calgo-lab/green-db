@@ -15,13 +15,10 @@ If you want to add another to-be-scraped-shop, unfortunately, there are some fil
    - further, it yields `SplashRequest` with the next SERP URL (pagination) and `parse_SERP` as callback.
 4. [`extract.extract.extractors.<shop-name>.py`](../extract/extract/__init__.py):
    - create a new file `<shop-name>.py`. (Check out others for examples)
-   - implement a function with signature: `def extract_<shop-name>(parsed_page: ParsedPage) -> Optional[Product]:`
+   - implement a function with signature: `def extract(parsed_page: ParsedPage) -> Optional[Product]:`
      - it's responsible for parsing the HTML
      - find and extract necessary product attributes
      - find and extract necessary sustainability information
      - return `Product` object or `None`
-5. [`extract.extract.__init__.py`](../extract/extract/__init__.py):
-   - import the implemented function: `extract_<shop-name>` from the created file: `extract.extract.extractors.<shop-name>.py`
-   - add the function for to the mapping: `EXTRACTOR_FOR_TABLE_NAME`
-6. [`workers.workers.__init__.py`](../workers/workers/__init__.py):
-   - add connection for `<shop-name>` to the mapping `CONNECTION_FOR_TABLE`
+   - add the dictionary `EXTRACTOR_FOR_TABLE_NAME = {TABLE_NAME_SCRAPING_<shop-name>: extract}`
+     - [`extract_product`](../extract/extract/__init__.py) uses this table to map a given `TABLE_NAME_SCRAPING_*` to a suitable extractor
