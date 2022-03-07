@@ -14,7 +14,7 @@ EXTRACTOR_FOR_TABLE_NAME = {}
 
 for module in iter_modules(extractors.__path__):
     print(module)
-    __import__(f'extractors.{module.name}')
+    __import__(f"extractors.{module.name}")
     EXTRACTOR_FOR_TABLE_NAME |= getattr(extractors, module.name).EXTRACTOR_FOR_TABLE_NAME
 
 
