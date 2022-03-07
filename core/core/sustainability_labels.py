@@ -79,11 +79,11 @@ def get_certificate_class() -> Type[Enum]:
     )
 
 
-Certificate = get_certificate_class()  # type: ignore  # noqa
+Certificate = get_certificate_class()
 
 
 class SustainabilityLabel(BaseModel):
-    id: Certificate
+    id: Certificate  # type: ignore
     timestamp: datetime
     name: str
     description: str
