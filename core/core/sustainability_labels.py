@@ -12,8 +12,7 @@ certificate_tag = "certificate:"
 
 # Add special labels (not included in JSON) manually
 special_labels = {
-    certificate_tag
-    + "OTHER": {
+    f"{certificate_prefix}OTHER": {
         "languages": {
             "de": {
                 "name": "OTHER",
@@ -21,8 +20,7 @@ special_labels = {
             }
         }
     },
-    certificate_tag
-    + "UNKNOWN": {
+    f"{certificate_prefix}UNKNOWN": {
         "languages": {
             "de": {
                 "name": "UNKNOWN",
