@@ -32,7 +32,7 @@ class ExtractorMapping(BaseModel):
     map: Dict[str, ExtractorSignature]
 
 
-def Extractor(*table_names: List[str]) -> Callable[[ExtractorSignature], ExtractorMapping]:
+def Extractor(*table_names: str) -> Callable[[ExtractorSignature], ExtractorMapping]:
     def decorator(procedure: ExtractorSignature) -> ExtractorMapping:
         return ExtractorMapping(map={name: procedure for name in table_names})
 
