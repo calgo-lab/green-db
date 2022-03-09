@@ -22,4 +22,3 @@ If you want to add another to-be-scraped-shop, unfortunately, there are some fil
      - find and extract necessary product attributes
      - find and extract necessary sustainability information
      - return `Product` object or `None`
-   - add the dictionary `EXTRACTOR_FOR_TABLE_NAME = {TABLE_NAME_SCRAPING_<shop-name>: extract}`

@@ -2,9 +2,10 @@ from logging import getLogger
 from typing import List, Optional
 
 from bs4 import BeautifulSoup
+from pydantic import ValidationError
+
 from core.constants import TABLE_NAME_SCRAPING_ZALANDO
 from core.domain import LabelIDType, Product
-from pydantic import ValidationError
 
 from ..parse import JSON_LD, ParsedPage
 from ..utils import Extractor, safely_return_first_element

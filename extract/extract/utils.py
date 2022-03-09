@@ -1,7 +1,8 @@
 from typing import Any, Callable, Dict, List, Optional
 
-from core.domain import Product
 from pydantic import BaseModel
+
+from core.domain import Product
 
 from .parse import ParsedPage
 
