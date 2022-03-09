@@ -16,7 +16,7 @@ If you want to add another to-be-scraped-shop, unfortunately, there are some fil
 4. [`extract.extract.extractors.<shop-name>.py`](../extract/extract/__init__.py):
    - create a new file `<shop-name>.py`. (Check out others for examples)
    - import the Extractor decorator: `from ..utils import Extractor`
-     - [`extract_product`](../extract/extract/__init__.py) uses to map a given `TABLE_NAME_SCRAPING_*` to an extractor
+     - [`extract_product`](../extract/extract/__init__.py) uses it to map a given `TABLE_NAME_SCRAPING_*` to an extractor.
    - implement a function with signature: `@Extractor(TABLE_NAME_SCRAPING_<shop-name>) def extract(parsed_page: ParsedPage) -> Optional[Product]:`
      - it's responsible for parsing the HTML
      - find and extract necessary product attributes

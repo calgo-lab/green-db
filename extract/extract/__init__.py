@@ -12,8 +12,6 @@ log.setup_logger(__name__)
 # Maps a scraping table name to its extraction method
 EXTRACTOR_FOR_TABLE_NAME: Dict[str, ExtractorSignature] = {}
 
-lol: Optional[ExtractorSignature] = None
-
 for module_name in extractors.names:
     module = getattr(extractors, module_name)
     for member_name in dir(module):
