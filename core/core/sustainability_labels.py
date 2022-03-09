@@ -79,21 +79,6 @@ def get_certificate_class() -> Type[Enum]:
     )
 
 
-Certificate = get_certificate_class()
-
-
-class SustainabilityLabel(BaseModel):
-    id: Certificate  # type: ignore
-    timestamp: datetime
-    name: str
-    description: str
-    ecological_evaluation: Optional[conint(ge=0, le=100)]  # type: ignore
-    social_evaluation: Optional[conint(ge=0, le=100)]  # type: ignore
-    credibility_evaluation: Optional[conint(ge=0, le=100)]  # type: ignore
-
-    class Config:
-        orm_mode = True
-        use_enum_values = True
 
 
 def get_certificate_attribute(

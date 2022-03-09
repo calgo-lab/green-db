@@ -5,6 +5,7 @@ from typing import List, Optional
 from pydantic import BaseModel, conlist
 
 from core.sustainability_labels import Certificate
+CertificateType = get_CertificateType_enum()
 
 
 class PageType(str, Enum):
@@ -52,6 +53,20 @@ class Product(BaseModel):
     # str because alpha numeric
     # source: https://en.wikipedia.org/wiki/Amazon_Standard_Identification_Number
     asin: Optional[str]
+
+    class Config:
+        orm_mode = True
+        use_enum_values = True
+
+
+class SustainabilityLabel(BaseModel):
+    id: CertificateType  # type: ignore
+    timestamp: datetime
+    name: str
+    description: str
+    ecological_evaluation: Optional[conint(ge=0, le=100)]  # type: ignore
+    social_evaluation: Optional[conint(ge=0, le=100)]  # type: ignore
+    credibility_evaluation: Optional[conint(ge=0, le=100)]  # type: ignore
 
     class Config:
         orm_mode = True
