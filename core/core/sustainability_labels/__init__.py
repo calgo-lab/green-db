@@ -45,7 +45,7 @@ def load_and_get_sustainability_labels() -> dict:
     return certificates
 
 
-def get_CertificateType_enum() -> EnumMeta:
+def create_CertificateType() -> EnumMeta:
     """
     Factory function to construct the `Enum` that contains the sustainable certificates
 

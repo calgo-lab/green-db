@@ -4,9 +4,9 @@ from typing import List, Optional
 
 from pydantic import BaseModel, conint, conlist
 
-from .sustainability_labels import get_CertificateType_enum
+from .sustainability_labels import create_CertificateType
 
-CertificateType = get_CertificateType_enum()
+CertificateType = create_CertificateType()
 
 
 class PageType(str, Enum):
