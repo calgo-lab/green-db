@@ -110,7 +110,7 @@ _LABEL_MAPPING = {
     "Leather Working Group": CertificateType.LEATHER_WORKING_GROUP,
     "Hergestellt aus mindestens 20% innovativen Leder-Alternativen": CertificateType.OTHER,
     "Hergestellt aus mindestens 50% Polyurethanen auf Wasserbasis": CertificateType.OTHER,
-    "Hergestellt aus mindestens 20% innovativen Materialien aus recyceltem Müll": CertificateType.OTHER,
+    "Hergestellt aus mindestens 20% innovativen Materialien aus recyceltem Müll": CertificateType.OTHER,  # noqa
     "OCS - Organic Content Standard": CertificateType.ORGANIC_CONTENT_STANDARD_100,
     "Hergestellt aus mindestens 50% nachhaltigerer Baumwolle": CertificateType.OTHER,
     "Zum Wohl der Tierwelt": CertificateType.OTHER,
