@@ -2,17 +2,17 @@ from logging import getLogger
 from typing import List, Optional
 
 from bs4 import BeautifulSoup
-from pydantic import ValidationError
-
 from core.constants import TABLE_NAME_SCRAPING_ZALANDO
 from core.domain import LabelIDType, Product
+from pydantic import ValidationError
 
 from ..parse import JSON_LD, ParsedPage
-from ..utils import safely_return_first_element
+from ..utils import Extractor, safely_return_first_element
 
 logger = getLogger(__name__)
 
 
+@Extractor(TABLE_NAME_SCRAPING_ZALANDO)
 def extract_zalando(parsed_page: ParsedPage) -> Optional[Product]:
     """
     Extracts information of interest from HTML (and other intermediate representations)
@@ -134,6 +134,3 @@ def _get_sustainability(beautiful_soup: BeautifulSoup) -> List[str]:
         labels = cluster.find_all(attrs={"data-testid": "certificate__title"})
         return sorted({_LABEL_MAPPING.get(label.string, LabelIDType.UNKNOWN) for label in labels})
     return []
-
-
-EXTRACTOR_FOR_TABLE_NAME = {TABLE_NAME_SCRAPING_ZALANDO: extract_zalando}

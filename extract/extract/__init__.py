@@ -1,18 +1,25 @@
-from typing import Callable, Dict, Optional
+from typing import Dict, Optional
 
 from core import log
 from core.domain import Product, ScrapedPage
 
 from . import extractors
-from .parse import ParsedPage, parse_page
+from .parse import parse_page
+from .utils import ExtractorMapping, ExtractorSignature
 
 log.setup_logger(__name__)
 
 # Maps a scraping table name to its extraction method
-EXTRACTOR_FOR_TABLE_NAME: Dict[str, Callable[[ParsedPage], Optional[Product]]] = {}
+EXTRACTOR_FOR_TABLE_NAME: Dict[str, ExtractorSignature] = {}
 
-for name in extractors.names:
-    EXTRACTOR_FOR_TABLE_NAME |= getattr(extractors, name).EXTRACTOR_FOR_TABLE_NAME
+lol: Optional[ExtractorSignature] = None
+
+for module_name in extractors.names:
+    module = getattr(extractors, module_name)
+    for member_name in dir(module):
+        member = getattr(module, member_name)
+        if isinstance(member, ExtractorMapping):
+            EXTRACTOR_FOR_TABLE_NAME |= member.map
 
 
 def extract_product(table_name: str, scraped_page: ScrapedPage) -> Optional[Product]:

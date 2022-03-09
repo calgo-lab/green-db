@@ -1,4 +1,9 @@
-from typing import Any, List
+from typing import Any, Callable, Dict, List, Optional
+
+from core.domain import Product
+from pydantic import BaseModel
+
+from .parse import ParsedPage
 
 
 def safely_return_first_element(list_object: List[Any], else_return: Any = {}) -> Any:
@@ -18,3 +23,17 @@ def safely_return_first_element(list_object: List[Any], else_return: Any = {}) -
 
     else:
         return list_object[0]
+
+
+ExtractorSignature = Callable[[ParsedPage], Optional[Product]]
+
+
+class ExtractorMapping(BaseModel):
+    map: Dict[str, ExtractorSignature]
+
+
+def Extractor(*table_names: List[str]) -> Callable[[ExtractorSignature], ExtractorMapping]:
+    def decorator(procedure: ExtractorSignature) -> ExtractorMapping:
+        return ExtractorMapping(map={name: procedure for name in table_names})
+
+    return decorator

@@ -5,19 +5,19 @@ from urllib.parse import ParseResult, urlparse
 
 import requests
 from bs4 import BeautifulSoup
-from pydantic import ValidationError
-
 from core.constants import TABLE_NAME_SCRAPING_OTTO
 from core.domain import LabelIDType, Product
+from pydantic import ValidationError
 
 from ..parse import DUBLINCORE, MICRODATA, ParsedPage
-from ..utils import safely_return_first_element
+from ..utils import Extractor, safely_return_first_element
 
 logger = getLogger(__name__)
 
 NUM_IMAGE_URLS = 3
 
 
+@Extractor(TABLE_NAME_SCRAPING_OTTO)
 def extract_otto(parsed_page: ParsedPage) -> Optional[Product]:
     """
     Extracts information of interest from HTML (and other intermediate representations)
@@ -269,6 +269,3 @@ def _get_sustainability(product_data: dict, parsed_url: ParseResult) -> List[str
         labels.update(_get_sustainability_info(sustainable_soup))
 
     return sorted({_LABEL_MAPPING.get(label, LabelIDType.UNKNOWN) for label in labels.keys()})
-
-
-EXTRACTOR_FOR_TABLE_NAME = {TABLE_NAME_SCRAPING_OTTO: extract_otto}
