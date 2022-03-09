@@ -1,0 +1,18 @@
+{
+    "certificate:OTHER": {
+        "languages": {
+            "de": {
+                "name": "OTHER",
+                "description": "Dieses 'Label' ist GreenDB intern. Es wird verwendet, wenn ein Shop das Produkt als nachhaltig listet, unsere Nachhlatigkeitsexpert*innen dies aber nicht nachvollziehen können. Es handelt sich also um falsche oder nicht belastbare Informationen"
+            }
+        }
+    },
+    "certificate:UNKNOWN": {
+        "languages": {
+            "de": {
+                "name": "UNKNOWN",
+                "description": "Dieses 'Label' ist GreenDB intern. Es wird verwendet, wenn die Angaben des Shops von uns (noch) nicht überprüft wurden."
+            }
+        }
+    }
+}

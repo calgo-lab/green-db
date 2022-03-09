@@ -6,8 +6,7 @@ from sqlalchemy import Column
 from sqlalchemy.orm import Query, Session
 
 from core.constants import DATABASE_NAME_GREEN_DB, DATABASE_NAME_SCRAPING
-from core.domain import Product, ScrapedPage
-from core.sustainability_labels import SustainabilityLabel
+from core.domain import Product, ScrapedPage, SustainabilityLabel
 
 from .tables import (
     SCRAPING_TABLE_CLASS_FOR,
@@ -195,12 +194,12 @@ class GreenDB(Connection):
         """
         super().__init__(GreenDBTable, DATABASE_NAME_GREEN_DB)
 
-        from core.sustainability_labels import certificate_information_dense
+        from core.sustainability_labels.bootstrap_database import sustainability_labels
 
         with self._session_factory() as db_session:
             # NOTE: this is slowly..
             # if we have many more labels to bootstrap, we should refactor it.
-            for label in certificate_information_dense:
+            for label in sustainability_labels:
                 if (  # If label does not exist
                     not db_session.query(SustainabilityLabelsTable.id)
                     .filter(SustainabilityLabelsTable.id == label.id)
