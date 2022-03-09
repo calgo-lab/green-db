@@ -1,10 +1,10 @@
 import json
 from datetime import datetime
-from enum import Enum
+from enum import Enum, EnumMeta
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Type
+from typing import Any, Dict, List
 
-from pydantic import BaseModel, conint
+from .domain import SustainabilityLabel
 
 SUSTAINABILITY_LABELS_DATA_DIR = Path(__file__).parent / "sustainability_labels_data"
 certificate_prefix = "certificate:"
@@ -52,30 +52,30 @@ _certificate_2_id = {
 }
 
 
-class _Certificate(str, Enum):
-    """
-    We use the `Enum` Functional API: https://docs.python.org/3/library/enum.html#functional-api
-    to construct an Enum based on the sustainable certificates.
-    This class defines the necessary function to create custom values, here the certificate IDs
-    """
-
-    def _generate_next_value_(name: str, start, count, last_values):  # type: ignore
-        return _certificate_2_id[name]
-
-
-def get_certificate_class() -> Type[Enum]:
+def get_CertificateType_enum() -> EnumMeta:
     """
     Factory function to construct the `Enum` that contains the sustainable certificates
+
     Returns:
-        Type[Enum]: `CertificateType` `Enum` use for the domain.
+        EnumMeta: `CertificateType` `Enum` use for the domain.
     """
-    return _Certificate(  # type: ignore
+
+    class CertificateHelper(Enum):
+        """
+        We use the `Enum` Functional API: https://docs.python.org/3/library/enum.html#functional-api
+        to construct an Enum based on the sustainability certificates. For this, we need to
+        implement `_generate_next_value_`, however, this class is not used any further.
+        """
+
+        def _generate_next_value_(name: str, start, count, last_values):  # type: ignore
+            return _certificate_2_id[name]
+
+    return CertificateHelper(  # type: ignore
         value="CertificateType",
         names=list(_certificate_2_id.keys()),
-        module=__name__,
+        module="core.domain",
+        type=str,
     )
-
-
 
 
 def _get_certificate_attribute(
@@ -85,6 +85,7 @@ def _get_certificate_attribute(
 ) -> str:
     """
     Helper function to retrieve an attribute of a certificate_information_dict in one language.
+
     Args:
         certificate_information_dict (Dict[str, Dict[str, Any]]): Dictionary that holds the
             sustainability label information.

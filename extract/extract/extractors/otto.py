@@ -1,4 +1,4 @@
-# Since the Enum 'Certificate' is dynamically generated, mypy can't know the attributes.
+# Since the Enum 'CertificateType' is dynamically generated, mypy can't know the attributes.
 # For this reason, we ignore those errors here.
 # type: ignore[attr-defined]
 
@@ -11,7 +11,7 @@ import requests
 from bs4 import BeautifulSoup
 from pydantic import ValidationError
 
-from core.domain import Certificate, Product
+from core.domain import CertificateType, Product
 
 from ..parse import DUBLINCORE, MICRODATA, ParsedPage
 from ..utils import safely_return_first_element
@@ -89,46 +89,46 @@ def extract_otto(parsed_page: ParsedPage) -> Optional[Product]:
 # TODO: How can we do this smart?
 # See: https://www.otto.de/shoppages/nachhaltigkeit/nachhaltiges_engagement/umweltfreundlich-bestellen/anspruch-an-nachhaltige-artikel-und-siegel  # noqa
 _LABEL_MAPPING = {
-    "Global Recycled Standard": Certificate.GLOBAL_RECYCLED_STANDARD,
-    "Vegetabil gegerbtes Leder": Certificate.OTHER,
-    "[REE]CYCLED": Certificate.OTHER,
-    "Recyceltes Material": Certificate.OTHER,
-    "bluesign® APPROVED": Certificate.BLUESIGN_APPROVED,
-    "Primegreen": Certificate.OTHER,
-    "bluesign® PRODUCT": Certificate.BLUESIGN_PRODUCT,
-    "Grüner Knopf": Certificate.GREEN_BUTTON,
-    "Organic Content Standard 100": Certificate.ORGANIC_CONTENT_STANDARD_100,
-    "Organic Content Standard blended": Certificate.ORGANIC_CONTENT_STANDARD_BLENDED,
-    "Bio-Baumwolle": Certificate.OTHER,
-    "Unterstützt Cotton made in Africa": Certificate.COTTON_MADE_IN_AFRICA,
-    "Primeblue": Certificate.OTHER,
-    "Fairtrade Cotton": Certificate.FAIRTRADE_COTTON,
-    "Fairtrade Textile Production": Certificate.FAIRTRADE_TEXTILE_PRODUCTION,
-    "Responsible Down Standard": Certificate.RESPONSIBLE_DOWN_STANDARD,
-    "BIONIC-FINISH®ECO (Rudolf Chemie)": Certificate.OTHER,
-    "GOTS organic": Certificate.GOTS_ORGANIC,
-    "GOTS made with organic materials": Certificate.GOTS_MADE_WITH_ORGANIC_MATERIALS,
-    "Umweltfreundlicher Färbeprozess": Certificate.OTHER,
-    "TENCEL™ Lyocell": Certificate.OTHER,
-    "TENCEL™ Modal": Certificate.OTHER,
-    "MADE IN GREEN by OEKO-TEX®": Certificate.MADE_IN_GREEN_OEKO_TEX,
-    "LENZING™ ECOVERO™": Certificate.OTHER,
-    "REPREVE®": Certificate.OTHER,
-    "Nachhaltige Viskose": Certificate.OTHER,
-    "ECONYL©": Certificate.OTHER,
-    "Blauer Engel": Certificate.UNKNOWN,  # TODO: We need to check this again
-    "Recycled Claim Standard blended": Certificate.RECYCLED_CLAIM_STANDARD_BLENDED,
-    "Recycled Claim Standard 100": Certificate.RECYCLED_CLAIM_STANDARD_100,
-    "Recycelter Kunststoff (Hartwaren)": Certificate.OTHER,
-    "Bio-Siegel": Certificate.OTHER,
-    "bioRe® Sustainable Textiles Standard": Certificate.BIORE,
-    "[REE]GROW": Certificate.OTHER,
-    "ECOCERT": Certificate.ECOCERT,
-    "EU Ecolabel": Certificate.EU_ECOLABEL_TEXTILES,
-    "The Good Cashmere Standard®": Certificate.GOOD_CASHMERE_STANDARD,
-    "Energieeffizientes Gerät": Certificate.OTHER,
-    "Birla Viscose": Certificate.OTHER,
-    "": Certificate.OTHER,
+    "Global Recycled Standard": CertificateType.GLOBAL_RECYCLED_STANDARD,
+    "Vegetabil gegerbtes Leder": CertificateType.OTHER,
+    "[REE]CYCLED": CertificateType.OTHER,
+    "Recyceltes Material": CertificateType.OTHER,
+    "bluesign® APPROVED": CertificateType.BLUESIGN_APPROVED,
+    "Primegreen": CertificateType.OTHER,
+    "bluesign® PRODUCT": CertificateType.BLUESIGN_PRODUCT,
+    "Grüner Knopf": CertificateType.GREEN_BUTTON,
+    "Organic Content Standard 100": CertificateType.ORGANIC_CONTENT_STANDARD_100,
+    "Organic Content Standard blended": CertificateType.ORGANIC_CONTENT_STANDARD_BLENDED,
+    "Bio-Baumwolle": CertificateType.OTHER,
+    "Unterstützt Cotton made in Africa": CertificateType.COTTON_MADE_IN_AFRICA,
+    "Primeblue": CertificateType.OTHER,
+    "Fairtrade Cotton": CertificateType.FAIRTRADE_COTTON,
+    "Fairtrade Textile Production": CertificateType.FAIRTRADE_TEXTILE_PRODUCTION,
+    "Responsible Down Standard": CertificateType.RESPONSIBLE_DOWN_STANDARD,
+    "BIONIC-FINISH®ECO (Rudolf Chemie)": CertificateType.OTHER,
+    "GOTS organic": CertificateType.GOTS_ORGANIC,
+    "GOTS made with organic materials": CertificateType.GOTS_MADE_WITH_ORGANIC_MATERIALS,
+    "Umweltfreundlicher Färbeprozess": CertificateType.OTHER,
+    "TENCEL™ Lyocell": CertificateType.OTHER,
+    "TENCEL™ Modal": CertificateType.OTHER,
+    "MADE IN GREEN by OEKO-TEX®": CertificateType.MADE_IN_GREEN_OEKO_TEX,
+    "LENZING™ ECOVERO™": CertificateType.OTHER,
+    "REPREVE®": CertificateType.OTHER,
+    "Nachhaltige Viskose": CertificateType.OTHER,
+    "ECONYL©": CertificateType.OTHER,
+    "Blauer Engel": CertificateType.GREEN_BUTTON,
+    "Recycled Claim Standard blended": CertificateType.RECYCLED_CLAIM_STANDARD_BLENDED,
+    "Recycled Claim Standard 100": CertificateType.RECYCLED_CLAIM_STANDARD_100,
+    "Recycelter Kunststoff (Hartwaren)": CertificateType.OTHER,
+    "Bio-Siegel": CertificateType.OTHER,
+    "bioRe® Sustainable Textiles Standard": CertificateType.BIORE,
+    "[REE]GROW": CertificateType.OTHER,
+    "ECOCERT": CertificateType.ECOCERT,
+    "EU Ecolabel": CertificateType.EU_ECOLABEL_TEXTILES,
+    "The Good Cashmere Standard®": CertificateType.GOOD_CASHMERE_STANDARD,
+    "Energieeffizientes Gerät": CertificateType.OTHER,
+    "Birla Viscose": CertificateType.OTHER,
+    "": CertificateType.OTHER,
 }
 
 
@@ -271,4 +271,4 @@ def _get_sustainability(product_data: dict, parsed_url: ParseResult) -> List[str
         sustainable_soup = BeautifulSoup(sustainability_information_html, "html.parser")
         labels.update(_get_sustainability_info(sustainable_soup))
 
-    return sorted({_LABEL_MAPPING.get(label, Certificate.UNKNOWN) for label in labels.keys()})
+    return sorted({_LABEL_MAPPING.get(label, CertificateType.UNKNOWN) for label in labels.keys()})

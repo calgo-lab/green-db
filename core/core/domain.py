@@ -2,9 +2,10 @@ from datetime import datetime
 from enum import Enum
 from typing import List, Optional
 
-from pydantic import BaseModel, conlist
+from pydantic import BaseModel, conint, conlist
 
-from core.sustainability_labels import Certificate
+from .sustainability_labels import get_CertificateType_enum
+
 CertificateType = get_CertificateType_enum()
 
 
@@ -39,7 +40,7 @@ class Product(BaseModel):
     name: str
     description: str
     brand: str
-    sustainability_labels: conlist(Certificate, min_items=1)  # type: ignore
+    sustainability_labels: conlist(CertificateType, min_items=1)  # type: ignore
     price: float
     currency: CurrencyType
     image_urls: List[str]
