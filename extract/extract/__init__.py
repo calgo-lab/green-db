@@ -4,8 +4,9 @@ from core import log
 from core.constants import TABLE_NAME_SCRAPING_OTTO, TABLE_NAME_SCRAPING_ZALANDO
 from core.domain import Product, ScrapedPage
 
-from .extractors.otto import extract_otto
-from .extractors.zalando import extract_zalando
+# Because we ignored the files `zalando.py` and `otto.py` we have to skip them here as well
+from .extractors.otto import extract_otto  # type: ignore[attr-defined]
+from .extractors.zalando import extract_zalando  # type: ignore[attr-defined]
 from .parse import parse_page
 
 log.setup_logger(__name__)
