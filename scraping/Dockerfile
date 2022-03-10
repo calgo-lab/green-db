@@ -1,5 +1,4 @@
-# TODO do not use latest!
-FROM easypi/scrapyd:latest
+FROM easypi/scrapyd:1.3.0-2.6.1
 
 MAINTAINER calgo-lab
 

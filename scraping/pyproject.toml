@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "scraping"
-version = "0.1.7"
+version = "0.1.8"
 description = ""
 license = "Apache-2.0"
 authors = ["Sebastian Jäger <message@sebastian-jaeger.me>"]
@@ -16,7 +16,7 @@ classifiers = [
 python = "^3.9"
 core = {path = "../core", develop = true}
 message_queue = {path = "../message-queue", develop = true}
-Scrapy = "^2.5.1"
+Scrapy = "^2.6.1"
 scrapy-splash = "^0.8.0"
 
 [tool.poetry.dev-dependencies]
@@ -32,7 +32,7 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.mypy]
-python_version = 3.9
+python_version = "3.9"
 disallow_untyped_defs = true
 ignore_missing_imports = true
 

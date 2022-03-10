@@ -194,7 +194,7 @@ class GreenDB(Connection):
         """
         super().__init__(GreenDBTable, DATABASE_NAME_GREEN_DB)
 
-        from .sustainability_labels import sustainability_labels
+        from core.sustainability_labels.bootstrap_database import sustainability_labels
 
         with self._session_factory() as db_session:
             # NOTE: this is slowly..
