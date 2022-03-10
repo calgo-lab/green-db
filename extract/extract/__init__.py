@@ -1,12 +1,17 @@
-from typing import Optional
+from typing import Callable, Dict, Optional
 
 from core import log
 from core.domain import Product, ScrapedPage
 
 from . import extractors
-from .parse import parse_page
+from .parse import ParsedPage, parse_page
 
 log.setup_logger(__name__)
+
+
+EXTRACTOR_FOR_TABLE_NAME: Dict[str, Callable[[ParsedPage], Optional[Product]]] = {
+    name: getattr(extractors, name).extract for name in extractors.names
+}
 
 
 def extract_product(table_name: str, scraped_page: ScrapedPage) -> Optional[Product]:
@@ -21,4 +26,4 @@ def extract_product(table_name: str, scraped_page: ScrapedPage) -> Optional[Prod
         Optional[Product]: Returns a valid `Product` object or `None` if extraction failed
     """
     parsed_page = parse_page(scraped_page)
-    return getattr(extractors, table_name).extract(parsed_page)
+    return EXTRACTOR_FOR_TABLE_NAME[table_name](parsed_page)
