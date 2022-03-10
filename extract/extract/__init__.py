@@ -1,21 +1,12 @@
-from importlib import import_module
-from pathlib import Path
-from pkgutil import walk_packages
-from typing import Callable, Dict, Optional
+from typing import Optional
 
 from core import log
 from core.domain import Product, ScrapedPage
 
-from .parse import ParsedPage, parse_page
+from . import extractors
+from .parse import parse_page
 
 log.setup_logger(__name__)
-
-
-EXTRACTORS_IMPLEMENTATION_PATH = "extractors"
-EXTRACTOR_FOR_TABLE_NAME: Dict[str, Callable[[ParsedPage], Optional[Product]]] = {
-    name: import_module(f"{__name__}.{EXTRACTORS_IMPLEMENTATION_PATH}.{name}").extract  # type: ignore # noqa
-    for _, name, _ in walk_packages([str(Path(__file__).parent / EXTRACTORS_IMPLEMENTATION_PATH)])
-}
 
 
 def extract_product(table_name: str, scraped_page: ScrapedPage) -> Optional[Product]:
@@ -30,4 +21,4 @@ def extract_product(table_name: str, scraped_page: ScrapedPage) -> Optional[Prod
         Optional[Product]: Returns a valid `Product` object or `None` if extraction failed
     """
     parsed_page = parse_page(scraped_page)
-    return EXTRACTOR_FOR_TABLE_NAME[table_name](parsed_page)
+    return getattr(extractors, table_name).extract(parsed_page)

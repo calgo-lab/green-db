@@ -1,10 +1,4 @@
-from typing import Any, Callable, Dict, List, Optional
-
-from pydantic import BaseModel
-
-from core.domain import Product
-
-from .parse import ParsedPage
+from typing import Any, List
 
 
 def safely_return_first_element(list_object: List[Any], else_return: Any = {}) -> Any:
