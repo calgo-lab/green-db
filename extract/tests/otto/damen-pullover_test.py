@@ -43,7 +43,7 @@ def test_otto_basic(requests_mock: Adapter) -> None:
         description="s.Oliver Strickpullover »Pullover« (1-tlg) für 29,99€. mit regulärer Passform,"
         " hat einen V-Ausschnitt, hat eine Rippblende am Ausschnitt bei OTTO",
         brand="s.Oliver",
-        sustainability_labels=["UNKNOWN"],
+        sustainability_labels=["certificate:UNKNOWN"],
         image_urls=[
             "https://i.otto.mock/i/otto/c5580e48-fb81-5e76-aec5-eb68201af88a",
             "https://i.otto.mock/i/otto/f9ac60e4-ab47-5ae1-a449-25d4fe3d9307",
