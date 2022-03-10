@@ -1,10 +1,14 @@
+# Since the Enum 'CertificateType' is dynamically generated, mypy can't know the attributes.
+# For this reason, we ignore those errors here.
+# type: ignore[attr-defined]
+
 from logging import getLogger
 from typing import List, Optional
 
 from bs4 import BeautifulSoup
 from pydantic import ValidationError
 
-from core.domain import LabelIDType, Product
+from core.domain import CertificateType, Product
 
 from ..parse import JSON_LD, ParsedPage
 from ..utils import safely_return_first_element
@@ -70,51 +74,51 @@ def extract(parsed_page: ParsedPage) -> Optional[Product]:
 # TODO: How can we do this smart?
 # See: https://www.zalando.de/campaigns/about-sustainability/
 _LABEL_MAPPING = {
-    "Responsible Wool Standard": LabelIDType.RWS,
-    "GOTS - organic": LabelIDType.GOTS_ORGANIC,
-    "GOTS - made with organic materials": LabelIDType.GOTS_MWOM,
-    "Hergestellt aus Wolle aus verantwortungsbewusster Landwirtschaft": LabelIDType.OTHER,
-    "Hergestellt aus mindestens 20% recycelter Baumwolle": LabelIDType.OTHER,
-    "Hergestellt aus 70-100% recycelten Materialien": LabelIDType.OTHER,
-    "Organisch": LabelIDType.OTHER,
-    "Hergestellt aus 50-70% biologischen Materialien": LabelIDType.OTHER,
-    "Hergestellt aus recyceltem Polyester": LabelIDType.OTHER,
-    "Weniger Verpackung": LabelIDType.OTHER,
-    "Better Cotton Initiative": LabelIDType.BCI,
-    "Hergestellt aus 50-70% recycelten Materialien": LabelIDType.OTHER,
-    "Hergestellt aus mindestens 50% verantwortungsbewussten forstbasierten Materialien": LabelIDType.OTHER,  # noqa
-    "Hergestellt aus 30-50% recycelten Materialien": LabelIDType.OTHER,
-    "Sustainable Textile Production (STeP) by OEKO-TEX®": LabelIDType.STEP_OEKO_TEX,
-    "Global Recycled Standard": LabelIDType.GRS,
-    "Hergestellt aus mindestens 50% Lyocell": LabelIDType.OTHER,
-    "Biologisch abbaubar": LabelIDType.OTHER,
-    "bluesign®": LabelIDType.OTHER,
-    "Hergestellt mit recyceltem Plastik": LabelIDType.OTHER,
-    "Fairtrade Certified Cotton": LabelIDType.FT_B,
-    "Hergestellt aus Daunen aus verantwortungsbewusster Landwirtschaft": LabelIDType.OTHER,
-    "Responsible Down Standard": LabelIDType.RDS,
-    "Hergestellt aus 70-100% biologischen Materialien": LabelIDType.OTHER,
-    "Hergestellt aus recycelter Wolle": LabelIDType.OTHER,
-    "OCS - Organic Blended Content Standard": LabelIDType.OCS_BLENDED,
-    "OEKO-TEX® Made in Green": LabelIDType.MIG_OEKO_TEX,
-    "Cradle to Cradle Certified™ Bronze": LabelIDType.CTC_T_BRONZE,
-    "Cradle to Cradle Certified™ Gold": LabelIDType.CTC_T_GOLD,
-    "Cradle to Cradle Certified™ Silver": LabelIDType.CTC_T_SILVER,
-    "Cradle to Cradle Certified™ Platinum": LabelIDType.CTC_T_PLATIN,
-    "Waldschonend": LabelIDType.OTHER,
-    "Hergestellt aus recyceltem Nylon": LabelIDType.OTHER,
-    "Leather Working Group": LabelIDType.LWG,
-    "Hergestellt aus mindestens 20% innovativen Leder-Alternativen": LabelIDType.OTHER,
-    "Hergestellt aus mindestens 50% Polyurethanen auf Wasserbasis": LabelIDType.OTHER,
-    "Hergestellt aus mindestens 20% innovativen Materialien aus recyceltem Müll": LabelIDType.OTHER,  # noqa
-    "OCS - Organic Content Standard": LabelIDType.OCS_100,
-    "Hergestellt aus mindestens 50% nachhaltigerer Baumwolle": LabelIDType.OTHER,
-    "Zum Wohl der Tierwelt": LabelIDType.OTHER,
-    "Hergestellt aus mindestens 20% innovativen ökologischen Alternativen zu fossilen Brennstoffen": LabelIDType.OTHER,  # noqa
-    "Natürlich": LabelIDType.OTHER,
-    "Hergestellt aus recyceltem Gummi": LabelIDType.OTHER,
-    "Hergestellt aus LENZING™ TENCEL™, einem Eco-Material": LabelIDType.OTHER,
-    "": LabelIDType.OTHER,
+    "Responsible Wool Standard": CertificateType.RESPONSIBLE_WOOL_STANDARD,
+    "GOTS - organic": CertificateType.GOTS_ORGANIC,
+    "GOTS - made with organic materials": CertificateType.GOTS_MADE_WITH_ORGANIC_MATERIALS,
+    "Hergestellt aus Wolle aus verantwortungsbewusster Landwirtschaft": CertificateType.OTHER,
+    "Hergestellt aus mindestens 20% recycelter Baumwolle": CertificateType.OTHER,
+    "Hergestellt aus 70-100% recycelten Materialien": CertificateType.OTHER,
+    "Organisch": CertificateType.OTHER,
+    "Hergestellt aus 50-70% biologischen Materialien": CertificateType.OTHER,
+    "Hergestellt aus recyceltem Polyester": CertificateType.OTHER,
+    "Weniger Verpackung": CertificateType.OTHER,
+    "Better Cotton Initiative": CertificateType.BETTER_COTTON_INITIATIVE,
+    "Hergestellt aus 50-70% recycelten Materialien": CertificateType.OTHER,
+    "Hergestellt aus mindestens 50% verantwortungsbewussten forstbasierten Materialien": CertificateType.OTHER,  # noqa
+    "Hergestellt aus 30-50% recycelten Materialien": CertificateType.OTHER,
+    "Sustainable Textile Production (STeP) by OEKO-TEX®": CertificateType.STEP_OEKO_TEX,
+    "Global Recycled Standard": CertificateType.GLOBAL_RECYCLED_STANDARD,
+    "Hergestellt aus mindestens 50% Lyocell": CertificateType.OTHER,
+    "Biologisch abbaubar": CertificateType.OTHER,
+    "bluesign®": CertificateType.OTHER,
+    "Hergestellt mit recyceltem Plastik": CertificateType.OTHER,
+    "Fairtrade Certified Cotton": CertificateType.FAIRTRADE_COTTON,
+    "Hergestellt aus Daunen aus verantwortungsbewusster Landwirtschaft": CertificateType.OTHER,
+    "Responsible Down Standard": CertificateType.RESPONSIBLE_DOWN_STANDARD,
+    "Hergestellt aus 70-100% biologischen Materialien": CertificateType.OTHER,
+    "Hergestellt aus recycelter Wolle": CertificateType.OTHER,
+    "OCS - Organic Blended Content Standard": CertificateType.ORGANIC_CONTENT_STANDARD_BLENDED,
+    "OEKO-TEX® Made in Green": CertificateType.MADE_IN_GREEN_OEKO_TEX,
+    "Cradle to Cradle Certified™ Bronze": CertificateType.CRADLE_TO_CRADLE_BRONZE,
+    "Cradle to Cradle Certified™ Gold": CertificateType.CRADLE_TO_CRADLE_GOLD,
+    "Cradle to Cradle Certified™ Silver": CertificateType.CRADLE_TO_CRADLE_SILVER,
+    "Cradle to Cradle Certified™ Platinum": CertificateType.CRADLE_TO_CRADLE_PLATINUM,
+    "Waldschonend": CertificateType.OTHER,
+    "Hergestellt aus recyceltem Nylon": CertificateType.OTHER,
+    "Leather Working Group": CertificateType.LEATHER_WORKING_GROUP,
+    "Hergestellt aus mindestens 20% innovativen Leder-Alternativen": CertificateType.OTHER,
+    "Hergestellt aus mindestens 50% Polyurethanen auf Wasserbasis": CertificateType.OTHER,
+    "Hergestellt aus mindestens 20% innovativen Materialien aus recyceltem Müll": CertificateType.OTHER,  # noqa
+    "OCS - Organic Content Standard": CertificateType.ORGANIC_CONTENT_STANDARD_100,
+    "Hergestellt aus mindestens 50% nachhaltigerer Baumwolle": CertificateType.OTHER,
+    "Zum Wohl der Tierwelt": CertificateType.OTHER,
+    "Hergestellt aus mindestens 20% innovativen ökologischen Alternativen zu fossilen Brennstoffen": CertificateType.OTHER,  # noqa
+    "Natürlich": CertificateType.OTHER,
+    "Hergestellt aus recyceltem Gummi": CertificateType.OTHER,
+    "Hergestellt aus LENZING™ TENCEL™, einem Eco-Material": CertificateType.OTHER,
+    "": CertificateType.OTHER,
 }
 
 
@@ -131,5 +135,7 @@ def _get_sustainability(beautiful_soup: BeautifulSoup) -> List[str]:
 
     if cluster := beautiful_soup.find("div", attrs={"data-testid": "cluster-certificates"}):
         labels = cluster.find_all(attrs={"data-testid": "certificate__title"})
-        return sorted({_LABEL_MAPPING.get(label.string, LabelIDType.UNKNOWN) for label in labels})
+        return sorted(
+            {_LABEL_MAPPING.get(label.string, CertificateType.UNKNOWN) for label in labels}
+        )
     return []
