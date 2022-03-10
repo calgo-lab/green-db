@@ -7,19 +7,17 @@ import requests
 from bs4 import BeautifulSoup
 from pydantic import ValidationError
 
-from core.constants import TABLE_NAME_SCRAPING_OTTO
 from core.domain import LabelIDType, Product
 
 from ..parse import DUBLINCORE, MICRODATA, ParsedPage
-from ..utils import Extractor, safely_return_first_element
+from ..utils import safely_return_first_element
 
 logger = getLogger(__name__)
 
 NUM_IMAGE_URLS = 3
 
 
-@Extractor(TABLE_NAME_SCRAPING_OTTO)
-def extract_otto(parsed_page: ParsedPage) -> Optional[Product]:
+def extract(parsed_page: ParsedPage) -> Optional[Product]:
     """
     Extracts information of interest from HTML (and other intermediate representations)
     and returns `Product` object or `None` if anything failed. Works for otto.de

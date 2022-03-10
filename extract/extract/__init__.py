@@ -1,23 +1,21 @@
-from typing import Dict, Optional
+from importlib import import_module
+from pathlib import Path
+from pkgutil import walk_packages
+from typing import Callable, Dict, Optional
 
 from core import log
 from core.domain import Product, ScrapedPage
 
-from . import extractors
-from .parse import parse_page
-from .utils import ExtractorMapping, ExtractorSignature
+from .parse import ParsedPage, parse_page
 
 log.setup_logger(__name__)
 
-# Maps a scraping table name to its extraction method
-EXTRACTOR_FOR_TABLE_NAME: Dict[str, ExtractorSignature] = {}
 
-for module_name in extractors.names:
-    module = getattr(extractors, module_name)
-    for member_name in dir(module):
-        member = getattr(module, member_name)
-        if isinstance(member, ExtractorMapping):
-            EXTRACTOR_FOR_TABLE_NAME |= member.map
+EXTRACTORS_IMPLEMENTATION_PATH = "extractors"
+EXTRACTOR_FOR_TABLE_NAME: Dict[str, Callable[[ParsedPage], Optional[Product]]] = {
+    name: import_module(f"{__name__}.{EXTRACTORS_IMPLEMENTATION_PATH}.{name}").extract  # type: ignore # noqa
+    for _, name, _ in walk_packages([str(Path(__file__).parent / EXTRACTORS_IMPLEMENTATION_PATH)])
+}
 
 
 def extract_product(table_name: str, scraped_page: ScrapedPage) -> Optional[Product]:

@@ -4,17 +4,15 @@ from typing import List, Optional
 from bs4 import BeautifulSoup
 from pydantic import ValidationError
 
-from core.constants import TABLE_NAME_SCRAPING_ZALANDO
 from core.domain import LabelIDType, Product
 
 from ..parse import JSON_LD, ParsedPage
-from ..utils import Extractor, safely_return_first_element
+from ..utils import safely_return_first_element
 
 logger = getLogger(__name__)
 
 
-@Extractor(TABLE_NAME_SCRAPING_ZALANDO)
-def extract_zalando(parsed_page: ParsedPage) -> Optional[Product]:
+def extract(parsed_page: ParsedPage) -> Optional[Product]:
     """
     Extracts information of interest from HTML (and other intermediate representations)
     and returns `Product` object or `None` if anything failed. Works for zalando.de.

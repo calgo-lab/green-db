@@ -24,17 +24,3 @@ def safely_return_first_element(list_object: List[Any], else_return: Any = {}) -
 
     else:
         return list_object[0]
-
-
-ExtractorSignature = Callable[[ParsedPage], Optional[Product]]
-
-
-class ExtractorMapping(BaseModel):
-    map: Dict[str, ExtractorSignature]
-
-
-def Extractor(*table_names: str) -> Callable[[ExtractorSignature], ExtractorMapping]:
-    def decorator(procedure: ExtractorSignature) -> ExtractorMapping:
-        return ExtractorMapping(map={name: procedure for name in table_names})
-
-    return decorator
