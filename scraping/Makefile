@@ -10,7 +10,7 @@ patch-package:
 
 patch-chart:
 	$(eval NEW_VERSION=$(shell poetry version -s))
-	sed -i '' -e 's/${OLD_VERSION}/${NEW_VERSION}/' ../infrastructure/charts/scrapyd/Chart.yaml
+	sed -ie 's/${OLD_VERSION}/${NEW_VERSION}/' ../infrastructure/charts/scrapyd/Chart.yaml
 
 check-docker-prerequisites:
 ifndef DOCKER_IMAGE_NAME
