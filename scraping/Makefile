@@ -1,5 +1,18 @@
 SCRAPYD_CHART=../infrastructure/charts/scrapyd
 
+## Define `sed` command depending on operating system.
+# Windows
+ifeq ($(OS), Windows_NT)
+	SED_COMMAND=sed --in-place='' -e
+
+# macOS
+else ifeq ($(shell uname), Darwin)
+	SED_COMMAND=sed -i '' -e
+
+else
+	SED_COMMAND=
+endif
+
 .PHONY: patch-version patch-package patch-chart patch-chart check-docker-prerequisites build-docker push-docker docker helm-delete helm-install helm deploy-test
 
 patch-version: patch-package patch-chart
@@ -9,8 +22,12 @@ patch-package:
 	poetry version patch
 
 patch-chart:
+ifndef SED_COMMAND
+	$(error Operating system not detected)
+endif
+
 	$(eval NEW_VERSION=$(shell poetry version -s))
-	sed --in-place='' -e 's/${OLD_VERSION}/${NEW_VERSION}/' ../infrastructure/charts/scrapyd/Chart.yaml
+	${SED_COMMAND} 's/${OLD_VERSION}/${NEW_VERSION}/' ../infrastructure/charts/scrapyd/Chart.yaml
 
 check-docker-prerequisites:
 ifndef DOCKER_IMAGE_NAME
