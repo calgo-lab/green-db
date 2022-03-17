@@ -1,5 +1,15 @@
 WORKERS_CHART=../infrastructure/charts/workers
 
+## Define `sed` command depending on operating system.
+
+ifeq ($(shell uname), Darwin)
+	# macOS
+	SED_INPLACE=sed -i '' -e
+else
+	# otherwise assume GNU sed
+	SED_INPLACE=sed -i -e
+endif
+
 .PHONY: patch-version patch-package patch-chart patch-chart check-docker-prerequisites build-docker push-docker docker helm-delete helm-install helm deploy-test
 
 patch-version: patch-package patch-chart
@@ -10,7 +20,7 @@ patch-package:
 
 patch-chart:
 	$(eval NEW_VERSION=$(shell poetry version -s))
-	sed -i '' -e 's/${OLD_VERSION}/${NEW_VERSION}/' ${WORKERS_CHART}/Chart.yaml
+	${SED_INPLACE} 's/${OLD_VERSION}/${NEW_VERSION}/' ${WORKERS_CHART}/Chart.yaml
 
 check-docker-prerequisites:
 ifndef DOCKER_IMAGE_NAME
