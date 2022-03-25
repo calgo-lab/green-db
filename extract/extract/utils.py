@@ -1,3 +1,4 @@
+import re
 from typing import Any, List
 
 
@@ -18,3 +19,21 @@ def safely_return_first_element(list_object: List[Any], else_return: Any = {}) -
 
     else:
         return list_object[0]
+
+
+def remove_html_tags(string_with_html_tags: str):
+    """
+       Helper function to remove html tags of a string.
+
+       Args:
+           string_with_html_tags (str): string with html tags
+
+       Returns:
+           cleaned string without html tags
+       """
+
+    clean_regex = re.compile('<.*?>')
+    clean_string = re.sub(clean_regex, ' ', string_with_html_tags)
+    # replace multiple whitespaces with one whitespace
+    clean_string = ' '.join(clean_string.split())
+    return clean_string
