@@ -1,5 +1,3 @@
-import html
-import json
 from dataclasses import dataclass
 
 import extruct
@@ -20,17 +18,6 @@ class ParsedPage:
     schema_org: dict
 
 
-@dataclass
-class ParsedJson:
-    """
-    Helper representation that bundles the original domain object `ScrapedPage`,
-    the parsed JSON of it.
-    """
-
-    scraped_page: ScrapedPage
-    page_json: json
-
-
 def parse_page(scraped_page: ScrapedPage) -> ParsedPage:
     """
     Parses the given `scraped_page` and extract its schema.org information.
@@ -45,23 +32,6 @@ def parse_page(scraped_page: ScrapedPage) -> ParsedPage:
     schema_org = extract_schema_org(scraped_page.html)
     return ParsedPage(
         scraped_page=scraped_page, beautiful_soup=beautiful_soup, schema_org=schema_org
-    )
-
-
-def parse_json(scraped_page: ScrapedPage) -> ParsedJson:
-    """
-    Parses the given `scraped_page` and extract it json.
-
-    Args:
-        scraped_page (ScrapedPage): Domain object `ScrapedPage`
-
-    Returns:
-        ParsedPage: Representation that bundles the `scraped_page` with intermediate representations
-    """
-    beautiful_soup = BeautifulSoup(scraped_page.html, "html.parser")
-    page_json = json.loads(beautiful_soup.pre.string)
-    return ParsedJson(
-        scraped_page=scraped_page, page_json=page_json
     )
 
 
@@ -85,6 +55,10 @@ def extract_schema_org(page_html: str) -> dict:
     Returns:
         dict: Schema.org information found in `page_html`
     """
-    unescaped_html = html.unescape(page_html)
-    schema_org = extruct.extract(unescaped_html, syntaxes=_SYNTAXES)
-    return schema_org if schema_org else {}
+    try:
+        unescaped_html = page_html.unescape(page_html)
+        schema_org = extruct.extract(unescaped_html, syntaxes=_SYNTAXES)
+        return schema_org if schema_org else {}
+    except AttributeError:
+        return {}
+

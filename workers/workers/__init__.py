@@ -1,6 +1,9 @@
 from core import log
-from core.constants import TABLE_NAME_SCRAPING_OTTO, TABLE_NAME_SCRAPING_ZALANDO, \
-    TABLE_NAME_SCRAPING_ASOS
+from core.constants import (
+    TABLE_NAME_SCRAPING_ASOS,
+    TABLE_NAME_SCRAPING_OTTO,
+    TABLE_NAME_SCRAPING_ZALANDO,
+)
 from database.connection import Scraping
 
 log.setup_logger(__name__)

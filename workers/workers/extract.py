@@ -4,7 +4,7 @@ from rq import Connection, Worker
 from core.constants import WORKER_QUEUE_EXTRACT
 from core.redis import REDIS_HOST, REDIS_PASSWORD, REDIS_PORT, REDIS_USER
 from database.connection import GreenDB
-from extract import extract_product, extract_product_json
+from extract import extract_product
 
 from . import CONNECTION_FOR_TABLE
 
@@ -34,18 +34,8 @@ def extract_and_write_to_green_db(table_name: str, row_id: int) -> None:
         row_id (int): The id of the to-be-fetched-row
     """
     scraped_page = CONNECTION_FOR_TABLE[table_name].get_scraped_page(id=row_id)
-
-    if table_name == "asos":
-        if product := extract_product_json(table_name=table_name, scraped_page=scraped_page):
-            green_db_connection.write(product)
-        else:
-            # TODO: what to do when extract fails? -> "failed" queue?
-            pass
+    if product := extract_product(table_name=table_name, scraped_page=scraped_page):
+        green_db_connection.write(product)
     else:
-        if product := extract_product(table_name=table_name, scraped_page=scraped_page):
-            green_db_connection.write(product)
-        else:
-            # TODO: what to do when extract fails? -> "failed" queue?
-            pass
-
-
+        # TODO: what to do when extract fails? -> "failed" queue?
+        pass

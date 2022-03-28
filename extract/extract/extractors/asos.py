@@ -1,7 +1,7 @@
 # Since the Enum 'CertificateType' is dynamically generated, mypy can't know the attributes.
 # For this reason, we ignore those errors here.
 # type: ignore[attr-defined]
-
+import json
 from logging import getLogger
 from typing import List, Optional
 
@@ -10,13 +10,13 @@ from pydantic import ValidationError
 
 from core.domain import CertificateType, Product
 
-from ..parse import ParsedJson
-from ..utils import safely_return_first_element, remove_html_tags
+from ..parse import ParsedPage
+from ..utils import remove_html_tags, safely_return_first_element
 
 logger = getLogger(__name__)
 
 
-def extract_asos(parsed_page: ParsedJson) -> Optional[Product]:
+def extract_asos(parsed_page: ParsedPage) -> Optional[Product]:
     """
     Extracts information of interest from HTML (and other intermediate representations)
     and returns `Product` object or `None` if anything failed. Works for zalando.de.
@@ -28,7 +28,7 @@ def extract_asos(parsed_page: ParsedJson) -> Optional[Product]:
         Optional[Product]: Valid `Product` object or `None` if extraction failed
     """
 
-    page_json = parsed_page.page_json
+    page_json = json.loads(parsed_page.scraped_page.html)
 
     name = page_json.get("name", None)
     # description = remove_html_tags(page_json.get("description", None))
@@ -79,6 +79,7 @@ def extract_asos(parsed_page: ParsedJson) -> Optional[Product]:
 _LABEL_MAPPING = {
     "Better Cotton Initiative": CertificateType.BETTER_COTTON_INITIATIVE,
     "Better Coton Initiative": CertificateType.BETTER_COTTON_INITIATIVE,
+    "Cotton made in Africa": CertificateType.COTTON_MADE_IN_AFRICA,
     "Modal TENCEL™": CertificateType.OTHER,
     "Lyocell Tencel™": CertificateType.OTHER,
     "TENCEL™ Lyocell": CertificateType.OTHER,
@@ -103,10 +104,11 @@ _LABEL_MAPPING = {
     "Fabriqué en utilisant moins d'eau et en produisant moins de déchets": CertificateType.OTHER,
     "Sa confection demande moins d'eau et produit moins de déchets": CertificateType.OTHER,
     "fabriqué en polyuréthane à base d'eau": CertificateType.OTHER,
-    "Ce jean a nécessité 50 % d'eau en moins au cours du lavage": CertificateType.OTHER
+    "Ce jean a nécessité 50 % d'eau en moins au cours du lavage": CertificateType.OTHER,
+    "au moins 40 % de matières recyclées": CertificateType.OTHER
 
     # Following labels are listed on the above link,
-    # but the corresponding string has not been yet identified
+    # but the corresponding string has not yet been identified
 
     # "": CertificateType.ORGANIC_CONTENT_STANDARD_100,
     # "": CertificateType.GOTS_MADE_WITH_ORGANIC_MATERIALS,
