@@ -1,9 +1,12 @@
+import json
+import math
 from logging import getLogger
 from typing import Iterator
+from urllib.parse import parse_qs, urlparse
 
-from scrapy_splash import SplashJsonResponse, SplashRequest
+from scrapy.http.request import Request as ScrapyHttpRequest
+from scrapy.http.response import Response as ScrapyHttpResponse
 
-from ..splash import scroll_end_of_page_script
 from ._base import BaseSpider
 
 logger = getLogger(__name__)
@@ -12,53 +15,87 @@ logger = getLogger(__name__)
 class AsosSpider(BaseSpider):
     name = "asos"
     allowed_domains = ["asos.com"]
-    api = "https://www.asos.com/api/product/catalogue/v3/products/"
+    product_api = "https://www.asos.com/api/product/catalogue/v3/products/"
     filters = "?currency=EUR&lang=fr-FR&sizeSchema=FR&store=FR&keyStoreDataversion=dup0qtf-35"
 
-    def parse_SERP(self, response: SplashJsonResponse) -> Iterator[SplashRequest]:
+    headers = {
+        "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",  # noqa
+        "accept-encoding": "deflate",
+        "accept-language": "de-DE,de;q=0.9",
+        "cache-control": "no-cache",
+        "pragma": "no-cache",
+        "sec-ch-ua": '" Not A;Brand";v="99", "Chromium";v="99", "Google Chrome";v="99"',
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": '"Windows"',
+        "sec-fetch-dest": "document",
+        "sec-fetch-mode": "navigate",
+        "sec-fetch-site": "none",
+        "sec-fetch-user": "?1",
+        "upgrade-insecure-requests": "1",
+    }
 
+    custom_settings = {
+        "DEFAULT_REQUEST_HEADERS": headers,
+        "DOWNLOAD_DELAY": 15,  # decrease this to increase speed
+    }
+
+    def start_requests(self) -> Iterator[ScrapyHttpRequest]:
+        """
+        The `Scrapy` framework executes this method.
+
+        Yields:
+            Iterator[ScrapyHttpRequest]: Requests that will be performed
+        """
+        for start_url in self.start_urls:
+            yield ScrapyHttpRequest(
+                url=start_url,
+                callback=self.parse_SERP,
+                meta={"original_URL": start_url},
+            )
+
+    def parse_SERP(self, response: ScrapyHttpResponse) -> Iterator[ScrapyHttpRequest]:
         # Save HTML to database
         self._save_SERP(response)
 
-        # get all products
-        products = response.css('article._2qG85dG::attr(id)').getall()
-        product_ids = [product.replace("product-", "") for product in products]
-        # get id where id has more than 6 digits (6 digit products or less are mixed products)
+        # data = json.loads(response.text)
+        data = json.loads(response.body.decode("utf-8"))
+        product_ids = [str(product.get("id", None)) for product in data.get("products", {})]
+
+        # get id where id has more than 6 digits (6 digit products or less are mix & match products)
         product_ids = [product_id for product_id in product_ids if len(product_id) > 6]
 
         # If set a subset of the products are scraped
         if self.products_per_page:
             product_ids = product_ids[: self.products_per_page]
 
-        logger.info(f"Number of products per page {len(product_ids)} to be scraped")
+        logger.info(f"Number of products {len(product_ids)} to be scraped")
 
         for product_id in product_ids:
-            yield SplashRequest(
-                url=''.join([self.api, product_id, self.filters]),
+            yield ScrapyHttpRequest(
+                url=f"{self.product_api}{product_id}{self.filters}",
                 callback=self.parse_PRODUCT,
-                endpoint="execute",
-                priority=1,  # request products before next page
-                args={  # passed to Splash HTTP API
-                    "wait": self.request_timeout,
-                    "lua_source": scroll_end_of_page_script,
-                    "timeout": 180,
-                },
+                meta={"original_URL": response.url},
+                priority=1,  # higher prio than SERP => finish product requests first
             )
 
-        # Pagination: Parse next SERP if exists
-        next_page = response.css('[data-auto-id=loadMoreProducts]::attr(href)').get()
+        # Pagination: Request SERPS if we are on start_url (offset=0)
+        if "offset=0" in response.url:
+            yield from self.request_SERPs(url=response.url, data=data)
 
-        if next_page:
-            yield SplashRequest(
+    def request_SERPs(self, url: str, data: dict) -> Iterator[ScrapyHttpRequest]:
+        parsed_url = urlparse(url)
+        url_query_params = parse_qs(parsed_url.query)
+        limit = int(url_query_params.get("limit", [0])[0])
+        product_count = data.get("itemCount", 0)
+        logger.info(f"Total products in category: {product_count}")
+
+        if product_count > limit:
+            logger.info(f"Creating {math.ceil(product_count/limit)} SERP Requests")
+
+        # Pagination: Request SERPS if there are more available
+        for offset in range(limit, product_count, limit):
+            next_page = url.replace("offset=0", f"offset={offset}")
+            yield ScrapyHttpRequest(
                 url=next_page,
                 callback=self.parse_SERP,
-                meta={"original_URL": next_page},
-                endpoint="execute",
-                args={  # passed to Splash HTTP API
-                    "wait": self.request_timeout,
-                    "lua_source": scroll_end_of_page_script,
-                    "timeout": 180,
-                },
             )
-        else:
-            logger.info(f"No further pages: {response.url}")
