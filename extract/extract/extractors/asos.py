@@ -2,8 +2,9 @@
 # For this reason, we ignore those errors here.
 # type: ignore[attr-defined]
 import json
+import re
 from logging import getLogger
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 from bs4 import BeautifulSoup
 from pydantic import ValidationError
@@ -11,15 +12,15 @@ from pydantic import ValidationError
 from core.domain import CertificateType, Product
 
 from ..parse import ParsedPage
-from ..utils import remove_html_tags, safely_return_first_element
+from ..utils import safely_return_first_element
 
 logger = getLogger(__name__)
 
 
 def extract_asos(parsed_page: ParsedPage) -> Optional[Product]:
     """
-    Extracts information of interest from HTML (and other intermediate representations)
-    and returns `Product` object or `None` if anything failed. Works for zalando.de.
+    Extracts information of interest from html, which in this case is a json
+    and returns `Product` object or `None` if anything failed. Works for asos.com.
 
     Args:
         parsed_page (ParsedPage): Intermediate representation of `ScrapedPage` domain object
@@ -31,8 +32,7 @@ def extract_asos(parsed_page: ParsedPage) -> Optional[Product]:
     page_json = json.loads(parsed_page.scraped_page.html)
 
     name = page_json.get("name", None)
-    # description = remove_html_tags(page_json.get("description", None))
-    description = remove_html_tags(page_json.get("info", {}).get("aboutMe", ""))
+    description = format_description(page_json.get("description", None))
     brand = page_json.get("brand", {}).get("name", None)
     first_offer = safely_return_first_element(page_json.get("variants", [{}]))
     color = first_offer.get("colour", None)
@@ -44,9 +44,11 @@ def extract_asos(parsed_page: ParsedPage) -> Optional[Product]:
     if price := first_offer.get("price", {}).get("current", {}).get("value", None):
         price = float(price)
 
+    sizes = [variant.get("displaySizeText", None) for variant in page_json.get("variants", [])]
+    sizes = ', '.join(sizes)  # size column expects str, so we join all sizes together
+
     url = _get_url(page_json.get("localisedData", []), "fr-FR")
-    sustainability_labels = _get_sustainability(
-        remove_html_tags(page_json.get("info", {}).get("aboutMe", "")))
+    sustainability_labels = _get_sustainability(page_json.get("info", {}).get("aboutMe", ""))
 
     try:
         return Product(
@@ -62,7 +64,7 @@ def extract_asos(parsed_page: ParsedPage) -> Optional[Product]:
             currency=currency,
             image_urls=image_urls,
             color=color,
-            size=None,
+            size=sizes,
             gtin=None,
             asin=None,
         )
@@ -106,26 +108,42 @@ _LABEL_MAPPING = {
     "fabriqué en polyuréthane à base d'eau": CertificateType.OTHER,
     "Ce jean a nécessité 50 % d'eau en moins au cours du lavage": CertificateType.OTHER,
     "au moins 40 % de matières recyclées": CertificateType.OTHER
-
-    # Following labels are listed on the above link,
-    # but the corresponding string has not yet been identified
-
-    # "": CertificateType.ORGANIC_CONTENT_STANDARD_100,
-    # "": CertificateType.GOTS_MADE_WITH_ORGANIC_MATERIALS,
-    # "": CertificateType.ORGANIC_CONTENT_STANDARD_BLENDED
-    # "": CertificateType.LEATHER_WORKING_GROUP,
-    # "": CertificateType.RESPONSIBLE_DOWN_STANDARD,
-    # "": CertificateType.GLOBAL_RECYCLED_STANDARD,
-    # "": CertificateType.RECYCLED_CLAIM_STANDARD_BLENDED,
-    # "": CertificateType.RECYCLED_CLAIM_STANDARD_100,
 }
 
 
-def _get_url(localized_data: List, lang: str) -> str:
+def _get_url(localized_data: List[Dict[str, str]], lang: str) -> str:
+    """
+    Extracts the language specific url from the List.
+
+    Args:
+        localized_data (List): List of dictionaries consisting of language, title and url
+        beautiful_soup (BeautifulSoup): Parsed HTML
+
+    Returns:
+        str: language specific url
+    """
+
     for country in localized_data:
         if country.get("locale", "") == lang:
             return country.get("pdpUrl", "")
     return ""
+
+
+def format_description(html: str):
+    """
+       Helper function to convert description including html tags to a string.
+
+       Args:
+           html (str): string with html tags
+
+       Returns:
+           cleaned string without html tags. HTML 'li' tags are replaced with '. '
+       """
+
+    clean_regex = re.compile('<(?!((li)|(\/li))).*?>')  # exclude all tags except 'li' tags
+    clean_string = re.sub(clean_regex, '', html)
+    soup = BeautifulSoup(clean_string, 'html.parser')
+    return soup.get_text('. ', strip=True)  # get text and replace all 'li' tags with '. '
 
 
 def _get_sustainability(about_me: str) -> List[str]:
@@ -133,7 +151,7 @@ def _get_sustainability(about_me: str) -> List[str]:
     Extracts the sustainability information from HTML.
 
     Args:
-        beautiful_soup (BeautifulSoup): Parsed HTML
+        about_me (str): string including the sustainability information if available
 
     Returns:
         List[str]: Ordered `list` of found sustainability labels
@@ -145,4 +163,4 @@ def _get_sustainability(about_me: str) -> List[str]:
     if certificates:
         return sorted(set(certificates))
     else:
-        return [CertificateType.UNKNOWN]
+        return []
