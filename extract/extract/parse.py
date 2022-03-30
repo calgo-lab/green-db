@@ -1,3 +1,4 @@
+import html
 from dataclasses import dataclass
 
 import extruct
@@ -55,10 +56,7 @@ def extract_schema_org(page_html: str) -> dict:
     Returns:
         dict: Schema.org information found in `page_html`
     """
-    try:
-        unescaped_html = page_html.unescape(page_html)
-        schema_org = extruct.extract(unescaped_html, syntaxes=_SYNTAXES)
-        return schema_org if schema_org else {}
-    except AttributeError:
-        return {}
+    unescaped_html = html.unescape(page_html)
+    schema_org = extruct.extract(unescaped_html, syntaxes=_SYNTAXES)
+    return schema_org if schema_org else {}
 
