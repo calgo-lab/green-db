@@ -100,9 +100,7 @@ class AsosSpider(BaseSpider):
         limit = int(url_query_params.get("limit", [0])[0])
         product_count = data.get("itemCount", 0)
         logger.info(f"Total products in category: {product_count}")
-
-        if product_count > limit:
-            logger.info(f"Creating {math.floor(product_count/limit)} SERP Requests")
+        logger.info(f"Creating {math.floor(product_count/limit)} additional SERP Requests")
 
         # Pagination: Request SERPS if there are more available
         for offset in range(limit, product_count, limit):
