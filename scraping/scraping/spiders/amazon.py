@@ -1,7 +1,7 @@
 import scrapy
 import json
 from scrapy_splash import SplashJsonResponse, SplashRequest
-#from ..splash import scroll_end_of_page_script
+from ..splash import scroll_end_of_page_script
 from ._base import BaseSpider
 from logging import getLogger
 
@@ -44,6 +44,7 @@ class AmazonSpider(BaseSpider):
                 callback=self.parse_SERP,
                 meta={"original_URL": start_url},
             )
+
 
     def parse_SERP(self, response):
         product_list = json.loads(response.body)
