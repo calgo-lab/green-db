@@ -33,7 +33,7 @@ class AmazonSpider(BaseSpider):
 
     def start_requests(self) -> Iterator[ScrapyJsonRequest]:
         """
-        The `Scrapy` framework executes this method.
+        The `Scrapy` framework executes this method..
 
         Yields:
             Iterator[ScrapyJsonRequest]: Requests that will be performed
