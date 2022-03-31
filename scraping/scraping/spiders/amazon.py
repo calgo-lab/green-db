@@ -1,12 +1,15 @@
 import scrapy
 import json
 from scrapy_splash import SplashJsonResponse, SplashRequest
-from ..splash import scroll_end_of_page_script
+#from ..splash import scroll_end_of_page_script
 from ._base import BaseSpider
+from logging import getLogger
+
+logger = getLogger(__name__)
 
 class AmazonSpider(BaseSpider):
     name = 'amazon'
-    allowed_domains = ['https://www.amazon.de']
+    allowed_domains = ['amazon.de']
     SERP_api = '"https://www.amazon.de/gcx/-/gfhz/api/scroll'
     filters = '?canBeEGifted=false&canBeGiftWrapped=false&categoryId=cpf-landing&count=50&isLimitedTimeOffer=false&isPrime=false&' \
               'offset=0&priceFrom=&priceTo=&searchBlob=&subcategoryIds=cpf-landing:Clothing'
@@ -28,17 +31,34 @@ class AmazonSpider(BaseSpider):
     }
     custom_settings = {"DEFAULT_REQUEST_HEADERS": headers}
 
+    def start_requests(self) -> Iterator[ScrapyJsonRequest]:
+        """
+        The `Scrapy` framework executes this method.
+
+        Yields:
+            Iterator[ScrapyJsonRequest]: Requests that will be performed
+        """
+        for start_url in self.start_urls:
+            yield SplashJsonResponse(
+                url=start_url,
+                callback=self.parse_SERP,
+                meta={"original_URL": start_url},
+            )
+
     def parse_SERP(self, response):
         product_list = json.loads(response.body)
+        products_category = product_list['totalCount']
+        print(products_category)
+        logger.info(f"Number of products {product_list['asins']} to be scraped")
         if len(product_list['asins']) != 0:
             for i in range(0, len(product_list['asins'])):
                 product = product_list['asins'][i]
                 yield SplashRequest(url=f'https://www.amazon.de/dp/{product["asin"]}',
-                                    callback=self.parse_PRODUCT,
-                                    endpoint="execute",
-                                    args={  # passed to Splash HTTP API
-                                        "wait": 0.5,
-                                        "lua_source": scroll_end_of_page_script,
-                                        "timeout": 180,
+                                        callback=self.parse_PRODUCT,
+                                        endpoint="execute",
+                                        args={  # passed to Splash HTTP API
+                                            "wait": 0.5,
+                                            "lua_source": scroll_end_of_page_script,
+                                            "timeout": 180,
                                     }
                                     )

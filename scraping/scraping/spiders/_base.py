@@ -12,8 +12,6 @@ from core.domain import PageType, ScrapedPage
 
 from ..splash import scroll_end_of_page_script
 
-logger = getLogger(__name__)
-
 
 class BaseSpider(Spider):
     def __init__(
