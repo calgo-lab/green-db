@@ -62,7 +62,7 @@ class ZalandoSpider(BaseSpider):
             )
 
         # Pagination: Parse next SERP 'recursively'
-        for next_page in response.css('[class="DJxzzA PgtkyN"]::attr(href)'):
+        for next_page in response.css('[class="DJxzzA PgtkyN"]::attr(href)').getall():
             # scrapy automatically filters the previous page
             yield SplashRequest(
                 url=response.urljoin(next_page),
@@ -75,5 +75,3 @@ class ZalandoSpider(BaseSpider):
                     "timeout": 180,
                 },
             )
-        else:
-            logger.info(f"No further pages: {response.url}")
