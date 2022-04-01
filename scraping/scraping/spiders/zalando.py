@@ -62,9 +62,7 @@ class ZalandoSpider(BaseSpider):
             )
 
         # Pagination: Parse next SERP 'recursively'
-        next_page = response.css('[title="nächste Seite"]::attr(href)').extract_first()
-
-        if next_page:
+        if next_page := response.css('[class="DJxzzA PgtkyN"]::attr(href)').extract_first():
             yield SplashRequest(
                 url=response.urljoin(next_page),
                 callback=self.parse_SERP,
