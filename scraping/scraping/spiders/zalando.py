@@ -62,7 +62,8 @@ class ZalandoSpider(BaseSpider):
             )
 
         # Pagination: Parse next SERP 'recursively'
-        if next_page := response.css('[class="DJxzzA PgtkyN"]::attr(href)').extract_first():
+        for next_page in response.css('[class="DJxzzA PgtkyN"]::attr(href)'):
+            # scrapy automatically filters the previous page
             yield SplashRequest(
                 url=response.urljoin(next_page),
                 callback=self.parse_SERP,
