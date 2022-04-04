@@ -96,7 +96,7 @@ class AsosSpider(BaseSpider):
 
         parsed_url = urlparse(url)
         url_query_params = parse_qs(parsed_url.query)
-        limit = int(url_query_params.get("limit", ['0'])[0])
+        limit = int(url_query_params.get("limit", ["72"])[0])  # default limit is 72 products/ page
         product_count = data.get("itemCount", 0)
         logger.info(f"Total products in category: {product_count}")
         logger.info(f"Creating {math.floor(product_count/limit)} additional SERP Requests")
