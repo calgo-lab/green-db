@@ -1,7 +1,4 @@
-import re
 from typing import Any, List
-
-from bs4 import BeautifulSoup
 
 
 def safely_return_first_element(list_object: List[Any], else_return: Any = {}) -> Any:

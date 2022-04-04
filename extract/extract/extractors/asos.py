@@ -45,7 +45,7 @@ def extract_asos(parsed_page: ParsedPage) -> Optional[Product]:
         price = float(price)
 
     sizes = [variant.get("displaySizeText", None) for variant in page_json.get("variants", [])]
-    sizes = ', '.join(sizes)  # size column expects str, so we join all sizes together
+    sizes = ", ".join(sizes)  # size column expects str, so we join all sizes together
 
     url = _get_url(page_json.get("localisedData", []), "fr-FR")
     sustainability_labels = _get_sustainability(page_json.get("info", {}).get("aboutMe", ""))
@@ -107,7 +107,7 @@ _LABEL_MAPPING = {
     "Sa confection demande moins d'eau et produit moins de déchets": CertificateType.OTHER,
     "fabriqué en polyuréthane à base d'eau": CertificateType.OTHER,
     "Ce jean a nécessité 50 % d'eau en moins au cours du lavage": CertificateType.OTHER,
-    "au moins 40 % de matières recyclées": CertificateType.OTHER
+    "au moins 40 % de matières recyclées": CertificateType.OTHER,
 }
 
 
@@ -131,19 +131,19 @@ def _get_url(localized_data: List[Dict[str, str]], lang: str) -> str:
 
 def format_description(html: str):
     """
-       Helper function to convert description including html tags to a string.
+    Helper function to convert description including html tags to a string.
 
-       Args:
-           html (str): string with html tags
+    Args:
+        html (str): string with html tags
 
-       Returns:
-           cleaned string without html tags. HTML 'li' tags are replaced with '. '
-       """
+    Returns:
+        cleaned string without html tags. HTML 'li' tags are replaced with '. '
+    """
 
-    clean_regex = re.compile('<(?!((li)|(\/li))).*?>')  # exclude all tags except 'li' tags
-    clean_string = re.sub(clean_regex, '', html)
-    soup = BeautifulSoup(clean_string, 'html.parser')
-    return soup.get_text('. ', strip=True)  # get text and replace all 'li' tags with '. '
+    clean_regex = re.compile("<(?!((li)|(/li))).*?>")  # exclude all tags except 'li' tags
+    clean_string = re.sub(clean_regex, "", html)
+    soup = BeautifulSoup(clean_string, "html.parser")
+    return soup.get_text(". ", strip=True)  # get text and replace all 'li' tags with '. '
 
 
 def _get_sustainability(about_me: str) -> List[str]:
@@ -157,8 +157,11 @@ def _get_sustainability(about_me: str) -> List[str]:
         List[str]: Ordered `list` of found sustainability labels
     """
 
-    certificates = [certificate for (label, certificate) in _LABEL_MAPPING.items()
-                    if label.lower() in about_me.lower()]
+    certificates = [
+        certificate
+        for (label, certificate) in _LABEL_MAPPING.items()
+        if label.lower() in about_me.lower()
+    ]
 
     if certificates:
         return sorted(set(certificates))

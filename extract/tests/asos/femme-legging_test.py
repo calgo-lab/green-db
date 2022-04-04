@@ -31,18 +31,18 @@ def test_asos_basic() -> None:
         merchant=merchant,
         category=category,
         name="& Other Stories - Legging de yoga côtelé d'ensemble en tissu recyclé - Beige chiné",
-        description='Legging par & Other Stories. Un modèle de notre sélection durable. '
-                    'Soutien-gorge vendu séparément. Taille haute. Taille élastiquée. Coupe '
-                    'moulante. Flatte la silhouette',
+        description="Legging par & Other Stories. Un modèle de notre sélection durable. "
+        "Soutien-gorge vendu séparément. Taille haute. Taille élastiquée. Coupe "
+        "moulante. Flatte la silhouette",
         brand="& Other Stories",
         sustainability_labels=["certificate:OTHER"],
         price=49.0,
         currency="EUR",
         image_urls=[
-            "images.asos-media.com/products/other-stories-legging-de-yoga-cotele-densemble-en-tissu-recycle-beige-chine/24068707-1-beigemelange", # noqa
-            "images.asos-media.com/products/other-stories-legging-de-yoga-cotele-densemble-en-tissu-recycle-beige-chine/24068707-2", # noqa
-            "images.asos-media.com/products/other-stories-legging-de-yoga-cotele-densemble-en-tissu-recycle-beige-chine/24068707-3", # noqa
-            "images.asos-media.com/products/other-stories-legging-de-yoga-cotele-densemble-en-tissu-recycle-beige-chine/24068707-4", # noqa
+            "images.asos-media.com/products/other-stories-legging-de-yoga-cotele-densemble-en-tissu-recycle-beige-chine/24068707-1-beigemelange",  # noqa
+            "images.asos-media.com/products/other-stories-legging-de-yoga-cotele-densemble-en-tissu-recycle-beige-chine/24068707-2",  # noqa
+            "images.asos-media.com/products/other-stories-legging-de-yoga-cotele-densemble-en-tissu-recycle-beige-chine/24068707-3",  # noqa
+            "images.asos-media.com/products/other-stories-legging-de-yoga-cotele-densemble-en-tissu-recycle-beige-chine/24068707-4",  # noqa
         ],
         color="Beige chiné",
         size="XS - FR 34-36, S - FR 38-40, M - FR 42-44, L - FR 46",

@@ -59,4 +59,3 @@ def extract_schema_org(page_html: str) -> dict:
     unescaped_html = html.unescape(page_html)
     schema_org = extruct.extract(unescaped_html, syntaxes=_SYNTAXES)
     return schema_org if schema_org else {}
-
