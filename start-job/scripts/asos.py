@@ -7,7 +7,7 @@ gender_to_category = {"female": 28981, "male": 28982}
 asos_file_path = Path(__file__).parent.parent / "data/asos_product_types.json"
 
 
-def read_json(path):
+def read_json(path: Path) -> dict:
     with open(path, "r", encoding="utf8") as f:
         return json.loads(f.read())
 
@@ -39,13 +39,13 @@ def combine_results(
     return results
 
 
-def male():
+def male() -> List[dict]:
     return combine_results(
         gender_mapping=gender_to_category, gender="male", categories_json_path=asos_file_path
     )
 
 
-def female():
+def female() -> List[dict]:
     return combine_results(
         gender_mapping=gender_to_category, gender="female", categories_json_path=asos_file_path
     )
