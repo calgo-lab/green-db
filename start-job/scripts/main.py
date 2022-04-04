@@ -2,14 +2,14 @@ import subprocess
 from configparser import ConfigParser
 from datetime import datetime
 
+from asos import get_settings as get_asos_settings
 from otto import get_settings as get_otto_settings
 from zalando import get_settings as get_zalando_settings
-from asos import get_settings as get_asos_settings
 
 from core.constants import (
     TABLE_NAME_SCRAPING_ASOS,
     TABLE_NAME_SCRAPING_OTTO,
-    TABLE_NAME_SCRAPING_ZALANDO
+    TABLE_NAME_SCRAPING_ZALANDO,
 )
 
 START_TIMESTAMP = datetime.utcnow()

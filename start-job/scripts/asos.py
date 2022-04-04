@@ -1,11 +1,8 @@
 import json
-from typing import Dict, List, Tuple, Union
 from pathlib import Path
+from typing import Dict, List, Tuple, Union
 
-gender_to_category = {
-    "female": 28981,
-    "male": 28982
-}
+gender_to_category = {"female": 28981, "male": 28982}
 
 asos_file_path = Path(__file__).parent.parent / "data/asos_product_types.json"
 
@@ -15,14 +12,15 @@ def read_json(path):
         return json.loads(f.read())
 
 
-def combine_results(gender_mapping: dict,
-                    gender: str,
-                    categories_json_path: Path,
-                    serp_api: str = "https://www.asos.com/api/product/search/v2/categories/",
-                    serp_filters: str = "&channel=mobile-web&country=FR&currency=EUR"
-                                   "&keyStoreDataversion=dup0qtf-35&lang=fr-FR&limit=72&offset=0"
-                                   "&rowlength=2&store=FR "
-                    ) -> List[dict]:
+def combine_results(
+    gender_mapping: dict,
+    gender: str,
+    categories_json_path: Path,
+    serp_api: str = "https://www.asos.com/api/product/search/v2/categories/",
+    serp_filters: str = "&channel=mobile-web&country=FR&currency=EUR"
+    "&keyStoreDataversion=dup0qtf-35&lang=fr-FR&limit=72&offset=0"
+    "&rowlength=2&store=FR ",
+) -> List[dict]:
     results = []
     categories = read_json(categories_json_path)
     for id, info in categories.items():
@@ -33,7 +31,7 @@ def combine_results(gender_mapping: dict,
                 results.append(
                     {
                         "start_urls": f"{serp_api}{gender_mapping.get(gender)}"
-                                      f"?attribute_1047={id}{serp_filters}",
+                        f"?attribute_1047={id}{serp_filters}",
                         "category": category,
                         "meta_data": json.dumps({"family": "FASHION", "sex": gender, **meta_data}),
                     }
@@ -42,13 +40,15 @@ def combine_results(gender_mapping: dict,
 
 
 def male():
-    return combine_results(gender_mapping=gender_to_category, gender="male",
-                           categories_json_path=asos_file_path)
+    return combine_results(
+        gender_mapping=gender_to_category, gender="male", categories_json_path=asos_file_path
+    )
 
 
 def female():
-    return combine_results(gender_mapping=gender_to_category, gender="female",
-                           categories_json_path=asos_file_path)
+    return combine_results(
+        gender_mapping=gender_to_category, gender="female", categories_json_path=asos_file_path
+    )
 
 
 def get_settings() -> List[Union[Dict[str, str], Dict[str, Tuple[str, Dict[str, str]]]]]:
