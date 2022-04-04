@@ -57,7 +57,7 @@
             "female",
             "male"
         ],
-        "mapping": "HAT"
+        "mapping": ""
     },
     "9337": {
         "de": "Jammers",
@@ -140,7 +140,7 @@
         "gender": [
             "female"
         ],
-        "mapping": "JEWELRY"
+        "mapping": ""
     },
     "9834": {
         "de": "Bikinihosen",
@@ -157,7 +157,7 @@
             "female",
             "male"
         ],
-        "mapping": "SCARF"
+        "mapping": ""
     },
     "9308": {
         "de": "Kompressionsshorts",
@@ -174,7 +174,7 @@
         "gender": [
             "female"
         ],
-        "mapping": "COSMETICS"
+        "mapping": ""
     },
     "8574": {
         "de": "Boardshorts",
@@ -190,7 +190,7 @@
         "gender": [
             "female"
         ],
-        "mapping": "COSMETICS"
+        "mapping": "UNDERWEAR"
     },
     "9233": {
         "de": "Bikinis",
@@ -249,7 +249,7 @@
             "female",
             "male"
         ],
-        "mapping": "JEWELRY"
+        "mapping": ""
     },
     "9747": {
         "de": "Lingerie Bodys",
@@ -266,7 +266,7 @@
             "female",
             "male"
         ],
-        "mapping": ["PANT", {"type": "ACCESSOIRE"}]
+        "mapping": ""
     },
     "8600": {
         "de": "Sandalen",
@@ -318,7 +318,7 @@
             "female",
             "male"
         ],
-        "mapping": "SOCKS"
+        "mapping": ""
     },
     "8248": {
         "de": "Kopfbänder",
@@ -385,7 +385,7 @@
         "gender": [
             "male"
         ],
-        "mapping": ["SUIT", {"type": "ACCESSOIRE"}]
+        "mapping": ""
     },
     "8244": {
         "de": "Sonnenbrillen",
@@ -394,7 +394,7 @@
             "female",
             "male"
         ],
-        "mapping": "SUNGLASSES"
+        "mapping": ""
     },
     "8283": {
         "de": "Taschen",
@@ -479,7 +479,7 @@
             "female",
             "male"
         ],
-        "mapping": "JEWELRY"
+        "mapping": ""
     },
     "8241": {
         "de": "Halswärmer",
@@ -488,7 +488,7 @@
             "female",
             "male"
         ],
-        "mapping": "SCARF"
+        "mapping": ""
     },
     "8577": {
         "de": "Boxer",
@@ -531,7 +531,7 @@
             "female",
             "male"
         ],
-        "mapping": "HAT"
+        "mapping": ""
     },
     "8572": {
         "de": "Unterhosen",
@@ -591,7 +591,7 @@
             "female",
             "male"
         ],
-        "mapping": "GLASSES"
+        "mapping": ""
     },
     "9311": {
         "de": "Fußball-Shirts",
@@ -608,7 +608,7 @@
             "female",
             "male"
         ],
-        "mapping": "GLOVE"
+        "mapping": ""
     },
     "8409": {
         "de": "Tuniken",
@@ -625,7 +625,7 @@
             "female",
             "male"
         ],
-        "mapping": "SCARF"
+        "mapping": ""
     },
     "8470": {
         "de": "Meggings",
@@ -657,7 +657,7 @@
         "gender": [
             "female"
         ],
-        "mapping": "JEWELRY"
+        "mapping": ""
     },
     "8390": {
         "de": "Hemden",
@@ -717,7 +717,7 @@
             "female",
             "male"
         ],
-        "mapping": "JEWELRY"
+        "mapping": ""
     },
     "8585": {
         "de": "Stiefel",
@@ -742,7 +742,7 @@
         "gender": [
             "male"
         ],
-        "mapping": ["SUIT", {"type": "ACCESSOIRE"}]
+        "mapping": ""
     },
     "8401": {
         "de": "Jacken",
@@ -795,7 +795,7 @@
             "female",
             "male"
         ],
-        "mapping": "HAT"
+        "mapping": ""
     },
     "8554": {
         "de": "Westen",
@@ -838,7 +838,7 @@
         "gender": [
             "male"
         ],
-        "mapping": "JEWELRY"
+        "mapping": ""
     },
     "8384": {
         "de": "Jumpsuits",
@@ -863,7 +863,7 @@
         "gender": [
             "female"
         ],
-        "mapping": "JEWELRY"
+        "mapping": ""
     },
     "8452": {
         "de": "Strandkleider",
@@ -888,7 +888,7 @@
         "gender": [
             "female"
         ],
-        "mapping": "JEWELRY"
+        "mapping": ""
     },
     "8736": {
         "de": "Strumpfhalter",
@@ -938,7 +938,7 @@
         "gender": [
             "female"
         ],
-        "mapping": "WALLET"
+        "mapping": ""
     },
     "8468": {
         "de": "Nachtwäsche-Sets",
@@ -954,7 +954,7 @@
         "gender": [
             "male"
         ],
-        "mapping": ["SUIT", {"type": "ACCESSOIRE"}]
+        "mapping": ""
     },
     "8377": {
         "de": "Kopftücher",
@@ -971,7 +971,7 @@
         "gender": [
             "male"
         ],
-        "mapping": ["SUIT", {"type": "ACCESSOIRE"}]
+        "mapping": ""
     },
     "8405": {
         "de": "Sweatshirts",
@@ -988,7 +988,7 @@
         "gender": [
             "male"
         ],
-        "mapping": ["SUIT", {"type": "ACCESSOIRE"}]
+        "mapping": ""
     },
     "8242": {
         "de": "Harnische",
@@ -996,7 +996,7 @@
         "gender": [
             "female"
         ],
-        "mapping": "JEWELRY"
+        "mapping": ""
     },
     "8396": {
         "de": "Chinohosen",
@@ -1070,7 +1070,7 @@
         "gender": [
             "female"
         ],
-        "mapping": "JEWELRY"
+        "mapping": ""
     },
     "9306": {
         "de": "Kompressionsoberteile",
@@ -1096,7 +1096,7 @@
             "female",
             "male"
         ],
-        "mapping": "JEWELRY"
+        "mapping": ""
     },
     "8568": {
         "de": "Unterwäsche-Sets",
@@ -1112,7 +1112,7 @@
         "gender": [
             "male"
         ],
-        "mapping": "SUNGLASSES"
+        "mapping": ""
     },
     "8361": {
         "de": "Kragen",
