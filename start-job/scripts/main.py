@@ -4,13 +4,19 @@ from datetime import datetime
 
 from otto import get_settings as get_otto_settings
 from zalando import get_settings as get_zalando_settings
+from asos import get_settings as get_asos_settings
 
-from core.constants import TABLE_NAME_SCRAPING_OTTO, TABLE_NAME_SCRAPING_ZALANDO
+from core.constants import (
+    TABLE_NAME_SCRAPING_ASOS,
+    TABLE_NAME_SCRAPING_OTTO,
+    TABLE_NAME_SCRAPING_ZALANDO
+)
 
 START_TIMESTAMP = datetime.utcnow()
 SETTINGS = {
     TABLE_NAME_SCRAPING_OTTO: get_otto_settings(),
     TABLE_NAME_SCRAPING_ZALANDO: get_zalando_settings(),
+    TABLE_NAME_SCRAPING_ASOS: get_asos_settings(),
 }
 
 # Read scrapy config and get target URL for local
@@ -23,7 +29,6 @@ if __name__ == "__main__":
 
     for merchant, settings in SETTINGS.items():
         for setting in settings:
-
             url = setting["start_urls"]
             category = setting["category"]
             meta_data = setting["meta_data"]
