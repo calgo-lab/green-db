@@ -57,7 +57,6 @@ class AsosSpider(BaseSpider):
         # Save HTML to database
         self._save_SERP(response)
 
-        # data = json.loads(response.text)
         data = json.loads(response.body.decode("utf-8"))
         product_ids = [str(product.get("id", None)) for product in data.get("products", {})]
 
