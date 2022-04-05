@@ -18,5 +18,5 @@ EOF
 scrapyd-client deploy in-cluster
 
 # finally start all scraping jobs
-cd /workdir
+cd /workdir/scripts
 python main.py
