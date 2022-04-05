@@ -19,7 +19,7 @@ def combine_results(
     serp_api: str = "https://www.asos.com/api/product/search/v2/categories/",
     serp_filters: str = "&channel=mobile-web&country=FR&currency=EUR"
     "&keyStoreDataversion=dup0qtf-35&lang=fr-FR&limit=72&offset=0"
-    "&rowlength=2&store=FR ",
+    "&rowlength=2&store=FR",
 ) -> List[dict]:
     results = []
     categories = read_json(categories_json_path)
