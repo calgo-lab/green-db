@@ -15,8 +15,8 @@ logger = getLogger(__name__)
 class AsosSpider(BaseSpider):
     name = "asos"
     allowed_domains = ["asos.com"]
-    product_api = "https://www.asos.com/api/product/catalogue/v3/products/"
-    filters = "?currency=EUR&lang=fr-FR&sizeSchema=FR&store=FR&keyStoreDataversion=dup0qtf-35"
+    _product_api = "https://www.asos.com/api/product/catalogue/v3/products/"
+    _filters = "?currency=EUR&lang=fr-FR&sizeSchema=FR&store=FR&keyStoreDataversion=dup0qtf-35"
 
     headers = {
         "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",  # noqa
@@ -71,7 +71,7 @@ class AsosSpider(BaseSpider):
 
         for product_id in product_ids:
             yield ScrapyHttpRequest(
-                url=f"{self.product_api}{product_id}{self.filters}",
+                url=f"{self._product_api}{product_id}{self._filters}",
                 callback=self.parse_PRODUCT,
                 meta={"original_URL": response.url},
                 priority=1,  # higher prio than SERP => finish product requests first
