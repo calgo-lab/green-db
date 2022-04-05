@@ -13,9 +13,7 @@ class AmazonSpider(BaseSpider):
     name = 'amazon'
     allowed_domains = ['amazon.de']
     #TODO: this variables will help later to iterate over the page
-    SERP_api = '"https://www.amazon.de/gcx/-/gfhz/api/scroll'
-    filters = '?canBeEGifted=false&canBeGiftWrapped=false&categoryId=cpf-landing&count=50&isLimitedTimeOffer=false&isPrime=false&' \
-              'offset=0&priceFrom=&priceTo=&searchBlob=&subcategoryIds=cpf-landing:Clothing'
+
     headers = {
         "cookie": "session-id=260-4111553-0597163; session-id-time=2082787201l; i18n-prefs=EUR; session-token=DDsIcwXgnBm8tsZ%2FT7mbf%2BpsazpNpTyJ0SS5F8jUgH%2BL8Drkmi%2BsY%2Fg3ytkuObCTZGF%2BJ8ke1qTBlNuZAAO9BfPvSxC3fHaTcHa%2BDjr6iVfTtyOQdk4cCiI2fomOCDc4pSNpofbM4ID2rWrV9UmQyQuml8abDod0QbWPicd0GyntPcCOlK%2BjI0tECbKUEQi5",
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:98.0) Gecko/20100101 Firefox/98.0",
@@ -56,9 +54,10 @@ class AmazonSpider(BaseSpider):
         Yields:
             Iterator[SplashRequest]: Requests that will be performed to scrap each product page
         """
+        # Save HTML to database
+        self._save_SERP(response)
         product_list = json.loads(response.body)
-        n_products_category = product_list['totalCount']
-        logger.info(f"Number of products {len(product_list['asins'])} to be scraped")
+        logger.info(f"Number of products to be scraped {len(product_list['asins'])}")
         if len(product_list['asins']) != 0:
             for i in range(0, len(product_list['asins'])):
                 product = product_list['asins'][i]
@@ -71,3 +70,29 @@ class AmazonSpider(BaseSpider):
                                             "timeout": 180,
                                     }
                                     )
+        if "offset=0" in response.url:
+            print("Calling parse next")
+            yield from self.parse_next_SERP(url=response.url, data=product_list)
+
+    def parse_next_SERP(self, url: str, product_list: dict) -> Iterator[ScrapyHttpRequest]:
+        """
+         The `Scrapy` framework executes this method to ask for more results as if we were scrolling.
+
+        Yields:
+        Iterator[ScrapyHttpRequest]: Requests that will be performed if category has more results to be scrapped.
+        """
+        n_products_category = int(product_list['totalCount'])
+        searchBlob = product_list['searchBlob']
+        count = 50
+        offset = count
+        for i in range(n_products_category/count):
+            offset = offset + count
+            SERP_api = '"https://www.amazon.de/gcx/-/gfhz/api/scroll'
+            filters = f'?canBeEGifted=false&canBeGiftWrapped=false&categoryId=cpf-landing&count={count}&isLimitedTimeOffer=false&isPrime=false&' \
+                      f'offset={offset}&priceFrom=&priceTo=&searchBlob={searchBlob}&subcategoryIds=cpf-landing:Clothing'
+
+            yield ScrapyHttpRequest(
+                url=f'{SERP_api}{filters}',
+                callback=self.parse_SERP,
+                #meta={"original_URL": start_url},
+                )
