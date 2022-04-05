@@ -15,7 +15,7 @@ class ZalandoSpider(BaseSpider):
     allowed_domains = ["zalando.de"]
 
     def parse_SERP(
-        self, response: SplashJsonResponse, is_first_page: Bool=True
+        self, response: SplashJsonResponse, is_first_page: Bool = True
     ) -> Iterator[SplashRequest]:
 
         if urlsplit(response.url).path.strip("/") != urlsplit(
