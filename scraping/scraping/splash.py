@@ -21,6 +21,9 @@ function main(splash, args)
         splash:wait(args.wait)
     end
     splash:wait(args.wait)
-    return splash:html()
+    return {
+        url = splash:url(),
+        html = splash:html(),
+    }
 end
 """
