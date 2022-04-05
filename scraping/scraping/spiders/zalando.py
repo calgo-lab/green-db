@@ -1,5 +1,5 @@
 from logging import getLogger
-from typing import Bool, Iterator
+from typing import Iterator
 from urllib.parse import urlsplit
 
 from scrapy_splash import SplashJsonResponse, SplashRequest
@@ -15,7 +15,7 @@ class ZalandoSpider(BaseSpider):
     allowed_domains = ["zalando.de"]
 
     def parse_SERP(
-        self, response: SplashJsonResponse, is_first_page: Bool = True
+        self, response: SplashJsonResponse, is_first_page: bool = True
     ) -> Iterator[SplashRequest]:
 
         if urlsplit(response.url).path.strip("/") != urlsplit(
