@@ -90,7 +90,7 @@ class AmazonSpider(BaseSpider):
         offset = 0
         for i in range(0, n_products_category/count):
             offset = offset + count
-            SERP_api = '"https://www.amazon.de/gcx/-/gfhz/api/scroll'
+            SERP_api = 'https://www.amazon.de/gcx/-/gfhz/api/scroll'
             filters = f'?canBeEGifted=false&canBeGiftWrapped=false&categoryId=cpf-landing&count={count}&isLimitedTimeOffer=false&isPrime=false&' \
                       f'offset={offset}&priceFrom=&priceTo=&searchBlob={searchBlob}&subcategoryIds=cpf-landing:Clothing'
             next_url = f'{SERP_api}{filters}'
