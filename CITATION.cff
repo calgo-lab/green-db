@@ -12,3 +12,5 @@ preferred-citation:
   year: 2022
   note: "Supported by the Federal Ministry for the Environment, Nature Conservation and Nuclear Safety based on a decision of the German Bundestag. Förderkennzeichen: 67KI2022B"
   url: https://doi.org/10.5281/zenodo.6078039
+  publisher: Zenodo
+  version: 0.1.0
