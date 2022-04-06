@@ -57,6 +57,7 @@ class AmazonSpider(BaseSpider):
         # Save HTML to database
         self._save_SERP(response)
         product_list = json.loads(response.body)
+        yield from self.parse_next_SERP(data=product_list)
         logger.info(f"Number of products to be scraped {len(product_list['asins'])}")
         logger.info(f"Number of products in category {len(product_list['totalCount'])}")
         for i in range(0, len(product_list['asins'])):
@@ -71,7 +72,7 @@ class AmazonSpider(BaseSpider):
                                 }
                                 )
         #if "offset=0" in response.url:
-        yield from self.parse_next_SERP(data=product_list)
+
 
 
     def parse_next_SERP(self, product_list: dict) -> Iterator[ScrapyHttpRequest]:
