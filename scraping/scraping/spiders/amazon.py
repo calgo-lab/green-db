@@ -57,17 +57,30 @@ class AmazonSpider(BaseSpider):
         # Save HTML to database
         self._save_SERP(response)
         product_list = json.loads(response.body)
-        yield from self.parse_next_SERP(data=product_list)
+
         logger.info(f"Number of products to be scraped {len(product_list['asins'])}")
         logger.info(f"Number of products in category {len(product_list['totalCount'])}")
+        for i in range(0, len(product_list['asins'])):
+            product = product_list['asins'][i]
+            yield SplashRequest(url=f'https://www.amazon.de/dp/{product["asin"]}',
+                                callback=self.parse_PRODUCT,
+                                endpoint="execute",
+                                args={  # passed to Splash HTTP API
+                                    "wait": self.request_timeout,
+                                    "lua_source": scroll_end_of_page_script,
+                                    "timeout": 180,
+                                }
+                                )
+        if "offset=0" in response.url:
+            yield from self.parse_next_SERP(product_list)
 
 
     def parse_next_SERP(self, product_list: dict) -> Iterator[ScrapyHttpRequest]:
         """
-         The `Scrapy` framework executes this method to ask for more results as if we were scrolling.
+        The `Scrapy` framework executes this method to ask for more results as if we were scrolling.
 
         Yields:
-        Iterator[ScrapyHttpRequest]: Requests that will be performed if category has more results to be scrapped.
+            Iterator[ScrapyHttpRequest]: Requests that will be performed if category has more results to be scrapped.
         """
         n_products_category = int(product_list['totalCount'])
         print(n_products_category)
@@ -75,10 +88,11 @@ class AmazonSpider(BaseSpider):
         print(searchBlob)
         count = 50
         offset = 0
-        for i in range(0, 5):
+        for i in range(0, n_products_category/count):
             offset = offset + count
             SERP_api = '"https://www.amazon.de/gcx/-/gfhz/api/scroll'
-            filters = f'?canBeEGifted=false&canBeGiftWrapped=false&categoryId=cpf-landing&count={count}&isLimitedTimeOffer=false&isPrime=false&offset={offset}&priceFrom=&priceTo=&searchBlob={searchBlob}&subcategoryIds=cpf-landing:Clothing'
+            filters = f'?canBeEGifted=false&canBeGiftWrapped=false&categoryId=cpf-landing&count={count}&isLimitedTimeOffer=false&isPrime=false&' \
+                      f'offset={offset}&priceFrom=&priceTo=&searchBlob={searchBlob}&subcategoryIds=cpf-landing:Clothing'
             next_url = f'{SERP_api}{filters}'
             print(next_url)
             yield ScrapyHttpRequest(
@@ -86,3 +100,5 @@ class AmazonSpider(BaseSpider):
                 callback=self.parse_SERP,
                 #meta={"original_URL": start_url},
                 )
+
+
