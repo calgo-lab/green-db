@@ -60,19 +60,6 @@ class AmazonSpider(BaseSpider):
         yield from self.parse_next_SERP(data=product_list)
         logger.info(f"Number of products to be scraped {len(product_list['asins'])}")
         logger.info(f"Number of products in category {len(product_list['totalCount'])}")
-        for i in range(0, len(product_list['asins'])):
-            product = product_list['asins'][i]
-            yield SplashRequest(url=f'https://www.amazon.de/dp/{product["asin"]}',
-                                callback=self.parse_PRODUCT,
-                                endpoint="execute",
-                                args={  # passed to Splash HTTP API
-                                            "wait": self.request_timeout,
-                                            "lua_source": scroll_end_of_page_script,
-                                            "timeout": 180,
-                                }
-                                )
-        #if "offset=0" in response.url:
-
 
 
     def parse_next_SERP(self, product_list: dict) -> Iterator[ScrapyHttpRequest]:
