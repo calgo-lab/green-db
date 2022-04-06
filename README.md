@@ -1,5 +1,7 @@
 # GreenDB
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6078039.svg)](https://doi.org/10.5281/zenodo.6078039)
+
 This repository contains code and infrastructure components (Helm charts) that powers the Green Database (GreenDB). This development is part of the research project [*Green Consumption Assistant (GCA)*](https://green-consumption-assistant.de).
 
 The publicly available open GreenDB is a product database. It contains classical product attributes, e.g., `name`, `description`, `color`, etc. On the other hand, it also includes information about the products' sustainability. Moreover, this sustainability information is transparently evaluated so that it is possible to rank products depending on their sustainability.
@@ -20,8 +22,6 @@ However, manual evaluating products does not scale well. Therefore, we leverage 
 ## GreenDB schema
 
 The GreenDB schema is highly inspired by [schema.org](https://schema.org). However, this is still a proof of concept implementation and can differ from their definitions (e.g., the `brand` column of the [`green-db` table](#table-green-db)). One of our future plans is to tackle this and make the GreenDB fully compatible with [schema.org's Product](https://schema.org/Product) definition. Our ultimate goal is to eventually contribute an extension of schema.org that integrates the products' sustainability information.
-
-
 
 
 ### Table: `green-db`
@@ -45,7 +45,7 @@ The GreenDB schema is highly inspired by [schema.org](https://schema.org). Howev
 
 ## Future plans
 
-- [ ] We are already working on a first publication of the GreenDB dataset.
+- [x] We are already working on a first publication of the GreenDB dataset.
 
 - [ ] In the near future, we plan to extend the GreenDB to more shops and non-German markets. We hope to drastically increase its product and sustainability label coverage and make it, therefore, more interesting to a wider range of potential users.
 
