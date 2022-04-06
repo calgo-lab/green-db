@@ -6,6 +6,7 @@ from typing import Any, Dict, Iterator, List, Optional, Union
 
 from message_queue import MessageQueue
 from scrapy import Spider
+from scrapy.http.response import Response as ScrapyHttpResponse
 from scrapy_splash import SplashJsonResponse, SplashRequest
 
 from core.domain import PageType, ScrapedPage
@@ -102,7 +103,7 @@ class BaseSpider(Spider):
                 },
             )
 
-    def _save_SERP(self, response: SplashJsonResponse) -> None:
+    def _save_SERP(self, response: Union[SplashJsonResponse, ScrapyHttpResponse]) -> None:
         """
         Helper method for child classes. Simply instantiates a `SrapedPage` object
             and enqueues this to the scraping `Queue`.
@@ -122,7 +123,7 @@ class BaseSpider(Spider):
 
         self.message_queue.add_scraping(table_name=self.table_name, scraped_page=scraped_page)
 
-    def parse_PRODUCT(self, response: SplashJsonResponse) -> None:
+    def parse_PRODUCT(self, response: Union[SplashJsonResponse, ScrapyHttpResponse]) -> None:
         """
         Helper method for child classes. Simply instantiates a `SrapedPage` object
             and enqueues this to the scraping `Queue`.
