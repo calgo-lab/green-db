@@ -71,8 +71,8 @@ class AmazonSpider(BaseSpider):
                                     "timeout": 180,
                                 }
                                 )
-        if "offset=0" in response.url:
-            yield from self.parse_next_SERP(product_list)
+        #if "offset=0" in response.url:
+        yield from self.parse_next_SERP(product_list)
 
 
     def parse_next_SERP(self, product_list: dict) -> Iterator[ScrapyHttpRequest]:
@@ -92,7 +92,7 @@ class AmazonSpider(BaseSpider):
             offset = offset + count
             SERP_api = 'https://www.amazon.de/gcx/-/gfhz/api/scroll'
             filters = f'?canBeEGifted=false&canBeGiftWrapped=false&categoryId=cpf-landing&count={count}&isLimitedTimeOffer=false&isPrime=false&' \
-                      f'offset={offset}&priceFrom=&priceTo=&searchBlob={searchBlob}&subcategoryIds=cpf-landing:Clothing'
+            f'offset={offset}&priceFrom=&priceTo=&searchBlob={searchBlob}&subcategoryIds=cpf-landing:Clothing'
             next_url = f'{SERP_api}{filters}'
             print(next_url)
             yield ScrapyHttpRequest(
