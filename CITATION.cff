@@ -1,0 +1,13 @@
+preferred-citation:
+  type: dataset
+  authors:
+    - family-names: "Jäger"
+      given-names: "Sebastian"
+      affiliation: "Berliner Hochschule für Technik, Germany"
+    - family-names: "Bießmann"
+      given-names: "Felix"
+      affiliation: "Berliner Hochschule für Technik, Germany"
+  doi: "10.5281/zenodo.6078039"
+  title: "GreenDB: A Product-by-Product Sustainability Database"
+  year: 2022
+  note: "Supported by the Federal Ministry for the Environment, Nature Conservation and Nuclear Safety based on a decision of the German Bundestag. Förderkennzeichen: 67KI2022B"
