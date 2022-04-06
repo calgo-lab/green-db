@@ -71,7 +71,6 @@ class AmazonSpider(BaseSpider):
                                     }
                                     )
         if "offset=0" in response.url:
-            print("Calling parse next")
             yield from self.parse_next_SERP(url=response.url, data=product_list)
 
     def parse_next_SERP(self, url: str, product_list: dict) -> Iterator[ScrapyHttpRequest]:
