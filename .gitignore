@@ -1,6 +1,7 @@
 # Editor
 .DS_Store
 .vscode
+.idea
 .linked_env
 
 # Python
