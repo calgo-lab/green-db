@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 cd /
 git clone https://github.com/calgo-lab/green-db.git
@@ -18,5 +18,5 @@ EOF
 scrapyd-client deploy in-cluster
 
 # finally start all scraping jobs
-cd /workdir
+cd /workdir/scripts
 python main.py
