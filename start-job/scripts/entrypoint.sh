@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 cd /
 git clone https://github.com/calgo-lab/green-db.git
