@@ -17,14 +17,6 @@ class ZalandoFrSpider(BaseSpider):
     def parse_SERP(
         self, response: SplashJsonResponse, is_first_page: bool = True
     ) -> Iterator[SplashRequest]:
-        print(type(response))
-        logger.info("serp")
-        logger.info(f"  is_first_page = {is_first_page}")
-        logger.info(f"  request url   = {response.request.url}")
-        logger.info(f"  response url  = {response.url}")
-        logger.info(f"  real url      = {response.real_url}")
-        logger.info(f"  original url  = {response.meta['original_URL']}")
-        logger.info(f"  redirect url  = {response.meta.get('redirect_urls')}")
         if urlsplit(response.url).path.strip("/") != urlsplit(
             response.meta["original_URL"]
         ).path.strip("/"):
