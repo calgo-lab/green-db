@@ -56,4 +56,5 @@ def test_otto_basic(requests_mock: Adapter) -> None:
         gtin=4065208505739,
         asin=None,
     )
-    assert actual == expected
+    for attribute in expected.__dict__.keys():
+        assert actual.__dict__[attribute] == expected.__dict__[attribute]

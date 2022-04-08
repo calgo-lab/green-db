@@ -1,0 +1,23 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ include "start-job.fullname" . }}
+  labels:
+    {{- include "start-job.labels" . | nindent 4 }}
+spec:
+  schedule: "0 18 * * 5"  # "At 18:00 on Friday."
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          {{- with  .Values.imagePullSecrets }}
+          imagePullSecrets:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          containers:
+            - name: {{  .Chart.Name }}
+              image: "{{  .Values.image.repository }}:{{  .Values.image.tag | default  .Chart.AppVersion }}"
+              imagePullPolicy: {{  .Values.image.pullPolicy }}
+              env:
+                {{- toYaml  .Values.env | nindent 16 }}
+          restartPolicy: OnFailure
