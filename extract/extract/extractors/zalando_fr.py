@@ -112,6 +112,7 @@ _LABEL_MAPPING = {
     "Responsible Wool Standard": CertificateType.RESPONSIBLE_WOOL_STANDARD,
 }
 
+
 def _get_sustainability(beautiful_soup: BeautifulSoup) -> List[str]:
     """
     Extracts the sustainability information from HTML.
