@@ -20,12 +20,10 @@ class OttoSpider(BaseSpider):
         # Save HTML to database
         self._save_SERP(response)
 
-        # most links are lazy loaded
-        all_product_links = response.css('[class*="productLink"]::attr(href)').getall()
-        all_product_links = list(set(all_product_links))
-
-        # Scrape products on page to database
-        all_product_links = [response.urljoin(link) for link in all_product_links]
+        # Get all unique links
+        all_links = list(set(response.css("[href]::attr(href)").getall()))
+        # Filter for product links
+        all_product_links = [response.urljoin(link) for link in all_links if "#variation" in link]
 
         # If set a subset of the products are scraped
         if self.products_per_page:
