@@ -87,10 +87,10 @@ _LABEL_MAPPING = {
     "Fabriqué avec 50-70% de matériaux recyclés": CertificateType.OTHER,
     "Fabriqué avec 70-100% de matériaux organiques": CertificateType.OTHER,
     "Fabriqué avec 70-100% de matériaux recyclés": CertificateType.OTHER,
-    "Fabriqué avec au moins 20 % d'alternatives biologiques innovantes aux combustibles fossiles": CertificateType.OTHER,
+    "Fabriqué avec au moins 20 % d'alternatives biologiques innovantes aux combustibles fossiles": CertificateType.OTHER,  # noqa
     "Fabriqué avec au moins 20% d'alternatives innovantes au cuir": CertificateType.OTHER,
     "Fabriqué avec au moins 20% de coton recyclé": CertificateType.OTHER,
-    "Fabriqué avec au moins 20% de matériaux innovants recyclés à partir de déchets": CertificateType.OTHER,
+    "Fabriqué avec au moins 20% de matériaux innovants recyclés à partir de déchets": CertificateType.OTHER,  # noqa
     "Fabriqué avec au moins 50 % de polyuréthane à base d'eau": CertificateType.OTHER,
     "Fabriqué avec au moins 50% de coton provenant de sources durables.": CertificateType.OTHER,
     "Fabriqué avec au moins 50% de lyocell": CertificateType.OTHER,
