@@ -39,5 +39,27 @@ class AmazonSpider(BaseSpider):
                                     }
                                     )
 
+        pagination = response.css('span.s-pagination-strip a.s-pagination-item.s-pagination-button::attr(href)').getall()
+        if len(pagination) != 0:
+            next_page = f'https://www.amazon.de/{pagination[0]}'
+            if response.url != next_page:
+                yield SplashRequest(
+                    url=next_page,
+                    callback=self.parse_SERP,
+                    # cb_kwargs=dict(is_first_page=False),
+                    meta={"original_URL": next_page},
+                    endpoint="execute",
+                    args={  # passed to Splash HTTP API
+                        "wait": self.request_timeout,
+                        "lua_source": scroll_end_of_page_script,
+                        "timeout": 180,
+                    },
+                )
+            else:
+                logger.info(f"No further pages: {response.url}")
+        else:
+            logger.info(f"No second page found: {response.url}")
+
+
 
 
