@@ -16,16 +16,16 @@ from core.constants import (
 
 START_TIMESTAMP = datetime.utcnow()
 SETTINGS = {
-    TABLE_NAME_SCRAPING_OTTO: get_otto_settings(),
-    TABLE_NAME_SCRAPING_ZALANDO: get_zalando_settings(),
-    TABLE_NAME_SCRAPING_ASOS: get_asos_settings(),
+    # TABLE_NAME_SCRAPING_OTTO: get_otto_settings(),
+    # TABLE_NAME_SCRAPING_ZALANDO: get_zalando_settings(),
+    # TABLE_NAME_SCRAPING_ASOS: get_asos_settings(),
     TABLE_NAME_SCRAPING_AMAZON: get_amazon_settings(),
 }
 
-# Read scrapy config and get target URL for local
+# Read scrapy config and get target URL for local scraping
 scrapy_config_parser = ConfigParser()
-scrapy_config_parser.read("/green-db/scraping/scrapy.cfg")  # Repo get cloned
-SCRAPYD_CLUSTER_TARGET = scrapy_config_parser.get("deploy:in-cluster", "url")
+scrapy_config_parser.read("/green-db/scraping/scrapy.cfg")  # Repo gets cloned
+SCRAPYD_CLUSTER_TARGET = scrapy_config_parser.get("deploy", "url")
 
 
 if __name__ == "__main__":
@@ -36,7 +36,7 @@ if __name__ == "__main__":
             category = setting["category"]
             meta_data = setting["meta_data"]
 
-            # -t in-cluster gets pachted by entrypoint.sh...
+            # -t in-cluster gets patched by entrypoint.sh...
             command = f"scrapyd-client -t {SCRAPYD_CLUSTER_TARGET} schedule -p scraping --arg start_urls='{url}' \
             --arg category='{category}' --arg timestamp='{START_TIMESTAMP}' \
             --arg meta_data='{meta_data}' {merchant}"
