@@ -24,19 +24,20 @@ class AmazonSpider(BaseSpider):
         # Save HTML to database
         self._save_SERP(response)
         #Get product urls
-        product_urls = response.css('div.a-section.a-spacing-small.s-padding-left-micro.s-padding-right-micro a::attr(href)').getall()
+        product_urls = response.css('a.a-link-normal.s-no-outline::attr(href)').getall()
         logger.info(f"Number of products to be scraped {len(product_urls)}")
-        #logger.info(f"Number of products in category {product_list['totalCount']}")
-        for url in product_urls:
-            yield SplashRequest(url=f'https://www.amazon.de{url}',
-                                callback=self.parse_PRODUCT,
-                                endpoint="execute",
-                                args={  # passed to Splash HTTP API
-                                    "wait": self.request_timeout,
-                                    "lua_source": scroll_end_of_page_script,
-                                    "timeout": 180,
-                                }
-                                )
+        for product_url in product_urls:
+            #There are some color variations of same product that are not cpf elegible
+            if 'refinements=p_n_cpf_eligible' in product_url:
+                yield SplashRequest(url=f'https://www.amazon.de/{product_url}',
+                                    callback=self.parse_PRODUCT,
+                                    endpoint="execute",
+                                    args={  # passed to Splash HTTP API
+                                        "wait": self.request_timeout,
+                                        "lua_source": scroll_end_of_page_script,
+                                        "timeout": 180,
+                                    }
+                                    )
 
 
 
