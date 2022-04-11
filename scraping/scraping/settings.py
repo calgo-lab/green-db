@@ -39,7 +39,7 @@ DOWNLOAD_DELAY = 15
 
 # Override the default request headers:
 DEFAULT_REQUEST_HEADERS = {
-    "Accept-Language": "de",  # We are interested in getting german sites
+    "Accept-Language": "*",  # We are interested in getting all sites
 }
 
 # Enable or disable spider middlewares
