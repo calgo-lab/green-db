@@ -20,16 +20,14 @@ class AmazonSpider(BaseSpider):
         Yields:
             Iterator[SplashRequest]: Requests that will be performed to scrap each product page
         """
+        print(type(response))
         # Save HTML to database
         self._save_SERP(response)
+        #Get product urls
         product_urls = response.css('div.a-section.a-spacing-small.s-padding-left-micro.s-padding-right-micro a::attr(href)').getall()
-        print(type(product_urls))
-        print(product_urls)
         logger.info(f"Number of products to be scraped {len(product_urls)}")
         #logger.info(f"Number of products in category {product_list['totalCount']}")
         for url in product_urls:
-            print(url)
-            #product = product_list['asins'][i]
             yield SplashRequest(url=f'https://www.amazon.de{url}',
                                 callback=self.parse_PRODUCT,
                                 endpoint="execute",
