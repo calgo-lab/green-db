@@ -63,10 +63,10 @@ class ZalandoSpider(BaseSpider):
             )
 
         # Pagination: Parse next SERP 'recursively'
-        neighbors = response.css('[class="DJxzzA PgtkyN"]::attr(href)').getall()
+        pagination = response.css('[class="DJxzzA PgtkyN"]::attr(href)').getall()
 
-        if (is_first_page and neighbors) or len(neighbors) == 2:
-            next_page = response.urljoin(neighbors[-1])
+        if (is_first_page and pagination) or len(pagination) == 2:
+            next_page = response.urljoin(pagination[-1])
             yield SplashRequest(
                 url=next_page,
                 callback=self.parse_SERP,
