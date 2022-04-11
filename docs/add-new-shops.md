@@ -25,3 +25,8 @@ If you want to add another to-be-scraped-shop, unfortunately, there are some fil
    - add the function for to the mapping: `EXTRACTOR_FOR_TABLE_NAME`
 6. [`workers.workers.__init__.py`](../workers/workers/__init__.py):
    - add connection for `<shop-name>` to the mapping `CONNECTION_FOR_TABLE`
+7. [`start-job.scripts.<shop-name>.py`](../start-job/scripts/):
+   - create a new file `<shop-name>.py`. (Check out others for examples)
+   - TODO: could you finalize this?
+8. [`start-job.scripts.main.py`](../start-job/scripts/main.py):
+   - TODO: could you finalize this?
