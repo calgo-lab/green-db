@@ -47,4 +47,5 @@ def test_zalando_basic() -> None:
         gtin=None,
         asin=None,
     )
-    assert actual == expected
+    for attribute in expected.__dict__.keys():
+        assert actual.__dict__[attribute] == expected.__dict__[attribute]

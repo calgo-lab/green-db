@@ -1,21 +1,26 @@
 from typing import Optional
 
 from core import log
-from core.constants import TABLE_NAME_SCRAPING_OTTO, TABLE_NAME_SCRAPING_ZALANDO
+from core.constants import (
+    TABLE_NAME_SCRAPING_ASOS,
+    TABLE_NAME_SCRAPING_OTTO,
+    TABLE_NAME_SCRAPING_ZALANDO,
+)
 from core.domain import Product, ScrapedPage
 
 # Because we ignored the files `zalando.py` and `otto.py` we have to skip them here as well
+from .extractors.asos import extract_asos  # type: ignore[attr-defined]
 from .extractors.otto import extract_otto  # type: ignore[attr-defined]
 from .extractors.zalando import extract_zalando  # type: ignore[attr-defined]
 from .parse import parse_page
 
 log.setup_logger(__name__)
 
-
 # Maps a scraping table name to its extraction method
 EXTRACTOR_FOR_TABLE_NAME = {
     TABLE_NAME_SCRAPING_OTTO: extract_otto,
     TABLE_NAME_SCRAPING_ZALANDO: extract_zalando,
+    TABLE_NAME_SCRAPING_ASOS: extract_asos,
 }
 
 
@@ -30,5 +35,6 @@ def extract_product(table_name: str, scraped_page: ScrapedPage) -> Optional[Prod
     Returns:
         Optional[Product]: Returns a valid `Product` object or `None` if extraction failed
     """
+
     parsed_page = parse_page(scraped_page)
     return EXTRACTOR_FOR_TABLE_NAME[table_name](parsed_page)
