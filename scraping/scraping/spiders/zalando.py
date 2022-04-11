@@ -14,8 +14,9 @@ class ZalandoSpider(BaseSpider):
     name = "zalando"
     allowed_domains = ["zalando.de"]
 
-    def parse_SERP(self, response: SplashJsonResponse) -> Iterator[SplashRequest]:
-        print(type(response))
+    def parse_SERP(
+        self, response: SplashJsonResponse, is_first_page: bool = True
+    ) -> Iterator[SplashRequest]:
 
         if urlsplit(response.url).path.strip("/") != urlsplit(
             response.meta["original_URL"]
@@ -62,13 +63,15 @@ class ZalandoSpider(BaseSpider):
             )
 
         # Pagination: Parse next SERP 'recursively'
-        next_page = response.css('[title="nächste Seite"]::attr(href)').extract_first()
+        pagination = response.css('[class="DJxzzA PgtkyN"]::attr(href)').getall()
 
-        if next_page:
+        if (is_first_page and pagination) or len(pagination) == 2:
+            next_page = response.urljoin(pagination[-1])
             yield SplashRequest(
-                url=response.urljoin(next_page),
+                url=next_page,
                 callback=self.parse_SERP,
-                meta={"original_URL": response.urljoin(next_page)},
+                cb_kwargs=dict(is_first_page=False),
+                meta={"original_URL": next_page},
                 endpoint="execute",
                 args={  # passed to Splash HTTP API
                     "wait": self.request_timeout,
