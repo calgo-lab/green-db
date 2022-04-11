@@ -25,7 +25,7 @@ SETTINGS = {
 # Read scrapy config and get target URL for local
 scrapy_config_parser = ConfigParser()
 scrapy_config_parser.read("/green-db/scraping/scrapy.cfg")  # Repo get cloned
-SCRAPYD_CLUSTER_TARGET = scrapy_config_parser.get("deploy", "url")
+SCRAPYD_CLUSTER_TARGET = scrapy_config_parser.get("deploy:in-cluster", "url")
 
 
 if __name__ == "__main__":
