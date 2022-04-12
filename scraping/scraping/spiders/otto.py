@@ -22,6 +22,7 @@ class OttoSpider(BaseSpider):
 
         # Get all unique links
         all_links = list(set(response.css("[href]::attr(href)").getall()))
+
         # Filter for product links
         all_product_links = [
             response.urljoin(link)
@@ -29,7 +30,6 @@ class OttoSpider(BaseSpider):
             if "/#variationId=" in link and "/p/" in link
         ]
 
-        # If set a subset of the products are scraped
         if self.products_per_page:
             all_product_links = all_product_links[: self.products_per_page]
 
