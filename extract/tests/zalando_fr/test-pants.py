@@ -1,4 +1,4 @@
-from core.constants import TABLE_NAME_SCRAPING_ZALANDO
+from core.constants import TABLE_NAME_SCRAPING_ZALANDO_FR
 from core.domain import Product
 from extract import extract_product
 
