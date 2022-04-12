@@ -5,7 +5,7 @@ from extract import extract_product
 from ..utils import read_test_html
 
 
-def test_zalando_basic() -> None:
+def test_zalando_fr_basic() -> None:
     timestamp = "2022-04-12 12:31:50"
     url = "https://www.zalando.mock/"
     merchant = "zalando_fr"
