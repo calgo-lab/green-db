@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from typing import Dict, List, Tuple, Union
+from typing import List
 
 gender_to_category = {"female": 28981, "male": 28982}
 
@@ -51,5 +51,5 @@ def female() -> List[dict]:
     )
 
 
-def get_settings() -> List[Union[Dict[str, str], Dict[str, Tuple[str, Dict[str, str]]]]]:
+def get_settings() -> List[dict]:
     return male() + female()

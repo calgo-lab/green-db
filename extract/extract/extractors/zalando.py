@@ -3,7 +3,7 @@
 # type: ignore[attr-defined]
 
 from logging import getLogger
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 from bs4 import BeautifulSoup
 from pydantic import ValidationError
@@ -15,64 +15,6 @@ from ..utils import safely_return_first_element
 
 logger = getLogger(__name__)
 
-
-def extract_zalando(parsed_page: ParsedPage) -> Optional[Product]:
-    """
-    Extracts information of interest from HTML (and other intermediate representations)
-    and returns `Product` object or `None` if anything failed. Works for zalando.de.
-
-    Args:
-        parsed_page (ParsedPage): Intermediate representation of `ScrapedPage` domain object
-
-    Returns:
-        Optional[Product]: Valid `Product` object or `None` if extraction failed
-    """
-    if "/outfits/" in parsed_page.scraped_page.url:
-        return None
-
-    meta_data = safely_return_first_element(parsed_page.schema_org.get(JSON_LD, [{}]))
-
-    name = meta_data.get("name", None)
-    description = meta_data.get("description", None)
-    brand = meta_data.get("brand", {}).get("name", None)
-    color = meta_data.get("color", None)
-
-    first_offer = safely_return_first_element(meta_data.get("offers", [{}]))
-    currency = first_offer.get("priceCurrency", None)
-    image_urls = meta_data.get("image", [])
-    if price := first_offer.get("price", None):
-        price = float(price)
-
-    sustainability_labels = _get_sustainability(parsed_page.beautiful_soup)
-
-    try:
-        return Product(
-            timestamp=parsed_page.scraped_page.timestamp,
-            url=parsed_page.scraped_page.url,
-            merchant=parsed_page.scraped_page.merchant,
-            category=parsed_page.scraped_page.category,
-            name=name,
-            description=description,
-            brand=brand,
-            sustainability_labels=sustainability_labels,
-            price=price,
-            currency=currency,
-            image_urls=image_urls,
-            color=color,
-            size=None,
-            gtin=None,
-            asin=None,
-        )
-
-    except ValidationError as error:
-        # TODO Handle Me!!
-        # error contains relatively nice report why data ist not valid
-        logger.info(error)
-        return None
-
-
-# TODO: How can we do this smart?
-# See: https://www.zalando.de/campaigns/about-sustainability/
 _LABEL_MAPPING = {
     "Responsible Wool Standard": CertificateType.RESPONSIBLE_WOOL_STANDARD,
     "GOTS - organic": CertificateType.GOTS_ORGANIC,
@@ -122,7 +64,68 @@ _LABEL_MAPPING = {
 }
 
 
-def _get_sustainability(beautiful_soup: BeautifulSoup) -> List[str]:
+def extract_zalando(
+    parsed_page: ParsedPage, label_mapping: Dict[str, CertificateType] = _LABEL_MAPPING
+) -> Optional[Product]:
+    """
+    Extracts information of interest from HTML (and other intermediate representations)
+    and returns `Product` object or `None` if anything failed. Works for zalando.de and zalando.fr.
+
+    Args:
+        parsed_page (ParsedPage): Intermediate representation of `ScrapedPage` domain object
+
+    Returns:
+        Optional[Product]: Valid `Product` object or `None` if extraction failed
+    """
+    if "/outfits/" in parsed_page.scraped_page.url:
+        return None
+
+    meta_data = safely_return_first_element(parsed_page.schema_org.get(JSON_LD, [{}]))
+
+    name = meta_data.get("name", None)
+    description = meta_data.get("description", None)
+    brand = meta_data.get("brand", {}).get("name", None)
+    color = meta_data.get("color", None)
+
+    first_offer = safely_return_first_element(meta_data.get("offers", [{}]))
+    currency = first_offer.get("priceCurrency", None)
+    image_urls = meta_data.get("image", [])
+    if price := first_offer.get("price", None):
+        price = float(price)
+
+    sustainability_labels = get_sustainability(
+        parsed_page.beautiful_soup, label_mapping=label_mapping
+    )
+
+    try:
+        return Product(
+            timestamp=parsed_page.scraped_page.timestamp,
+            url=parsed_page.scraped_page.url,
+            merchant=parsed_page.scraped_page.merchant,
+            category=parsed_page.scraped_page.category,
+            name=name,
+            description=description,
+            brand=brand,
+            sustainability_labels=sustainability_labels,
+            price=price,
+            currency=currency,
+            image_urls=image_urls,
+            color=color,
+            size=None,
+            gtin=None,
+            asin=None,
+        )
+
+    except ValidationError as error:
+        # TODO Handle Me!!
+        # error contains relatively nice report why data ist not valid
+        logger.info(error)
+        return None
+
+
+def get_sustainability(
+    beautiful_soup: BeautifulSoup, label_mapping: Dict[str, CertificateType]
+) -> List[str]:
     """
     Extracts the sustainability information from HTML.
 
@@ -136,6 +139,6 @@ def _get_sustainability(beautiful_soup: BeautifulSoup) -> List[str]:
     if cluster := beautiful_soup.find("div", attrs={"data-testid": "cluster-certificates"}):
         labels = cluster.find_all(attrs={"data-testid": "certificate__title"})
         return sorted(
-            {_LABEL_MAPPING.get(label.string, CertificateType.UNKNOWN) for label in labels}
+            {label_mapping.get(label.string, CertificateType.UNKNOWN) for label in labels}
         )
     return []
