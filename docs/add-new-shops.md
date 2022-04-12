@@ -27,14 +27,14 @@ If you want to add another to-be-scraped-shop, unfortunately, there are some fil
    - add connection for `<shop-name>` to the mapping `CONNECTION_FOR_TABLE`
 7. [`start-job.scripts.<shop-name>.py`](../start-job/scripts/):
    - create a new file `<shop-name>.py`. (Check out others for examples)
-   - implement a function with signature: `def get_settings() -> List[Dict[str, str]]:`
-   - each dict corresponds to one scrapy job. they should have these entries:
+   - implement a function with signature: `def get_settings() -> List[dict]:`
+   - each dict corresponds to one scrapy job. They should have these entries:
      - `'start_urls'` usually a single url pointing to a SERP.
      - `'category'` product category string (eg. `'SHIRT'`, `'SHOES'`, ...)
-     - `'meta_data'` json formatted string containing additional product information.
+     - `'meta_data'` json string containing additional product information.
        - `family` product family (eg. `'FASHION'`)
        - `sex` gender (eg. `'MALE'`, `'FEMALE'`, ...)
 8. [`start-job.scripts.main.py`](../start-job/scripts/main.py):
    - import your `get_settings` and add it to `SETTINGS`.
 
-your done. good job :)
+You'r done. Good job :)

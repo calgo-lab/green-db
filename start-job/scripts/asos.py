@@ -51,5 +51,5 @@ def female() -> List[dict]:
     )
 
 
-def get_settings() -> List[Union[Dict[str, str], Dict[str, Tuple[str, Dict[str, str]]]]]:
+def get_settings() -> List[dict]:
     return male() + female()

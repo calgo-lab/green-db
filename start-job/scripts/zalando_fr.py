@@ -104,5 +104,5 @@ def female() -> List[dict]:
     return combine_results(path_2_category, sex="FEMALE")
 
 
-def get_settings() -> List[Union[Dict[str, str], Dict[str, Tuple[str, Dict[str, str]]]]]:
+def get_settings() -> List[dict]:
     return male() + female()
