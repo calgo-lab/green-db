@@ -36,7 +36,6 @@ class AsosSpider(BaseSpider):
 
     custom_settings = {
         "DEFAULT_REQUEST_HEADERS": headers,
-        "DOWNLOAD_DELAY": 15,  # decrease this to increase speed
     }
 
     def start_requests(self) -> Iterator[ScrapyHttpRequest]:
