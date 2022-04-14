@@ -18,12 +18,12 @@ from core.constants import (
 )
 
 START_TIMESTAMP = datetime.utcnow()
-SETTINGS = (
+SETTINGS = [
     [(TABLE_NAME_SCRAPING_ASOS, x) for x in get_asos_settings()],
     [(TABLE_NAME_SCRAPING_OTTO, x) for x in get_otto_settings()],
     [(TABLE_NAME_SCRAPING_ZALANDO, x) for x in get_zalando_settings()],
     [(TABLE_NAME_SCRAPING_ZALANDO_FR, x) for x in get_zalando_fr_settings()],
-)
+]
 
 # Read scrapy config and get target URL for local
 scrapy_config_parser = ConfigParser()
@@ -31,13 +31,17 @@ scrapy_config_parser.read("/green-db/scraping/scrapy.cfg")  # Repo get cloned
 SCRAPYD_CLUSTER_TARGET = scrapy_config_parser.get("deploy:in-cluster", "url")
 
 
-def roundrobin(*lists: List[Any]) -> Iterator[Any]:
+def get_round_robin_iterator(*lists: List[Any]) -> Iterator[Any]:
     """
-    `roundrobin` iterates over the given `lists` in a round robin fashion.
-    First elements of `lists`, second elements of `lists`, ...
+    Creates an `Iterator`, which `yield`s objects in `lists` in a round robin fashion.
+    This means: First elements of all `lists`, then second elements of all `lists`, ..
+        until all `lists` are fully consumed.
+
     Args:
-        lists (List[Any]): `roundrobin` will output elements of `lists`
-            one after another.
+        lists (List[Any]): Contains `list`s of arbitrary objects and not necessary same length
+
+    Yields:
+        Iterator[Any]: Objects of `lists` in round robin fashion
     """
     if lists:
         for i in range(max(map(len, lists))):
@@ -50,7 +54,7 @@ if __name__ == "__main__":
 
     # Using `roundrobin` helps to mix the shops and increases scraping speed
     # since we can request them in parallel but throttle for same domain.
-    for merchant, setting in roundrobin(*SETTINGS):
+    for merchant, setting in get_round_robin_iterator(*SETTINGS):
         url = setting["start_urls"]
         category = setting["category"]
         meta_data = setting["meta_data"]
