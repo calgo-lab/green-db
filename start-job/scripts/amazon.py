@@ -1,4 +1,5 @@
 from typing import List
+import json
 
 
 def combine_results(
@@ -11,7 +12,7 @@ def combine_results(
             {
                 "start_urls": f"https://www.amazon.de/s?bbn={node}&rh=n%3A{node}%2Cp_n_cpf_eligible%3A22579885031",             
                 "category": category,
-                "meta_data": metadata,                
+                "meta_data": json.dumps(metadata),                
             }
         )
     return results
