@@ -13,9 +13,7 @@ def combine_results(
             {
                 "start_urls": f"https://www.amazon.de/s?bbn={path}&rh=n%3A{path}%2Cp_n_cpf_eligible%3A22579885031",             
                 "category": category,
-                # "meta_data": json.dumps(
-                #     {"family": "FASHION", "sustainability": filter, "sex": sex}
-                # ),
+                "meta_data": {"familiy": "FASHION", "sex": sex},                
             }
         )
         print(results)
