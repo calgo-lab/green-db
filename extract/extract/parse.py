@@ -57,5 +57,5 @@ def extract_schema_org(page_html: str) -> dict:
         dict: Schema.org information found in `page_html`
     """
     unescaped_html = html.unescape(page_html)
-    schema_org = extruct.extract(unescaped_html, syntaxes=_SYNTAXES)
+    schema_org = extruct.extract(unescaped_html, syntaxes=_SYNTAXES, errors="ignore")
     return schema_org if schema_org else {}
