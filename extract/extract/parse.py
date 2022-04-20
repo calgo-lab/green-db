@@ -1,5 +1,6 @@
 import html
 from dataclasses import dataclass
+from json import JSONDecodeError
 
 import extruct
 from bs4 import BeautifulSoup
@@ -31,15 +32,7 @@ def parse_page(scraped_page: ScrapedPage) -> ParsedPage:
         ParsedPage: Representation that bundles the `scraped_page` with intermediate representations
     """
     beautiful_soup = BeautifulSoup(scraped_page.html, "html.parser")
-
-    # otto schema extraction fails sometimes when unescaped, there is no official fix yet
-    # see: https://github.com/scrapinghub/extruct/issues/175
-    if scraped_page.merchant == "otto":
-        unescape = False
-    else:
-        unescape = True
-
-    schema_org = extract_schema_org(scraped_page.html, unescape)
+    schema_org = extract_schema_org(scraped_page.html)
     return ParsedPage(
         scraped_page=scraped_page, beautiful_soup=beautiful_soup, schema_org=schema_org
     )
@@ -55,7 +48,7 @@ MICRODATA = "microdata"
 _SYNTAXES = [DUBLINCORE, JSON_LD, MICRODATA]
 
 
-def extract_schema_org(page_html: str, unescape: bool) -> dict:
+def extract_schema_org(page_html: str) -> dict:
     """
     Extract schema.org information form `page_html`.
 
@@ -66,10 +59,12 @@ def extract_schema_org(page_html: str, unescape: bool) -> dict:
     Returns:
         dict: Schema.org information found in `page_html`
     """
-
-    if unescape:
-        unescaped_html = html.unescape(page_html)
+    unescaped_html = html.unescape(page_html)
+    # otto schema extraction fails sometimes for json-ld when unescaped (no official fix yet)
+    # see: https://github.com/scrapinghub/extruct/issues/175
+    # Fix: using the escaped html works for otto
+    try:
         schema_org = extruct.extract(unescaped_html, syntaxes=_SYNTAXES)
-    else:
+    except JSONDecodeError:
         schema_org = extruct.extract(page_html, syntaxes=_SYNTAXES)
     return schema_org if schema_org else {}
