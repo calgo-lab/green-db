@@ -13,7 +13,7 @@ from pydantic import ValidationError
 
 from core.domain import CertificateType, Product
 
-from ..parse import DUBLINCORE, MICRODATA, ParsedPage
+from ..parse import DUBLINCORE, MICRODATA, ParsedPage, JSON_LD
 from ..utils import safely_return_first_element
 
 logger = getLogger(__name__)
@@ -39,6 +39,9 @@ def extract_otto(parsed_page: ParsedPage) -> Optional[Product]:
 
     name = properties.get("name", None)
     brand = properties.get("brand", None)
+
+    if not brand:
+        brand = parsed_page.schema_org.get(JSON_LD, [{}])[0].get("brand", {}).get("name", None)
 
     gtin = properties.get("gtin13", None)
     gtin = int(gtin) if type(gtin) == str and len(gtin) > 0 else None
