@@ -40,7 +40,7 @@ def extract_otto(parsed_page: ParsedPage) -> Optional[Product]:
     name = properties.get("name", None)
     brand = properties.get("brand", None)
 
-    if not brand:
+    if brand is None:
         brand = parsed_page.schema_org.get(JSON_LD, [{}])[0].get("brand", {}).get("name", None)
 
     gtin = properties.get("gtin13", None)
