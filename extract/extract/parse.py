@@ -25,7 +25,6 @@ def parse_page(scraped_page: ScrapedPage) -> ParsedPage:
     Parses the given `scraped_page` and extract its schema.org information.
 
     Args:
-        unescape:
         scraped_page (ScrapedPage): Domain object `ScrapedPage`
 
     Returns:
@@ -53,7 +52,6 @@ def extract_schema_org(page_html: str) -> dict:
     Extract schema.org information form `page_html`.
 
     Args:
-        unescape (boolean): boolean whether to unescape the html before extraction or not
         page_html (str): HTML of the page
 
     Returns:
