@@ -4,15 +4,15 @@ import json
 
 def combine_results(
     node_2_category: dict,
-    metadata: dict,    
+    metadata: dict,
 ) -> List[dict]:
     results = []
     for node, category in node_2_category.items():
         results.append(
             {
-                "start_urls": f"https://www.amazon.de/s?bbn={node}&rh=n%3A{node}%2Cp_n_cpf_eligible%3A22579885031",             
+                "start_urls": f"https://www.amazon.de/s?bbn={node}&rh=n%3A{node}%2Cp_n_cpf_eligible%3A22579885031",
                 "category": category,
-                "meta_data": json.dumps(metadata),                
+                "meta_data": json.dumps(metadata),
             }
         )
     return results
@@ -38,7 +38,7 @@ def female() -> List[dict]:
         "1981835031": "JACKET",
     }
 
-    return combine_results(node_2_category, metadata={"sex": "FEMALE"})
+    return combine_results(node_2_category, metadata={"family": "FASHION", "sex": "FEMALE"})
 
 
 def male() -> List[dict]:
@@ -59,9 +59,9 @@ def male() -> List[dict]:
         "1981351031": "SWEATER",
         "1981400031": "UNDERWEAR",
         "1981365031": "JACKET",
-    }    
+    }
 
-    return combine_results(node_2_category, metadata={"sex": "MALE"})
+    return combine_results(node_2_category, metadata={"family": "FASHION", "sex": "MALE"})
 
 
 def get_settings() -> List[dict]:
