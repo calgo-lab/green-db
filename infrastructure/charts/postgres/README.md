@@ -27,8 +27,8 @@ Note that these paths are relative to ``green-db/infrastructure/charts/postgres`
 
 ```bash
 umask 077
-echo "<some password>" > ../../.credentials/postgresql-postgres-password
-echo "<some other password>" > ../../.credentials/postgresql-replicator-password
+echo -n "<some password>" > ../../.credentials/postgresql-postgres-password
+echo -n "<some other password>" > ../../.credentials/postgresql-replicator-password
 ```
 
 Now you can create the secret.
@@ -94,10 +94,10 @@ As for the postgres secret, you need to set usernames and passwords.
 
 ```bash
 umask 077
-echo "scraping" > ../../.credentials/scraping-postgres-user
-echo "<scraping-password>" > ../../.credentials/scraping-postgres-password
-echo "green-db" > ../../.credentials/green-db-postgres-user
-echo "<green-db-password>" > ../../.credentials/green-db-postgres-password
+echo -n "scraping" > ../../.credentials/scraping-postgres-user
+echo -n "<scraping-password>" > ../../.credentials/scraping-postgres-password
+echo -n "green-db" > ../../.credentials/green-db-postgres-user
+echo -n "<green-db-password>" > ../../.credentials/green-db-postgres-password
 ```
 
 make sure that the usernames/passwords match those in the database.
