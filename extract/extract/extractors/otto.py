@@ -9,8 +9,9 @@ from urllib.parse import ParseResult, urlparse
 
 import requests
 from bs4 import BeautifulSoup
-from core.domain import CertificateType, Product
 from pydantic import ValidationError
+
+from core.domain import CertificateType, Product
 
 from ..parse import DUBLINCORE, JSON_LD, MICRODATA, ParsedPage
 from ..utils import safely_return_first_element
