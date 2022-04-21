@@ -1,5 +1,6 @@
 from core.constants import TABLE_NAME_SCRAPING_ZALANDO
 from core.domain import Product
+
 from extract import extract_product
 
 from ..utils import read_test_html
