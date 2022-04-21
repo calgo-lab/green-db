@@ -25,6 +25,22 @@ def test_amazon_basic() -> None:
         url=url,
     )
     actual = extract_product(TABLE_NAME_SCRAPING_AMAZON, scraped_page)
-    expected = Product() # TODO
+    expected = Product(
+        timestamp=timestamp,
+        url=url,
+        merchant=merchant,
+        category=category,
+        name="Think! Herren Kong_3-000284 Chromfrei Gegerbte, Nachhaltige Wechselfußbett Schnürhalbschuhe",
+        description=None, # TODO: Filter paragraph text without markup tags
+        brand="THINK!",
+        sustainability_labels=["certificate:OTHER"],
+        price=69.80,
+        currency="EUR",
+        image_urls=[],
+        color="0000 Black",
+        size=None,
+        gtin=None,
+        asin="B09BFC4BN8",
+    )
     for attribute in expected.__dict__.keys():
         assert actual.__dict__[attribute] == expected.__dict__[attribute]
