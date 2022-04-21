@@ -50,15 +50,17 @@ class AmazonSpider(BaseSpider):
                                 }
                                 )
 
+
         #Pagination
         next_path = response.css('.s-pagination-selected+ .s-pagination-button::attr(href)').get()
-        page_number = response.css('.s-pagination-selected+ .s-pagination-button::text').get()
-        if next_path != '':
+        print(next_path)
+
+        if next_path is not None:
+            page_number = response.css('.s-pagination-selected+ .s-pagination-button::text').get()
             next_page = f"https://www.amazon.de{next_path}"
-            logger.info(f"Starting scraping for next page number {page_number} at {next_page}")
+            logger.info(f"Next page found, number {page_number} at {next_page}")
             yield SplashRequest(url=next_page,
                     callback=self.parse_SERP,
-                    #cb_kwargs=dict(is_first_page=False),
                     meta={"original_URL": next_page},
                     endpoint="execute",
                     args={  # passed to Splash HTTP API
@@ -69,6 +71,9 @@ class AmazonSpider(BaseSpider):
                     )
         else:
             logger.info(f"No further pages found for {response.url}")
+
+
+
 
 
 
