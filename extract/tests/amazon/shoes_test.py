@@ -33,7 +33,7 @@ def test_amazon_basic() -> None:
         name="Think! Herren Kong_3-000284 Chromfrei Gegerbte, Nachhaltige Wechselfußbett Schnürhalbschuhe",
         description=None, # TODO: Filter paragraph text without markup tags
         brand="THINK!",
-        sustainability_labels=["certificate:OTHER"],
+        sustainability_labels=["certificate:BLUE_ANGEL"],
         price=69.80,
         currency="EUR",
         image_urls=[],
