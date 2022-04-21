@@ -11,8 +11,8 @@ from urllib.parse import parse_qs, urlparse
 logger = getLogger(__name__)
 
 class AmazonSpider(BaseSpider):
-    name = 'amazon'
-    allowed_domains = ['amazon.de']
+    name = "amazon"
+    allowed_domains = ["amazon.de"]
 
     def parse_SERP(self,  response: SplashJsonResponse) -> Iterator[SplashRequest]:
         """
@@ -52,11 +52,11 @@ class AmazonSpider(BaseSpider):
 
 
         #Pagination
-        next_path = response.css('.s-pagination-selected+ .s-pagination-button::attr(href)').get()
+        next_path = response.css(".s-pagination-selected+ .s-pagination-button::attr(href)").get()
         print(next_path)
 
         if next_path is not None:
-            page_number = response.css('.s-pagination-selected+ .s-pagination-button::text').get()
+            page_number = response.css(".s-pagination-selected+ .s-pagination-button::text").get()
             next_page = f"https://www.amazon.de{next_path}"
             logger.info(f"Next page found, number {page_number} at {next_page}")
             yield SplashRequest(url=next_page,
