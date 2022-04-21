@@ -6,6 +6,7 @@ from core.constants import (
     TABLE_NAME_SCRAPING_OTTO,
     TABLE_NAME_SCRAPING_ZALANDO,
     TABLE_NAME_SCRAPING_ZALANDO_FR,
+    TABLE_NAME_SCRAPING_AMAZON,
 )
 from core.domain import Product, ScrapedPage
 
@@ -24,6 +25,7 @@ EXTRACTOR_FOR_TABLE_NAME = {
     TABLE_NAME_SCRAPING_OTTO: extract_otto,
     TABLE_NAME_SCRAPING_ZALANDO: extract_zalando,
     TABLE_NAME_SCRAPING_ZALANDO_FR: extract_zalando_fr,
+    TABLE_NAME_SCRAPING_AMAZON: extractor_amazon,
 }
 
 
