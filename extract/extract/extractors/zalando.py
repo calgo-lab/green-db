@@ -1,7 +1,7 @@
 # Since the Enum 'CertificateType' is dynamically generated, mypy can't know the attributes.
 # For this reason, we ignore those errors here.
 # type: ignore[attr-defined]
-
+import json
 from logging import getLogger
 from typing import Dict, List, Optional
 
@@ -136,9 +136,19 @@ def get_sustainability(
         List[str]: Ordered `list` of found sustainability labels
     """
 
-    if cluster := beautiful_soup.find("div", attrs={"data-testid": "cluster-certificates"}):
-        labels = cluster.find_all(attrs={"data-testid": "certificate__title"})
+    data = json.loads(beautiful_soup.find("script", {"type": "application/json",
+                                                     "class": "re-1-13"}).get_text())
+    labels = []
+    for key, item in data.get("graphqlCache", {}).items():
+        for entry in item.get("data", {}).get("product", {}).get("attributeSuperClusters", [{}]):
+            if entry.get("id", "") == "sustainability":
+                for cluster in entry.get("clusters", [{}]):
+                    if cluster.get("sustainabilityClusterKind", "") == "certificates":
+                        for attribute in cluster.get("attributes", [{}]):
+                            labels.append(attribute.get("label", "").replace("%25", "%"))
+
+    if labels:
         return sorted(
-            {label_mapping.get(label.string, CertificateType.UNKNOWN) for label in labels}
+            {label_mapping.get(label, CertificateType.UNKNOWN) for label in labels}
         )
     return []
