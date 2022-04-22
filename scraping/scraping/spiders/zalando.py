@@ -36,21 +36,15 @@ class ZalandoSpider(BaseSpider):
         # Save HTML to database
         self._save_SERP(response)
 
-        # # ads are less often than real products
-        # article_elements = response.css("article::attr(class)").getall()
-        # most_class_selector = max(set(article_elements), key=article_elements.count)
-        # all_product_links = response.css(f"[class='{most_class_selector}']>a::attr(href)").getall()
-        # all_product_links = list(set(all_product_links))
-        #
-        # # Scrape products on page to database
-        # all_product_links = [response.urljoin(link) for link in all_product_links]
-
+        # Extract links from json object
         data = json.loads(response.css("script.re-data-el-hydrate::text").get())
         all_product_links = []
         for key, value in data.get("graphqlCache", {}).items():
             url = value.get("data", {}).get("product", {}).get("uri")
             if url is not None:
                 all_product_links.append(url)
+
+        all_product_links = list(set(all_product_links))
 
         # If set a subset of the products are scraped
         if self.products_per_page:
