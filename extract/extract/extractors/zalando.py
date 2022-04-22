@@ -136,8 +136,9 @@ def get_sustainability(
         List[str]: Ordered `list` of found sustainability labels
     """
 
-    data = json.loads(beautiful_soup.find("script", {"type": "application/json",
-                                                     "class": "re-1-13"}).get_text())
+    data = json.loads(
+        beautiful_soup.find("script", {"type": "application/json", "class": "re-1-13"}).get_text()
+    )
     labels = []
     for key, item in data.get("graphqlCache", {}).items():
         for entry in item.get("data", {}).get("product", {}).get("attributeSuperClusters", [{}]):
@@ -148,7 +149,5 @@ def get_sustainability(
                             labels.append(attribute.get("label", "").replace("%25", "%"))
 
     if labels:
-        return sorted(
-            {label_mapping.get(label, CertificateType.UNKNOWN) for label in labels}
-        )
+        return sorted({label_mapping.get(label, CertificateType.UNKNOWN) for label in labels})
     return []
