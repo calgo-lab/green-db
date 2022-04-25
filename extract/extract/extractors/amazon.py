@@ -18,7 +18,7 @@ def sustainability_label_to_certificate(labels) -> list[CertificateType]:
     result = {
         CertificateType[certificate.split(":")[-1]]
         for certificate, description in sustainability_labels.items()
-        if any(_get_matchin_languages(description["languages"].values(), labels))
+        if any(_get_matching_languages(description["languages"].values(), labels))
     }
 
     # TODO: Are there more labels that need manual mapping?
@@ -28,7 +28,7 @@ def sustainability_label_to_certificate(labels) -> list[CertificateType]:
     return result or {CertificateType.OTHER}
 
 
-def _get_matchin_languages(languages, labels):
+def _get_matching_languages(languages, labels):
     return [
         language
         for language in languages
@@ -36,10 +36,16 @@ def _get_matchin_languages(languages, labels):
     ]
 
 
-def find_from_detail_list(soup, prop):
-    product_details = soup.find("div", {"id": "detailBulletsWrapper_feature_div"})
-    parent = product_details.find("span", text=re.compile(f"^{prop}")).parent
-    return parent.findAll("span")[1].text
+def _find_from_details_section(soup, prop):
+    product_details_list = soup.find("div", {"id": "detailBulletsWrapper_feature_div"})
+    product_details_table = soup.find("table", {"id": "productDetails_techSpec_section_1"})
+
+    if product_details_list:
+        parent = product_details_list.find("span", text=re.compile(f"^{prop}")).parent
+        return parent.find_all("span")[1].text
+    elif product_details_table:
+        parent = product_details_table.find("th", text=re.compile(f"\s+{prop}\s+")).parent
+        return parent.find("td").text.strip().replace("\u200e", "")
 
 
 def extract_amazon(parsed_page: ParsedPage) -> Optional[Product]:
@@ -70,8 +76,8 @@ def extract_amazon(parsed_page: ParsedPage) -> Optional[Product]:
     sustainability_texts = [span.text for span in sustainability_spans]
     sustainability_labels = sustainability_label_to_certificate(sustainability_texts)
 
-    brand = find_from_detail_list(soup, "Manufacturer")
-    asin = find_from_detail_list(soup, "ASIN")
+    brand = _find_from_details_section(soup, "Manufacturer")
+    asin = _find_from_details_section(soup, "ASIN")
     description = soup.find("div", {"id": "productDescription"}).p.get_text().strip()
 
     return Product(
