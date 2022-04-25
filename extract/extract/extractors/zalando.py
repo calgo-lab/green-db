@@ -2,6 +2,7 @@
 # For this reason, we ignore those errors here.
 # type: ignore[attr-defined]
 import json
+import urllib
 from logging import getLogger
 from typing import Dict, List, Optional
 
@@ -146,7 +147,7 @@ def get_sustainability(
                 for cluster in entry.get("clusters", [{}]):
                     if cluster.get("sustainabilityClusterKind", "") == "certificates":
                         for attribute in cluster.get("attributes", [{}]):
-                            labels.append(attribute.get("label", "").replace("%25", "%"))
+                            labels.append(urllib.parse.unquote(attribute.get("label", "")))
 
     if labels:
         return sorted({label_mapping.get(label, CertificateType.UNKNOWN) for label in labels})
