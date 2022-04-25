@@ -73,7 +73,7 @@ def create_CertificateType() -> EnumMeta:
 
     return CertificateHelper(  # type: ignore
         value="CertificateType",
-        names=list(_certificate_2_id.keys()),
+        names=sorted(list(_certificate_2_id.keys())),
         module="core.domain",
         type=str,
     )
