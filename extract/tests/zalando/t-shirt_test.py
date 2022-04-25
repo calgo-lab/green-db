@@ -9,7 +9,7 @@ def test_zalando_basic() -> None:
     timestamp = "2022-04-22 12:49:00"
     url = "https://www.zalando.mock/"
     merchant = "zalando"
-    file_name = "t-shirt-new.html"
+    file_name = "t-shirt.html"
     category = "TSHIRT"
     meta_information = {
         "family": "FASHION",
