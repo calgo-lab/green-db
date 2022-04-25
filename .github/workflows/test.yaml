@@ -35,5 +35,5 @@ jobs:
       #              run test suite
       #----------------------------------------------
       - name: Run tests
-        run: |          
-          make extract-test
+        run: |
+          make test
