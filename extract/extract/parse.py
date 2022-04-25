@@ -1,5 +1,6 @@
 import html
 from dataclasses import dataclass
+from json import JSONDecodeError
 
 import extruct
 from bs4 import BeautifulSoup
@@ -57,5 +58,11 @@ def extract_schema_org(page_html: str) -> dict:
         dict: Schema.org information found in `page_html`
     """
     unescaped_html = html.unescape(page_html)
-    schema_org = extruct.extract(unescaped_html, syntaxes=_SYNTAXES)
+    # otto schema extraction fails sometimes for json-ld when unescaped (no official fix yet)
+    # see: https://github.com/scrapinghub/extruct/issues/175
+    # Fix: using the escaped html works for otto
+    try:
+        schema_org = extruct.extract(unescaped_html, syntaxes=_SYNTAXES)
+    except JSONDecodeError:
+        schema_org = extruct.extract(page_html, syntaxes=_SYNTAXES)
     return schema_org if schema_org else {}
