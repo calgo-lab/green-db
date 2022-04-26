@@ -1,4 +1,5 @@
 import html
+from codecs import decode
 from dataclasses import dataclass
 from json import JSONDecodeError
 
@@ -31,7 +32,11 @@ def parse_page(scraped_page: ScrapedPage) -> ParsedPage:
         ParsedPage: Representation that bundles the `scraped_page` with intermediate representations
     """
     beautiful_soup = BeautifulSoup(scraped_page.html, "html.parser")
-    schema_org = extract_schema_org(scraped_page.html)
+    if scraped_page.merchant == 'hm':
+        schema_org = extract_schema_org_hm(scraped_page.html)
+    else:
+        schema_org = extract_schema_org(scraped_page.html)
+
     return ParsedPage(
         scraped_page=scraped_page, beautiful_soup=beautiful_soup, schema_org=schema_org
     )
@@ -65,4 +70,23 @@ def extract_schema_org(page_html: str) -> dict:
         schema_org = extruct.extract(unescaped_html, syntaxes=_SYNTAXES)
     except JSONDecodeError:
         schema_org = extruct.extract(page_html, syntaxes=_SYNTAXES)
+    return schema_org if schema_org else {}
+
+
+def extract_schema_org_hm(page_html: str) -> dict:
+    """
+    Extract schema.org information form `page_html`.
+
+    Args:
+        page_html (str): HTML of the page
+
+    Returns:
+        dict: Schema.org information found in `page_html`
+    """
+    unescaped_html = html.unescape(page_html)
+    try:
+        schema_org = extruct.extract(unescaped_html, syntaxes=_SYNTAXES)
+    except JSONDecodeError:
+        unescaped_html = decode(page_html, 'unicode-escape')
+        schema_org = extruct.extract(unescaped_html, syntaxes=_SYNTAXES)
     return schema_org if schema_org else {}
