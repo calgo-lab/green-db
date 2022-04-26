@@ -25,12 +25,9 @@ EXTRACTOR_FOR_TABLE_NAME = {
     TABLE_NAME_SCRAPING_ASOS: extract_asos,
     TABLE_NAME_SCRAPING_OTTO: extract_otto,
     TABLE_NAME_SCRAPING_ZALANDO: extract_zalando,
-<<<<<<< HEAD
     TABLE_NAME_SCRAPING_ZALANDO_FR: extract_zalando_fr,
-=======
     TABLE_NAME_SCRAPING_ASOS: extract_asos,
     TABLE_NAME_SCRAPING_HM: extract_hm,
->>>>>>> 2092a1f (Init extraction.)
 }
 
 
