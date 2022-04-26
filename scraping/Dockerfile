@@ -32,6 +32,7 @@ RUN dpkg --install libicu66_66.1-2ubuntu2.1_amd64.deb
 RUN wget http://security.ubuntu.com/ubuntu/pool/main/libj/libjpeg-turbo/libjpeg-turbo8_2.0.3-0ubuntu1.20.04.1_amd64.deb
 RUN dpkg --install libjpeg-turbo8_2.0.3-0ubuntu1.20.04.1_amd64.deb
 
+# TODO: remove downloaded packages after installation
 RUN apt --fix-broken -y install
 
 # Now we can install all playwright dependencies via:
