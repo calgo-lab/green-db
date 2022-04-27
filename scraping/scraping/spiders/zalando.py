@@ -36,9 +36,12 @@ class ZalandoSpider(BaseSpider):
         # Save HTML to database
         self._save_SERP(response)
 
-        # Extract links from json object
+        # Splash does not load all the links into the html, so we have to extract the links
+        # from a JSON stored inside a script tag
         data = json.loads(response.css("script.re-data-el-hydrate::text").get())
         all_product_links = []
+
+        # Loop over all items and retrieve the product url
         for key, value in data.get("graphqlCache", {}).items():
             url = value.get("data", {}).get("product", {}).get("uri")
             if url is not None:
