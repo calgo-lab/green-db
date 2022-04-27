@@ -94,7 +94,7 @@ class HMSpider(BaseSpider):
 
         parsed_url = urlparse(url)
         url_query_params = parse_qs(parsed_url.query)
-        limit = int(url_query_params.get("limit", ["36"])[0])  # default limit is 36 products/ page
+        limit = int(url_query_params.get("page-size", ["72"])[0])  # default limit is 36 products/ page
         product_count = data.get("total", 0)
         logger.info(f"Total products in category: {product_count}")
         logger.info(f"Creating {math.floor(product_count / limit)} additional SERP Requests")
