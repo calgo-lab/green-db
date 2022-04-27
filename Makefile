@@ -44,5 +44,5 @@ workers-test-deploy:
 start-job-test-deploy:
 	$(MAKE) -C start-job deploy-test
 
-extract-test:
+test:
 	$(MAKE) -C extract test
