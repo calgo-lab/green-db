@@ -34,7 +34,7 @@ def test_amazon_details_list() -> None:
         description="Better starts with Aware - everyday essentials, created in an environmentally conscious. Made from dense bonded faux lambskin, this sherpa jacket provides extra warmth and is particularly comfortable. Made from GRS certified (Global Recycled Standard) recycled polyester and certified by ClimatePartner as CO2 neutral. Learn more about our third-party sustainability certifications.",
         brand="Amazon Aware",
         sustainability_labels=["certificate:CLIMATE_NEUTRAL_CLIMATE_PARTNER", "certificate:GLOBAL_RECYCLED_STANDARD"],
-        price=53.99,
+        price=28.07,
         currency="EUR",
         image_urls=[
             'https://m.media-amazon.com/images/I/41HMMHUNHFL._AC_SR38,50_.jpg',
@@ -82,7 +82,7 @@ def test_amazon_details_table() -> None:
         description="Density inside with a knitted surface, this warm and comfortable inner fabric provides instant and reliable protection. Works just as well on a shirt, as part of your everyday life, used as a reliable layer under protective clothing in nature. Two zip pockets provide space for important items, and the hem can be adjusted with one hand for one hand for better warmth and a perfect fit. You will not quickly separate from this comfortable and reliable inner fabric with hood. Comfortable fleece fabric with a dense interior and a knitted surface that provides warmth and comfort. Front zip and a soft flap that prevents the two side pockets with zip. Flatlock seams on the entire clothes and prevents friction with just one hand.",
         brand="HAGLÖFS",
         sustainability_labels=["certificate:BLUESIGN_PRODUCT"],
-        price=137.68,
+        price=94.90,
         currency="EUR",
         image_urls=[
             'https://m.media-amazon.com/images/I/51I5NWQqKHL._AC_US40_.jpg',

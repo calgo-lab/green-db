@@ -31,7 +31,7 @@ def extract_amazon(parsed_page: ParsedPage) -> Optional[Product]:
     currency = "EUR"
     price_range = soup.find("span", {"class": "a-price-range"})
     prices = price_range.find_all("span", {"class": "a-offscreen"})
-    price = float(prices[-1].text[1:])  # Return the maximum price
+    price = float(prices[0].text[1:])  # Return the minimum price
 
     sustainability_spans = soup.find_all("span", id=re.compile("CPF-BTF-Certificate-Name"))
     sustainability_texts = [span.text for span in sustainability_spans]
