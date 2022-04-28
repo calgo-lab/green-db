@@ -64,5 +64,16 @@ def male() -> List[dict]:
     return combine_results(node_2_category, metadata={"family": "FASHION", "sex": "MALE"})
 
 
+def electronics() -> List[dict]:
+    node_2_category = {
+        "427957031": "LAPTOP",
+        "429874031": "TABLET",
+        "570278": "HEADPHONES",
+        "427955031": "PRINTER",
+    }
+
+    return combine_results(node_2_category, metadata={"family": "electronics"})
+
+
 def get_settings() -> List[dict]:
-    return male() + female()
+    return male() + female() + electronics()
