@@ -126,7 +126,7 @@ def _find_from_details_section(soup, prop):
         parent = product_details_list.find("span", text=re.compile(f"^{prop}")).parent
         return parent.find_all("span")[1].text
     elif product_details_table:
-        parent = product_details_table.find("th", text=re.compile(f"\s+{prop}\s+")).parent
+        parent = product_details_table.find("th", text=re.compile(f"\s+{prop}\s+"))
         if parent is None:
             add_info_table = soup.find("table", {"id": "productDetails_detailBullets_sections1"})
             parent = add_info_table.find("th", text=re.compile(f"{prop}")).parent
