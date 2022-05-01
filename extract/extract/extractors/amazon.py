@@ -7,7 +7,7 @@ from pydantic import ValidationError
 
 from core.domain import CertificateType, Product
 from core.sustainability_labels import load_and_get_sustainability_labels
-from ..parse import MICRODATA, ParsedPage
+from ..parse import ParsedPage
 
 logger = getLogger(__name__)
 
@@ -15,29 +15,30 @@ def extract_amazon(parsed_page: ParsedPage) -> Optional[Product]:
     soup = parsed_page.beautiful_soup
 
     name = soup.find("span", {"id": "productTitle"}).text.strip()
-    color = soup.find("span", {"id": "inline-twister-expanded-dimension-text-color_name"}).text.strip()
+    color = _get_color(soup)
 
-    sizes = soup.find_all("span", {"class", "a-size-base swatch-title-text-display swatch-title-text"})[1:]
-    size = ", ".join([size.text.strip() for size in sizes])
+    size = _get_sizes(soup)
 
     images = soup.find("div", {"id": "altImages"}).find_all("img")
     image_urls = [
         image["src"]
         for image in images
         if not image["src"].endswith(".gif")
-        and "play-button-overlay" not in image["src"]
+           and "play-button-overlay" not in image["src"]
     ]
 
     currency = "EUR"
+    # TODO: Consider other price formats dif to ranges.
     price_range = soup.find("span", {"class": "a-price-range"})
     prices = price_range.find_all("span", {"class": "a-offscreen"})
-    price = float(prices[0].text[1:])  # Return the minimum price
+    price = float((prices[0].text.replace(",", ".")).replace("€", ""))  # Return the minimum price
 
     sustainability_spans = soup.find_all("span", id=re.compile("CPF-BTF-Certificate-Name"))
     sustainability_texts = [span.text for span in sustainability_spans]
     sustainability_labels = sustainability_label_to_certificate(sustainability_texts)
 
-    brand = _find_from_details_section(soup, "Manufacturer")
+    # TODO: Make sure german word workd for other categories
+    brand = _find_from_details_section(soup, "Hersteller")
     asin = _find_from_details_section(soup, "ASIN")
     description = soup.find("div", {"id": "productDescription"}).p.get_text().strip()
 
@@ -49,7 +50,7 @@ def extract_amazon(parsed_page: ParsedPage) -> Optional[Product]:
         name=name,
         description=description,
         brand=brand,
-        sustainability_labels=sustainability_texts,
+        sustainability_labels=sustainability_labels,
         price=price,
         currency=currency,
         image_urls=image_urls,
@@ -81,6 +82,25 @@ def _get_matching_languages(languages, labels):
         for language in languages
         if language["name"] in labels
     ]
+
+def _get_color(soup):
+    #If color not found returns None value
+    color = soup.find("span", {"class": "selection"})
+    if color is not None:
+        color = color.text.strip()
+    return color
+
+# TODO: Are there more formats?
+def _get_sizes(soup):
+    # If color not found returns None value
+    sizes_other = soup.find_all("span", {"class", "a-size-base swatch-title-text-display swatch-title-text"})[1:]
+    sizes_dropdown = soup.find_all("option", id=re.compile("size_name"))[1:]
+
+    if sizes_other and sizes_other is not None:
+        size = ", ".join([size.text.strip() for size in sizes_other])
+    elif sizes_dropdown and sizes_other is not None:
+        size = ", ".join([size.text.strip() for size in sizes_dropdown])
+    return size
 
 
 def _find_from_details_section(soup, prop):
