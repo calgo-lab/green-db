@@ -16,8 +16,8 @@ def extract_amazon(parsed_page: ParsedPage) -> Optional[Product]:
 
     name = soup.find("span", {"id": "productTitle"}).text.strip()
     color = _get_color(soup)
-
     size = _get_sizes(soup)
+    price = _get_price(soup)
 
     images = soup.find("div", {"id": "altImages"}).find_all("img")
     image_urls = [
@@ -28,10 +28,6 @@ def extract_amazon(parsed_page: ParsedPage) -> Optional[Product]:
     ]
 
     currency = "EUR"
-    # TODO: Consider other price formats dif to ranges.
-    price_range = soup.find("span", {"class": "a-price-range"})
-    prices = price_range.find_all("span", {"class": "a-offscreen"})
-    price = float((prices[0].text.replace(",", ".")).replace("€", ""))  # Return the minimum price
 
     sustainability_spans = soup.find_all("span", id=re.compile("CPF-BTF-Certificate-Name"))
     sustainability_texts = [span.text for span in sustainability_spans]
@@ -83,12 +79,29 @@ def _get_matching_languages(languages, labels):
         if language["name"] in labels
     ]
 
+
 def _get_color(soup):
     #If color not found returns None value
     color = soup.find("span", {"class": "selection"})
     if color is not None:
         color = color.text.strip()
     return color
+
+# TODO Can we catch electronic colors? (soup.find("table", {"class": "a-normal a-spacing-micro"})
+def _get_price(soup):
+    price_range = soup.find("span", {"class": "a-price-range"})
+    price_micro = soup.find("div", {"class":"a-section a-spacing-micro"})
+
+    if price_range:
+        prices = price_range.find_all("span", {"class": "a-offscreen"})
+        price = float(((prices[0].text.replace(".", "")).replace("€", "")).replace(",", "."))  # Return the minimum price
+        return price
+
+    elif price_micro:
+
+        s_price = price_micro.find("span", {"class": "a-offscreen"})
+        price = float(((s_price.text.replace(".", "")).replace("€", "")).replace(",", "."))
+        return price
 
 # TODO: Are there more formats?
 def _get_sizes(soup):
@@ -98,18 +111,25 @@ def _get_sizes(soup):
 
     if sizes_other and sizes_other is not None:
         size = ", ".join([size.text.strip() for size in sizes_other])
+        return size
     elif sizes_dropdown and sizes_other is not None:
         size = ", ".join([size.text.strip() for size in sizes_dropdown])
-    return size
+        return size
 
 
 def _find_from_details_section(soup, prop):
     product_details_list = soup.find("div", {"id": "detailBulletsWrapper_feature_div"})
     product_details_table = soup.find("table", {"id": "productDetails_techSpec_section_1"})
+    add_info_table = soup.find("table", {"id": "productDetails_detailBullets_sections1"})
 
     if product_details_list:
         parent = product_details_list.find("span", text=re.compile(f"^{prop}")).parent
         return parent.find_all("span")[1].text
     elif product_details_table:
         parent = product_details_table.find("th", text=re.compile(f"\s+{prop}\s+")).parent
-        return parent.find("td").text.strip().replace("\u200e", "")
+        if parent is None:
+            add_info_table = soup.find("table", {"id": "productDetails_detailBullets_sections1"})
+            parent = add_info_table.find("th", text=re.compile(f"{prop}")).parent
+            return parent.find("td").text.strip()
+        return parent.parent.find("td").text.strip().replace("\u200e", "")
+
