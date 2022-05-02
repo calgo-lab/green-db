@@ -9,6 +9,7 @@ from core.domain import CertificateType, Product
 from core.sustainability_labels import load_and_get_sustainability_labels
 from ..parse import ParsedPage
 
+
 logger = getLogger(__name__)
 
 def extract_amazon(parsed_page: ParsedPage) -> Optional[Product]:
@@ -33,7 +34,7 @@ def extract_amazon(parsed_page: ParsedPage) -> Optional[Product]:
     sustainability_texts = [span.text for span in sustainability_spans]
     sustainability_labels = sustainability_label_to_certificate(sustainability_texts)
 
-    # TODO: Make sure german word workd for other categories
+    # TODO: Make sure german keys work for other categories
     brand = _find_from_details_section(soup, "Hersteller")
     asin = _find_from_details_section(soup, "ASIN")
     description = soup.find("div", {"id": "productDescription"}).p.get_text().strip()
@@ -56,8 +57,13 @@ def extract_amazon(parsed_page: ParsedPage) -> Optional[Product]:
         asin=asin,
     )
 
+
+# TODO: Are there more labels that need manual mapping?
 def sustainability_label_to_certificate(labels) -> list[CertificateType]:
     sustainability_labels = load_and_get_sustainability_labels()
+    manual_mapping = {
+        "Global Recycled Standard": CertificateType.GLOBAL_RECYCLED_STANDARD,
+    }
 
     result = {
         CertificateType[certificate.split(":")[-1]]
@@ -65,9 +71,9 @@ def sustainability_label_to_certificate(labels) -> list[CertificateType]:
         if any(_get_matching_languages(description["languages"].values(), labels))
     }
 
-    # TODO: Are there more labels that need manual mapping?
-    if "Global Recycled Standard" in labels:
-        result.update({CertificateType.GLOBAL_RECYCLED_STANDARD})
+    for label in manual_mapping.keys():
+        if label in labels:
+            result.update({manual_mapping[label]})
 
     return result or {CertificateType.OTHER}
 
@@ -92,7 +98,7 @@ def _get_color(soup):
         color = color_table.find_all("span")[-1].text
     return color
 
-# TODO Can we catch electronic colors? (soup.find("table", {"class": "a-normal a-spacing-micro"})
+
 def _get_price(soup):
     price_range = soup.find("span", {"class": "a-price-range"})
     price_micro = soup.find("div", {"class":"a-section a-spacing-micro"})
@@ -116,6 +122,7 @@ def _get_sizes(soup):
     if sizes_other and sizes_other is not None:
         size = ", ".join([size.text.strip() for size in sizes_other])
         return size
+
     elif sizes_dropdown and sizes_other is not None:
         size = ", ".join([size.text.strip() for size in sizes_dropdown])
         return size
@@ -129,6 +136,7 @@ def _find_from_details_section(soup, prop):
     if product_details_list:
         parent = product_details_list.find("span", text=re.compile(f"^{prop}")).parent
         return parent.find_all("span")[1].text
+
     elif product_details_table:
         parent = product_details_table.find("th", text=re.compile(f"\s+{prop}\s+"))
         if parent is None:
