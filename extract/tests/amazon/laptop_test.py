@@ -52,5 +52,4 @@ def test_amazon_electronics() -> None:
     )
 
     for attribute in expected.__dict__.keys():
-        print(actual.__dict__[attribute], expected.__dict__[attribute])
         assert actual.__dict__[attribute] == expected.__dict__[attribute]

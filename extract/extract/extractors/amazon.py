@@ -37,7 +37,7 @@ def extract_amazon(parsed_page: ParsedPage) -> Optional[Product]:
     # TODO: Make sure german keys work for other categories
     brand = _find_from_details_section(soup, "Hersteller")
     asin = _find_from_details_section(soup, "ASIN")
-    description = soup.find("div", {"id": "productDescription"}).p.get_text().strip()
+    description = _get_description(soup)
 
     return Product(
         timestamp=parsed_page.scraped_page.timestamp,
@@ -142,3 +142,18 @@ def _find_from_details_section(soup, prop):
             parent = add_info_table.find("th", text=re.compile(f"{prop}")).parent
             return parent.find("td").text.strip()
         return parent.parent.find("td").text.strip().replace("\u200e", "")
+
+def _get_description(soup):
+    desc_paragraph = soup.find("div", {"id": "productDescription"})
+    desc_list = soup.find("div", {"id": "feature-bullets"})
+
+    if desc_paragraph:
+        return desc_paragraph.p.get_text().strip()
+    elif desc_list:
+        desc_list = desc_list.find_all("span")
+        if "Mehr anzeigen" in desc_list[-1].text.strip():
+            description = ". ".join([li.text.strip() for li in desc_list[:-1]])
+            return description
+        else:
+            description = ". ".join([li.text.strip() for li in desc_list])
+            return description
