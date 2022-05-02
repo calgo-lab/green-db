@@ -87,16 +87,14 @@ def _get_matching_languages(languages, labels):
 
 
 def _get_color(soup):
-    #If color not found returns None value
-    color = soup.find("span", {"class": "selection"})
+    color_intro = soup.find("span", {"class": "selection"})
     color_table = soup.find("tr", {"class": re.compile("po-color")})
 
-    if color is not None:
-        color = color.text.strip()
+    if color_intro:
+        return color_intro.text.strip()
 
-    elif color_table is not None:
-        color = color_table.find_all("span")[-1].text
-    return color
+    if color_table:
+        return color_table.find_all("span")[1].text
 
 
 def _get_price(soup):
