@@ -83,8 +83,13 @@ def _get_matching_languages(languages, labels):
 def _get_color(soup):
     #If color not found returns None value
     color = soup.find("span", {"class": "selection"})
+    color_table = soup.find("tr", {"class": re.compile("po-color")})
+
     if color is not None:
         color = color.text.strip()
+
+    elif color_table is not None:
+        color = color_table.find_all("span")[-1].text
     return color
 
 # TODO Can we catch electronic colors? (soup.find("table", {"class": "a-normal a-spacing-micro"})
@@ -98,14 +103,13 @@ def _get_price(soup):
         return price
 
     elif price_micro:
-
         s_price = price_micro.find("span", {"class": "a-offscreen"})
         price = float(((s_price.text.replace(".", "")).replace("€", "")).replace(",", "."))
         return price
 
+
 # TODO: Are there more formats?
 def _get_sizes(soup):
-    # If color not found returns None value
     sizes_other = soup.find_all("span", {"class", "a-size-base swatch-title-text-display swatch-title-text"})[1:]
     sizes_dropdown = soup.find_all("option", id=re.compile("size_name"))[1:]
 
@@ -132,4 +136,3 @@ def _find_from_details_section(soup, prop):
             parent = add_info_table.find("th", text=re.compile(f"{prop}")).parent
             return parent.find("td").text.strip()
         return parent.parent.find("td").text.strip().replace("\u200e", "")
-

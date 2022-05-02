@@ -45,12 +45,12 @@ def test_amazon_electronics() -> None:
                     'https://m.media-amazon.com/images/I/21FGojgZvcL._AC_US40_.jpg',
                     'https://m.media-amazon.com/images/I/21DU9eh-mHL._AC_US40_.jpg']
 ,
-        color=None,
+        color="Black",
         size=None,
         gtin=None,
         asin="B08WC37LYB",
     )
 
     for attribute in expected.__dict__.keys():
-        print(actual.__dict__[attribute])
+        print(actual.__dict__[attribute], expected.__dict__[attribute])
         assert actual.__dict__[attribute] == expected.__dict__[attribute]
