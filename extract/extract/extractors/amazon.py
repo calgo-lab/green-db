@@ -34,10 +34,9 @@ def extract_amazon(parsed_page: ParsedPage) -> Optional[Product]:
     sustainability_texts = [span.text for span in sustainability_spans]
     sustainability_labels = sustainability_label_to_certificate(sustainability_texts)
 
-    # TODO: Make sure german keys work for other categories
-    brand = _find_from_details_section(soup, "Hersteller")
-    asin = _find_from_details_section(soup, "ASIN")
+    brand = _get_brand(soup)
     description = _get_description(soup)
+    asin = _find_from_details_section(soup, "ASIN")
 
     return Product(
         timestamp=parsed_page.scraped_page.timestamp,
@@ -124,6 +123,16 @@ def _get_sizes(soup):
     elif sizes_dropdown and sizes_other is not None:
         size = ", ".join([size.text.strip() for size in sizes_dropdown])
         return size
+
+
+def _get_brand(soup):
+    brand_title = soup.find("div", {"id": "bylineInfo_feature_div"}).a.text
+
+    if brand_title.startswith("Besuche den "):
+        return brand_title[len("Besuche den "):-len("-Store")]
+
+    return _find_from_details_section(soup, "Marke") \
+        or _find_from_details_section(soup, "Hersteller")
 
 
 def _find_from_details_section(soup, prop):
