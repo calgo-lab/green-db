@@ -129,7 +129,6 @@ def _get_sizes(soup):
 def _find_from_details_section(soup, prop):
     product_details_list = soup.find("div", {"id": "detailBulletsWrapper_feature_div"})
     product_details_table = soup.find("table", {"id": "productDetails_techSpec_section_1"})
-    add_info_table = soup.find("table", {"id": "productDetails_detailBullets_sections1"})
 
     if product_details_list:
         parent = product_details_list.find("span", text=re.compile(f"^{prop}")).parent
@@ -144,11 +143,11 @@ def _find_from_details_section(soup, prop):
         return parent.parent.find("td").text.strip().replace("\u200e", "")
 
 def _get_description(soup):
-    desc_paragraph = soup.find("div", {"id": "productDescription"})
+    desc_paragraph = soup.find("div", {"id": "productDescription"}).p
     desc_list = soup.find("div", {"id": "feature-bullets"})
 
     if desc_paragraph:
-        return desc_paragraph.p.get_text().strip()
+        return desc_paragraph.get_text().strip()
     elif desc_list:
         desc_list = desc_list.find_all("span")
         if "Mehr anzeigen" in desc_list[-1].text.strip():

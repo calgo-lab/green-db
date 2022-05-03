@@ -76,4 +76,5 @@ def electronics() -> List[dict]:
 
 
 def get_settings() -> List[dict]:
-    return male() + female() + electronics()
+    return male() \
+           #+ female() + electronics()
