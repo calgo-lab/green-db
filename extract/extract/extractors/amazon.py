@@ -151,17 +151,16 @@ def _find_from_details_section(soup, prop):
             return parent.find("td").text.strip()
         return parent.parent.find("td").text.strip().replace("\u200e", "")
 
+
 def _get_description(soup):
     desc_paragraph = soup.find("div", {"id": "productDescription"}).p
     desc_list = soup.find("div", {"id": "feature-bullets"})
 
     if desc_paragraph:
         return desc_paragraph.get_text().strip()
-    elif desc_list:
+
+    if desc_list:
         desc_list = desc_list.find_all("span")
         if "Mehr anzeigen" in desc_list[-1].text.strip():
-            description = ". ".join([li.text.strip() for li in desc_list[:-1]])
-            return description
-        else:
-            description = ". ".join([li.text.strip() for li in desc_list])
-            return description
+            desc_list = desc_list[:-1]
+        return ". ".join([li.text.strip() for li in desc_list])
