@@ -7,6 +7,7 @@ from pydantic import ValidationError
 
 from core.domain import CertificateType, Product
 from core.sustainability_labels import load_and_get_sustainability_labels
+from ..utils import safely_return_first_element
 from ..parse import ParsedPage
 
 
@@ -87,53 +88,87 @@ def _get_matching_languages(languages, labels):
     ]
 
 
+def _get_first_target_result(targets, func):
+    if any(targets):
+        result = [target for target in targets if target][0]
+        return func(result)
+
+
 def _get_color(soup):
-    color_intro = soup.find("span", {"class": "selection"})
-    color_table = soup.find("tr", {"class": re.compile("po-color")})
+    targets = [
+        soup.find("span", {"class": "selection"}),
+        soup.find("tr", {"class": re.compile("po-color")}),
+    ]
 
-    if color_intro:
-        return color_intro.text.strip()
+    def parse_color(element):
+        from_table = getattr(element.find_all("span")[1], "text", None)
+        return from_table or element.text.strip()
 
-    if color_table:
-        return color_table.find_all("span")[1].text
+    return _get_first_target_result(targets, parse_color)
 
 
 def _get_price(soup):
-    price_range = soup.find("span", {"class": "a-price-range"})
-    price_micro = soup.find("div", {"class":"a-section a-spacing-micro"})
+    targets = [
+        soup.find("span", {"class": "a-price-range"}),
+        soup.find("div", {"class":"a-section a-spacing-micro"}),
+    ]
 
-    if price_range:
-        prices = price_range.find_all("span", {"class": "a-offscreen"})
-        price = float(((prices[0].text.replace(".", "")).replace("€", "")).replace(",", "."))  # Return the minimum price
+    def parse_price(element):
+        price_text = element.find("span", {"class": "a-offscreen"}).text
+        price = float(price_text.strip(".€").replace(",", "."))
         return price
 
-    elif price_micro:
-        s_price = price_micro.find("span", {"class": "a-offscreen"})
-        price = float(((s_price.text.replace(".", "")).replace("€", "")).replace(",", "."))
-        return price
+    return _get_first_target_result(targets, parse_price)
 
 
 # TODO: Are there more formats?
 def _get_sizes(soup):
-    sizes_other = soup.find_all("span", {"class", "a-size-base swatch-title-text-display swatch-title-text"})[1:]
-    sizes_dropdown = soup.find_all("option", id=re.compile("size_name"))[1:]
+    targets = [
+        soup.find_all("span", {"class", "a-size-base swatch-title-text-display swatch-title-text"})[1:],
+        soup.find_all("option", id=re.compile("size_name"))[1:],
+    ]
 
-    if sizes_other and sizes_other is not None:
-        return ", ".join([size.text.strip() for size in sizes_other if size.text.strip()])
+    def parse_sizes(sizes):
+        sizes = [size.text.strip() for size in sizes if size.text.strip()]
+        return ", ".join(sizes)
 
-    elif sizes_dropdown and sizes_dropdown is not None:
-        return ", ".join([size.text.strip() for size in sizes_dropdown if size.text.strip()])
+    return _get_first_target_result(targets, parse_sizes)
 
 
 def _get_brand(soup):
-    brand_title = soup.find("div", {"id": "bylineInfo_feature_div"}).a.text
+    targets = [
+        soup.find("div", {"id": "bylineInfo_feature_div"}).a.text
+    ]
 
-    if brand_title.startswith("Besuche den "):
-        return brand_title[len("Besuche den "):-len("-Store")]
-    elif brand_title.startswith("Marke: "):
-        return brand_title[len("Marke: "):]
+    def parse_brand(brand):
+        if brand.startswith("Besuche den "):
+            return brand[len("Besuche den "):-len("-Store")]
+        if brand.startswith("Marke: "):
+            return brand[len("Marke: "):]
 
-    return _find_from_details_section(soup, "Hersteller")
+    return _get_first_target_result(targets, parse_brand) \
+        or _find_from_details_section(soup, "Marke") \
+        or _find_from_details_section(soup, "Hersteller")
+
+
+def _get_description(soup):
+    targets = [
+        soup.find("div", {"id": "productDescription"}),
+        soup.find("div", {"id": "feature-bullets"}),
+    ]
+
+    def parse_description(description):
+        desc_paragraph = getattr(description, "p", None)
+        desc_list = description.find_all("span")
+        if desc_paragraph:
+            return description.get_text().strip()
+        if desc_list:
+            if "Mehr anzeigen" in desc_list[-1].text.strip():
+                desc_list = desc_list[:-1]
+            list_text = [li.text.strip() for li in desc_list if li.text.strip()]
+            return ". ".join(list_text)
+
+    return _get_first_target_result(targets, parse_description)
 
 
 def _find_from_details_section(soup, prop):
@@ -144,23 +179,10 @@ def _find_from_details_section(soup, prop):
         parent = product_details_list.find("span", text=re.compile(f"^{prop}")).parent
         return parent.find_all("span")[1].text
 
-    elif product_details_table:
+    if product_details_table:
         parent = product_details_table.find("th", text=re.compile(f"\s+{prop}\s+"))
-        if parent is None:
+        if not parent:
             add_info_table = soup.find("table", {"id": "productDetails_detailBullets_sections1"})
             parent = add_info_table.find("th", text=re.compile(f"{prop}")).parent
             return parent.find("td").text.strip()
         return parent.parent.find("td").text.strip().replace("\u200e", "")
-
-
-def _get_description(soup):
-    desc_paragraph = soup.find("div", {"id": "productDescription"})
-    desc_list = soup.find("div", {"id": "feature-bullets"})
-    #If both exist (paragraph and list), we'll take the list
-    if desc_list:
-        desc_list = desc_list.find_all("span")
-        if "Mehr anzeigen" in desc_list[-1].text.strip():
-            desc_list = desc_list[:-1]
-        return ". ".join([li.text.strip() for li in desc_list])
-    if desc_paragraph.p is not None:
-        return desc_paragraph.get_text().strip()
