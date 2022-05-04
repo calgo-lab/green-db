@@ -117,12 +117,10 @@ def _get_sizes(soup):
     sizes_dropdown = soup.find_all("option", id=re.compile("size_name"))[1:]
 
     if sizes_other and sizes_other is not None:
-        size = ", ".join([size.text.strip() for size in sizes_other])
-        return size
+        return ", ".join([size.text.strip() for size in sizes_other])
 
-    elif sizes_dropdown and sizes_other is not None:
-        size = ", ".join([size.text.strip() for size in sizes_dropdown])
-        return size
+    elif sizes_dropdown and sizes_dropdown is not None:
+        return ", ".join([size.text.strip() for size in sizes_dropdown])
 
 
 def _get_brand(soup):
@@ -130,9 +128,10 @@ def _get_brand(soup):
 
     if brand_title.startswith("Besuche den "):
         return brand_title[len("Besuche den "):-len("-Store")]
+    elif brand_title.startswith("Marke: "):
+        return brand_title[len("Marke: "):]
 
-    return _find_from_details_section(soup, "Marke") \
-        or _find_from_details_section(soup, "Hersteller")
+    return _find_from_details_section(soup, "Hersteller")
 
 
 def _find_from_details_section(soup, prop):
@@ -153,14 +152,13 @@ def _find_from_details_section(soup, prop):
 
 
 def _get_description(soup):
-    desc_paragraph = soup.find("div", {"id": "productDescription"}).p
+    desc_paragraph = soup.find("div", {"id": "productDescription"})
     desc_list = soup.find("div", {"id": "feature-bullets"})
-
-    if desc_paragraph:
-        return desc_paragraph.get_text().strip()
-
+    #If both exist (paragraph and list), we'll take the list
     if desc_list:
         desc_list = desc_list.find_all("span")
         if "Mehr anzeigen" in desc_list[-1].text.strip():
             desc_list = desc_list[:-1]
         return ". ".join([li.text.strip() for li in desc_list])
+    if desc_paragraph.p is not None:
+        return desc_paragraph.get_text().strip()
