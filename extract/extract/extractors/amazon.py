@@ -26,6 +26,8 @@ def extract_amazon(parsed_page: ParsedPage) -> Optional[Product]:
         for image in images
         if not image["src"].endswith(".gif")
            and "play-button-overlay" not in image["src"]
+           and "play-icon-overlay" not in image["src"]
+           and "360_icon" not in image["src"]
     ]
 
     currency = "EUR"
@@ -117,10 +119,10 @@ def _get_sizes(soup):
     sizes_dropdown = soup.find_all("option", id=re.compile("size_name"))[1:]
 
     if sizes_other and sizes_other is not None:
-        return ", ".join([size.text.strip() for size in sizes_other])
+        return ", ".join([size.text.strip() for size in sizes_other if size.text.strip()])
 
     elif sizes_dropdown and sizes_dropdown is not None:
-        return ", ".join([size.text.strip() for size in sizes_dropdown])
+        return ", ".join([size.text.strip() for size in sizes_dropdown if size.text.strip()])
 
 
 def _get_brand(soup):
