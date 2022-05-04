@@ -88,10 +88,14 @@ def _get_matching_languages(languages, labels):
     ]
 
 
-def _get_first_target_result(targets, func):
-    if any(targets):
-        result = [target for target in targets if target][0]
-        return func(result)
+class DocumentExtractor():
+    def __init__(self, targets: list) -> None:
+        self.targets = targets
+
+    def __call__(self, extraction) -> Optional[str]:
+        if any(self.targets):
+            result = [target for target in self.targets if target][0]
+            return extraction(result)
 
 
 def _get_color(soup):
@@ -104,7 +108,8 @@ def _get_color(soup):
         from_table = getattr(element.find_all("span")[1], "text", None)
         return from_table or element.text.strip()
 
-    return _get_first_target_result(targets, parse_color)
+    parser = DocumentExtractor(targets)
+    return parser(parse_color)
 
 
 def _get_price(soup):
@@ -118,7 +123,8 @@ def _get_price(soup):
         price = float(price_text.strip(".€").replace(",", "."))
         return price
 
-    return _get_first_target_result(targets, parse_price)
+    parser = DocumentExtractor(targets)
+    return parser(parse_price)
 
 
 # TODO: Are there more formats?
@@ -132,7 +138,8 @@ def _get_sizes(soup):
         sizes = [size.text.strip() for size in sizes if size.text.strip()]
         return ", ".join(sizes)
 
-    return _get_first_target_result(targets, parse_sizes)
+    parser = DocumentExtractor(targets)
+    return parser(parse_sizes)
 
 
 def _get_brand(soup):
@@ -146,7 +153,8 @@ def _get_brand(soup):
         if brand.startswith("Marke: "):
             return brand[len("Marke: "):]
 
-    return _get_first_target_result(targets, parse_brand) \
+    parser = DocumentExtractor(targets)
+    return parser(parse_brand) \
         or _find_from_details_section(soup, "Marke") \
         or _find_from_details_section(soup, "Hersteller")
 
@@ -163,12 +171,14 @@ def _get_description(soup):
         if desc_paragraph:
             return description.get_text().strip()
         if desc_list:
-            if "Mehr anzeigen" in desc_list[-1].text.strip():
-                desc_list = desc_list[:-1]
-            list_text = [li.text.strip() for li in desc_list if li.text.strip()]
+            list_text = [
+                li.text.strip()
+                for li in desc_list
+                if li.text.strip() and li.text.strip() != "Mehr anzeigen"]
             return ". ".join(list_text)
 
-    return _get_first_target_result(targets, parse_description)
+    parser = DocumentExtractor(targets)
+    return parser(parse_description)
 
 
 def _find_from_details_section(soup, prop):
