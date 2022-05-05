@@ -32,7 +32,7 @@ class AmazonSpider(BaseSpider):
         for key, value in products.items():
             yield SplashRequest(url=f'https://www.amazon.de{key}',
                                 callback=self.parse_PRODUCT,
-                                meta={"price": value},
+                                meta={"add_meta": value},
                                 endpoint="execute",
                                 priority=1,  # higher prio than SERP => finish product requests first
                                 args={  # passed to Splash HTTP API

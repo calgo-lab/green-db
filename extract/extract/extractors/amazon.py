@@ -1,4 +1,5 @@
 import re
+import json
 from logging import getLogger
 from typing import Optional
 
@@ -19,7 +20,7 @@ def extract_amazon(parsed_page: ParsedPage) -> Optional[Product]:
     name = soup.find("span", {"id": "productTitle"}).text.strip()
     color = _get_color(soup)
     size = _get_sizes(soup)
-    price = _get_price(soup)
+    price = float(parsed_page.scraped_page.meta_information['price'].replace(",", "."))
 
     images = soup.find("div", {"id": "altImages"}).find_all("img")
     image_urls = [
@@ -106,7 +107,8 @@ def _get_color(soup):
 
     def parse_color(element):
         from_table = getattr(element.find_all("span")[1], "text", None)
-        return from_table or element.text.strip()
+        from_intro = element.text.strip(), None
+        return from_table or from_intro
 
     parser = DocumentExtractor(targets)
     return parser(parse_color)
@@ -168,14 +170,13 @@ def _get_description(soup):
     def parse_description(description):
         desc_paragraph = getattr(description, "p", None)
         desc_list = description.find_all("span")
-        if desc_paragraph:
-            return description.get_text().strip()
+        if desc_paragraph and desc_paragraph.p is not None:
+            return desc_paragraph.p.get_text().strip()
+
         if desc_list:
-            list_text = [
-                li.text.strip()
-                for li in desc_list
-                if li.text.strip() and li.text.strip() != "Mehr anzeigen"]
-            return ". ".join(list_text)
+            if "Mehr anzeigen" in desc_list[-1].text.strip():
+                desc_list = desc_list[:-1]
+            return ". ".join([li.text.strip() for li in desc_list])
 
     parser = DocumentExtractor(targets)
     return parser(parse_description)
