@@ -13,6 +13,7 @@ def test_amazon_electronics() -> None:
     category = "LAPTOP"
     meta_information = {
         "family": "electronics",
+        "price": "2998.0"
     }
 
     scraped_page = read_test_html(
@@ -36,8 +37,7 @@ def test_amazon_electronics() -> None:
         sustainability_labels=['certificate:EPEAT'],
         price=2998.0,
         currency="EUR",
-        image_urls=['https://images-na.ssl-images-amazon.com/images/G/03/HomeCustomProduct/360_icon_73x73v2._CB485971279_SS40_FMpng_RI_.png',
-                    'https://m.media-amazon.com/images/I/41q5QmxMFYL._AC_US40_.jpg',
+        image_urls=['https://m.media-amazon.com/images/I/41q5QmxMFYL._AC_US40_.jpg',
                     'https://m.media-amazon.com/images/I/41ii1ViuGuL._AC_US40_.jpg',
                     'https://m.media-amazon.com/images/I/31LC85nNfZL._AC_US40_.jpg',
                     'https://m.media-amazon.com/images/I/41h5YqQqEdL._AC_US40_.jpg',
@@ -52,4 +52,6 @@ def test_amazon_electronics() -> None:
     )
 
     for attribute in expected.__dict__.keys():
+        #print(actual.__dict__[attribute])
         assert actual.__dict__[attribute] == expected.__dict__[attribute]
+

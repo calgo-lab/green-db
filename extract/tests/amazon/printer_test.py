@@ -14,6 +14,7 @@ def test_amazon_basic() -> None:
     meta_information = {
         "family": "electronics",
         "sex": "MALE",
+        "price": "599,00",
     }
 
     scraped_page = read_test_html(
@@ -46,4 +47,5 @@ def test_amazon_basic() -> None:
         asin="B07TXRHFYS",
     )
     for attribute in expected.__dict__.keys():
+        print(actual.__dict__[attribute])
         assert actual.__dict__[attribute] == expected.__dict__[attribute]

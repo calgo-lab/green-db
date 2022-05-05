@@ -98,21 +98,21 @@ class DocumentExtractor():
             result = [target for target in self.targets if target][0]
             return extraction(result)
 
-
 def _get_color(soup):
     targets = [
         soup.find("span", {"class": "selection"}),
         soup.find("tr", {"class": re.compile("po-color")}),
     ]
 
-    def parse_color(element):
-        from_table = getattr(element.find_all("span")[1], "text", None)
-        from_intro = element.text.strip(), None
-        return from_table or from_intro
+    color_intro = soup.find("span", {"class": "selection"})
+    color_table = soup.find("tr", {"class": re.compile("po-color")})
 
+    if color_intro:
+        return color_intro.text.strip()
+
+    if color_table:
+        return color_table.find_all("span")[1].text
     parser = DocumentExtractor(targets)
-    return parser(parse_color)
-
 
 # TODO: Are there more formats?
 def _get_sizes(soup):
