@@ -1,7 +1,8 @@
+from crypt import methods
 import re
 import json
 from logging import getLogger
-from typing import Optional
+from typing import Optional, Callable
 
 from bs4 import BeautifulSoup
 from pydantic import ValidationError
@@ -89,14 +90,10 @@ def _get_matching_languages(languages, labels):
     ]
 
 
-class AttributeParser():
-    def __init__(self, targets: list) -> None:
-        self.targets = targets
-
-    def __call__(self, extraction) -> Optional[str]:
-        if any(self.targets):
-            result = [target for target in self.targets if target][0]
-            return extraction(result)
+def _handle_parse(targets: list, parse: Callable) -> Optional[str]:
+    if any(targets):
+        result = [target for target in targets if target][0]
+        return parse(result)
 
 
 def _get_color(soup):
@@ -111,8 +108,7 @@ def _get_color(soup):
         if color.name == "tr":
             return color.find_all("span")[1].text
 
-    parser = AttributeParser(targets)
-    return parser(parse_color)
+    return _handle_parse(targets, parse_color)
 
 
 # TODO: Are there more formats?
@@ -126,8 +122,7 @@ def _get_sizes(soup):
         sizes = [size.text.strip() for size in sizes if size.text.strip()]
         return ", ".join(sizes)
 
-    parser = AttributeParser(targets)
-    return parser(parse_sizes)
+    return _handle_parse(targets, parse_sizes)
 
 
 def _get_brand(soup):
@@ -141,8 +136,7 @@ def _get_brand(soup):
         if brand.startswith("Marke: "):
             return brand[len("Marke: "):]
 
-    parser = AttributeParser(targets)
-    return parser(parse_brand) \
+    return _handle_parse(targets, parse_brand) \
         or _find_from_details_section(soup, "Marke") \
         or _find_from_details_section(soup, "Hersteller")
 
@@ -163,8 +157,7 @@ def _get_description(soup):
                 desc_list = desc_list[:-1]
             return ". ".join([li.text.strip() for li in desc_list if li.text.strip()])
 
-    parser = AttributeParser(targets)
-    return parser(parse_description)
+    return _handle_parse(targets, parse_description)
 
 
 def _find_from_details_section(soup, prop):
