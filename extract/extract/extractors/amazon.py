@@ -114,21 +114,6 @@ def _get_color(soup):
     return parser(parse_color)
 
 
-def _get_price(soup):
-    targets = [
-        soup.find("span", {"class": "a-price-range"}),
-        soup.find("div", {"class":"a-section a-spacing-micro"}),
-    ]
-
-    def parse_price(element):
-        price_text = element.find("span", {"class": "a-offscreen"}).text
-        price = float(price_text.strip(".€").replace(",", "."))
-        return price
-
-    parser = DocumentExtractor(targets)
-    return parser(parse_price)
-
-
 # TODO: Are there more formats?
 def _get_sizes(soup):
     targets = [
