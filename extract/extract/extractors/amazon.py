@@ -89,7 +89,7 @@ def _get_matching_languages(languages, labels):
     ]
 
 
-class DocumentExtractor():
+class AttributeParser():
     def __init__(self, targets: list) -> None:
         self.targets = targets
 
@@ -98,21 +98,22 @@ class DocumentExtractor():
             result = [target for target in self.targets if target][0]
             return extraction(result)
 
+
 def _get_color(soup):
     targets = [
         soup.find("span", {"class": "selection"}),
         soup.find("tr", {"class": re.compile("po-color")}),
     ]
 
-    color_intro = soup.find("span", {"class": "selection"})
-    color_table = soup.find("tr", {"class": re.compile("po-color")})
+    def parse_color(color):
+        if color.name == "span":
+            return color.text.strip()
+        if color.name == "tr":
+            return color.find_all("span")[1].text
 
-    if color_intro:
-        return color_intro.text.strip()
+    parser = AttributeParser(targets)
+    return parser(parse_color)
 
-    if color_table:
-        return color_table.find_all("span")[1].text
-    parser = DocumentExtractor(targets)
 
 # TODO: Are there more formats?
 def _get_sizes(soup):
@@ -125,7 +126,7 @@ def _get_sizes(soup):
         sizes = [size.text.strip() for size in sizes if size.text.strip()]
         return ", ".join(sizes)
 
-    parser = DocumentExtractor(targets)
+    parser = AttributeParser(targets)
     return parser(parse_sizes)
 
 
@@ -140,7 +141,7 @@ def _get_brand(soup):
         if brand.startswith("Marke: "):
             return brand[len("Marke: "):]
 
-    parser = DocumentExtractor(targets)
+    parser = AttributeParser(targets)
     return parser(parse_brand) \
         or _find_from_details_section(soup, "Marke") \
         or _find_from_details_section(soup, "Hersteller")
@@ -155,15 +156,14 @@ def _get_description(soup):
     def parse_description(description):
         desc_paragraph = getattr(description, "p", None)
         desc_list = description.find_all("span")
-        if desc_paragraph and desc_paragraph.p is not None:
-            return desc_paragraph.p.get_text().strip()
-
+        if desc_paragraph:
+            return desc_paragraph.get_text().strip()
         if desc_list:
             if "Mehr anzeigen" in desc_list[-1].text.strip():
                 desc_list = desc_list[:-1]
-            return ". ".join([li.text.strip() for li in desc_list])
+            return ". ".join([li.text.strip() for li in desc_list if li.text.strip()])
 
-    parser = DocumentExtractor(targets)
+    parser = AttributeParser(targets)
     return parser(parse_description)
 
 
