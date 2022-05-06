@@ -17,16 +17,13 @@ def combine_results(
     results = []
     for path, info in path_2_category.items():
         category, meta_data = info if type(info) == tuple else (info, {})
-        for filter in filters:
-            results.append(
-                {
-                    "start_urls": f"https://www.zalando.de/{path}/?cause={filter}",
-                    "category": category,
-                    "meta_data": json.dumps(
-                        {"family": "FASHION", "sustainability": filter, "sex": sex, **meta_data}
-                    ),
-                }
-            )
+        results.append(
+            {
+                "start_urls": f"https://www.zalando.de/{path}/?cause={'.'.join(filters)}",
+                "category": category,
+                "meta_data": json.dumps({"family": "FASHION", "sex": sex, **meta_data}),
+            }
+        )
     return results
 
 
