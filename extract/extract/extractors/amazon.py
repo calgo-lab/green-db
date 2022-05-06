@@ -1,6 +1,9 @@
+from lib2to3.pgen2.token import OP
 import re
 from logging import getLogger
 from typing import Optional, Callable
+
+from bs4 import BeautifulSoup
 
 from core.domain import CertificateType, Product
 from core.sustainability_labels import load_and_get_sustainability_labels
@@ -10,6 +13,16 @@ from ..parse import ParsedPage
 logger = getLogger(__name__)
 
 def extract_amazon(parsed_page: ParsedPage) -> Optional[Product]:
+    """
+    Extracts information of interest from HTML (and other intermediate representations)
+    and returns `Product` object or `None` if anything failed. Works for amazon.de.
+
+    Args:
+        parsed_page (ParsedPage): Intermediate representation of `ScrapedPage` domain object
+
+    Returns:
+        Optional[Product]: Valid `Product` object or `None` if extraction failed
+    """
     soup = parsed_page.beautiful_soup
 
     name = soup.find("span", {"id": "productTitle"}).text.strip()
@@ -22,7 +35,7 @@ def extract_amazon(parsed_page: ParsedPage) -> Optional[Product]:
 
     sustainability_spans = soup.find_all("span", id=re.compile("CPF-BTF-Certificate-Name"))
     sustainability_texts = [span.text for span in sustainability_spans]
-    sustainability_labels = sustainability_label_to_certificate(sustainability_texts)
+    sustainability_labels = _sustainability_label_to_certificate(sustainability_texts)
 
     brand = _get_brand(soup)
     description = _get_description(soup)
@@ -47,7 +60,16 @@ def extract_amazon(parsed_page: ParsedPage) -> Optional[Product]:
     )
 
 
-def sustainability_label_to_certificate(labels) -> list[CertificateType]:
+def _sustainability_label_to_certificate(labels) -> list[CertificateType]:
+    """
+    Helper function that extracts the sustainability information from the parsed HTML's label tag.
+
+    Args:
+        labels (str): Label string from the HTML span tag
+
+    Returns:
+        list[CertificateType]: List of `CertificateType` objects
+    """
     sustainability_labels = load_and_get_sustainability_labels()
     manual_mapping = {
         "Global Recycled Standard": CertificateType.GLOBAL_RECYCLED_STANDARD,
@@ -76,7 +98,20 @@ def sustainability_label_to_certificate(labels) -> list[CertificateType]:
     return result or {CertificateType.OTHER}
 
 
-def _get_matching_languages(languages, labels):
+def _get_matching_languages(languages: list[dict], labels: list[str]) -> list[dict]:
+    """
+    Helper function that checks if a label from `load_and_get_sustainability_labels`
+    matches in a language with a label name.
+
+    Args:
+        languages (list[dict]): List of `dict` objects with each object containing the
+            label information in a specific language
+        labels (list[str]): Function that is processing the scan result
+
+    Returns:
+        list[dict]: `list` with `dict` objects representing the matched label information
+            in a specific language.
+    """
     return [
         language
         for language in languages
@@ -85,12 +120,31 @@ def _get_matching_languages(languages, labels):
 
 
 def _handle_parse(targets: list, parse: Callable) -> Optional[str]:
+    """
+    Helper function that handles the parsing of product attributes from the HTML.
+
+    Args:
+        targets (list): List of scans on the `BeautifulSoup` soup
+        parse (Callable): Function that is processing the scan result
+
+    Returns:
+        Optional[str]: `str` object when the parsing succeeded, else `None`.
+    """
     if any(targets):
         result = [target for target in targets if target][0]
         return parse(result)
 
 
-def _get_color(soup):
+def _get_color(soup: BeautifulSoup) -> Optional[str]:
+    """
+    Helper function that extracts the product's color.
+
+    Args:
+        soup (BeautifulSoup): Parsed HTML
+
+    Returns:
+        Optional[str]: `str` object with the color name. If nothing was found `None` is returned.
+    """
     targets = [
         soup.find("span", {"class": "selection"}),
         soup.find("tr", {"class": re.compile("po-color")}),
@@ -105,7 +159,17 @@ def _get_color(soup):
     return _handle_parse(targets, parse_color)
 
 
-def _get_image_urls(soup):
+def _get_image_urls(soup: BeautifulSoup) -> Optional[list[str]]:
+    """
+    Helper function that extracts the product's image urls.
+
+    Args:
+        soup (BeautifulSoup): Parsed HTML
+
+    Returns:
+        Optional[list[str]]: `list` object containing `str` objects representing the image urls.
+            If nothing was found `None` or empty list is returned.
+    """
     targets = [
         soup.find("div", {"id": "altImages"}).find_all("img"),
     ]
@@ -124,7 +188,16 @@ def _get_image_urls(soup):
     return _handle_parse(targets, parse_image_urls)
 
 
-def _get_sizes(soup):
+def _get_sizes(soup: BeautifulSoup) -> Optional[str]:
+    """
+    Helper function that extracts the product's sizes.
+
+    Args:
+        soup (BeautifulSoup): Parsed HTML
+
+    Returns:
+        Optional[str]: `str` object containing all sizes. If nothing was found `None`.
+    """
     targets = [
         soup.find_all("span", {"class", "a-size-base swatch-title-text-display swatch-title-text"})[1:],
         soup.find_all("option", id=re.compile("size_name"))[1:],
@@ -137,7 +210,16 @@ def _get_sizes(soup):
     return _handle_parse(targets, parse_sizes)
 
 
-def _get_price(parsed_page):
+def _get_price(parsed_page: ParsedPage) -> Optional[float]:
+    """
+    Helper function that extracts the product's price.
+
+    Args:
+        parsed_page (ParsedPage): Intermediate representation of `ScrapedPage` domain object
+
+    Returns:
+        Optional[float]: `float` object if a price is given, else `None`.
+    """
     targets = [
         parsed_page.scraped_page.meta_information["price"],
     ]
@@ -148,7 +230,16 @@ def _get_price(parsed_page):
     return _handle_parse(targets, parse_price)
 
 
-def _get_brand(soup):
+def _get_brand(soup: BeautifulSoup) -> Optional[str]:
+    """
+    Helper function that extracts the product's brand.
+
+    Args:
+        soup (BeautifulSoup): Parsed HTML
+
+    Returns:
+        Optional[str]: `str` object if a brand was found, else `None`.
+    """
     targets = [
         soup.find("div", {"id": "bylineInfo_feature_div"}).a.text,
     ]
@@ -164,7 +255,16 @@ def _get_brand(soup):
         or _find_from_details_section(soup, "Hersteller")
 
 
-def _get_description(soup):
+def _get_description(soup: BeautifulSoup) -> str:
+    """
+    Helper function that extracts the product's description.
+
+    Args:
+        soup (BeautifulSoup): Parsed HTML
+
+    Returns:
+        str: `str` object with the description. Empty if nothing was found.
+    """
     targets = [
         soup.find("div", {"id": "productDescription"}),
         soup.find("div", {"id": "feature-bullets"}),
@@ -189,7 +289,17 @@ def _get_description(soup):
     return _handle_parse(targets, parse_description)
 
 
-def _find_from_details_section(soup, prop):
+def _find_from_details_section(soup: BeautifulSoup, prop: str) -> Optional[str]:
+    """
+    Helper function that extracts the value from a column of the parsed HTML detail section.
+
+    Args:
+        soup (BeautifulSoup): Parsed HTML
+        prop (str): Column name
+
+    Returns:
+        Optional[str]: `str` object if the property was found or `None` if it failed
+    """
     product_details_list = soup.find("div", {"id": "detailBulletsWrapper_feature_div"})
     product_details_table = soup.find("table", {"id": "productDetails_techSpec_section_1"})
 
