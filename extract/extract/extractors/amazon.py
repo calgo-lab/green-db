@@ -21,7 +21,7 @@ def extract_amazon(parsed_page: ParsedPage) -> Optional[Product]:
     name = soup.find("span", {"id": "productTitle"}).text.strip()
     color = _get_color(soup)
     size = _get_sizes(soup)
-    price = float(parsed_page.scraped_page.meta_information['price'].replace(",", "."))
+    price = float(parsed_page.scraped_page.meta_information['price'].replace(".", "").replace(",","."))
 
     images = soup.find("div", {"id": "altImages"}).find_all("img")
     image_urls = [
@@ -67,6 +67,16 @@ def sustainability_label_to_certificate(labels) -> list[CertificateType]:
     sustainability_labels = load_and_get_sustainability_labels()
     manual_mapping = {
         "Global Recycled Standard": CertificateType.GLOBAL_RECYCLED_STANDARD,
+        "Global Organic Textile Standard": CertificateType.GOTS_MADE_WITH_ORGANIC_MATERIALS,
+        "Organic Content Standard 100": CertificateType.ORGANIC_CONTENT_STANDARD_100,
+        "Organic Content Standard Blended": CertificateType.ORGANIC_CONTENT_STANDARD_BLENDED,
+        "Compact by Design (zertifiziert durch Amazon)": CertificateType.COMPACT_BY_DESIGN,
+        "Natrue": CertificateType.NATRUE,
+        "Cradle to Cradle Certified": CertificateType.CRADLE_TO_CRADLE,
+        "Responsible Wool Standard": CertificateType.RESPONSIBLE_WOOL_STANDARD,
+        "The Forest Stewardship Council": CertificateType.FOREST_STEWARDSHIP_COUNCIL,
+        "Das offizielle Nordische Umweltzeichen": CertificateType.NORDIC_SWAN_ECOLABEL,
+        "Reducing CO2": CertificateType.CARBON_TRUST_REDUCING,
     }
 
     result = {
@@ -149,13 +159,16 @@ def _get_description(soup):
 
     def parse_description(description):
         desc_paragraph = getattr(description, "p", None)
-        desc_list = description.find_all("span")
+        desc_list = description.find_all("li")
         if desc_paragraph:
             return desc_paragraph.get_text().strip()
         if desc_list:
             if "Mehr anzeigen" in desc_list[-1].text.strip():
                 desc_list = desc_list[:-1]
-            return ". ".join([li.text.strip() for li in desc_list if li.text.strip()])
+            return ". ".join([i.text.strip() for i in desc_list if i.text.strip()])
+                #". ".join([li.text.strip() for li in desc_list if li.text.strip()])
+        else:
+            return ""
 
     return _handle_parse(targets, parse_description)
 

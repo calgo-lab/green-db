@@ -30,17 +30,18 @@ class AmazonSpider(BaseSpider):
         #Yield request for each product
         logger.info(f"Number of products to be scraped {len(products)}")
         for key, value in products.items():
-            yield SplashRequest(url=f'https://www.amazon.de{key}',
-                                callback=self.parse_PRODUCT,
-                                meta={"add_meta": value},
-                                endpoint="execute",
-                                priority=1,  # higher prio than SERP => finish product requests first
-                                args={  # passed to Splash HTTP API
-                                    "wait": self.request_timeout,
-                                    "lua_source": scroll_end_of_page_script,
-                                    "timeout": 180,
-                                }
-                                )
+            if 'refinements=p_n_cpf_eligible' in key:
+                yield SplashRequest(url=f'https://www.amazon.de{key}',
+                                    callback=self.parse_PRODUCT,
+                                    meta={"add_meta": value},
+                                    endpoint="execute",
+                                    priority=1,  # higher prio than SERP => finish product requests first
+                                    args={  # passed to Splash HTTP API
+                                        "wait": self.request_timeout,
+                                        "lua_source": scroll_end_of_page_script,
+                                        "timeout": 180,
+                                    }
+                                    )
 
         #Pagination
         next_path = response.css(".s-pagination-selected+ .s-pagination-button::attr(href)").get()
