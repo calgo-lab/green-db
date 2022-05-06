@@ -1,15 +1,9 @@
-from crypt import methods
 import re
-import json
 from logging import getLogger
 from typing import Optional, Callable
 
-from bs4 import BeautifulSoup
-from pydantic import ValidationError
-
 from core.domain import CertificateType, Product
 from core.sustainability_labels import load_and_get_sustainability_labels
-from ..utils import safely_return_first_element
 from ..parse import ParsedPage
 
 
@@ -21,17 +15,8 @@ def extract_amazon(parsed_page: ParsedPage) -> Optional[Product]:
     name = soup.find("span", {"id": "productTitle"}).text.strip()
     color = _get_color(soup)
     size = _get_sizes(soup)
-    price = float(parsed_page.scraped_page.meta_information['price'].replace(".", "").replace(",","."))
-
-    images = soup.find("div", {"id": "altImages"}).find_all("img")
-    image_urls = [
-        image["src"]
-        for image in images
-        if not image["src"].endswith(".gif")
-           and "play-button-overlay" not in image["src"]
-           and "play-icon-overlay" not in image["src"]
-           and "360_icon" not in image["src"]
-    ]
+    price = _get_price(parsed_page)
+    image_urls = _get_image_urls(soup)
 
     currency = "EUR"
 
@@ -62,7 +47,6 @@ def extract_amazon(parsed_page: ParsedPage) -> Optional[Product]:
     )
 
 
-# TODO: Are there more labels that need manual mapping?
 def sustainability_label_to_certificate(labels) -> list[CertificateType]:
     sustainability_labels = load_and_get_sustainability_labels()
     manual_mapping = {
@@ -121,7 +105,25 @@ def _get_color(soup):
     return _handle_parse(targets, parse_color)
 
 
-# TODO: Are there more formats?
+def _get_image_urls(soup):
+    targets = [
+        soup.find("div", {"id": "altImages"}).find_all("img"),
+    ]
+
+    def parse_image_urls(images):
+        image_urls = [
+            image["src"]
+            for image in images
+            if not image["src"].endswith(".gif")
+            and "play-button-overlay" not in image["src"]
+            and "play-icon-overlay" not in image["src"]
+            and "360_icon" not in image["src"]
+        ]
+        return image_urls
+
+    return _handle_parse(targets, parse_image_urls)
+
+
 def _get_sizes(soup):
     targets = [
         soup.find_all("span", {"class", "a-size-base swatch-title-text-display swatch-title-text"})[1:],
@@ -135,9 +137,20 @@ def _get_sizes(soup):
     return _handle_parse(targets, parse_sizes)
 
 
+def _get_price(parsed_page):
+    targets = [
+        parsed_page.scraped_page.meta_information["price"],
+    ]
+
+    def parse_price(price):
+        return float(price.replace(".", "").replace(",","."))
+
+    return _handle_parse(targets, parse_price)
+
+
 def _get_brand(soup):
     targets = [
-        soup.find("div", {"id": "bylineInfo_feature_div"}).a.text
+        soup.find("div", {"id": "bylineInfo_feature_div"}).a.text,
     ]
 
     def parse_brand(brand):
@@ -165,10 +178,13 @@ def _get_description(soup):
         if desc_list:
             if "Mehr anzeigen" in desc_list[-1].text.strip():
                 desc_list = desc_list[:-1]
-            return ". ".join([i.text.strip() for i in desc_list if i.text.strip()])
-                #". ".join([li.text.strip() for li in desc_list if li.text.strip()])
-        else:
-            return ""
+            spans = [
+                span.text.strip()
+                for span in desc_list
+                if span.text.strip()
+            ]
+            return ". ".join(spans)
+        return ""
 
     return _handle_parse(targets, parse_description)
 
@@ -184,7 +200,7 @@ def _find_from_details_section(soup, prop):
     if product_details_table:
         parent = product_details_table.find("th", text=re.compile(f"\s+{prop}\s+"))
         if not parent:
-            add_info_table = soup.find("table", {"id": "productDetails_detailBullets_sections1"})
-            parent = add_info_table.find("th", text=re.compile(f"{prop}")).parent
+            additional_section = soup.find("table", {"id": "productDetails_detailBullets_sections1"})
+            parent = additional_section.find("th", text=re.compile(f"{prop}")).parent
             return parent.find("td").text.strip()
         return parent.parent.find("td").text.strip().replace("\u200e", "")
