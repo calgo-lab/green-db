@@ -71,7 +71,7 @@ def _sustainability_label_to_certificate(labels) -> list[CertificateType]:
         list[CertificateType]: List of `CertificateType` objects
     """
     sustainability_labels = load_and_get_sustainability_labels()
-    manual_mapping = {
+    label_mapping = {
         "Global Recycled Standard": CertificateType.GLOBAL_RECYCLED_STANDARD,
         "Global Organic Textile Standard": CertificateType.GOTS_MADE_WITH_ORGANIC_MATERIALS,
         "Organic Content Standard 100": CertificateType.ORGANIC_CONTENT_STANDARD_100,
@@ -91,9 +91,9 @@ def _sustainability_label_to_certificate(labels) -> list[CertificateType]:
         if any(_get_matching_languages(description["languages"].values(), labels))
     }
 
-    for label in manual_mapping.keys():
+    for label in label_mapping.keys():
         if label in labels:
-            result.update({manual_mapping[label]})
+            result.update({label_mapping[label]})
 
     return result or {CertificateType.OTHER}
 
