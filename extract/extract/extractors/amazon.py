@@ -91,9 +91,9 @@ def _sustainability_label_to_certificate(labels) -> list[CertificateType]:
         if any(_get_matching_languages(description["languages"].values(), labels))
     }
 
-    for label in label_mapping.keys():
+    for label, certificate in label_mapping.items():
         if label in labels:
-            result.update({label_mapping[label]})
+            result.update({certificate})
 
     return result or {CertificateType.OTHER}
 
