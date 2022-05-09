@@ -10,7 +10,7 @@ def combine_results(
     for node, category in node_2_category.items():
         results.append(
             {
-                "start_urls": f"https://www.amazon.de/s?bbn={node}&rh=n%3A{node}%2Cp_n_cpf_eligible%3A22579885031",
+                "start_urls": f"https://www.amazon.de/s?bbn={node}&rh=n%3A{node}%2Cp_n_cpf_eligible%3A22579885031",  # noqa
                 "category": category,
                 "meta_data": json.dumps(metadata),
             }
