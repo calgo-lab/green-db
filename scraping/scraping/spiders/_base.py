@@ -134,7 +134,8 @@ class BaseSpider(Spider):
             response (SplashJsonResponse): Response from a performed request
         """
         if response.meta["add_meta"]:
-            self.meta_data.update({"price": response.meta["add_meta"]})
+            meta_information = self.meta_data
+            meta_information = meta_information.update({"price": response.meta["add_meta"]})
         scraped_page = ScrapedPage(
             timestamp=self.timestamp,
             merchant=self.name,
@@ -142,7 +143,7 @@ class BaseSpider(Spider):
             html=response.body.decode("utf-8"),
             page_type=PageType.PRODUCT,
             category=self.category,
-            meta_information=self.meta_data,
+            meta_information=meta_information,
         )
 
         self.message_queue.add_scraping(table_name=self.table_name, scraped_page=scraped_page)
