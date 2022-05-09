@@ -4,13 +4,13 @@ from typing import Callable, Optional
 
 from bs4 import BeautifulSoup
 
-from core.domain import CertificateType, Product
+from core.domain import CertificateType, Product, Union
 from core.sustainability_labels import load_and_get_sustainability_labels
-
 
 from ..parse import ParsedPage
 
 logger = getLogger(__name__)
+
 
 def extract_amazon(parsed_page: ParsedPage) -> Optional[Product]:
     """
@@ -60,7 +60,7 @@ def extract_amazon(parsed_page: ParsedPage) -> Optional[Product]:
     )
 
 
-def _sustainability_label_to_certificate(labels: str) -> list:
+def _sustainability_label_to_certificate(labels: list[str]) -> Union[list | set]:
     """
     Helper function that extracts the sustainability information from the parsed HTML's label tag.
 
@@ -130,6 +130,8 @@ def _handle_parse(targets: list, parse: Callable) -> Optional[str]:
         result = [target for target in targets if target][0]
         return parse(result)
 
+    return None
+
 
 def _get_color(soup: BeautifulSoup) -> Optional[str]:
     """
@@ -146,11 +148,12 @@ def _get_color(soup: BeautifulSoup) -> Optional[str]:
         soup.find("tr", {"class": re.compile("po-color")}),
     ]
 
-    def parse_color(color):
+    def parse_color(color: BeautifulSoup) -> Optional[str]:
         if color.name == "span":
             return color.text.strip()
         if color.name == "tr":
             return color.find_all("span")[1].text
+        return None
 
     return _handle_parse(targets, parse_color)
 
@@ -170,7 +173,7 @@ def _get_image_urls(soup: BeautifulSoup) -> Optional[list[str]]:
         soup.find("div", {"id": "altImages"}).find_all("img"),
     ]
 
-    def parse_image_urls(images):
+    def parse_image_urls(images: list[BeautifulSoup]) -> list[str]:
         image_urls = [
             image["src"]
             for image in images
@@ -201,7 +204,7 @@ def _get_sizes(soup: BeautifulSoup) -> Optional[str]:
         soup.find_all("option", id=re.compile("size_name"))[1:],
     ]
 
-    def parse_sizes(sizes):
+    def parse_sizes(sizes: list[BeautifulSoup]) -> str:
         sizes = [size.text.strip() for size in sizes if size.text.strip()]
         return ", ".join(sizes)
 
@@ -222,7 +225,7 @@ def _get_price(parsed_page: ParsedPage) -> Optional[float]:
         parsed_page.scraped_page.meta_information["price"],
     ]
 
-    def parse_price(price):
+    def parse_price(price: str) -> float:
         return float(price.replace(".", "").replace(",", "."))
 
     return _handle_parse(targets, parse_price)
@@ -242,11 +245,12 @@ def _get_brand(soup: BeautifulSoup) -> Optional[str]:
         soup.find("div", {"id": "bylineInfo_feature_div"}).a.text,
     ]
 
-    def parse_brand(brand):
+    def parse_brand(brand: str) -> Optional[str]:
         if brand.startswith("Besuche den "):
             return brand[len("Besuche den ") : -len("-Store")]  # noqa
         if brand.startswith("Marke: "):
             return brand[len("Marke: ") :]  # noqa
+        return None
 
     return (
         _handle_parse(targets, parse_brand)
@@ -270,7 +274,7 @@ def _get_description(soup: BeautifulSoup) -> str:
         soup.find("div", {"id": "feature-bullets"}),
     ]
 
-    def parse_description(description):
+    def parse_description(description: BeautifulSoup) -> str:
         desc_paragraph = getattr(description, "p", None)
         desc_list = description.find_all("li")
         if desc_paragraph:
