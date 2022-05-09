@@ -31,8 +31,20 @@ def test_amazon_electronics() -> None:
         url=url,
         merchant=merchant,
         category=category,
-        name="Kyocera Klimaschutz-System Ecosys P3145dn Laserdrucker: Schwarz-Weiß, Duplex-Einheit, 45 Seiten pro Minute. Inkl. Mobile Print Funktion",
-        description="Geben Sie Ihr Modell ein, um sicherzustellen, dass dieser Artikel passt.. Zuverlässig: Der professionelle Ecosys Schwarz-Weiß Bürodrucker druckt bis zu 45 A4 Seiten/Minute und ist ideal für den Einsatz in Büroumgebungen wie (Home)Office, Praxis oder Kanzlei. Umweltfreundlich: Klimaschutz-System = klimafreundlich drucken und kopieren. Weitere Infos zur Kyocera Klimaschutz Initiative finden Sie unter dem Suchbegriff printgreen bei Kyocera in Ihrem Browser. Leistungsstark: Der Profi-Netzwerkdrucker mit doppelseitigem Druck, 600 Blatt Standard Papierkapazität, USB und Gigabit LAN druckt effizient und geräuscharm mit der Funktion Leiser Druck. Langlebigkeit: Der Laser-Drucker ist aus hochwertigen Materialien mit einer extrem hohen Lebensdauer gefertigt und ist speziell für den Einsatz in Geschäftsumgebungen geeignet und konzipiert. Sicherheit: Umfangreiche, integrierte Sicherheitsfunktionen für Unternehmensnetzwerke durch SSL, IPsec und Vertraulichen Druck",
+        name="Kyocera Klimaschutz-System Ecosys P3145dn Laserdrucker: Schwarz-Weiß, "
+        "Duplex-Einheit, 45 Seiten pro Minute. Inkl. Mobile Print Funktion",
+        description="Geben Sie Ihr Modell ein, um sicherzustellen, dass dieser Artikel passt.. "
+        "Zuverlässig: Der professionelle Ecosys Schwarz-Weiß Bürodrucker druckt bis zu 45 A4 "
+        "Seiten/Minute und ist ideal für den Einsatz in Büroumgebungen wie (Home)Office, "
+        "Praxis oder Kanzlei. Umweltfreundlich: Klimaschutz-System = klimafreundlich drucken "
+        "und kopieren. Weitere Infos zur Kyocera Klimaschutz Initiative finden Sie unter dem "
+        "Suchbegriff printgreen bei Kyocera in Ihrem Browser. Leistungsstark: Der Profi-"
+        "Netzwerkdrucker mit doppelseitigem Druck, 600 Blatt Standard Papierkapazität, USB "
+        "und Gigabit LAN druckt effizient und geräuscharm mit der Funktion Leiser Druck. "
+        "Langlebigkeit: Der Laser-Drucker ist aus hochwertigen Materialien mit einer extrem "
+        "hohen Lebensdauer gefertigt und ist speziell für den Einsatz in Geschäftsumgebungen "
+        "geeignet und konzipiert. Sicherheit: Umfangreiche, integrierte Sicherheitsfunktionen "
+        "für Unternehmensnetzwerke durch SSL, IPsec und Vertraulichen Druck",
         brand="Kyocera",
         sustainability_labels=["certificate:BLUE_ANGEL"],
         price=599.00,
