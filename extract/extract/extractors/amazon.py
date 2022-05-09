@@ -6,6 +6,7 @@ from logging import getLogger
 from typing import Any, Callable, Optional, Union
 
 from bs4 import BeautifulSoup
+
 from core.domain import CertificateType, Product
 from core.sustainability_labels import load_and_get_sustainability_labels
 
