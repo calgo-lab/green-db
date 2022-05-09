@@ -244,9 +244,9 @@ def _get_brand(soup: BeautifulSoup) -> Optional[str]:
 
     def parse_brand(brand):
         if brand.startswith("Besuche den "):
-            return brand[len("Besuche den "):-len("-Store")]
+            return brand[len("Besuche den ") : -len("-Store")]  # noqa
         if brand.startswith("Marke: "):
-            return brand[len("Marke: "):]
+            return brand[len("Marke: ") :]  # noqa
 
     return (
         _handle_parse(targets, parse_brand)
@@ -304,7 +304,7 @@ def _find_from_details_section(soup: BeautifulSoup, prop: str) -> Optional[str]:
         return parent.find_all("span")[1].text
 
     if product_details_table:
-        parent = product_details_table.find("th", text=re.compile(r"\s+"+prop+r"\s+"))
+        parent = product_details_table.find("th", text=re.compile(r"\s+" + prop + r"\s+"))
         if not parent:
             additional_section = soup.find(
                 "table", {"id": "productDetails_detailBullets_sections1"}
