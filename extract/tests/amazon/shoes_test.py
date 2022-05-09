@@ -32,21 +32,22 @@ def test_amazon_basic() -> None:
         merchant=merchant,
         category=category,
         name="THINK! Herren Kong_3-000371 chromfrei gegerbte, nachhaltige Wechselfußbett Boots",
-        description="Think! ist ein traditionelles Schuhunternehmen und wahrt die Handwerkskunst. Think! Schuhe sind "
-        "handgefertigt und werden ausschließlich in Europa hergestellt. Die Schuhe sind dabei "
-        "individuell, gesund und nachhaltig produziert. Alle Innenleder sind chromfrei gegerbt. Durch die "
-        "schonende, pflanzliche Gerbung entsteht ein angenehmes Klima im Schuh. Die beim Tragen "
-        "entstehende Feuchtigkeit wird sofort aufgenommen und hält die Füße trocken. Die in vielen "
-        "Modellen eingesetzten KorkEinlagen wirken antibakteriell. Die eingeschlossenen Luftkammern "
-        "dämpfen jeden Schritt und lassen den Füßen genug Luft zum Atmen.Lässig, individuell und bequem "
-        "sind die KONG Schnürer für Herren. Die asymmetrischen Schuhspitzen mit breiterem "
-        "Vorderfußbereich sind anatomisch geformt und bieten den Zehen reichlich Platz. Die Latexsohle "
-        "hat integrierte Luftkammern. Dadurch werden Stöße abgedämpft und der Fuß wird stabilisiert. Die "
-        "Dämpfung schont die Gelenke und die Bänder. Das sorgt für weiches, federleichtes Gehvergnügen. "
-        "Das markante Sohlenprofil bietet n Halt auf allen Oberflächen. KONG Modelle sind mit einem "
+        description="Think! ist ein traditionelles Schuhunternehmen und wahrt die Handwerkskunst. "
+        "Think! Schuhe sind handgefertigt und werden ausschließlich in Europa hergestellt. "
+        "Die Schuhe sind dabei individuell, gesund und nachhaltig produziert. Alle Innenleder "
+        "sind chromfrei gegerbt. Durch die schonende, pflanzliche Gerbung entsteht ein angenehmes "
+        "Klima im Schuh. Die beim Tragen entstehende Feuchtigkeit wird sofort aufgenommen und "
+        "hält die Füße trocken. Die in vielen Modellen eingesetzten KorkEinlagen wirken "
+        "antibakteriell. Die eingeschlossenen Luftkammern dämpfen jeden Schritt und lassen den "
+        "Füßen genug Luft zum Atmen.Lässig, individuell und bequem sind die KONG Schnürer für "
+        "Herren. Die asymmetrischen Schuhspitzen mit breiterem Vorderfußbereich sind anatomisch "
+        "geformt und bieten den Zehen reichlich Platz. Die Latexsohle hat integrierte Luftkammern. "
+        "Dadurch werden Stöße abgedämpft und der Fuß wird stabilisiert. Die Dämpfung schont die "
+        "Gelenke und die Bänder. Das sorgt für weiches, federleichtes Gehvergnügen. Das markante "
+        "Sohlenprofil bietet n Halt auf allen Oberflächen. KONG Modelle sind mit einem "
         "Wechselfußbett ausgestattet. Das bedeutet, dass die Einlegesohlen ganz leicht durch "
-        "orthopädische Einlagen oder später durch neue KONG Einlagen ausgetauscht werden können. Einige "
-        "KONG Modelle wurden mit dem Österreichischen Umweltzeichen ausgezeichnet.",
+        "orthopädische Einlagen oder später durch neue KONG Einlagen ausgetauscht werden können. "
+        "Einige KONG Modelle wurden mit dem Österreichischen Umweltzeichen ausgezeichnet.",
         brand="Think!",
         sustainability_labels=["certificate:BLUE_ANGEL"],
         price=77.62,
