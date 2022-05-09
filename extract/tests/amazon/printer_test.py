@@ -54,7 +54,8 @@ def test_amazon_electronics() -> None:
             "https://m.media-amazon.com/images/I/41ybCjXFRkL._AC_US40_.jpg",
         ],
         color="Grau",
-        size="45 Seiten pro Minute, 50 Seiten pro Minute, 55 Seiten pro Minute, 60 Seiten pro Minute, 2 Jahre Herstellergarantie, 3 Jahre vor Ort Herstellergarantie",
+        size="45 Seiten pro Minute, 50 Seiten pro Minute, 55 Seiten pro Minute, 60 Seiten pro "
+        "Minute, 2 Jahre Herstellergarantie, 3 Jahre vor Ort Herstellergarantie",
         gtin=None,
         asin="B07TXRHFYS",
     )

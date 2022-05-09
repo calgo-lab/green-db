@@ -62,7 +62,8 @@ def test_amazon_basic() -> None:
             "https://m.media-amazon.com/images/I/31Gkl-CPiiL._AC_US40_.jpg",
         ],
         color="3000 Cuoio Kombi",
-        size="40 EU, 40.5 EU, 41 EU, 41.5 EU, 42 EU, 42.5 EU, 43 EU, 43.5 EU, 44 EU, 44.5 EU, 45 EU, 45.5 EU, 46 EU, 46.5 EU, 47 EU, 47.5 EU",
+        size="40 EU, 40.5 EU, 41 EU, 41.5 EU, 42 EU, 42.5 EU, 43 EU, 43.5 EU, 44 EU, 44.5 EU, "
+        "45 EU, 45.5 EU, 46 EU, 46.5 EU, 47 EU, 47.5 EU",
         gtin=None,
         asin="B08FSZSW2L",
     )
