@@ -304,7 +304,7 @@ def _find_from_details_section(soup: BeautifulSoup, prop: str) -> Optional[str]:
         return parent.find_all("span")[1].text
 
     if product_details_table:
-        parent = product_details_table.find("th", text=re.compile(f"\s+{prop}\s+"))
+        parent = product_details_table.find("th", text=re.compile(r"\s+"+prop+r"\s+"))
         if not parent:
             additional_section = soup.find(
                 "table", {"id": "productDetails_detailBullets_sections1"}
