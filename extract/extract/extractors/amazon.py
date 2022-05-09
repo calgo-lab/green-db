@@ -7,10 +7,10 @@ from bs4 import BeautifulSoup
 from core.domain import CertificateType, Product
 from core.sustainability_labels import load_and_get_sustainability_labels
 
+
 from ..parse import ParsedPage
 
 logger = getLogger(__name__)
-
 
 def extract_amazon(parsed_page: ParsedPage) -> Optional[Product]:
     """
@@ -60,7 +60,7 @@ def extract_amazon(parsed_page: ParsedPage) -> Optional[Product]:
     )
 
 
-def _sustainability_label_to_certificate(labels) -> list[CertificateType]:
+def _sustainability_label_to_certificate(labels: str) -> list:
     """
     Helper function that extracts the sustainability information from the parsed HTML's label tag.
 
@@ -71,7 +71,7 @@ def _sustainability_label_to_certificate(labels) -> list[CertificateType]:
         list[CertificateType]: List of `CertificateType` objects
     """
     sustainability_labels = load_and_get_sustainability_labels()
-    label_mapping = {
+    _LABEL_MAPPING = {
         "Global Recycled Standard": CertificateType.GLOBAL_RECYCLED_STANDARD,
         "Global Organic Textile Standard": CertificateType.GOTS_MADE_WITH_ORGANIC_MATERIALS,
         "Organic Content Standard 100": CertificateType.ORGANIC_CONTENT_STANDARD_100,
@@ -91,7 +91,7 @@ def _sustainability_label_to_certificate(labels) -> list[CertificateType]:
         if any(_get_matching_languages(description["languages"].values(), labels))
     }
 
-    for label, certificate in label_mapping.items():
+    for label, certificate in _LABEL_MAPPING.items():
         if label in labels:
             result.update({certificate})
 
