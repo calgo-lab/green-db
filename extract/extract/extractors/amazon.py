@@ -244,9 +244,9 @@ def _get_brand(soup: BeautifulSoup) -> Optional[str]:
 
     def parse_brand(brand):
         if brand.startswith("Besuche den "):
-            return brand[len("Besuche den ") : -len("-Store")]
+            return brand[len("Besuche den "):-len("-Store")]
         if brand.startswith("Marke: "):
-            return brand[len("Marke: ") :]
+            return brand[len("Marke: "):]
 
     return (
         _handle_parse(targets, parse_brand)
