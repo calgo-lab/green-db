@@ -63,8 +63,8 @@ class BaseSpider(Spider):
 
             if type(meta_data) == dict:
                 self.meta_data = meta_data
-                #if response.meta is not None:
-                    #self.meta_data = meta_data.update(response.meta)
+                # if response.meta is not None:
+                # self.meta_data = meta_data.update(response.meta)
             else:
                 logger.error(
                     "Argument 'meta_data' need to be of type dict or serialized JSON string."
@@ -133,8 +133,8 @@ class BaseSpider(Spider):
         Args:
             response (SplashJsonResponse): Response from a performed request
         """
-        if response.meta['add_meta']:
-            self.meta_data.update({"price": response.meta['add_meta']})
+        if response.meta["add_meta"]:
+            self.meta_data.update({"price": response.meta["add_meta"]})
         scraped_page = ScrapedPage(
             timestamp=self.timestamp,
             merchant=self.name,

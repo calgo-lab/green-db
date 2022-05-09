@@ -1,8 +1,10 @@
-from scrapy_splash import SplashJsonResponse, SplashRequest
-from ..splash import scroll_end_of_page_script
-from ._base import BaseSpider
 from logging import getLogger
 from typing import Iterator
+
+from scrapy_splash import SplashJsonResponse, SplashRequest
+
+from ..splash import scroll_end_of_page_script
+from ._base import BaseSpider
 
 logger = getLogger(__name__)
 
@@ -11,7 +13,7 @@ class AmazonSpider(BaseSpider):
     name = "amazon"
     allowed_domains = ["amazon.de"]
 
-    def parse_SERP(self,  response: SplashJsonResponse) -> Iterator[SplashRequest]:
+    def parse_SERP(self, response: SplashJsonResponse) -> Iterator[SplashRequest]:
         """
         The `Scrapy` framework executes this method.
 
@@ -21,7 +23,9 @@ class AmazonSpider(BaseSpider):
         # Save HTML to database
         self._save_SERP(response)
         urls = response.css("div.a-row.a-size-base.a-color-base a::attr(href)").getall()
-        prices = response.css("div.a-row.a-size-base.a-color-base span.a-price-whole::text").getall()
+        prices = response.css(
+            "div.a-row.a-size-base.a-color-base span.a-price-whole::text"
+        ).getall()
         products = dict(zip(urls, prices))
 
         # Yield request for each product

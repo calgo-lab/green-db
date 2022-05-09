@@ -1,15 +1,16 @@
 import re
 from logging import getLogger
-from typing import Optional, Callable
+from typing import Callable, Optional
 
 from bs4 import BeautifulSoup
 
 from core.domain import CertificateType, Product
 from core.sustainability_labels import load_and_get_sustainability_labels
+
 from ..parse import ParsedPage
 
-
 logger = getLogger(__name__)
+
 
 def extract_amazon(parsed_page: ParsedPage) -> Optional[Product]:
     """
@@ -111,11 +112,7 @@ def _get_matching_languages(languages: list[dict], labels: list[str]) -> list[di
         list[dict]: `list` with `dict` objects representing the matched label information
             in a specific language.
     """
-    return [
-        language
-        for language in languages
-        if language["name"] in labels
-    ]
+    return [language for language in languages if language["name"] in labels]
 
 
 def _handle_parse(targets: list, parse: Callable) -> Optional[str]:
@@ -198,7 +195,9 @@ def _get_sizes(soup: BeautifulSoup) -> Optional[str]:
         Optional[str]: `str` object containing all sizes. If nothing was found `None`.
     """
     targets = [
-        soup.find_all("span", {"class", "a-size-base swatch-title-text-display swatch-title-text"})[1:],
+        soup.find_all("span", {"class", "a-size-base swatch-title-text-display swatch-title-text"})[
+            1:
+        ],
         soup.find_all("option", id=re.compile("size_name"))[1:],
     ]
 
@@ -224,7 +223,7 @@ def _get_price(parsed_page: ParsedPage) -> Optional[float]:
     ]
 
     def parse_price(price):
-        return float(price.replace(".", "").replace(",","."))
+        return float(price.replace(".", "").replace(",", "."))
 
     return _handle_parse(targets, parse_price)
 
@@ -245,13 +244,15 @@ def _get_brand(soup: BeautifulSoup) -> Optional[str]:
 
     def parse_brand(brand):
         if brand.startswith("Besuche den "):
-            return brand[len("Besuche den "):-len("-Store")]
+            return brand[len("Besuche den ") : -len("-Store")]
         if brand.startswith("Marke: "):
-            return brand[len("Marke: "):]
+            return brand[len("Marke: ") :]
 
-    return _handle_parse(targets, parse_brand) \
-        or _find_from_details_section(soup, "Marke") \
+    return (
+        _handle_parse(targets, parse_brand)
+        or _find_from_details_section(soup, "Marke")
         or _find_from_details_section(soup, "Hersteller")
+    )
 
 
 def _get_description(soup: BeautifulSoup) -> str:
@@ -277,11 +278,7 @@ def _get_description(soup: BeautifulSoup) -> str:
         if desc_list:
             if "Mehr anzeigen" in desc_list[-1].text.strip():
                 desc_list = desc_list[:-1]
-            spans = [
-                span.text.strip()
-                for span in desc_list
-                if span.text.strip()
-            ]
+            spans = [span.text.strip() for span in desc_list if span.text.strip()]
             return ". ".join(spans)
         return ""
 
@@ -309,7 +306,9 @@ def _find_from_details_section(soup: BeautifulSoup, prop: str) -> Optional[str]:
     if product_details_table:
         parent = product_details_table.find("th", text=re.compile(f"\s+{prop}\s+"))
         if not parent:
-            additional_section = soup.find("table", {"id": "productDetails_detailBullets_sections1"})
+            additional_section = soup.find(
+                "table", {"id": "productDetails_detailBullets_sections1"}
+            )
             parent = additional_section.find("th", text=re.compile(f"{prop}")).parent
             return parent.find("td").text.strip()
         return parent.parent.find("td").text.strip().replace("\u200e", "")

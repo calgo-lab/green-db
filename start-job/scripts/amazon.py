@@ -1,5 +1,5 @@
-from typing import List
 import json
+from typing import List
 
 
 def combine_results(
@@ -76,4 +76,4 @@ def electronics() -> List[dict]:
 
 
 def get_settings() -> List[dict]:
-    return male()+ female()+ electronics()
+    return male() + female() + electronics()

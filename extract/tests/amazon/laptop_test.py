@@ -11,10 +11,7 @@ def test_amazon_electronics() -> None:
     merchant = "amazon"
     file_name = "laptop.html"
     category = "LAPTOP"
-    meta_information = {
-        "family": "electronics",
-        "price": "2998,0"
-    }
+    meta_information = {"family": "electronics", "price": "2998,0"}
 
     scraped_page = read_test_html(
         timestamp=timestamp,
@@ -32,19 +29,20 @@ def test_amazon_electronics() -> None:
         category=category,
         name="Lenovo ThinkPad X1 Nano - Laptop Black 16GB RAM 1TB SSD",
         description="Lenovo ThinkPad X1 Nano Gen 1 Notebook 33 cm (13 Zoll), 2K (Intel Core i7-1160G7, 16 GB RAM, "
-                    "1 TB SSD, Intel Iris Xe Graphics, Windows 10 Pro), Schwarz spanische QWERTY-Tastatur",
+        "1 TB SSD, Intel Iris Xe Graphics, Windows 10 Pro), Schwarz spanische QWERTY-Tastatur",
         brand="Lenovo",
-        sustainability_labels=['certificate:EPEAT'],
+        sustainability_labels=["certificate:EPEAT"],
         price=2998.0,
         currency="EUR",
-        image_urls=['https://m.media-amazon.com/images/I/41q5QmxMFYL._AC_US40_.jpg',
-                    'https://m.media-amazon.com/images/I/41ii1ViuGuL._AC_US40_.jpg',
-                    'https://m.media-amazon.com/images/I/31LC85nNfZL._AC_US40_.jpg',
-                    'https://m.media-amazon.com/images/I/41h5YqQqEdL._AC_US40_.jpg',
-                    'https://m.media-amazon.com/images/I/316v2VeOxwL._AC_US40_.jpg',
-                    'https://m.media-amazon.com/images/I/21FGojgZvcL._AC_US40_.jpg',
-                    'https://m.media-amazon.com/images/I/21DU9eh-mHL._AC_US40_.jpg'
-                    ],
+        image_urls=[
+            "https://m.media-amazon.com/images/I/41q5QmxMFYL._AC_US40_.jpg",
+            "https://m.media-amazon.com/images/I/41ii1ViuGuL._AC_US40_.jpg",
+            "https://m.media-amazon.com/images/I/31LC85nNfZL._AC_US40_.jpg",
+            "https://m.media-amazon.com/images/I/41h5YqQqEdL._AC_US40_.jpg",
+            "https://m.media-amazon.com/images/I/316v2VeOxwL._AC_US40_.jpg",
+            "https://m.media-amazon.com/images/I/21FGojgZvcL._AC_US40_.jpg",
+            "https://m.media-amazon.com/images/I/21DU9eh-mHL._AC_US40_.jpg",
+        ],
         color="Black",
         size=None,
         gtin=None,

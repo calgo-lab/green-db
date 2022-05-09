@@ -5,15 +5,15 @@ from configparser import ConfigParser
 from datetime import datetime
 from typing import Any, Iterator, List
 
-from asos import get_settings as get_asos_settings
 from amazon import get_settings as get_amazon_settings
+from asos import get_settings as get_asos_settings
 from otto import get_settings as get_otto_settings
 from zalando import get_settings as get_zalando_settings
 from zalando_fr import get_settings as get_zalando_fr_settings
 
 from core.constants import (
-    TABLE_NAME_SCRAPING_ASOS,
     TABLE_NAME_SCRAPING_AMAZON,
+    TABLE_NAME_SCRAPING_ASOS,
     TABLE_NAME_SCRAPING_OTTO,
     TABLE_NAME_SCRAPING_ZALANDO,
     TABLE_NAME_SCRAPING_ZALANDO_FR,

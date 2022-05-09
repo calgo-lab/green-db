@@ -1,10 +1,10 @@
 from core import log
 from core.constants import (
+    TABLE_NAME_SCRAPING_AMAZON,
     TABLE_NAME_SCRAPING_ASOS,
     TABLE_NAME_SCRAPING_OTTO,
     TABLE_NAME_SCRAPING_ZALANDO,
     TABLE_NAME_SCRAPING_ZALANDO_FR,
-    TABLE_NAME_SCRAPING_AMAZON,
 )
 from database.connection import Scraping
 
