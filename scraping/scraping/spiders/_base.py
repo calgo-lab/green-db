@@ -133,9 +133,8 @@ class BaseSpider(Spider):
         Args:
             response (SplashJsonResponse): Response from a performed request
         """
-        if response.meta["add_meta"]:
-            meta_information = self.meta_data
-            meta_information = meta_information.update({"price": response.meta["add_meta"]})
+        if response.meta["amazon_price"]:
+            meta_information = self.meta_data | response.meta["amazon_price"]
         scraped_page = ScrapedPage(
             timestamp=self.timestamp,
             merchant=self.name,

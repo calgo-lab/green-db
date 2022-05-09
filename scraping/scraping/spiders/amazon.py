@@ -35,7 +35,7 @@ class AmazonSpider(BaseSpider):
                 yield SplashRequest(
                     url=f"https://www.amazon.de{key}",
                     callback=self.parse_PRODUCT,
-                    meta={"add_meta": value},
+                    meta={"amazon_price": value}, #customized meta_information working used just in amazon
                     endpoint="execute",
                     priority=1,  # higher priority than SERP
                     args={  # passed to Splash HTTP API
