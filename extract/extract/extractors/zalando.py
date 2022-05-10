@@ -94,7 +94,7 @@ def extract_zalando(
     if price := first_offer.get("price", None):
         price = float(price)
 
-    unmapped_labels = get_sustainability(parsed_page.beautiful_soup)
+    unmapped_labels = set(get_sustainability(parsed_page.beautiful_soup))
     sustainability_labels = sorted(
         {label_mapping.get(label, CertificateType.UNKNOWN) for label in unmapped_labels}
     )
