@@ -4,7 +4,7 @@
 
 import re
 from logging import getLogger
-from typing import Any, Callable, Optional, Union
+from typing import Any, Callable, Optional
 
 from bs4 import BeautifulSoup
 from pydantic import ValidationError
