@@ -7,9 +7,10 @@ from logging import getLogger
 from typing import Any, Callable, Optional, Union
 
 from bs4 import BeautifulSoup
+from pydantic import ValidationError
+
 from core.domain import CertificateType, Product
 from core.sustainability_labels import load_and_get_sustainability_labels
-from pydantic import ValidationError
 
 from ..parse import ParsedPage
 
@@ -71,7 +72,7 @@ def extract_amazon(parsed_page: ParsedPage) -> Optional[Product]:
         return None
 
 
-def _sustainability_label_to_certificate(labels: list[str]) -> Union[list, set]:
+def _sustainability_label_to_certificate(labels: list[str]) -> list[str]:
     """
     Helper function that extracts the sustainability information from the parsed HTML's label tag.
 
@@ -106,7 +107,7 @@ def _sustainability_label_to_certificate(labels: list[str]) -> Union[list, set]:
         if label in labels:
             result.update({certificate})
 
-    return result or {CertificateType.OTHER}
+    return result or [CertificateType.OTHER]
 
 
 def _get_matching_languages(languages: list[dict], labels: list[str]) -> list[dict]:
