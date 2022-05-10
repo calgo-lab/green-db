@@ -234,7 +234,7 @@ def _get_price(parsed_page: ParsedPage) -> Optional[float]:
         Optional[float]: `float` object if a price is given, else `None`.
     """
     targets = [
-        parsed_page.scraped_page.meta_information["price"],
+        parsed_page.scraped_page.meta_information["amazon_price"],
     ]
 
     def parse_price(price: str) -> float:
