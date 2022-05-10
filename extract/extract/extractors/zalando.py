@@ -141,13 +141,14 @@ def get_sustainability(beautiful_soup: BeautifulSoup) -> Iterator[str]:
         Iterator[str]: found sustainability labels
     """
 
-    node = json.loads(
+    data = json.loads(
         beautiful_soup.find("script", {"type": "application/json", "class": "re-1-13"}).get_text()
     )
 
     # Loop over all nested items to find the JSON node holding the sustainability information
-    stack = []
-    while 1:
+    stack = [data]
+    while len(stack) > 0:
+        node = stack.pop()
         match node:
             case {"sustainabilityClusterKind": "certificates", "attributes": [*attributes]}:
                 for attribute in attributes:
@@ -155,9 +156,5 @@ def get_sustainability(beautiful_soup: BeautifulSoup) -> Iterator[str]:
                         yield urllib.parse.unquote(attribute["label"])
             case {**items}:
                 stack += items.values()
-            case [*items, node]:
+            case [*items]:
                 stack += items
-                continue
-        if not stack:
-            break
-        node = stack.pop()
