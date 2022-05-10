@@ -1,14 +1,15 @@
 # Since the Enum 'CertificateType' is dynamically generated, mypy can't know the attributes.
 # For this reason, we ignore those errors here.
 # type: ignore[attr-defined]
+
 import re
 from logging import getLogger
 from typing import Any, Callable, Optional, Union
 
 from bs4 import BeautifulSoup
-
 from core.domain import CertificateType, Product
 from core.sustainability_labels import load_and_get_sustainability_labels
+from pydantic import ValidationError
 
 from ..parse import ParsedPage
 
@@ -44,23 +45,30 @@ def extract_amazon(parsed_page: ParsedPage) -> Optional[Product]:
     description = _get_description(soup)
     asin = _find_from_details_section(soup, "ASIN")
 
-    return Product(
-        timestamp=parsed_page.scraped_page.timestamp,
-        url=parsed_page.scraped_page.url,
-        merchant=parsed_page.scraped_page.merchant,
-        category=parsed_page.scraped_page.category,
-        name=name,
-        description=description,
-        brand=brand,
-        sustainability_labels=sustainability_labels,
-        price=price,
-        currency=currency,
-        image_urls=image_urls,
-        color=color,
-        size=size,
-        gtin=None,
-        asin=asin,
-    )
+    try:
+        return Product(
+            timestamp=parsed_page.scraped_page.timestamp,
+            url=parsed_page.scraped_page.url,
+            merchant=parsed_page.scraped_page.merchant,
+            category=parsed_page.scraped_page.category,
+            name=name,
+            description=description,
+            brand=brand,
+            sustainability_labels=sustainability_labels,
+            price=price,
+            currency=currency,
+            image_urls=image_urls,
+            color=color,
+            size=size,
+            gtin=None,
+            asin=asin,
+        )
+
+    except ValidationError as error:
+        # TODO Handle Me!!
+        # error contains relatively nice report why data is not valid
+        logger.info(error)
+        return None
 
 
 def _sustainability_label_to_certificate(labels: list[str]) -> Union[list, set]:
