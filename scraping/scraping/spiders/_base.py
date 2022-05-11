@@ -135,6 +135,7 @@ class BaseSpider(Spider):
         """
         if response.meta["amazon_price"]:
             meta_information = self.meta_data | {"amazon_price": response.meta["amazon_price"]}
+
         scraped_page = ScrapedPage(
             timestamp=self.timestamp,
             merchant=self.name,
