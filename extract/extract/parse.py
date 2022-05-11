@@ -88,5 +88,5 @@ def extract_schema_org_hm(page_html: str) -> dict:
         schema_org = extruct.extract(unescaped_html, syntaxes=_SYNTAXES)
     except JSONDecodeError:
         unescaped_html = decode(page_html, 'unicode-escape')
-        schema_org = extruct.extract(unescaped_html, syntaxes=_SYNTAXES)
+        schema_org = extruct.extract(unescaped_html, syntaxes=_SYNTAXES, errors='ignore')
     return schema_org if schema_org else {}
