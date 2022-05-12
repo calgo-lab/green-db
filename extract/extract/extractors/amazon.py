@@ -58,7 +58,7 @@ def extract_amazon(parsed_page: ParsedPage) -> Optional[Product]:
         sustainability_texts, _LABEL_MAPPING
     )
 
-    brand = _get_brand(soup)
+    brand = _get_brand(soup, "de")
     description = _get_description(soup)
     asin = _find_from_details_section(soup, "ASIN")
 
@@ -204,7 +204,7 @@ def _get_price(parsed_page: ParsedPage) -> Optional[float]:
     return _handle_parse(targets, parse_price)
 
 
-def _get_brand(soup: BeautifulSoup) -> Optional[str]:
+def _get_brand(soup: BeautifulSoup, language: str) -> Optional[str]:
     """
     Helper function that extracts the product's brand.
 
@@ -218,17 +218,26 @@ def _get_brand(soup: BeautifulSoup) -> Optional[str]:
         soup.find("div", {"id": "bylineInfo_feature_div"}).a.text,
     ]
 
+    _LANGUAGE_LOCALES = {
+        "de": {
+            "info": ("Besuche den ", "-Store", "Marke: "),
+            "table": ("Marke", "Hersteller"),
+        },
+    }
+
     def parse_brand(brand: str) -> Optional[str]:
-        if brand.startswith("Besuche den "):
-            return brand[len("Besuche den ") : -len("-Store")]  # noqa
-        if brand.startswith("Marke: "):
-            return brand[len("Marke: ") :]  # noqa
+        info_locales = _LANGUAGE_LOCALES[language]["info"]
+        if brand.startswith(info_locales[0]):
+            return brand[len(info_locales[0]) : -len(info_locales[1])]  # noqa
+        if brand.startswith(info_locales[2]):
+            return brand[len(info_locales[2]) :]  # noqa
         return None
 
+    table_locales = _LANGUAGE_LOCALES[language]["table"]
     return (
         _handle_parse(targets, parse_brand)
-        or _find_from_details_section(soup, "Marke")
-        or _find_from_details_section(soup, "Hersteller")
+        or _find_from_details_section(soup, table_locales[0])
+        or _find_from_details_section(soup, table_locales[1])
     )
 
 
