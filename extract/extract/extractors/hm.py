@@ -2,9 +2,9 @@
 # For this reason, we ignore those errors here.
 # type: ignore[attr-defined]
 import json
+from codecs import decode
 from logging import getLogger
 from typing import List, Optional
-from codecs import decode
 
 from bs4 import BeautifulSoup
 from pydantic import ValidationError
@@ -109,6 +109,7 @@ _LABEL_MAPPING = {
     "Lin biologique": CertificateType.OTHER,
     "Lyocell issue d’une gestion forestière durable": CertificateType.OTHER,
     "Coton biologique": CertificateType.OTHER,
+    "Coton en conversion": CertificateType.OTHER,
 }
 
 
@@ -124,7 +125,7 @@ def _get_sustainability(beautiful_soup: BeautifulSoup) -> List[str]:
     """
 
     if materials := beautiful_soup.find("dt", text="Matériaux plus durables"):
-        materials = materials.next_sibling.get_text().strip()
+        materials = materials.parent.find("dd").get_text().strip()
     elif materials := beautiful_soup.find("dt", text="Mat\\u00E9riaux plus durables'"):
         materials = decode(materials.next_sibling.get_text().strip(), "unicode-escape")
     else:

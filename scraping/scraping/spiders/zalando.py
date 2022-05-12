@@ -55,6 +55,9 @@ class ZalandoSpider(BaseSpider):
                 url=product_link,
                 callback=self.parse_PRODUCT,
                 endpoint="execute",
+                priority=2,
+                meta={"category": response.meta.get("category"),
+                      "meta_data": response.meta.get("meta_data")},
                 args={  # passed to Splash HTTP API
                     "wait": 5,
                     "lua_source": minimal_script,
@@ -72,8 +75,11 @@ class ZalandoSpider(BaseSpider):
                 url=next_page,
                 callback=self.parse_SERP,
                 cb_kwargs=dict(is_first_page=False),
-                meta={"original_URL": next_page},
+                meta={"original_URL": next_page,
+                      "category": response.meta.get("category"),
+                      "meta_data": response.meta.get("meta_data")},
                 endpoint="execute",
+                priority=1,
                 args={  # passed to Splash HTTP API
                     "wait": 5,
                     "lua_source": minimal_script,

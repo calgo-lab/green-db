@@ -12,10 +12,10 @@ from core.domain import Product, ScrapedPage
 
 # Because we ignored the files `zalando.py` and `otto.py` we have to skip them here as well
 from .extractors.asos import extract_asos  # type: ignore[attr-defined]
+from .extractors.hm import extract_hm  # type: ignore[attr-defined]
 from .extractors.otto import extract_otto  # type: ignore[attr-defined]
 from .extractors.zalando import extract_zalando  # type: ignore[attr-defined]
 from .extractors.zalando_fr import extract_zalando_fr  # type: ignore[attr-defined]
-from .extractors.hm import extract_hm  # type: ignore[attr-defined]
 from .parse import parse_page
 
 log.setup_logger(__name__)

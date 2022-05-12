@@ -1,0 +1,641 @@
+{
+    "accessoirespourchien": {
+        "name": "Accessoires pour chien",
+        "code": "Accessoires+pour+chien",
+        "gender": [
+            "female",
+            "male"
+        ],
+        "mapping": ""
+    },
+    "bague": {
+        "name": "Bague",
+        "code": "Bague",
+        "gender": [
+            "female",
+            "male"
+        ],
+        "mapping": ""
+    },
+    "bandeau": {
+        "name": "Bandeau",
+        "code": "Bandeau",
+        "gender": [
+            "female",
+            "male"
+        ],
+        "mapping": ""
+    },
+    "basdemaillot": {
+        "name": "Bas de maillot",
+        "code": "Bas+de+maillot",
+        "gender": [
+            "female"
+        ],
+        "mapping": "SWIMMWEAR"
+    },
+    "bijoudepied": {
+        "name": "Bijou de pied",
+        "code": "Bijou+de+pied",
+        "gender": [
+            "female"
+        ],
+        "mapping": ""
+    },
+    "blazer": {
+        "name": "Blazer",
+        "code": "Blazer",
+        "gender": [
+            "female",
+            "male"
+        ],
+        "mapping": "SUIT"
+    },
+    "blouse": {
+        "name": "Blouse",
+        "code": "Blouse",
+        "gender": [
+            "female"
+        ],
+        "mapping": "BLOUSE"
+    },
+    "body": {
+        "name": "Body",
+        "code": "Body",
+        "gender": [
+            "female"
+        ],
+        "mapping": ""
+    },
+    "boléro": {
+        "name": "Boléro",
+        "code": "Bol%C3%A9ro",
+        "gender": [
+            "female"
+        ],
+        "mapping": ""
+    },
+    "bonnet": {
+        "name": "Bonnet",
+        "code": "Bonnet",
+        "gender": [
+            "female",
+            "male"
+        ],
+        "mapping": ""
+    },
+    "bouclesdoreilles": {
+        "name": "Boucles d'oreilles",
+        "code": "Boucles+d%27oreilles",
+        "gender": [
+            "female"
+        ],
+        "mapping": ""
+    },
+    "bracelet": {
+        "name": "Bracelet",
+        "code": "Bracelet",
+        "gender": [
+            "female",
+            "male"
+        ],
+        "mapping": ""
+    },
+    "béret": {
+        "name": "Béret",
+        "code": "B%C3%A9ret",
+        "gender": [
+            "female"
+        ],
+        "mapping": ""
+    },
+    "caftan": {
+        "name": "Caftan",
+        "code": "Caftan",
+        "gender": [
+            "female"
+        ],
+        "mapping": ""
+    },
+    "casquette": {
+        "name": "Casquette",
+        "code": "Casquette",
+        "gender": [
+            "female",
+            "male"
+        ],
+        "mapping": ""
+    },
+    "ceinture": {
+        "name": "Ceinture",
+        "code": "Ceinture",
+        "gender": [
+            "female"
+        ],
+        "mapping": ""
+    },
+    "ceintureàharnais": {
+        "name": "Ceinture à harnais",
+        "code": "Ceinture+%C3%A0+harnais",
+        "gender": [
+            "female"
+        ],
+        "mapping": ""
+    },
+    "chapeau": {
+        "name": "Chapeau",
+        "code": "Chapeau",
+        "gender": [
+            "female",
+            "male"
+        ],
+        "mapping": ""
+    },
+    "chauffe-poignets": {
+        "name": "Chauffe-poignets",
+        "code": "Chauffe-poignets",
+        "gender": [
+            "female"
+        ],
+        "mapping": ""
+    },
+    "chaussettes": {
+        "name": "Chaussettes",
+        "code": "Chaussettes",
+        "gender": [
+            "female",
+            "male"
+        ],
+        "mapping": "SOCKS"
+    },
+    "chaussons": {
+        "name": "Chaussons",
+        "code": "Chaussons",
+        "gender": [
+            "female",
+            "male"
+        ],
+        "mapping": "SHOES"
+    },
+    "chaussures": {
+        "name": "Chaussures",
+        "code": "Chaussures",
+        "gender": [
+            "female",
+            "male"
+        ],
+        "mapping": "SHOES"
+    },
+    "chaînepourlunettes": {
+        "name": "Chaîne pour lunettes",
+        "code": "Cha%C3%AEne+pour+lunettes",
+        "gender": [
+            "female"
+        ],
+        "mapping": ""
+    },
+    "chemise": {
+        "name": "Chemise",
+        "code": "Chemise",
+        "gender": [
+            "female",
+            "male"
+        ],
+        "mapping": "SHIRT"
+    },
+    "chemisedenuit": {
+        "name": "Chemise de nuit",
+        "code": "Chemise+de+nuit",
+        "gender": [
+            "female"
+        ],
+        "mapping": "NIGHTWEAR"
+    },
+    "col": {
+        "name": "Col",
+        "code": "Col",
+        "gender": [
+            "female"
+        ],
+        "mapping": ""
+    },
+    "colplastron": {
+        "name": "Col plastron",
+        "code": "Col+plastron",
+        "gender": [
+            "female"
+        ],
+        "mapping": ""
+    },
+    "collant": {
+        "name": "Collant",
+        "code": "Collant",
+        "gender": [
+            "female"
+        ],
+        "mapping": ""
+    },
+    "collier": {
+        "name": "Collier",
+        "code": "Collier",
+        "gender": [
+            "female",
+            "male"
+        ],
+        "mapping": ""
+    },
+    "combinaison": {
+        "name": "Combinaison",
+        "code": "Combinaison",
+        "gender": [
+            "female"
+        ],
+        "mapping": "OVERALL"
+    },
+    "combinaisonpompiste": {
+        "name": "Combinaison pompiste",
+        "code": "Combinaison+pompiste",
+        "gender": [
+            "female",
+            "male"
+        ],
+        "mapping": "OVERALL"
+    },
+    "culotte": {
+        "name": "Culotte",
+        "code": "Culotte",
+        "gender": [
+            "female"
+        ],
+        "mapping": "UNDERWEAR"
+    },
+    "foulard": {
+        "name": "Foulard",
+        "code": "Foulard",
+        "gender": [
+            "female",
+            "male"
+        ],
+        "mapping": ""
+    },
+    "gilet": {
+        "name": "Gilet",
+        "code": "Gilet",
+        "gender": [
+            "female",
+            "male"
+        ],
+        "mapping": "JACKET"
+    },
+    "giletdecostume": {
+        "name": "Gilet de costume",
+        "code": "Gilet+de+costume",
+        "gender": [
+            "female",
+            "male"
+        ],
+        "mapping": "JACKET"
+    },
+    "guêtres": {
+        "name": "Guêtres",
+        "code": "Gu%C3%AAtres",
+        "gender": [
+            "female"
+        ],
+        "mapping": ""
+    },
+    "hautdemaillot": {
+        "name": "Haut de maillot",
+        "code": "Haut+de+maillot",
+        "gender": [
+            "female"
+        ],
+        "mapping": "SWIMMWEAR"
+    },
+    "jambière": {
+        "name": "Jambière",
+        "code": "Jambi%C3%A8re",
+        "gender": [
+            "female"
+        ],
+        "mapping": ""
+    },
+    "jean": {
+        "name": "Jean",
+        "code": "Jean",
+        "gender": [
+            "female",
+            "male"
+        ],
+        "mapping": "JEANS"
+    },
+    "jupe": {
+        "name": "Jupe",
+        "code": "Jupe",
+        "gender": [
+            "female"
+        ],
+        "mapping": "SKIRT"
+    },
+    "legging": {
+        "name": "Legging",
+        "code": "Legging",
+        "gender": [
+            "female",
+            "male"
+        ],
+        "mapping": "PANT"
+    },
+    "lunettesdesoleil": {
+        "name": "Lunettes de soleil",
+        "code": "Lunettes+de+soleil",
+        "gender": [
+            "female",
+            "male"
+        ],
+        "mapping": ""
+    },
+    "maillotdebain": {
+        "name": "Maillot de bain",
+        "code": "Maillot+de+bain",
+        "gender": [
+            "female"
+        ],
+        "mapping": ""
+    },
+    "manteau": {
+        "name": "Manteau",
+        "code": "Manteau",
+        "gender": [
+            "female",
+            "male"
+        ],
+        "mapping": "SWIMMWEAR"
+    },
+    "pantalon": {
+        "name": "Pantalon",
+        "code": "Pantalon",
+        "gender": [
+            "female",
+            "male"
+        ],
+        "mapping": "PANT"
+    },
+    "pinceàcheveux": {
+        "name": "Pince à cheveux",
+        "code": "Pince+%C3%A0+cheveux",
+        "gender": [
+            "female"
+        ],
+        "mapping": ""
+    },
+    "pull": {
+        "name": "Pull",
+        "code": "Pull",
+        "gender": [
+            "female",
+            "male"
+        ],
+        "mapping": "SWEATER"
+    },
+    "pyjama": {
+        "name": "Pyjama",
+        "code": "Pyjama",
+        "gender": [
+            "female",
+            "male"
+        ],
+        "mapping": "NIGHTWEAR"
+    },
+    "robe": {
+        "name": "Robe",
+        "code": "Robe",
+        "gender": [
+            "female"
+        ],
+        "mapping": "DRESS"
+    },
+    "robedechambre": {
+        "name": "Robe de chambre",
+        "code": "Robe+de+chambre",
+        "gender": [
+            "female"
+        ],
+        "mapping": "DRESS"
+    },
+    "sac": {
+        "name": "Sac",
+        "code": "Sac",
+        "gender": [
+            "female",
+            "male"
+        ],
+        "mapping": "BAG"
+    },
+    "sacàlinge": {
+        "name": "Sac à linge",
+        "code": "Sac+%C3%A0+linge",
+        "gender": [
+            "female"
+        ],
+        "mapping": "BAG"
+    },
+    "serre-tête": {
+        "name": "Serre-tête",
+        "code": "Serre-t%C3%AAte",
+        "gender": [
+            "female"
+        ],
+        "mapping": ""
+    },
+    "short": {
+        "name": "Short",
+        "code": "Short",
+        "gender": [
+            "female",
+            "male"
+        ],
+        "mapping": "PANT"
+    },
+    "soutien-gorge": {
+        "name": "Soutien-gorge",
+        "code": "Soutien-gorge",
+        "gender": [
+            "female"
+        ],
+        "mapping": "UNDERWEAR"
+    },
+    "sweat": {
+        "name": "Sweat",
+        "code": "Sweat",
+        "gender": [
+            "female",
+            "male"
+        ],
+        "mapping": "SWEATER"
+    },
+    "t-shirt": {
+        "name": "T-shirt",
+        "code": "T-shirt",
+        "gender": [
+            "female",
+            "male"
+        ],
+        "mapping": "TSHIRT"
+    },
+    "top": {
+        "name": "Top",
+        "code": "Top",
+        "gender": [
+            "female"
+        ],
+        "mapping": "TOP"
+    },
+    "troussedetoilette": {
+        "name": "Trousse de toilette",
+        "code": "Trousse+de+toilette",
+        "gender": [
+            "female"
+        ],
+        "mapping": ""
+    },
+    "tunique": {
+        "name": "Tunique",
+        "code": "Tunique",
+        "gender": [
+            "female"
+        ],
+        "mapping": ""
+    },
+    "veste": {
+        "name": "Veste",
+        "code": "Veste",
+        "gender": [
+            "female",
+            "male"
+        ],
+        "mapping": "JACKET"
+    },
+    "vestesansmanches": {
+        "name": "Veste sans manches",
+        "code": "Veste+sans+manches",
+        "gender": [
+            "female",
+            "male"
+        ],
+        "mapping": "veste"
+    },
+    "vêtementspourchien": {
+        "name": "Vêtements pour chien",
+        "code": "V%C3%AAtements+pour+chien",
+        "gender": [
+            "female",
+            "male"
+        ],
+        "mapping": ""
+    },
+    "étuiàlingettes": {
+        "name": "Étui à lingettes",
+        "code": "%C3%89tui+%C3%A0+lingettes",
+        "gender": [
+            "female"
+        ],
+        "mapping": ""
+    },
+    "caleçonlong": {
+        "name": "Caleçon long",
+        "code": "Cale%C3%A7on+long",
+        "gender": [
+            "male"
+        ],
+        "mapping": ""
+    },
+    "cravate": {
+        "name": "Cravate",
+        "code": "Cravate",
+        "gender": [
+            "male"
+        ],
+        "mapping": ""
+    },
+    "gants": {
+        "name": "Gants",
+        "code": "Gants",
+        "gender": [
+            "male"
+        ],
+        "mapping": ""
+    },
+    "houssepourordinateurportable": {
+        "name": "Housse pour ordinateur portable",
+        "code": "Housse+pour+ordinateur+portable",
+        "gender": [
+            "male"
+        ],
+        "mapping": ""
+    },
+    "lunettes": {
+        "name": "Lunettes",
+        "code": "Lunettes",
+        "gender": [
+            "male"
+        ],
+        "mapping": ""
+    },
+    "mouchoir": {
+        "name": "Mouchoir",
+        "code": "Mouchoir",
+        "gender": [
+            "male"
+        ],
+        "mapping": ""
+    },
+    "organiseurdesac": {
+        "name": "Organiseur de sac",
+        "code": "Organiseur+de+sac",
+        "gender": [
+            "male"
+        ],
+        "mapping": ""
+    },
+    "portefeuille": {
+        "name": "Portefeuille",
+        "code": "Portefeuille",
+        "gender": [
+            "male"
+        ],
+        "mapping": "BAG"
+    },
+    "shortdebain": {
+        "name": "Short de bain",
+        "code": "Short+de+bain",
+        "gender": [
+            "male"
+        ],
+        "mapping": "SWIMMWEAR"
+    },
+    "slips": {
+        "name": "Slips",
+        "code": "Slips",
+        "gender": [
+            "male"
+        ],
+        "mapping": "UNDERWEAR"
+    },
+    "tourdecouporte-clés": {
+        "name": "Tour de cou porte-clés",
+        "code": "Tour+de+cou+porte-cl%C3%A9s",
+        "gender": [
+            "male"
+        ],
+        "mapping": ""
+    },
+    "écharpe": {
+        "name": "Écharpe",
+        "code": "%C3%89charpe",
+        "gender": [
+            "male"
+        ],
+        "mapping": ""
+    }
+}

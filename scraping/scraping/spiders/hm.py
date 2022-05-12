@@ -1,12 +1,14 @@
+import json
 import math
 from logging import getLogger
 from typing import Iterator
 from urllib.parse import parse_qs, urlparse
 
-
 from scrapy.http.request import Request as ScrapyHttpRequest
 from scrapy.http.response import Response as ScrapyHttpResponse
 from scrapy_playwright.page import PageMethod
+
+from ..start_scripts.hm import get_settings
 from ._base import BaseSpider
 
 logger = getLogger(__name__)
@@ -18,7 +20,7 @@ class HMSpider(BaseSpider):
 
     custom_settings = {
         "COOKIES_ENABLED": True,
-        "DOWNLOAD_DELAY": 2,
+        "DOWNLOAD_DELAY": 0.5,
         "CONCURRENT_REQUESTS_PER_DOMAIN": 4,
         "USER_AGENT": "Green Consumption Assistant",
         "DOWNLOAD_HANDLERS": {
@@ -40,11 +42,13 @@ class HMSpider(BaseSpider):
     }
 
     def start_requests(self) -> Iterator[ScrapyHttpRequest]:
-        for start_url in self.start_urls:
+        for setting in get_settings():
             yield ScrapyHttpRequest(
-                url=start_url,
+                url=setting.get("start_urls"),
                 callback=self.parse_SERP,
+                meta=setting
             )
+            logger.info(f"Scraping setting: {setting}")
 
     def parse_SERP(
         self, response: ScrapyHttpResponse
@@ -72,19 +76,20 @@ class HMSpider(BaseSpider):
                 url=response.urljoin(product_link),
                 callback=self.parse_PRODUCT,
                 priority=1,  # higher prio than SERP => finish product requests first
-                meta=self._playwright_meta,
+                meta=self._playwright_meta | response.meta,
             )
 
         # Pagination: Request SERPS if we are on start_url (offset=0)
         if "offset=0" in response.url:
-            yield from self.request_SERPs(url=response.url, data=data)
+            yield from self.request_SERPs(url=response.url, data=data, meta=response.meta)
 
-    def request_SERPs(self, url: str, data: dict) -> Iterator[ScrapyHttpRequest]:
+    def request_SERPs(self, url: str, data: dict, meta: dict) -> Iterator[ScrapyHttpRequest]:
         """
         It is responsible for yielding new `ScrapyHttpRequest` for results pages (a.k.a `SERP`)
             if more products are available.
 
         Args:
+            meta: dict with meta information
             url (str): url of the start_url
             data (dict): responded data of initial request
 
@@ -105,4 +110,5 @@ class HMSpider(BaseSpider):
             yield ScrapyHttpRequest(
                 url=next_page,
                 callback=self.parse_SERP,
+                meta=meta,
             )
