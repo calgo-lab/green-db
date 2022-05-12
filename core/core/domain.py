@@ -16,6 +16,7 @@ class PageType(str, Enum):
 
 class CurrencyType(str, Enum):
     EUR = "EUR"
+    GBP = "GBP"
 
 
 class ScrapedPage(BaseModel):
