@@ -50,7 +50,7 @@ class BaseSpider(Spider):
 
         super().__init__(name=self.name, **kwargs)
 
-        self.meta_data: Optional[Dict[str, str]] = {}
+        self.meta_data: Dict[str, str] = {}
         self.timestamp = timestamp
         self.category = category
         self.message_queue = MessageQueue()
@@ -63,8 +63,6 @@ class BaseSpider(Spider):
 
             if type(meta_data) == dict:
                 self.meta_data = meta_data
-                # if response.meta is not None:
-                # self.meta_data = meta_data.update(response.meta)
             else:
                 logger.error(
                     "Argument 'meta_data' need to be of type dict or serialized JSON string."
@@ -72,8 +70,6 @@ class BaseSpider(Spider):
 
         if search_term:
             self.meta_data["search_term"] = search_term  # type: ignore
-
-        self.meta_data = self.meta_data if self.meta_data else None  # type: ignore
 
         if not (type(start_urls) == str or type(start_urls) == list):
             logger.error(
@@ -133,8 +129,12 @@ class BaseSpider(Spider):
         Args:
             response (SplashJsonResponse): Response from a performed request
         """
-        if response.meta["amazon_price"]:
-            meta_information = self.meta_data | {"amazon_price": response.meta["amazon_price"]}
+
+        request_meta_information = response.meta.get("amazon_price", None)
+        if request_meta_information is not None:
+            meta_information = self.meta_data | {"amazon_price": request_meta_information}
+        else:
+            meta_information = self.meta_data
 
         scraped_page = ScrapedPage(
             timestamp=self.timestamp,
