@@ -262,8 +262,6 @@ def _get_description(soup: BeautifulSoup) -> str:
         if desc_paragraph:
             return desc_paragraph.get_text().strip()
         if desc_list:
-            if "Mehr anzeigen" in desc_list[-1].text.strip():
-                desc_list = desc_list[:-1]
             spans = [span.text.strip() for span in desc_list if span.text.strip()]
             return ". ".join(spans)
         return ""
