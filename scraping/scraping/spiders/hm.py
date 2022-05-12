@@ -46,7 +46,9 @@ class HMSpider(BaseSpider):
             yield ScrapyHttpRequest(
                 url=setting.get("start_urls"),
                 callback=self.parse_SERP,
-                meta=setting
+                meta={"original_URL": setting.get("start_urls"),
+                      "category": setting.get("category"),
+                      "meta_data": setting.get("meta_data")},
             )
             logger.info(f"Scraping setting: {setting}")
 
@@ -75,7 +77,7 @@ class HMSpider(BaseSpider):
             yield ScrapyHttpRequest(
                 url=response.urljoin(product_link),
                 callback=self.parse_PRODUCT,
-                priority=1,  # higher prio than SERP => finish product requests first
+                priority=2,  # higher prio than SERP => finish product requests first
                 meta=self._playwright_meta | response.meta,
             )
 
@@ -111,4 +113,5 @@ class HMSpider(BaseSpider):
                 url=next_page,
                 callback=self.parse_SERP,
                 meta=meta,
+                priority=1,
             )

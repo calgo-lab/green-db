@@ -34,6 +34,19 @@ SETTINGS = {
 }
 
 
+def load_meta(meta_data):
+    if meta_data:
+        meta_data = json.loads(meta_data) if isinstance(meta_data, str) else meta_data  # type: ignore # noqa
+        if isinstance(meta_data, dict):
+            return meta_data  # type: ignore
+        else:
+            logger.error(
+                "Argument 'meta_data' need to be of type dict or serialized JSON string."
+            )
+    else:
+        return None  # type: ignore
+
+
 class BaseSpider(Spider):
     def __init__(
             self,
@@ -78,18 +91,7 @@ class BaseSpider(Spider):
         if category:
             self.category = category
 
-        if meta_data:
-            meta_data = json.loads(meta_data) if type(
-                meta_data) == str else meta_data  # type: ignore # noqa
-
-            if type(meta_data) == dict:
-                self.meta_data = meta_data  # type: ignore
-            else:
-                logger.error(
-                    "Argument 'meta_data' need to be of type dict or serialized JSON string."
-                )
-        else:
-            self.meta_data = None  # type: ignore
+        self.meta_data = load_meta(meta_data)
 
         if search_term:
             self.meta_data["search_term"] = search_term  # type: ignore
@@ -162,7 +164,7 @@ class BaseSpider(Spider):
             html=response.body.decode("utf-8"),
             page_type=PageType.SERP,
             category=response.meta.get("category"),
-            meta_information=json.loads(response.meta.get("meta_data")),
+            meta_information=load_meta(response.meta.get("meta_data")),
             #meta_information=response.meta.get("meta_data"),
         )
 
@@ -183,7 +185,7 @@ class BaseSpider(Spider):
             html=response.body.decode("utf-8"),
             page_type=PageType.PRODUCT,
             category=response.meta.get("category"),
-            meta_information=json.loads(response.meta.get("meta_data")),
+            meta_information=load_meta(response.meta.get("meta_data")),
             #meta_information=response.meta.get("meta_data"),
         )
 

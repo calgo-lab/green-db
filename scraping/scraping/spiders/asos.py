@@ -7,6 +7,7 @@ from urllib.parse import parse_qs, urlparse
 from scrapy.http.request import Request as ScrapyHttpRequest
 from scrapy.http.response import Response as ScrapyHttpResponse
 
+from ..start_scripts.asos import get_settings
 from ._base import BaseSpider
 
 logger = getLogger(__name__)
@@ -45,12 +46,15 @@ class AsosSpider(BaseSpider):
         Yields:
             Iterator[ScrapyHttpRequest]: Requests that will be performed
         """
-        for start_url in self.start_urls:
+        for setting in get_settings():
             yield ScrapyHttpRequest(
-                url=start_url,
+                url=setting.get("start_urls"),
                 callback=self.parse_SERP,
-                meta={"original_URL": start_url},
+                meta={"original_URL": setting.get("start_urls"),
+                      "category": setting.get("category"),
+                      "meta_data": setting.get("meta_data")},
             )
+            logger.info(f"Scraping setting: {setting}")
 
     def parse_SERP(self, response: ScrapyHttpResponse) -> Iterator[ScrapyHttpRequest]:
         # Save HTML to database
@@ -67,25 +71,27 @@ class AsosSpider(BaseSpider):
             product_ids = product_ids[: self.products_per_page]
 
         logger.info(f"Number of products {len(product_ids)} to be scraped")
+        response.meta.update({"original_URL": response.url})
 
         for product_id in product_ids:
             yield ScrapyHttpRequest(
                 url=f"{self._product_api}{product_id}{self._filters}",
                 callback=self.parse_PRODUCT,
-                meta={"original_URL": response.url},
-                priority=1,  # higher prio than SERP => finish product requests first
+                meta=response.meta,
+                priority=2,  # higher prio than SERP => finish product requests first
             )
 
         # Pagination: Request SERPS if we are on start_url (offset=0)
         if "offset=0" in response.url:
-            yield from self.request_SERPs(url=response.url, data=data)
+            yield from self.request_SERPs(url=response.url, data=data, meta=response.meta)
 
-    def request_SERPs(self, url: str, data: dict) -> Iterator[ScrapyHttpRequest]:
+    def request_SERPs(self, url: str, data: dict, meta: dict) -> Iterator[ScrapyHttpRequest]:
         """
         It is responsible for yielding new `ScrapyHttpRequest` for results pages (a.k.a `SERP`)
             if more products are available.
 
         Args:
+            meta: dict with meta information
             url (str): url of the start_url
             data (dict): responded data of initial request
 
@@ -106,4 +112,6 @@ class AsosSpider(BaseSpider):
             yield ScrapyHttpRequest(
                 url=next_page,
                 callback=self.parse_SERP,
+                meta=meta,
+                priority=1,
             )
