@@ -26,17 +26,16 @@ class AmazonSpider(BaseSpider):
         prices = response.css(
             "div.a-row.a-size-base.a-color-base span.a-price-whole::text"
         ).getall()
-        products = dict(zip(urls, prices))
 
         # Yield request for each product
-        logger.info(f"Number of products to be scraped {len(products)}")
-        for key, value in products.items():
-            if "refinements=p_n_cpf_eligible" in key:
+        logger.info(f"Number of products to be scraped {len(urls)}")
+        for url, price in zip(urls, prices):
+            if "refinements=p_n_cpf_eligible" in url:
                 yield SplashRequest(
-                    url=f"https://www.amazon.de{key}",
+                    url=f"https://www.amazon.de{url}",
                     callback=self.parse_PRODUCT,
                     meta={
-                        "amazon_price": value
+                        "amazon_price": price
                     },  # customized meta_information working used just in amazon
                     endpoint="execute",
                     priority=1,  # higher priority than SERP

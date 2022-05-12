@@ -14,7 +14,7 @@ def test_amazon_electronics() -> None:
     meta_information = {
         "family": "electronics",
         "sex": "MALE",
-        "price": "599,00",
+        "amazon_price": "599,00",
     }
 
     scraped_page = read_test_html(
