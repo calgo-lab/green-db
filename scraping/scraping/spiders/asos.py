@@ -1,13 +1,13 @@
 import json
 import math
+from datetime import datetime
 from logging import getLogger
-from typing import Iterator
+from typing import Iterator, Dict, Any
 from urllib.parse import parse_qs, urlparse
 
 from scrapy.http.request import Request as ScrapyHttpRequest
 from scrapy.http.response import Response as ScrapyHttpResponse
 
-from ..start_scripts.asos import get_settings
 from ._base import BaseSpider
 
 logger = getLogger(__name__)
@@ -39,22 +39,9 @@ class AsosSpider(BaseSpider):
         "DEFAULT_REQUEST_HEADERS": headers,
     }
 
-    def start_requests(self) -> Iterator[ScrapyHttpRequest]:
-        """
-        The `Scrapy` framework executes this method.
-
-        Yields:
-            Iterator[ScrapyHttpRequest]: Requests that will be performed
-        """
-        for setting in get_settings():
-            yield ScrapyHttpRequest(
-                url=setting.get("start_urls"),
-                callback=self.parse_SERP,
-                meta={"original_URL": setting.get("start_urls"),
-                      "category": setting.get("category"),
-                      "meta_data": setting.get("meta_data")},
-            )
-            logger.info(f"Scraping setting: {setting}")
+    def __init__(self, timestamp: datetime, **kwargs: Dict[str, Any]):
+        super().__init__(timestamp, **kwargs)
+        self.StartRequestType = ScrapyHttpRequest
 
     def parse_SERP(self, response: ScrapyHttpResponse) -> Iterator[ScrapyHttpRequest]:
         # Save HTML to database

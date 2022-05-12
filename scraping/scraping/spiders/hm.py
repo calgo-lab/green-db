@@ -1,14 +1,14 @@
 import json
 import math
+from datetime import datetime
 from logging import getLogger
-from typing import Iterator
+from typing import Iterator, Dict, Any
 from urllib.parse import parse_qs, urlparse
 
 from scrapy.http.request import Request as ScrapyHttpRequest
 from scrapy.http.response import Response as ScrapyHttpResponse
 from scrapy_playwright.page import PageMethod
 
-from ..start_scripts.hm import get_settings
 from ._base import BaseSpider
 
 logger = getLogger(__name__)
@@ -17,6 +17,7 @@ logger = getLogger(__name__)
 class HMSpider(BaseSpider):
     name = "hm"
     allowed_domains = ["hm.com"]
+    StartRequestType = ScrapyHttpRequest
 
     custom_settings = {
         "COOKIES_ENABLED": True,
@@ -41,16 +42,9 @@ class HMSpider(BaseSpider):
         ],
     }
 
-    def start_requests(self) -> Iterator[ScrapyHttpRequest]:
-        for setting in get_settings():
-            yield ScrapyHttpRequest(
-                url=setting.get("start_urls"),
-                callback=self.parse_SERP,
-                meta={"original_URL": setting.get("start_urls"),
-                      "category": setting.get("category"),
-                      "meta_data": setting.get("meta_data")},
-            )
-            logger.info(f"Scraping setting: {setting}")
+    def __init__(self, timestamp: datetime, **kwargs: Dict[str, Any]):
+        super().__init__(timestamp, **kwargs)
+        self.StartRequestType = ScrapyHttpRequest
 
     def parse_SERP(
         self, response: ScrapyHttpResponse
@@ -62,9 +56,9 @@ class HMSpider(BaseSpider):
         all_product_links = list(
             set(
                 [
-                    color.get("articleLink")
+                    variant.get("articleLink")
                     for product in data.get("products")
-                    for color in product.get("swatches")
+                    for variant in product.get("swatches")
                 ]
             )
         )

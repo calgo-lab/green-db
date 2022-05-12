@@ -8,6 +8,7 @@ from message_queue import MessageQueue
 from scrapy import Spider
 from scrapy.http.response import Response as ScrapyHttpResponse
 from scrapy.http.response.text import TextResponse as ScrapyTextResponse
+from scrapy.http.request import Request as ScrapyHttpRequest, Request
 from scrapy_splash import SplashJsonResponse, SplashRequest
 
 from core.constants import (
@@ -78,6 +79,7 @@ class BaseSpider(Spider):
         # set default value
         self.request_timeout = getattr(self, "request_timeout", 0.5)
         self.table_name: str = getattr(self, "table_name", self.name)  # type: ignore
+        self.StartRequestType = SplashRequest
 
         super().__init__(name=self.name, **kwargs)
 
@@ -115,28 +117,29 @@ class BaseSpider(Spider):
         Yields:
             Iterator[SplashRequest]: Requests that will be performed
         """
+        settings = []
         if self.start_urls:
             for start_url in self.start_urls:
-                yield SplashRequest(
-                    url=start_url,
-                    callback=self.parse_SERP,
-                    meta={"original_URL": start_url,
-                          "category": self.category,
-                          "meta_data": self.meta_data},
-                    endpoint="execute",
-                    args={  # passed to Splash HTTP API
-                        "wait": self.request_timeout,
-                        "lua_source": scroll_end_of_page_script,
-                        "timeout": 180,
-                    },
-                )
+                settings.append(
+                    {"start_urls": start_url,
+                     "category": self.category,
+                     "meta_data": self.meta_data})
         else:
-            for setting in SETTINGS.get(self.name):
+            settings = SETTINGS.get(self.name)
+
+        for setting in settings:
+            if self.StartRequestType == ScrapyHttpRequest:
+                yield ScrapyHttpRequest(
+                    url=setting.get("start_urls"),
+                    callback=self.parse_SERP,
+                    meta={"category": setting.get("category"),
+                          "meta_data": setting.get("meta_data")},
+                )
+            elif self.StartRequestType == SplashRequest:
                 yield SplashRequest(
                     url=setting.get("start_urls"),
                     callback=self.parse_SERP,
-                    meta={"original_URL": setting.get("start_urls"),
-                          "category": setting.get("category"),
+                    meta={"category": setting.get("category"),
                           "meta_data": setting.get("meta_data")},
                     endpoint="execute",
                     args={  # passed to Splash HTTP API
@@ -145,7 +148,7 @@ class BaseSpider(Spider):
                         "timeout": 180,
                     },
                 )
-                logger.info(f"Crawling setting: {setting}")
+            logger.info(f"Crawling setting: {setting}")
 
     def _save_SERP(
             self, response: Union[SplashJsonResponse, ScrapyHttpResponse, ScrapyTextResponse]
@@ -165,7 +168,7 @@ class BaseSpider(Spider):
             page_type=PageType.SERP,
             category=response.meta.get("category"),
             meta_information=load_meta(response.meta.get("meta_data")),
-            #meta_information=response.meta.get("meta_data"),
+            # meta_information=response.meta.get("meta_data"),
         )
 
         self.message_queue.add_scraping(table_name=self.table_name, scraped_page=scraped_page)
@@ -186,7 +189,7 @@ class BaseSpider(Spider):
             page_type=PageType.PRODUCT,
             category=response.meta.get("category"),
             meta_information=load_meta(response.meta.get("meta_data")),
-            #meta_information=response.meta.get("meta_data"),
+            # meta_information=response.meta.get("meta_data"),
         )
 
         self.message_queue.add_scraping(table_name=self.table_name, scraped_page=scraped_page)
