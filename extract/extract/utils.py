@@ -23,6 +23,9 @@ def safely_return_first_element(list_object: List[Any], else_return: Any = {}) -
         return list_object[0]
 
 
+# Since the Enum 'CertificateType' is dynamically generated, mypy can't know the attributes.
+# For this reason, we ignore those errors here.
+# type: ignore[attr-defined]
 def sustainability_labels_to_certificates(labels: list[str], label_mapping: dict) -> list[str]:
     """
     Helper function that maps the extracted HTML span texts to certificates.
