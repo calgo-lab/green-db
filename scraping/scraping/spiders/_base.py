@@ -16,6 +16,7 @@ from core.constants import (
     TABLE_NAME_SCRAPING_OTTO,
     TABLE_NAME_SCRAPING_ZALANDO,
     TABLE_NAME_SCRAPING_ZALANDO_FR,
+    TABLE_NAME_SCRAPING_HM,
 )
 from core.domain import PageType, ScrapedPage
 
@@ -24,6 +25,7 @@ from ..start_scripts.asos import get_settings as get_asos_settings
 from ..start_scripts.otto import get_settings as get_otto_settings
 from ..start_scripts.zalando import get_settings as get_zalando_settings
 from ..start_scripts.zalando_fr import get_settings as get_zalando_fr_settings
+from ..start_scripts.hm import get_settings as get_hm_settings
 
 logger = getLogger(__name__)
 
@@ -32,10 +34,20 @@ SETTINGS = {
     TABLE_NAME_SCRAPING_ZALANDO: get_zalando_settings(),
     TABLE_NAME_SCRAPING_ASOS: get_asos_settings(),
     TABLE_NAME_SCRAPING_ZALANDO_FR: get_zalando_fr_settings(),
+    TABLE_NAME_SCRAPING_HM: get_hm_settings(),
 }
 
 
-def load_meta(meta_data):
+def load_meta(meta_data: str) -> dict:
+    """
+    Helper method to load meta_data.
+
+    Args:
+        meta_data: Additional meta information that could be useful downstream.
+
+    Returns:
+        dict: meta_data represented as dict.
+    """
     if meta_data:
         meta_data = json.loads(meta_data) if isinstance(meta_data, str) else meta_data  # type: ignore # noqa
         if isinstance(meta_data, dict):
@@ -168,7 +180,6 @@ class BaseSpider(Spider):
             page_type=PageType.SERP,
             category=response.meta.get("category"),
             meta_information=load_meta(response.meta.get("meta_data")),
-            # meta_information=response.meta.get("meta_data"),
         )
 
         self.message_queue.add_scraping(table_name=self.table_name, scraped_page=scraped_page)
@@ -189,7 +200,6 @@ class BaseSpider(Spider):
             page_type=PageType.PRODUCT,
             category=response.meta.get("category"),
             meta_information=load_meta(response.meta.get("meta_data")),
-            # meta_information=response.meta.get("meta_data"),
         )
 
         self.message_queue.add_scraping(table_name=self.table_name, scraped_page=scraped_page)
