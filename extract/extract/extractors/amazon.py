@@ -10,11 +10,26 @@ from bs4 import BeautifulSoup
 from pydantic import ValidationError
 
 from core.domain import CertificateType, Product
-from core.sustainability_labels import load_and_get_sustainability_labels
 
 from ..parse import ParsedPage
+from ..utils import sustainability_labels_to_certificates
 
 logger = getLogger(__name__)
+
+
+_LABEL_MAPPING = {
+    "Global Recycled Standard": CertificateType.GLOBAL_RECYCLED_STANDARD,
+    "Global Organic Textile Standard": CertificateType.GOTS_MADE_WITH_ORGANIC_MATERIALS,
+    "Organic Content Standard 100": CertificateType.ORGANIC_CONTENT_STANDARD_100,
+    "Organic Content Standard Blended": CertificateType.ORGANIC_CONTENT_STANDARD_BLENDED,
+    "Compact by Design (zertifiziert durch Amazon)": CertificateType.COMPACT_BY_DESIGN,
+    "Natrue": CertificateType.NATRUE,
+    "Cradle to Cradle Certified": CertificateType.CRADLE_TO_CRADLE,
+    "Responsible Wool Standard": CertificateType.RESPONSIBLE_WOOL_STANDARD,
+    "The Forest Stewardship Council": CertificateType.FOREST_STEWARDSHIP_COUNCIL,
+    "Das offizielle Nordische Umweltzeichen": CertificateType.NORDIC_SWAN_ECOLABEL,
+    "Reducing CO2": CertificateType.CARBON_TRUST_REDUCING,
+}
 
 
 def extract_amazon(parsed_page: ParsedPage) -> Optional[Product]:
@@ -40,7 +55,9 @@ def extract_amazon(parsed_page: ParsedPage) -> Optional[Product]:
 
     sustainability_spans = soup.find_all("span", id=re.compile("CPF-BTF-Certificate-Name"))
     sustainability_texts = [span.text for span in sustainability_spans]
-    sustainability_labels = _sustainability_label_to_certificate(sustainability_texts)
+    sustainability_labels = sustainability_labels_to_certificates(
+        sustainability_texts, _LABEL_MAPPING
+    )
 
     brand = _get_brand(soup)
     description = _get_description(soup)
@@ -70,61 +87,6 @@ def extract_amazon(parsed_page: ParsedPage) -> Optional[Product]:
         # error contains relatively nice report why data is not valid
         logger.info(error)
         return None
-
-
-def _sustainability_label_to_certificate(labels: list[str]) -> list[str]:
-    """
-    Helper function that extracts the sustainability information from the parsed HTML's label tag.
-
-    Args:
-        labels (str): Label string from the HTML span tag
-
-    Returns:
-        list[CertificateType]: List of `CertificateType` objects
-    """
-    sustainability_labels = load_and_get_sustainability_labels()
-    _LABEL_MAPPING = {
-        "Global Recycled Standard": CertificateType.GLOBAL_RECYCLED_STANDARD,
-        "Global Organic Textile Standard": CertificateType.GOTS_MADE_WITH_ORGANIC_MATERIALS,
-        "Organic Content Standard 100": CertificateType.ORGANIC_CONTENT_STANDARD_100,
-        "Organic Content Standard Blended": CertificateType.ORGANIC_CONTENT_STANDARD_BLENDED,
-        "Compact by Design (zertifiziert durch Amazon)": CertificateType.COMPACT_BY_DESIGN,
-        "Natrue": CertificateType.NATRUE,
-        "Cradle to Cradle Certified": CertificateType.CRADLE_TO_CRADLE,
-        "Responsible Wool Standard": CertificateType.RESPONSIBLE_WOOL_STANDARD,
-        "The Forest Stewardship Council": CertificateType.FOREST_STEWARDSHIP_COUNCIL,
-        "Das offizielle Nordische Umweltzeichen": CertificateType.NORDIC_SWAN_ECOLABEL,
-        "Reducing CO2": CertificateType.CARBON_TRUST_REDUCING,
-    }
-
-    result = {
-        CertificateType[certificate.split(":")[-1]]
-        for certificate, description in sustainability_labels.items()
-        if any(_get_matching_languages(description["languages"].values(), labels))
-    }
-
-    for label, certificate in _LABEL_MAPPING.items():
-        if label in labels:
-            result.update({certificate})
-
-    return result or [CertificateType.OTHER]
-
-
-def _get_matching_languages(languages: list[dict], labels: list[str]) -> list[dict]:
-    """
-    Helper function that checks if a label from `load_and_get_sustainability_labels`
-    matches in a language with a label name.
-
-    Args:
-        languages (list[dict]): List of `dict` objects with each object containing the
-            label information in a specific language
-        labels (list[str]): Function that is processing the scan result
-
-    Returns:
-        list[dict]: `list` with `dict` objects representing the matched label information
-            in a specific language.
-    """
-    return [language for language in languages if language["name"] in labels]
 
 
 def _handle_parse(targets: list, parse: Callable) -> Optional[Any]:
