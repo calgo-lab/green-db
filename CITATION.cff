@@ -1,16 +1,29 @@
 preferred-citation:
-  type: dataset
+  type: software
   authors:
-    - family-names: "Jäger"
-      given-names: "Sebastian"
-      affiliation: "Berliner Hochschule für Technik, Germany"
-    - family-names: "Bießmann"
-      given-names: "Felix"
-      affiliation: "Berliner Hochschule für Technik, Germany"
-  doi: "10.5281/zenodo.6078039"
+    - given-names: Sebastian
+      family-names: Jäger
+      email: sebastian.jaeger@bht-berlin.de
+      affiliation: Berliner Hochschule für Technik
+    - given-names: Jessica
+      family-names: Greene
+      affiliation: Ecosia GmbH
+    - given-names: Max
+      family-names: Jakob
+      affiliation: Ecosia GmbH
+    - given-names: Ruben
+      family-names: Korenke
+      affiliation: Ecosia GmbH
+    - family-names: Santarius
+      given-names: Tilman
+      affiliation: "Technical University of Berlin, Einstein Center Digital Future"
+    - family-names: Bießmann
+      given-names: Felix
+      affiliation: "Berliner Hochschule für Technik, Einstein Center Digital Future"
+
+  doi: "10.48550/arXiv.2205.02908"
   title: "GreenDB: A Product-by-Product Sustainability Database"
   year: 2022
   note: "Supported by the Federal Ministry for the Environment, Nature Conservation and Nuclear Safety based on a decision of the German Bundestag. Förderkennzeichen: 67KI2022B"
-  url: https://doi.org/10.5281/zenodo.6078039
-  publisher: Zenodo
-  version: 0.1.0
+  url: https://arxiv.org/abs/2205.02908
+  publisher: arXiv
