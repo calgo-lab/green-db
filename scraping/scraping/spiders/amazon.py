@@ -29,6 +29,7 @@ class AmazonSpider(BaseSpider):
 
         # Yield request for each product
         logger.info(f"Number of products to be scraped {len(urls)}")
+
         for url, price in zip(urls, prices):
             if "refinements=p_n_cpf_eligible" in url:
                 yield SplashRequest(
