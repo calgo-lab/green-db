@@ -31,7 +31,7 @@ SETTINGS = [
 # Read scrapy config and get target URL for local scraping
 scrapy_config_parser = ConfigParser()
 scrapy_config_parser.read("/green-db/scraping/scrapy.cfg")  # Repo gets cloned
-SCRAPYD_CLUSTER_TARGET = scrapy_config_parser.get("deploy", "url")
+SCRAPYD_CLUSTER_TARGET = scrapy_config_parser.get("deploy:in-cluster", "url")
 
 
 def get_round_robin_iterator(*lists: List[Any]) -> Iterator[Any]:
