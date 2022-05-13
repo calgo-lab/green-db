@@ -58,8 +58,7 @@ If you are using our code or the GreenDB dataset, please reference the [preprint
   keywords = {Machine Learning (cs.LG), FOS: Computer and information sciences, FOS: Computer and information sciences},
   title = {GreenDB: Toward a Product-by-Product Sustainability Database},
   publisher = {arXiv},
-  year = {2022},
-  copyright = {Creative Commons Attribution Non Commercial Share Alike 4.0 International}
+  year = {2022}
 }
 ```
 
