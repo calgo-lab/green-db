@@ -41,5 +41,8 @@ scrapyd-test-deploy:
 workers-test-deploy:
 	$(MAKE) -C workers deploy-test
 
-extract-test:
+start-job-test-deploy:
+	$(MAKE) -C start-job deploy-test
+
+test:
 	$(MAKE) -C extract test

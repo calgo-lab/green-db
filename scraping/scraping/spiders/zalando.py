@@ -1,10 +1,11 @@
+import json
 from logging import getLogger
 from typing import Iterator
 from urllib.parse import urlsplit
 
 from scrapy_splash import SplashJsonResponse, SplashRequest
 
-from ..splash import scroll_end_of_page_script
+from ..splash import minimal_script
 from ._base import BaseSpider
 
 logger = getLogger(__name__)
@@ -14,8 +15,9 @@ class ZalandoSpider(BaseSpider):
     name = "zalando"
     allowed_domains = ["zalando.de"]
 
-    def parse_SERP(self, response: SplashJsonResponse) -> Iterator[SplashRequest]:
-        print(type(response))
+    def parse_SERP(
+        self, response: SplashJsonResponse, is_first_page: bool = True
+    ) -> Iterator[SplashRequest]:
 
         if urlsplit(response.url).path.strip("/") != urlsplit(
             response.meta["original_URL"]
@@ -34,14 +36,18 @@ class ZalandoSpider(BaseSpider):
         # Save HTML to database
         self._save_SERP(response)
 
-        # ads are less often than real products
-        article_elements = response.css("article::attr(class)").getall()
-        most_class_selector = max(set(article_elements), key=article_elements.count)
-        all_product_links = response.css(f"[class='{most_class_selector}']>a::attr(href)").getall()
-        all_product_links = list(set(all_product_links))
+        # Splash does not load all the links into the html, so we have to extract the links
+        # from a JSON stored inside a script tag
+        data = json.loads(response.css("script.re-data-el-hydrate::text").get())
+        all_product_links = []
 
-        # Scrape products on page to database
-        all_product_links = [response.urljoin(link) for link in all_product_links]
+        # Loop over all items and retrieve the product url
+        for key, value in data.get("graphqlCache", {}).items():
+            url = value.get("data", {}).get("product", {}).get("uri")
+            if url is not None:
+                all_product_links.append(url)
+
+        all_product_links = list(set(all_product_links))
 
         # If set a subset of the products are scraped
         if self.products_per_page:
@@ -55,25 +61,29 @@ class ZalandoSpider(BaseSpider):
                 callback=self.parse_PRODUCT,
                 endpoint="execute",
                 args={  # passed to Splash HTTP API
-                    "wait": self.request_timeout,
-                    "lua_source": scroll_end_of_page_script,
+                    "wait": 5,
+                    "lua_source": minimal_script,
                     "timeout": 180,
+                    "allowed_content_type": "text/html",
                 },
             )
 
         # Pagination: Parse next SERP 'recursively'
-        next_page = response.css('[title="nächste Seite"]::attr(href)').extract_first()
+        pagination = response.css('[class="DJxzzA PgtkyN"]::attr(href)').getall()
 
-        if next_page:
+        if (is_first_page and pagination) or len(pagination) == 2:
+            next_page = response.urljoin(pagination[-1])
             yield SplashRequest(
-                url=response.urljoin(next_page),
+                url=next_page,
                 callback=self.parse_SERP,
-                meta={"original_URL": response.urljoin(next_page)},
+                cb_kwargs=dict(is_first_page=False),
+                meta={"original_URL": next_page},
                 endpoint="execute",
                 args={  # passed to Splash HTTP API
-                    "wait": self.request_timeout,
-                    "lua_source": scroll_end_of_page_script,
+                    "wait": 5,
+                    "lua_source": minimal_script,
                     "timeout": 180,
+                    "allowed_content_type": "text/html",
                 },
             )
         else:

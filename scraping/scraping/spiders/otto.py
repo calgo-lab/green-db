@@ -5,7 +5,7 @@ from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 
 from scrapy_splash import SplashJsonResponse, SplashRequest
 
-from ..splash import scroll_end_of_page_script
+from ..splash import minimal_script
 from ._base import BaseSpider
 
 logger = getLogger(__name__)
@@ -20,14 +20,16 @@ class OttoSpider(BaseSpider):
         # Save HTML to database
         self._save_SERP(response)
 
-        # most links are lazy loaded
-        all_product_links = response.css('[class*="productLink"]::attr(href)').getall()
-        all_product_links = list(set(all_product_links))
+        # Get all unique links
+        all_links = list(set(response.css("[href]::attr(href)").getall()))
 
-        # Scrape products on page to database
-        all_product_links = [response.urljoin(link) for link in all_product_links]
+        # Filter for product links
+        all_product_links = [
+            response.urljoin(link)
+            for link in all_links
+            if "/#variationId=" in link and "/p/" in link
+        ]
 
-        # If set a subset of the products are scraped
         if self.products_per_page:
             all_product_links = all_product_links[: self.products_per_page]
 
@@ -39,9 +41,10 @@ class OttoSpider(BaseSpider):
                 callback=self.parse_PRODUCT,
                 endpoint="execute",
                 args={  # passed to Splash HTTP API
-                    "wait": self.request_timeout,
-                    "lua_source": scroll_end_of_page_script,
+                    "wait": 5,
+                    "lua_source": minimal_script,
                     "timeout": 180,
+                    "allowed_content_type": "text/html",
                 },
             )
 
@@ -71,9 +74,10 @@ class OttoSpider(BaseSpider):
                     meta={"o": int(pagination_info["o"])},
                     endpoint="execute",
                     args={  # passed to Splash HTTP API
-                        "wait": self.request_timeout,
-                        "lua_source": scroll_end_of_page_script,
+                        "wait": 5,
+                        "lua_source": minimal_script,
                         "timeout": 180,
+                        "allowed_content_type": "text/html",
                     },
                 )
             else:

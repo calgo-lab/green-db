@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from typing import Dict, List, Tuple, Union
+from typing import List
 
 gender_to_category = {"female": 28981, "male": 28982}
 
@@ -19,7 +19,7 @@ def combine_results(
     serp_api: str = "https://www.asos.com/api/product/search/v2/categories/",
     serp_filters: str = "&channel=mobile-web&country=FR&currency=EUR"
     "&keyStoreDataversion=dup0qtf-35&lang=fr-FR&limit=72&offset=0"
-    "&rowlength=2&store=FR ",
+    "&rowlength=2&store=FR",
 ) -> List[dict]:
     results = []
     categories = read_json(categories_json_path)
@@ -51,5 +51,5 @@ def female() -> List[dict]:
     )
 
 
-def get_settings() -> List[Union[Dict[str, str], Dict[str, Tuple[str, Dict[str, str]]]]]:
+def get_settings() -> List[dict]:
     return male() + female()

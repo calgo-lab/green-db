@@ -17,12 +17,13 @@ def test_otto_basic(requests_mock: Adapter) -> None:
     """
     requests_mock.register_uri("GET", "/product/sustainability/layerContent", text=label_html)
 
+    # original_url: https://www.otto.de/p/h-i-s-rundhalsshirt-packung-3-tlg-3er-pack-mit-druck-1379261103/#variationId=1379261260 # noqa
     url = "https://www.otto.mock/"
-    timestamp = "2022-02-17 12:49:00"
+    timestamp = "2022-04-19 12:49:00"
     merchant = "otto"
-    file_name = "damen-pullover.html"
-    category = "SWEATER"
-    meta_information = {"sex": "FEMALE", "family": "FASHION"}
+    file_name = "herren-shirt.html"
+    category = "SHIRT"
+    meta_information = {"sex": "MALE", "family": "FASHION"}
 
     scraped_page = read_test_html(
         timestamp=timestamp,
@@ -39,21 +40,22 @@ def test_otto_basic(requests_mock: Adapter) -> None:
         url=url,
         merchant=merchant,
         category=category,
-        name="s.Oliver Strickpullover »Pullover« (1-tlg)",
-        description="s.Oliver Strickpullover »Pullover« (1-tlg) für 29,99€. mit regulärer Passform,"
-        " hat einen V-Ausschnitt, hat eine Rippblende am Ausschnitt bei OTTO",
-        brand="s.Oliver",
+        name="H.I.S Rundhalsshirt (Packung, 3-tlg., 3er-Pack) mit Druck",
+        description="H.I.S Rundhalsshirt (Packung, 3-tlg., 3er-Pack) mit Druck für 29,"
+        "99€. Kontrastfarbenes Band mit HIS Schriftzug im Ausschnitt, Pflegeleichtes "
+        "Material bei OTTO",
+        brand="H.I.S",
         sustainability_labels=["certificate:UNKNOWN"],
         image_urls=[
-            "https://i.otto.mock/i/otto/c5580e48-fb81-5e76-aec5-eb68201af88a",
-            "https://i.otto.mock/i/otto/f9ac60e4-ab47-5ae1-a449-25d4fe3d9307",
-            "https://i.otto.mock/i/otto/1979af3b-ee61-52cb-bd64-1642ab0a65a7",
+            "https://i.otto.mock/i/otto/05cb3291-9921-5253-85d0-1e97c3dd5b37",
+            "https://i.otto.mock/i/otto/77656fe2-ac3f-5242-9bb0-61b5d2f768a6",
+            "https://i.otto.mock/i/otto/7072f590-6798-549a-bf2d-e8e82c6a6ed5",
         ],
         price=29.99,
         currency="EUR",
         color=None,
         size=None,
-        gtin=4065208505739,
+        gtin=8907890476439,
         asin=None,
     )
     for attribute in expected.__dict__.keys():

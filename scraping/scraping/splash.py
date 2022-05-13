@@ -21,6 +21,38 @@ function main(splash, args)
         splash:wait(args.wait)
     end
     splash:wait(args.wait)
-    return splash:html()
+    return {
+        url = splash:url(),
+        html = splash:html(),
+    }
+end
+"""
+
+minimal_script = """
+function main(splash, args)
+
+    splash.js_enabled = false
+    splash.images_enabled = false
+    splash.media_source_enabled = false
+    splash.webgl_enabled = false
+
+    -- Abort requests if allowed_content_type is set
+    if args.allowed_content_type ~= nil then
+        splash:on_request(
+            function(request)
+                if string.find(request.headers['Accept'], args.allowed_content_type) == nil then
+                    request.abort()
+                end
+            end
+        )
+    end
+
+    assert(splash:go{args.url, headers=args.headers})
+    splash:wait(args.wait)
+
+    return {
+        url = splash:url(),
+        html = splash:html(),
+    }
 end
 """

@@ -1,9 +1,10 @@
 # Since the Enum 'CertificateType' is dynamically generated, mypy can't know the attributes.
 # For this reason, we ignore those errors here.
 # type: ignore[attr-defined]
-
+import json
+import urllib
 from logging import getLogger
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 from bs4 import BeautifulSoup
 from pydantic import ValidationError
@@ -15,64 +16,6 @@ from ..utils import safely_return_first_element
 
 logger = getLogger(__name__)
 
-
-def extract_zalando(parsed_page: ParsedPage) -> Optional[Product]:
-    """
-    Extracts information of interest from HTML (and other intermediate representations)
-    and returns `Product` object or `None` if anything failed. Works for zalando.de.
-
-    Args:
-        parsed_page (ParsedPage): Intermediate representation of `ScrapedPage` domain object
-
-    Returns:
-        Optional[Product]: Valid `Product` object or `None` if extraction failed
-    """
-    if "/outfits/" in parsed_page.scraped_page.url:
-        return None
-
-    meta_data = safely_return_first_element(parsed_page.schema_org.get(JSON_LD, [{}]))
-
-    name = meta_data.get("name", None)
-    description = meta_data.get("description", None)
-    brand = meta_data.get("brand", {}).get("name", None)
-    color = meta_data.get("color", None)
-
-    first_offer = safely_return_first_element(meta_data.get("offers", [{}]))
-    currency = first_offer.get("priceCurrency", None)
-    image_urls = meta_data.get("image", [])
-    if price := first_offer.get("price", None):
-        price = float(price)
-
-    sustainability_labels = _get_sustainability(parsed_page.beautiful_soup)
-
-    try:
-        return Product(
-            timestamp=parsed_page.scraped_page.timestamp,
-            url=parsed_page.scraped_page.url,
-            merchant=parsed_page.scraped_page.merchant,
-            category=parsed_page.scraped_page.category,
-            name=name,
-            description=description,
-            brand=brand,
-            sustainability_labels=sustainability_labels,
-            price=price,
-            currency=currency,
-            image_urls=image_urls,
-            color=color,
-            size=None,
-            gtin=None,
-            asin=None,
-        )
-
-    except ValidationError as error:
-        # TODO Handle Me!!
-        # error contains relatively nice report why data ist not valid
-        logger.info(error)
-        return None
-
-
-# TODO: How can we do this smart?
-# See: https://www.zalando.de/campaigns/about-sustainability/
 _LABEL_MAPPING = {
     "Responsible Wool Standard": CertificateType.RESPONSIBLE_WOOL_STANDARD,
     "GOTS - organic": CertificateType.GOTS_ORGANIC,
@@ -122,20 +65,99 @@ _LABEL_MAPPING = {
 }
 
 
-def _get_sustainability(beautiful_soup: BeautifulSoup) -> List[str]:
+def extract_zalando(
+    parsed_page: ParsedPage, label_mapping: Dict[str, CertificateType] = _LABEL_MAPPING
+) -> Optional[Product]:
     """
-    Extracts the sustainability information from HTML.
+    Extracts information of interest from HTML (and other intermediate representations)
+    and returns `Product` object or `None` if anything failed. Works for zalando.de and zalando.fr.
+
+    Args:
+        parsed_page (ParsedPage): Intermediate representation of `ScrapedPage` domain object
+
+    Returns:
+        Optional[Product]: Valid `Product` object or `None` if extraction failed
+    """
+    if "/outfits/" in parsed_page.scraped_page.url:
+        return None
+
+    meta_data = safely_return_first_element(parsed_page.schema_org.get(JSON_LD, [{}]))
+
+    name = meta_data.get("name", None)
+    description = meta_data.get("description", None)
+    brand = meta_data.get("brand", {}).get("name", None)
+    color = meta_data.get("color", None)
+
+    first_offer = safely_return_first_element(meta_data.get("offers", [{}]))
+    currency = first_offer.get("priceCurrency", None)
+    image_urls = meta_data.get("image", [])
+    if price := first_offer.get("price", None):
+        price = float(price)
+
+    sustainability_labels = get_sustainability(
+        parsed_page.beautiful_soup, label_mapping=label_mapping
+    )
+
+    try:
+        return Product(
+            timestamp=parsed_page.scraped_page.timestamp,
+            url=parsed_page.scraped_page.url,
+            merchant=parsed_page.scraped_page.merchant,
+            category=parsed_page.scraped_page.category,
+            name=name,
+            description=description,
+            brand=brand,
+            sustainability_labels=sustainability_labels,
+            price=price,
+            currency=currency,
+            image_urls=image_urls,
+            color=color,
+            size=None,
+            gtin=None,
+            asin=None,
+        )
+
+    except ValidationError as error:
+        # TODO Handle Me!!
+        # error contains relatively nice report why data ist not valid
+        logger.info(error)
+        return None
+
+
+def get_sustainability(
+    beautiful_soup: BeautifulSoup, label_mapping: Dict[str, CertificateType]
+) -> List[str]:
+    """
+    Extracts the sustainability information from HTML. Splash does not load all the information
+    into the html anymore,so we have to extract the sustainability information from a JSON, stored
+    inside a script tag.
 
     Args:
         beautiful_soup (BeautifulSoup): Parsed HTML
+        label_mapping (Dict) : Dictionary containing the mappings from Zalando's certificate names
+        to our CertificateTypes
 
     Returns:
         List[str]: Ordered `list` of found sustainability labels
     """
 
-    if cluster := beautiful_soup.find("div", attrs={"data-testid": "cluster-certificates"}):
-        labels = cluster.find_all(attrs={"data-testid": "certificate__title"})
-        return sorted(
-            {_LABEL_MAPPING.get(label.string, CertificateType.UNKNOWN) for label in labels}
-        )
+    # Load JSON holding the sustainability information
+    data = json.loads(
+        beautiful_soup.find("script", {"type": "application/json", "class": "re-1-13"}).get_text()
+    )
+    labels = []
+
+    # Loop over all nested items to find the JSON node holding the sustainability information
+    for key, item in data.get("graphqlCache", {}).items():
+        for entry in item.get("data", {}).get("product", {}).get("attributeSuperClusters", [{}]):
+            if entry.get("id", "") == "sustainability":
+                for cluster in entry.get("clusters", [{}]):
+                    if cluster.get("sustainabilityClusterKind", "") == "certificates":
+                        # Loop over all certificate attributes and add the label to the labels list
+                        for attribute in cluster.get("attributes", [{}]):
+                            labels.append(urllib.parse.unquote(attribute.get("label", "")))
+
+    if labels:
+        # Map the found labels to their respective CertificateType
+        return sorted({label_mapping.get(label, CertificateType.UNKNOWN) for label in labels})
     return []
