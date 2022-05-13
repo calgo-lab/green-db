@@ -130,9 +130,9 @@ class BaseSpider(Spider):
             response (SplashJsonResponse): Response from a performed request
         """
 
-        request_meta_information = response.meta.get("amazon_price", None)
+        request_meta_information = response.meta.get("request_meta_information", None)
         if request_meta_information is not None:
-            meta_information = self.meta_data | {"amazon_price": request_meta_information}
+            meta_information = self.meta_data | request_meta_information
         else:
             meta_information = self.meta_data
 
