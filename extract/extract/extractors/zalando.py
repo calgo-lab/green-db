@@ -4,7 +4,7 @@
 import json
 import urllib
 from logging import getLogger
-from typing import Dict, List, Optional
+from typing import Dict, Iterator, Optional
 
 from bs4 import BeautifulSoup
 from pydantic import ValidationError
@@ -94,9 +94,20 @@ def extract_zalando(
     if price := first_offer.get("price", None):
         price = float(price)
 
-    sustainability_labels = get_sustainability(
-        parsed_page.beautiful_soup, label_mapping=label_mapping
+    sustainability_strings = set(get_sustainability_strings(parsed_page.beautiful_soup))
+    sustainability_labels = sorted(
+        {
+            label_mapping.get(sustainability_string, CertificateType.UNKNOWN)
+            for sustainability_string in sustainability_strings
+        }
     )
+
+    if unknown_labels := {
+        sustainability_string
+        for sustainability_string in sustainability_strings
+        if sustainability_string not in label_mapping
+    }:
+        logger.info(f'unknown sustainability labels: {", ".join(map(repr, unknown_labels))}')
 
     try:
         return Product(
@@ -124,9 +135,7 @@ def extract_zalando(
         return None
 
 
-def get_sustainability(
-    beautiful_soup: BeautifulSoup, label_mapping: Dict[str, CertificateType]
-) -> List[str]:
+def get_sustainability_strings(beautiful_soup: BeautifulSoup) -> Iterator[str]:
     """
     Extracts the sustainability information from HTML. Splash does not load all the information
     into the html anymore,so we have to extract the sustainability information from a JSON, stored
@@ -134,30 +143,24 @@ def get_sustainability(
 
     Args:
         beautiful_soup (BeautifulSoup): Parsed HTML
-        label_mapping (Dict) : Dictionary containing the mappings from Zalando's certificate names
-        to our CertificateTypes
 
     Returns:
-        List[str]: Ordered `list` of found sustainability labels
+        Iterator[str]: found sustainability strings
     """
 
-    # Load JSON holding the sustainability information
     data = json.loads(
         beautiful_soup.find("script", {"type": "application/json", "class": "re-1-13"}).get_text()
     )
-    labels = []
 
-    # Loop over all nested items to find the JSON node holding the sustainability information
-    for key, item in data.get("graphqlCache", {}).items():
-        for entry in item.get("data", {}).get("product", {}).get("attributeSuperClusters", [{}]):
-            if entry.get("id", "") == "sustainability":
-                for cluster in entry.get("clusters", [{}]):
-                    if cluster.get("sustainabilityClusterKind", "") == "certificates":
-                        # Loop over all certificate attributes and add the label to the labels list
-                        for attribute in cluster.get("attributes", [{}]):
-                            labels.append(urllib.parse.unquote(attribute.get("label", "")))
-
-    if labels:
-        # Map the found labels to their respective CertificateType
-        return sorted({label_mapping.get(label, CertificateType.UNKNOWN) for label in labels})
-    return []
+    # Loop over all nested items to find the JSON objects holding the sustainability information
+    json_values = [data]
+    for json_value in json_values:
+        match json_value:
+            case {"sustainabilityClusterKind": "certificates", "attributes": [*attributes]}:
+                for attribute in attributes:
+                    if "label" in attribute:
+                        yield urllib.parse.unquote(attribute["label"])
+            case {**json_object}:
+                json_values += json_object.values()
+            case [*json_array]:
+                json_values += json_array
