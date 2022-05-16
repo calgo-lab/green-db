@@ -13,9 +13,7 @@ class AmazonSpider(BaseSpider):
     name = "amazon"
     allowed_domains = ["amazon.de"]
 
-    def parse_SERP(
-        self, response: SplashJsonResponse, request_meta_information: dict = None
-    ) -> Iterator[SplashRequest]:
+    def parse_SERP(self, response: SplashJsonResponse) -> Iterator[SplashRequest]:
         """
         The `Scrapy` framework executes this method.
 
@@ -37,7 +35,7 @@ class AmazonSpider(BaseSpider):
                 yield SplashRequest(
                     url=f"https://www.amazon.de{url}",
                     callback=self.parse_PRODUCT,
-                    meta={request_meta_information: {"price": price}},
+                    meta={"request_meta_information": {"price": price}},
                     endpoint="execute",
                     priority=1,  # higher priority than SERP
                     args={  # passed to Splash HTTP API
