@@ -11,7 +11,7 @@ def test_amazon_electronics() -> None:
     merchant = "amazon"
     file_name = "laptop.html"
     category = "LAPTOP"
-    meta_information = {"family": "electronics", "request_meta_information": {"price": "2998,0"}}
+    meta_information = {"family": "electronics", "price": "2998,0"}
 
     scraped_page = read_test_html(
         timestamp=timestamp,
