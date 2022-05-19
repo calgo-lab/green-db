@@ -148,14 +148,14 @@ def _get_image_urls(soup: BeautifulSoup) -> Optional[list[str]]:
 
     def parse_image_urls(images: list[BeautifulSoup]) -> list[str]:
         image_urls = [
-            image["src"]
+            str(image["src"])
             for image in images
             if not image["src"].endswith(".gif")
             and "play-button-overlay" not in image["src"]
             and "play-icon-overlay" not in image["src"]
             and "360_icon" not in image["src"]
         ]
-        return image_urls
+        return [re.sub('_[^>]+_.', '', image) for image in image_urls]
 
     return _handle_parse(targets, parse_image_urls)
 
