@@ -50,8 +50,8 @@ def test_amazon_electronics() -> None:
         price=599.00,
         currency="EUR",
         image_urls=[
-            "https://m.media-amazon.com/images/I/41UAg0LchaL._AC_US40_.jpg",
-            "https://m.media-amazon.com/images/I/41ybCjXFRkL._AC_US40_.jpg",
+            "https://m.media-amazon.com/images/I/41UAg0LchaL.jpg",
+            "https://m.media-amazon.com/images/I/41ybCjXFRkL.jpg",
         ],
         color="Grau",
         size="45 Seiten pro Minute, 50 Seiten pro Minute, 55 Seiten pro Minute, 60 Seiten pro "
