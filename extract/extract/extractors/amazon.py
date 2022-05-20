@@ -155,7 +155,7 @@ def _get_image_urls(soup: BeautifulSoup) -> Optional[list[str]]:
             and "play-icon-overlay" not in image["src"]
             and "360_icon" not in image["src"]
         ]
-        return [re.sub('_[^>]+_.', '', image) for image in image_urls]
+        return [re.sub("_[^>]+_.", "", image) for image in image_urls]
 
     return _handle_parse(targets, parse_image_urls)
 
