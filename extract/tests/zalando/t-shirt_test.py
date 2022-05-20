@@ -1,4 +1,4 @@
-from core.constants import TABLE_NAME_SCRAPING_ZALANDO
+from core.constants import TABLE_NAME_SCRAPING_ZALANDO_DE
 from core.domain import Product
 from extract import extract_product
 
@@ -25,7 +25,7 @@ def test_zalando_basic() -> None:
         meta_information=meta_information,
         url=url,
     )
-    actual = extract_product(TABLE_NAME_SCRAPING_ZALANDO, scraped_page)
+    actual = extract_product(TABLE_NAME_SCRAPING_ZALANDO_DE, scraped_page)
     expected = Product(
         timestamp=timestamp,
         url=url,
