@@ -5,6 +5,7 @@ from sqlalchemy import ARRAY, BIGINT, INTEGER, JSON, NUMERIC, TEXT, TIMESTAMP, V
 
 from core.constants import (
     TABLE_NAME_GREEN_DB,
+    TABLE_NAME_SCRAPING_AMAZON,
     TABLE_NAME_SCRAPING_ASOS,
     TABLE_NAME_SCRAPING_OTTO,
     TABLE_NAME_SCRAPING_ZALANDO_DE,
@@ -139,6 +140,17 @@ class AsosScrapingTable(ScrapingBaseTable, ScrapingTable):
     __tablename__ = TABLE_NAME_SCRAPING_ASOS
 
 
+class AmazonScrapingTable(ScrapingBaseTable, ScrapingTable):
+    """
+    The actual scraping table for Amazon.
+    Args:
+        ScrapingBaseTable ([type]): `sqlalchemy` base class for the Scraping database
+        ScrapingTable ([type]): To inherit the table definition
+    """
+
+    __tablename__ = TABLE_NAME_SCRAPING_AMAZON
+
+
 # Used to dynamically map a table name to the correct Table class.
 SCRAPING_TABLE_CLASS_FOR: Dict[str, Type[ScrapingTable]] = {
     TABLE_NAME_SCRAPING_ZALANDO_DE: ZalandoDeScrapingTable,
@@ -146,6 +158,7 @@ SCRAPING_TABLE_CLASS_FOR: Dict[str, Type[ScrapingTable]] = {
     TABLE_NAME_SCRAPING_ZALANDO_UK: ZalandoUkScrapingTable,
     TABLE_NAME_SCRAPING_OTTO: OTTOScrapingTable,
     TABLE_NAME_SCRAPING_ASOS: AsosScrapingTable,
+    TABLE_NAME_SCRAPING_AMAZON: AmazonScrapingTable,
 }
 
 

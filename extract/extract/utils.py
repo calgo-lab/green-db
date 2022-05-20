@@ -1,5 +1,10 @@
 from typing import Any, List
 
+from core.domain import CertificateType
+from core.sustainability_labels import load_and_get_sustainability_labels
+
+SUSTAINABILITY_LABELS = load_and_get_sustainability_labels()
+
 
 def safely_return_first_element(list_object: List[Any], else_return: Any = {}) -> Any:
     """
@@ -18,3 +23,58 @@ def safely_return_first_element(list_object: List[Any], else_return: Any = {}) -
 
     else:
         return list_object[0]
+
+
+def sustainability_labels_to_certificates(
+    certificate_strings: list[str], certificate_mapping: dict
+) -> list[str]:
+    """
+    Helper function that maps the extracted HTML span texts to certificates.
+    1. It tries all known certificates
+    2. It uses`certificate_mapping` for shop specific certificates strings
+
+    Args:
+        certificate_strings list[str]: Certificate strings from the HTML span tags
+        certificate_mapping (dict): Mapping of certificate strings to certificates
+
+    Returns:
+        list[str]: List of parsed certificates
+    """
+
+    result = [
+        CertificateType[certificate_id.split(":")[-1]]
+        for certificate_id, localized_certificate_infos in SUSTAINABILITY_LABELS.items()
+        if any(
+            _get_certificate_for_any_language(
+                localized_certificate_infos["languages"].values(), certificate_strings
+            )
+        )
+    ]
+
+    for certificate_string, certificate in certificate_mapping.items():
+        if certificate_string in certificate_strings:
+            result.append(certificate)
+
+    return sorted(result) or [CertificateType.UNKNOWN]  # type: ignore[attr-defined]
+
+
+def _get_certificate_for_any_language(
+    localized_certificate_infos: list[dict], certificate_strings: list[str]
+) -> list[dict]:
+    """
+    Helper function that checks if a certificate matches in a language with a certificate name.
+
+    Args:
+        localized_certificate_infos (list[dict]): List of `dict` objects with each object
+            containing the certificate information in a specific language
+        certificate_strings (list[str]): Function that is processing the scan result
+
+    Returns:
+        list[dict]: `list` with `dict` objects representing the matched certificate information
+            in a specific language.
+    """
+    return [
+        localized_certificate_info
+        for localized_certificate_info in localized_certificate_infos
+        if localized_certificate_info["name"].lower() in [x.lower() for x in certificate_strings]
+    ]

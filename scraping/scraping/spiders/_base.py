@@ -25,7 +25,7 @@ class BaseSpider(Spider):
         search_term: Optional[str] = None,
         meta_data: Optional[Union[str, Dict[str, str]]] = None,
         products_per_page: Optional[int] = None,
-        **kwargs: Dict[str, Any]
+        **kwargs: Dict[str, Any],
     ) -> None:
         """
         Base `class` for all spiders.
@@ -50,7 +50,7 @@ class BaseSpider(Spider):
 
         super().__init__(name=self.name, **kwargs)
 
-        self.meta_data: Optional[Dict[str, str]] = {}
+        self.meta_data: Dict[str, str] = {}
         self.timestamp = timestamp
         self.category = category
         self.message_queue = MessageQueue()
@@ -59,10 +59,10 @@ class BaseSpider(Spider):
             logger.error("It's necessary to set the Spider's 'name' attribute.")
 
         if meta_data:
-            meta_data = json.loads(meta_data) if type(meta_data) == str else meta_data  # type: ignore # noqa
+            meta_data = json.loads(meta_data) if type(meta_data) == str else meta_data
 
             if type(meta_data) == dict:
-                self.meta_data = meta_data  # type: ignore
+                self.meta_data = meta_data
             else:
                 logger.error(
                     "Argument 'meta_data' need to be of type dict or serialized JSON string."
@@ -70,8 +70,6 @@ class BaseSpider(Spider):
 
         if search_term:
             self.meta_data["search_term"] = search_term  # type: ignore
-
-        self.meta_data = self.meta_data if self.meta_data else None  # type: ignore
 
         if not (type(start_urls) == str or type(start_urls) == list):
             logger.error(
@@ -131,6 +129,13 @@ class BaseSpider(Spider):
         Args:
             response (SplashJsonResponse): Response from a performed request
         """
+
+        request_meta_information = response.meta.get("request_meta_information", None)
+        if request_meta_information is not None:
+            meta_information = self.meta_data | request_meta_information
+        else:
+            meta_information = self.meta_data
+
         scraped_page = ScrapedPage(
             timestamp=self.timestamp,
             merchant=self.name,
@@ -138,7 +143,7 @@ class BaseSpider(Spider):
             html=response.body.decode("utf-8"),
             page_type=PageType.PRODUCT,
             category=self.category,
-            meta_information=self.meta_data,
+            meta_information=meta_information,
         )
 
         self.message_queue.add_scraping(table_name=self.table_name, scraped_page=scraped_page)

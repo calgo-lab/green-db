@@ -5,6 +5,7 @@ from configparser import ConfigParser
 from datetime import datetime
 from typing import Any, Iterator, List
 
+from amazon import get_settings as get_amazon_settings
 from asos import get_settings as get_asos_settings
 from otto import get_settings as get_otto_settings
 from zalando import get_settings as get_zalando_de_settings
@@ -12,6 +13,7 @@ from zalando_fr import get_settings as get_zalando_fr_settings
 from zalando_uk import get_settings as get_zalando_uk_settings
 
 from core.constants import (
+    TABLE_NAME_SCRAPING_AMAZON,
     TABLE_NAME_SCRAPING_ASOS,
     TABLE_NAME_SCRAPING_OTTO,
     TABLE_NAME_SCRAPING_ZALANDO_DE,
@@ -22,15 +24,16 @@ from core.constants import (
 START_TIMESTAMP = datetime.utcnow()
 SETTINGS = [
     [(TABLE_NAME_SCRAPING_ASOS, x) for x in get_asos_settings()],
+    [(TABLE_NAME_SCRAPING_AMAZON, x) for x in get_amazon_settings()],
     [(TABLE_NAME_SCRAPING_OTTO, x) for x in get_otto_settings()],
     [(TABLE_NAME_SCRAPING_ZALANDO_DE, x) for x in get_zalando_de_settings()],
     [(TABLE_NAME_SCRAPING_ZALANDO_FR, x) for x in get_zalando_fr_settings()],
     [(TABLE_NAME_SCRAPING_ZALANDO_UK, x) for x in get_zalando_uk_settings()],
 ]
 
-# Read scrapy config and get target URL for local
+# Read scrapy config and get target URL for local scraping
 scrapy_config_parser = ConfigParser()
-scrapy_config_parser.read("/green-db/scraping/scrapy.cfg")  # Repo get cloned
+scrapy_config_parser.read("/green-db/scraping/scrapy.cfg")  # Repo gets cloned
 SCRAPYD_CLUSTER_TARGET = scrapy_config_parser.get("deploy:in-cluster", "url")
 
 
