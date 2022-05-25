@@ -1,8 +1,16 @@
 volumePermissions:
   enabled: true
 primary:
+  priorityClassName: important
+  resources:
+    limits:
+      memory: "4Gi"
+      cpu: 4
+    requests:
+      memory: "2Gi"
+      cpu: 1
   persistence:
-    size: 100Gi
+    size: 1000Gi
     existingClaim: postgres-pvc
   extraEnvVars:
     - name: TZ
