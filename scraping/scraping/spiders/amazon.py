@@ -3,7 +3,7 @@ from typing import Iterator
 
 from scrapy_splash import SplashJsonResponse, SplashRequest
 
-from ..splash import scroll_end_of_page_script
+from ..splash import minimal_script
 from ._base import BaseSpider
 
 logger = getLogger(__name__)
@@ -35,13 +35,17 @@ class AmazonSpider(BaseSpider):
                 yield SplashRequest(
                     url=f"https://www.amazon.de{url}",
                     callback=self.parse_PRODUCT,
-                    meta={"request_meta_information": {"price": price}},
+                    meta={"request_meta_information": {"price": price},
+                          "category": response.meta.get("category"),
+                          "meta_data": response.meta.get("meta_data"),
+                          },
                     endpoint="execute",
                     priority=1,  # higher priority than SERP
                     args={  # passed to Splash HTTP API
                         "wait": self.request_timeout,
-                        "lua_source": scroll_end_of_page_script,
+                        "lua_source": minimal_script,
                         "timeout": 180,
+                        "allowed_content_type": "text/html",
                     },
                 )
 
@@ -56,12 +60,15 @@ class AmazonSpider(BaseSpider):
             yield SplashRequest(
                 url=next_page,
                 callback=self.parse_SERP,
-                meta={"original_URL": next_page},
+                meta={"original_URL": next_page,
+                      "category": response.meta.get("category"),
+                      "meta_data": response.meta.get("meta_data")},
                 endpoint="execute",
                 args={  # passed to Splash HTTP API
                     "wait": self.request_timeout,
-                    "lua_source": scroll_end_of_page_script,
+                    "lua_source": minimal_script,
                     "timeout": 180,
+                    "allowed_content_type": "text/html",
                 },
             )
         else:
