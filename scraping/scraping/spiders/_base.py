@@ -8,7 +8,6 @@ from message_queue import MessageQueue
 from scrapy import Spider
 from scrapy.http.response import Response as ScrapyHttpResponse
 from scrapy.http.response.text import TextResponse as ScrapyTextResponse
-from scrapy.http.request import Request as ScrapyHttpRequest, Request
 from scrapy_splash import SplashJsonResponse, SplashRequest
 
 from core.constants import (
@@ -20,7 +19,7 @@ from core.constants import (
 )
 from core.domain import PageType, ScrapedPage
 
-from ..splash import scroll_end_of_page_script
+from ..splash import minimal_script
 from ..start_scripts.asos import get_settings as get_asos_settings
 from ..start_scripts.otto import get_settings as get_otto_settings
 from ..start_scripts.zalando import get_settings as get_zalando_settings
@@ -38,7 +37,7 @@ SETTINGS = {
 }
 
 
-def load_meta(meta_data: str) -> dict:
+def load_meta_data(meta_data: str) -> dict:
     """
     Helper method to load meta_data.
 
@@ -91,7 +90,7 @@ class BaseSpider(Spider):
         # set default value
         self.request_timeout = getattr(self, "request_timeout", 0.5)
         self.table_name: str = getattr(self, "table_name", self.name)  # type: ignore
-        self.StartRequestType = SplashRequest
+        self.StartRequest = SplashRequest
 
         super().__init__(name=self.name, **kwargs)
 
@@ -105,7 +104,7 @@ class BaseSpider(Spider):
         if category:
             self.category = category
 
-        self.meta_data = load_meta(meta_data)
+        self.meta_data = load_meta_data(meta_data)
 
         if search_term:
             self.meta_data["search_term"] = search_term  # type: ignore
@@ -140,26 +139,26 @@ class BaseSpider(Spider):
             settings = SETTINGS.get(self.name)
 
         for setting in settings:
-            if self.StartRequestType == ScrapyHttpRequest:
-                yield ScrapyHttpRequest(
-                    url=setting.get("start_urls"),
-                    callback=self.parse_SERP,
-                    meta={"category": setting.get("category"),
-                          "meta_data": setting.get("meta_data")},
-                )
-            elif self.StartRequestType == SplashRequest:
-                yield SplashRequest(
-                    url=setting.get("start_urls"),
-                    callback=self.parse_SERP,
-                    meta={"category": setting.get("category"),
-                          "meta_data": setting.get("meta_data")},
-                    endpoint="execute",
-                    args={  # passed to Splash HTTP API
+            yield self.StartRequest(
+                url=setting.get("start_urls"),
+                callback=self.parse_SERP,
+                meta={
+                    "category": setting.get("category"),
+                    "meta_data": setting.get("meta_data"),
+                    "original_URL": setting.get("start_urls"),
+                },
+                **{
+                    "endpoint": "execute",
+                    "args": {  # passed to Splash HTTP API
                         "wait": self.request_timeout,
-                        "lua_source": scroll_end_of_page_script,
+                        "lua_source": minimal_script,
                         "timeout": 180,
                     },
-                )
+                }
+                if self.StartRequest == SplashRequest
+                else {},
+            )
+
             logger.info(f"Crawling setting: {setting}")
 
     def _save_SERP(
@@ -179,7 +178,7 @@ class BaseSpider(Spider):
             html=response.body.decode("utf-8"),
             page_type=PageType.SERP,
             category=response.meta.get("category"),
-            meta_information=load_meta(response.meta.get("meta_data")),
+            meta_information=load_meta_data(response.meta.get("meta_data")),
         )
 
         self.message_queue.add_scraping(table_name=self.table_name, scraped_page=scraped_page)
@@ -199,7 +198,7 @@ class BaseSpider(Spider):
             html=response.body.decode("utf-8"),
             page_type=PageType.PRODUCT,
             category=response.meta.get("category"),
-            meta_information=load_meta(response.meta.get("meta_data")),
+            meta_information=load_meta_data(response.meta.get("meta_data")),
         )
 
         self.message_queue.add_scraping(table_name=self.table_name, scraped_page=scraped_page)

@@ -41,7 +41,7 @@ class AsosSpider(BaseSpider):
 
     def __init__(self, timestamp: datetime, **kwargs: Dict[str, Any]):
         super().__init__(timestamp, **kwargs)
-        self.StartRequestType = ScrapyHttpRequest
+        self.StartRequest = ScrapyHttpRequest
 
     def parse_SERP(self, response: ScrapyHttpResponse) -> Iterator[ScrapyHttpRequest]:
         # Save HTML to database

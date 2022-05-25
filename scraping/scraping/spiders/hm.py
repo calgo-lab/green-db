@@ -1,4 +1,3 @@
-import json
 import math
 from datetime import datetime
 from logging import getLogger
@@ -44,7 +43,7 @@ class HMSpider(BaseSpider):
 
     def __init__(self, timestamp: datetime, **kwargs: Dict[str, Any]):
         super().__init__(timestamp, **kwargs)
-        self.StartRequestType = ScrapyHttpRequest
+        self.StartRequest = ScrapyHttpRequest
 
     def parse_SERP(
         self, response: ScrapyHttpResponse
