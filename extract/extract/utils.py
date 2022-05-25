@@ -37,10 +37,12 @@ def get_product_from_JSON_LD(json_ld: List[Any], else_return: Any = {}) -> Any:
     Returns:
         Any: product object in `json_ld` or `else_return`
     """
-    for element in json_ld:
-        if element.get('@type') == 'Product':
-            return element
-    return else_return
+    if isinstance(json_ld, list):
+        for element in json_ld:
+            if element.get('@type') == 'Product':
+                return element
+    else:
+        return else_return
 
 
 def sustainability_labels_to_certificates(
