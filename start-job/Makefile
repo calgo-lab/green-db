@@ -17,8 +17,9 @@ helm-delete:
 	# ignoring error as long as it does not exist
 	-helm delete start-job
 
-helm-install:
-	helm install start-job ${START_JOB_CHART}
+helm-install: docker
+	# for private docker registry, we need 'private-registry-auth' imagePullSecrets
+	helm install start-job --set image.repository=${DOCKER_IMAGE_NAME} --set imagePullSecrets[0].name=private-registry-auth ${START_JOB_CHART}
 
 helm: helm-delete helm-install
 

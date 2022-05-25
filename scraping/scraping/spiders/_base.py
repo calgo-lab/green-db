@@ -11,10 +11,12 @@ from scrapy.http.response.text import TextResponse as ScrapyTextResponse
 from scrapy_splash import SplashJsonResponse, SplashRequest
 
 from core.constants import (
+    TABLE_NAME_SCRAPING_AMAZON,
     TABLE_NAME_SCRAPING_ASOS,
     TABLE_NAME_SCRAPING_OTTO,
-    TABLE_NAME_SCRAPING_ZALANDO,
+    TABLE_NAME_SCRAPING_ZALANDO_DE,
     TABLE_NAME_SCRAPING_ZALANDO_FR,
+    TABLE_NAME_SCRAPING_ZALANDO_UK,
     TABLE_NAME_SCRAPING_HM,
 )
 from core.domain import PageType, ScrapedPage
@@ -24,16 +26,20 @@ from ..start_scripts.asos import get_settings as get_asos_settings
 from ..start_scripts.otto import get_settings as get_otto_settings
 from ..start_scripts.zalando import get_settings as get_zalando_settings
 from ..start_scripts.zalando_fr import get_settings as get_zalando_fr_settings
+from ..start_scripts.zalando_uk import get_settings as get_zalando_uk_settings
 from ..start_scripts.hm import get_settings as get_hm_settings
+from ..start_scripts.amazon import get_settings as get_amazon_settings
 
 logger = getLogger(__name__)
 
 SETTINGS = {
     TABLE_NAME_SCRAPING_OTTO: get_otto_settings(),
-    TABLE_NAME_SCRAPING_ZALANDO: get_zalando_settings(),
     TABLE_NAME_SCRAPING_ASOS: get_asos_settings(),
+    TABLE_NAME_SCRAPING_ZALANDO_DE: get_zalando_settings(),
     TABLE_NAME_SCRAPING_ZALANDO_FR: get_zalando_fr_settings(),
+    TABLE_NAME_SCRAPING_ZALANDO_UK: get_zalando_uk_settings(),
     TABLE_NAME_SCRAPING_HM: get_hm_settings(),
+    TABLE_NAME_SCRAPING_AMAZON: get_amazon_settings(),
 }
 
 
@@ -94,7 +100,7 @@ class BaseSpider(Spider):
 
         super().__init__(name=self.name, **kwargs)
 
-        self.meta_data: Optional[Dict[str, str]] = {}
+        self.meta_data: Dict[str, str] = {}
         self.timestamp = timestamp
         self.message_queue = MessageQueue()
 
@@ -144,7 +150,7 @@ class BaseSpider(Spider):
                 callback=self.parse_SERP,
                 meta={
                     "category": setting.get("category"),
-                    "meta_data": setting.get("meta_data"),
+                    "meta_data": load_meta_data(setting.get("meta_data")),
                     "original_URL": setting.get("start_urls"),
                 },
                 **{
@@ -178,7 +184,7 @@ class BaseSpider(Spider):
             html=response.body.decode("utf-8"),
             page_type=PageType.SERP,
             category=response.meta.get("category"),
-            meta_information=load_meta_data(response.meta.get("meta_data")),
+            meta_information=response.meta.get("meta_data"),
         )
 
         self.message_queue.add_scraping(table_name=self.table_name, scraped_page=scraped_page)
@@ -191,6 +197,10 @@ class BaseSpider(Spider):
         Args:
             response (SplashJsonResponse): Response from a performed request
         """
+
+        request_meta_information = response.meta.get("request_meta_information", {})
+        meta_information = response.meta.get("meta_data") | request_meta_information
+
         scraped_page = ScrapedPage(
             timestamp=self.timestamp,
             merchant=self.name,
@@ -198,7 +208,7 @@ class BaseSpider(Spider):
             html=response.body.decode("utf-8"),
             page_type=PageType.PRODUCT,
             category=response.meta.get("category"),
-            meta_information=load_meta_data(response.meta.get("meta_data")),
+            meta_information=meta_information,
         )
 
         self.message_queue.add_scraping(table_name=self.table_name, scraped_page=scraped_page)
