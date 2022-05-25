@@ -4,7 +4,7 @@ from urllib.parse import urlparse
 
 from scrapy_splash import SplashJsonResponse, SplashRequest
 
-from ..splash import scroll_end_of_page_script
+from ..splash import minimal_script
 from ._base import BaseSpider
 
 logger = getLogger(__name__)
@@ -43,8 +43,9 @@ class AmazonSpider(BaseSpider):
                     priority=1,  # higher priority than SERP
                     args={  # passed to Splash HTTP API
                         "wait": self.request_timeout,
-                        "lua_source": scroll_end_of_page_script,
+                        "lua_source": minimal_script,
                         "timeout": 180,
+                        "allowed_content_type": "text/html",
                     },
                 )
 
@@ -63,8 +64,9 @@ class AmazonSpider(BaseSpider):
                 endpoint="execute",
                 args={  # passed to Splash HTTP API
                     "wait": self.request_timeout,
-                    "lua_source": scroll_end_of_page_script,
+                    "lua_source": minimal_script,
                     "timeout": 180,
+                    "allowed_content_type": "text/html",
                 },
             )
         else:
