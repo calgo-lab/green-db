@@ -12,7 +12,7 @@ from pydantic import ValidationError
 from core.domain import CertificateType, Product
 
 from ..parse import JSON_LD, ParsedPage
-from ..utils import safely_return_first_element
+from ..utils import safely_return_first_element, get_product_from_JSON_LD
 
 logger = getLogger(__name__)
 
@@ -30,7 +30,7 @@ def extract_hm(parsed_page: ParsedPage) -> Optional[Product]:
     """
 
     if parsed_page.schema_org.get(JSON_LD):
-        meta_data = safely_return_first_element(parsed_page.schema_org.get(JSON_LD, [{}]))
+        meta_data = get_product_from_JSON_LD(parsed_page.schema_org.get(JSON_LD, [{}]))
     else:
         meta_data = json.loads(parsed_page.beautiful_soup.find(id="product-schema").get_text())
 
