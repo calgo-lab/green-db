@@ -78,7 +78,7 @@ def extract_amazon(parsed_page: ParsedPage) -> Optional[Product]:
             sustainability_labels=sustainability_labels,
             price=price,
             currency=currency,
-            image_urls=sustainability_texts,
+            image_urls=image_urls,
             color=color,
             size=size,
             gtin=None,
