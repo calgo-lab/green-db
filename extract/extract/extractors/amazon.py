@@ -29,6 +29,8 @@ _LABEL_MAPPING = {
     "The Forest Stewardship Council": CertificateType.FOREST_STEWARDSHIP_COUNCIL,
     "Das offizielle Nordische Umweltzeichen": CertificateType.NORDIC_SWAN_ECOLABEL,
     "Reducing CO2": CertificateType.CARBON_TRUST_REDUCING,
+    "The Nordic Swan Ecolabel": CertificateType.NORDIC_SWAN_ECOLABEL,
+    "C02 compensé de ClimatePartner": CertificateType.CLIMATE_NEUTRAL_CLIMATE_PARTNER,
 }
 
 
@@ -76,7 +78,7 @@ def extract_amazon(parsed_page: ParsedPage) -> Optional[Product]:
             sustainability_labels=sustainability_labels,
             price=price,
             currency=currency,
-            image_urls=image_urls,
+            image_urls=sustainability_texts,
             color=color,
             size=size,
             gtin=None,

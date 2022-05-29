@@ -151,6 +151,7 @@ class AmazonScrapingTable(ScrapingBaseTable, ScrapingTable):
 
     __tablename__ = TABLE_NAME_SCRAPING_AMAZON
 
+
 class AmazonFrScrapingTable(ScrapingBaseTable, ScrapingTable):
     """
     The actual scraping table for Amazon France.
@@ -160,6 +161,7 @@ class AmazonFrScrapingTable(ScrapingBaseTable, ScrapingTable):
     """
 
     __tablename__ = TABLE_NAME_SCRAPING_AMAZON_FR
+
 
 # Used to dynamically map a table name to the correct Table class.
 SCRAPING_TABLE_CLASS_FOR: Dict[str, Type[ScrapingTable]] = {
