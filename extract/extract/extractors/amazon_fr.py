@@ -1,3 +1,6 @@
+# We ignore mypy those errors here.
+# type: ignore[attr-defined]
+
 from typing import Optional
 
 from core.domain import Product
