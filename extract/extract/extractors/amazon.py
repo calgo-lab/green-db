@@ -237,11 +237,11 @@ def _get_brand(soup: BeautifulSoup, language: str) -> Optional[str]:
         info_locales = _LANGUAGE_LOCALES[language]["info"]
         if brand.startswith(info_locales[0]):
             if len(info_locales) == 3:
-                return brand[len(info_locales[0]) : -len(info_locales[1])]
+                return brand[len(info_locales[0]) : -len(info_locales[1])]  # noqa
             else:
-                return brand[len(info_locales[0]) :]
+                return brand[len(info_locales[0]) :]  # noqa
         if brand.startswith(info_locales[-1]):
-            return brand[len(info_locales[-1]) :]
+            return brand[len(info_locales[-1]) :]  # noqa
         return None
 
     table_locales = _LANGUAGE_LOCALES[language]["table"]
