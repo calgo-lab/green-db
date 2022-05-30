@@ -38,7 +38,11 @@ class AmazonSpider(BaseSpider):
                 yield SplashRequest(
                     url=f"{url_domain}{url}",
                     callback=self.parse_PRODUCT,
-                    meta={"request_meta_information": {"price": price}},
+                    meta={
+                        "request_meta_information": {
+                            "price": price.encode("ascii", "ignore").decode()
+                        }
+                    },
                     endpoint="execute",
                     priority=1,  # higher priority than SERP
                     args={  # passed to Splash HTTP API
