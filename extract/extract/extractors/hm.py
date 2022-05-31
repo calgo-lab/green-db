@@ -112,6 +112,25 @@ _LABEL_MAPPING = {
     "Coton en conversion": CertificateType.OTHER,
 }
 
+_LABEL_MAPPING_HIGG = {
+    "1": CertificateType.HIGG_INDEX_MATERIALS,
+    "2": CertificateType.HIGG_INDEX_MATERIALS,
+    "3": CertificateType.HIGG_INDEX_MATERIALS,
+    "4": CertificateType.HIGG_INDEX_MATERIALS,
+}
+
+
+def _get_higg_index(beautiful_soup: BeautifulSoup) -> CertificateType:
+    data_element = beautiful_soup.find(id="pickup-in-store")
+    if data_element:
+        data = data_element.get("article-data")
+        if data:
+            data = json.loads(data)
+            higg_level = data.get("higg", {}).get("levelAchievement")
+            if higg_level:
+                return _LABEL_MAPPING_HIGG.get(higg_level)
+    return None
+
 
 def _get_sustainability(beautiful_soup: BeautifulSoup) -> List[str]:
     """
@@ -136,6 +155,11 @@ def _get_sustainability(beautiful_soup: BeautifulSoup) -> List[str]:
         for (label, certificate) in _LABEL_MAPPING.items()
         if label.lower() in materials.lower()
     ]
+
+    higg_label = _get_higg_index(beautiful_soup)
+    if higg_label:
+        certificates.append(higg_label)
+    certificates.append(CertificateType.HM_CONSCIOUS)
 
     if certificates:
         return sorted(set(certificates))
