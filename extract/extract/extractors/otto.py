@@ -240,7 +240,7 @@ def _get_sustainability_info(beautiful_soup: BeautifulSoup) -> dict:
     return_value = dict()
 
     for label_html in beautiful_soup.find_all(
-            "div", attrs={"class": "prd_sustainabilityLayer__label"}
+        "div", attrs={"class": "prd_sustainabilityLayer__label"}
     ):
         name = label_html.find("div", attrs={"class": "prd_sustainabilityLayer__caption"})
         description = label_html.find(
@@ -277,10 +277,9 @@ def _get_energy_labels(product_data: dict) -> List[str]:
 
     for json_value in json_values:
         match json_value:
-            case {"showNewEnergyLabelInfoLayer": True,
-                  "energyEfficiencyClasses": [*attributes]}:
+            case {"showNewEnergyLabelInfoLayer": True, "energyEfficiencyClasses": [*attributes]}:
                 for attribute in attributes:
-                    energy_labels.append(attribute.get('energyLabel', {}).get('letter'))
+                    energy_labels.append(attribute.get("energyLabel", {}).get("letter"))
             case {**json_object}:
                 json_values += json_object.values()
             case [*json_array]:
@@ -312,5 +311,7 @@ def _get_sustainability(product_data: dict, parsed_url: ParseResult) -> List[str
         sustainable_soup = BeautifulSoup(sustainability_information_html, "html.parser")
         labels.update(_get_sustainability_info(sustainable_soup))
 
-    return sorted({_LABEL_MAPPING.get(label, CertificateType.UNKNOWN) for label in labels.keys()} |
-                  {_LABEL_MAPPING_ENERGY.get(label) for label in energy_labels})
+    return sorted(
+        {_LABEL_MAPPING.get(label, CertificateType.UNKNOWN) for label in labels.keys()}
+        | {_LABEL_MAPPING_ENERGY.get(label) for label in energy_labels}
+    )

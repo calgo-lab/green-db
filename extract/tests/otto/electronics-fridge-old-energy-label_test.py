@@ -41,16 +41,16 @@ def test_otto_basic(requests_mock: Adapter) -> None:
         merchant=merchant,
         category=category,
         name="Privileg Family Edition Pyrolyse Backofen »PBWR6 OP8V2 IN«, "
-             "mit 2-fach-Teleskopauszug, Pyrolyse-Selbstreinigung, 50 Monate Herstellergarantie",
-        description= "Privileg Family Edition Pyrolyse Backofen »PBWR6 OP8V2 IN«, "
-                     "mit 2-fach-Teleskopauszug, Pyrolyse-Selbstreinigung, 50 Monate "
-                     "Herstellergarantie für 333,00€ bei OTTO",
+        "mit 2-fach-Teleskopauszug, Pyrolyse-Selbstreinigung, 50 Monate Herstellergarantie",
+        description="Privileg Family Edition Pyrolyse Backofen »PBWR6 OP8V2 IN«, "
+        "mit 2-fach-Teleskopauszug, Pyrolyse-Selbstreinigung, 50 Monate "
+        "Herstellergarantie für 333,00€ bei OTTO",
         brand="Privileg Family Edition",
         sustainability_labels=["certificate:UNKNOWN"],
         image_urls=[
-            'https://i.otto.mock/i/otto/19651738',
-            'https://i.otto.mock/i/otto/19651739',
-            'https://i.otto.mock/i/otto/19651740',
+            "https://i.otto.mock/i/otto/19651738",
+            "https://i.otto.mock/i/otto/19651739",
+            "https://i.otto.mock/i/otto/19651740",
         ],
         price=333.00,
         currency="EUR",
