@@ -20,8 +20,7 @@ class HMSpider(BaseSpider):
 
     custom_settings = {
         "COOKIES_ENABLED": True,
-        "DOWNLOAD_DELAY": 0.5,
-        "CONCURRENT_REQUESTS_PER_DOMAIN": 4,
+        "DOWNLOAD_DELAY": 2,
         "USER_AGENT": "Green Consumption Assistant",
         "DOWNLOAD_HANDLERS": {
             "http": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
@@ -30,7 +29,9 @@ class HMSpider(BaseSpider):
         "TWISTED_REACTOR": "twisted.internet.asyncioreactor.AsyncioSelectorReactor",
         "LOG_LEVEL": "INFO",
         # Abort requests which are not of type document e.g. images, scripts, etc.
-        "PLAYWRIGHT_ABORT_REQUEST": lambda req: req.resource_type != "document",
+        # full list of ressource types: https://playwright.dev/python/docs/api/class-request#request-resource-type
+        # Routing disables http caching (e.g. scripts are not saved)
+        "PLAYWRIGHT_ABORT_REQUEST": lambda req: req.resource_type in ["image", "font", "media"]
     }
 
     _playwright_meta = {
