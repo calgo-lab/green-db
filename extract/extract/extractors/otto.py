@@ -133,6 +133,16 @@ _LABEL_MAPPING = {
     "": CertificateType.OTHER,
 }
 
+_LABEL_MAPPING_ENERGY = {
+    "A": CertificateType.EU_ENERGY_LABEL_A,
+    "B": CertificateType.EU_ENERGY_LABEL_B,
+    "C": CertificateType.EU_ENERGY_LABEL_C,
+    "D": CertificateType.EU_ENERGY_LABEL_D,
+    "E": CertificateType.EU_ENERGY_LABEL_E,
+    "F": CertificateType.EU_ENERGY_LABEL_F,
+    "G": CertificateType.EU_ENERGY_LABEL_G,
+}
+
 
 def _get_product_data(beautiful_soup: BeautifulSoup) -> dict:
     """
@@ -230,7 +240,7 @@ def _get_sustainability_info(beautiful_soup: BeautifulSoup) -> dict:
     return_value = dict()
 
     for label_html in beautiful_soup.find_all(
-        "div", attrs={"class": "prd_sustainabilityLayer__label"}
+            "div", attrs={"class": "prd_sustainabilityLayer__label"}
     ):
         name = label_html.find("div", attrs={"class": "prd_sustainabilityLayer__caption"})
         description = label_html.find(
@@ -251,6 +261,34 @@ def _get_sustainability_info(beautiful_soup: BeautifulSoup) -> dict:
     return return_value
 
 
+def _get_energy_labels(product_data: dict) -> List[str]:
+    """
+    Helper function that extracts the EU_ENERGY_LABEL from the product_data json.
+
+    Args:
+        product_data (dict): Representation of the product data JSON
+
+    Returns:
+        List[str]: `list` of found energy_labels.
+    """
+
+    energy_labels = []
+    json_values = [product_data]
+
+    for json_value in json_values:
+        match json_value:
+            case {"showNewEnergyLabelInfoLayer": True,
+                  "energyEfficiencyClasses": [*attributes]}:
+                for attribute in attributes:
+                    energy_labels.append(attribute.get('energyLabel', {}).get('letter'))
+            case {**json_object}:
+                json_values += json_object.values()
+            case [*json_array]:
+                json_values += json_array
+
+    return energy_labels
+
+
 def _get_sustainability(product_data: dict, parsed_url: ParseResult) -> List[str]:
     """
     Helper function that extracts the product's sustainability information.
@@ -263,8 +301,9 @@ def _get_sustainability(product_data: dict, parsed_url: ParseResult) -> List[str
         List[str]: Sorted `list` of found sustainability labels
     """
     sustainability_information_htmls = _get_sustainability_info_htmls(product_data, parsed_url)
+    energy_labels = _get_energy_labels(product_data)
 
-    if sustainability_information_htmls is None:
+    if sustainability_information_htmls is None and energy_labels is None:
         return []
 
     labels = {}
@@ -273,4 +312,5 @@ def _get_sustainability(product_data: dict, parsed_url: ParseResult) -> List[str
         sustainable_soup = BeautifulSoup(sustainability_information_html, "html.parser")
         labels.update(_get_sustainability_info(sustainable_soup))
 
-    return sorted({_LABEL_MAPPING.get(label, CertificateType.UNKNOWN) for label in labels.keys()})
+    return sorted({_LABEL_MAPPING.get(label, CertificateType.UNKNOWN) for label in labels.keys()} |
+                  {_LABEL_MAPPING_ENERGY.get(label) for label in energy_labels})
