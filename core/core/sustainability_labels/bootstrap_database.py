@@ -36,12 +36,22 @@ def _get_localized_certificate_attribute(
 sustainability_labels = [
     SustainabilityLabel(
         id=certificate_id,
-        timestamp=datetime(2022, 3, 3, 19),  # NOTE: Change me after updating sustainability labels
+        timestamp=datetime(2022, 6, 2, 19),  # NOTE: Change me after updating sustainability labels
         name=_get_localized_certificate_attribute(certificate_information, "name"),
         description=_get_localized_certificate_attribute(certificate_information, "description"),
-        ecological_evaluation=certificate_information.get("ecological_evaluation", None),
-        social_evaluation=certificate_information.get("social_evaluation", None),
-        credibility_evaluation=certificate_information.get("social_evaluation", None),
+        cred_credibility =certificate_information.get("cred_credibility", None),
+        eco_chemicals =certificate_information.get("eco_chemicals", None),
+        eco_lifetime =certificate_information.get("eco_lifetime", None),
+        eco_water =certificate_information.get("eco_water", None),
+        eco_quality =certificate_information.get("eco_quality", None),
+        eco_energy =certificate_information.get("eco_energy", None),
+        eco_waste_air =certificate_information.get("eco_waste_air", None),
+        eco_environmental_management =certificate_information.get("eco_environmental_management", None),
+        social_labour_rights =certificate_information.get("social_labour_rights", None),
+        social_business_practice =certificate_information.get("social_business_practice", None),
+        social_social_rights =certificate_information.get("social_social_rights", None),
+        social_company_responsibility =certificate_information.get("social_company_responsibility", None),
+        social_conflict_minerals =certificate_information.get("social_conflict_minerals", None),
     )
     for certificate_id, certificate_information in load_and_get_sustainability_labels().items()
 ]
