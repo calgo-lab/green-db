@@ -1,10 +1,11 @@
+import csv
 import json
 from enum import Enum, EnumMeta
 from pathlib import Path
 
 SUSTAINABILITY_LABELS_JSON_FILE_PATH = Path(__file__).parent / "sustainability-labels.json"
-SUSTAINABILITY_LABELS_EVALUATION_JSON_FILE_PATH = (
-    Path(__file__).parent / "sustainability-labels-evaluation.json"
+SUSTAINABILITY_LABELS_EVALUATION_CSV_FILE_PATH = (
+    Path(__file__).parent / "sustainability-labels-evaluation.csv"
 )
 SPECIAL_LABELS_JSON_FILE_PATH = Path(__file__).parent / "special-labels.json"
 
@@ -22,6 +23,19 @@ def _load_json_file(file_path: Path) -> dict:
     with open(file_path, "r") as file:
         return json.load(file)
 
+def _load_csv_file(file_path: Path) -> list:
+    """
+    Loads the given file at `file_path`.
+
+    Args:
+        file_path (Path): path of CSV file to load.
+
+    Returns:
+        dict: `dict` representation of `file_path`.
+    """
+    with open(file_path) as file:
+        return list(csv.DictReader(file, delimiter=','))
+
 
 def load_and_get_sustainability_labels() -> dict:
     """
@@ -32,18 +46,18 @@ def load_and_get_sustainability_labels() -> dict:
     """
     # load JSON files
     certificates = _load_json_file(SUSTAINABILITY_LABELS_JSON_FILE_PATH)
-    certificate_evaluations = _load_json_file(SUSTAINABILITY_LABELS_EVALUATION_JSON_FILE_PATH)
+    certificate_evaluations = _load_csv_file(SUSTAINABILITY_LABELS_EVALUATION_CSV_FILE_PATH)
     special_labels = _load_json_file(SPECIAL_LABELS_JSON_FILE_PATH)
 
-    # add labels' evaluation scores
-    for certificate, evaluation in certificate_evaluations.items():
-        certificates[certificate].update(evaluation)
+    for certificate in certificates:
+        for evaluation in certificate_evaluations:
+            if certificate == evaluation['id']:
+                certificates[certificate].update(evaluation)
 
     # add special labels
     certificates.update(special_labels)
 
     return certificates
-
 
 def create_CertificateType() -> EnumMeta:
     """
