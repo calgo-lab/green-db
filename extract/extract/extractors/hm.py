@@ -2,10 +2,12 @@
 # For this reason, we ignore those errors here.
 # type: ignore[attr-defined]
 import json
+import re
 from codecs import decode
 from logging import getLogger
-from typing import List, Optional
+from typing import List, Optional, Dict
 
+import chompjs
 from bs4 import BeautifulSoup
 from pydantic import ValidationError
 
@@ -48,7 +50,11 @@ def extract_hm(parsed_page: ParsedPage) -> Optional[Product]:
     if price := first_offer.get("price", None):
         price = float(price)
 
-    sustainability_labels = _get_sustainability(parsed_page.beautiful_soup)
+    if product_data := _get_product_details(parsed_page.beautiful_soup):
+        sizes = [size.get('name') for size in product_data.get('sizes', [])]
+        size = ', '.join(sizes)  # size column expects str, so we join all sizes together
+
+    sustainability_labels = _get_sustainability(parsed_page.beautiful_soup, product_data)
 
     try:
         return Product(
@@ -64,7 +70,7 @@ def extract_hm(parsed_page: ParsedPage) -> Optional[Product]:
             currency=currency,
             image_urls=image_urls,
             color=color,
-            size=None,
+            size=size,
             gtin=None,
             asin=None,
         )
@@ -90,6 +96,7 @@ _LABEL_MAPPING = {
     "Polyester recyclé REPREVE®": CertificateType.OTHER,
     "Our Ocean™": CertificateType.OTHER,
     "Nylon régénéré ECONYL®": CertificateType.OTHER,
+    "Circulose®": CertificateType.OTHER,
 
     # recycle
     "Coton recyclé": CertificateType.OTHER,
@@ -113,34 +120,80 @@ _LABEL_MAPPING = {
 }
 
 _LABEL_MAPPING_HIGG = {
+    # TODO: Add Higg levels when available in sustainability-labels.json
+    "0": CertificateType.HIGG_INDEX_MATERIALS,
     "1": CertificateType.HIGG_INDEX_MATERIALS,
     "2": CertificateType.HIGG_INDEX_MATERIALS,
     "3": CertificateType.HIGG_INDEX_MATERIALS,
-    "4": CertificateType.HIGG_INDEX_MATERIALS,
 }
 
 
-def _get_higg_index(beautiful_soup: BeautifulSoup) -> CertificateType:
-    data_element = beautiful_soup.find(id="pickup-in-store")
-    if data_element:
-        data = data_element.get("article-data")
-        if data:
-            data = json.loads(data)
-            higg_level = data.get("higg", {}).get("levelAchievement")
-            if higg_level:
-                return _LABEL_MAPPING_HIGG.get(higg_level)
+def _get_product_details(beautiful_soup: BeautifulSoup) -> Dict:
+    """
+    Extracts the JSON product data from script tag of HTML and returns the relevant information of
+    the scraped color variant.
+
+    The basic JSON package can not handle 'messy' JSON data, so we have to use chompjs.
+
+    Args:
+        beautiful_soup (BeautifulSoup): Parsed HTML.
+
+    Returns:
+        Dict: product data JSON
+    """
+    for script in beautiful_soup.find_all('script'):
+        if script.string:
+            if 'productArticleDetails = {' in script.string:
+                data = script.string.split("var productArticleDetails = ")[1][:-2]
+                data = re.sub(r"isDesktop \? \'.*' : ", "", data)
+                data = chompjs.parse_js_object(data)
+                article_code = data.get('articleCode', '')
+                return data.get(article_code, {})
+    return {}
+
+
+def _get_higg_label(product_data: Dict) -> CertificateType:
+    """
+    Extracts the HIGG_INDEX_MATERIALS label from article product_data.
+
+    Args:
+        product_data (Dict): Product data JSON.
+
+    Returns:
+        CertificateType: CertificateType.HIGG_INDEX_MATERIALS
+    """
+    if higg_level := product_data.get('higg', {}).get('levelAchievement'):
+        return _LABEL_MAPPING_HIGG.get(higg_level)
     return None
 
 
-def _get_sustainability(beautiful_soup: BeautifulSoup) -> List[str]:
+def _get_hm_conscious(product_data: Dict) -> CertificateType:
     """
-    Extracts the sustainability information from HTML.
+    Extracts the HM_CONSCIOUS label from article product_data.
 
     Args:
-        beautiful_soup (BeautifulSoup): Parsed HTML
+        product_data (Dict): Product data JSON.
 
     Returns:
-        List[str]: Ordered `list` of found sustainability labels
+        CertificateType: CertificateType.HM_CONSCIOUS.
+    """
+    if markers := product_data.get('marketingMarkers'):
+        for marker in markers:
+            if marker.get('text') == 'Conscious choice':
+                return CertificateType.HM_CONSCIOUS
+    return None
+
+
+def _get_sustainability(beautiful_soup: BeautifulSoup, product_data: Optional[Dict]) -> List[str]:
+    """
+    Extracts the sustainability information from HTML and product_data.
+
+    Args:
+        beautiful_soup (BeautifulSoup): Parsed HTML.
+        product_data (Dict): Product data JSON.
+
+    Returns:
+        List[str]: Ordered `list` of found sustainability labels.
     """
 
     if materials := beautiful_soup.find("dt", text="Matériaux plus durables"):
@@ -148,7 +201,7 @@ def _get_sustainability(beautiful_soup: BeautifulSoup) -> List[str]:
     elif materials := beautiful_soup.find("dt", text="Mat\\u00E9riaux plus durables'"):
         materials = decode(materials.next_sibling.get_text().strip(), "unicode-escape")
     else:
-        return None  # the product does not contain sustainable information
+        materials = ""
 
     certificates = [
         certificate
@@ -156,10 +209,11 @@ def _get_sustainability(beautiful_soup: BeautifulSoup) -> List[str]:
         if label.lower() in materials.lower()
     ]
 
-    higg_label = _get_higg_index(beautiful_soup)
-    if higg_label:
-        certificates.append(higg_label)
-    certificates.append(CertificateType.HM_CONSCIOUS)
+    if product_data:
+        if higg_label := _get_higg_label(product_data):
+            certificates.append(higg_label)
+        if hm_conscious := _get_hm_conscious(product_data):
+            certificates.append(hm_conscious)
 
     if certificates:
         return sorted(set(certificates))

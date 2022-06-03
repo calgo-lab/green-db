@@ -44,7 +44,7 @@ def test_hm_basic() -> None:
             "%5D%2Ctype%5BLOOKBOOK%5D%2Cres%5Bm%5D%2Chmver%5B1%5D&call=url[file:/product/main]"
         ],
         color="Blanc",
-        size=None,
+        size="XS, S, M, L, XL, XXL, XS/P, S/P, M/P, L/P, XL/P, XXL/P",
         gtin=None,
         asin=None,
     )
