@@ -35,10 +35,8 @@ class AmazonSpider(BaseSpider):
                 yield SplashRequest(
                     url=f"https://www.amazon.de{url}",
                     callback=self.parse_PRODUCT,
-                    meta={"request_meta_information": {"price": price},
-                          "category": response.meta.get("category"),
-                          "meta_data": response.meta.get("meta_data"),
-                          },
+                    meta={"request_meta_information": {"price": price}}
+                    | self.create_default_request_meta(response),
                     endpoint="execute",
                     priority=1,  # higher priority than SERP
                     args={  # passed to Splash HTTP API
@@ -60,9 +58,7 @@ class AmazonSpider(BaseSpider):
             yield SplashRequest(
                 url=next_page,
                 callback=self.parse_SERP,
-                meta={"original_URL": next_page,
-                      "category": response.meta.get("category"),
-                      "meta_data": response.meta.get("meta_data")},
+                meta=self.create_default_request_meta(response, original_url=next_page),
                 endpoint="execute",
                 args={  # passed to Splash HTTP API
                     "wait": self.request_timeout,

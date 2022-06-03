@@ -58,13 +58,12 @@ class AsosSpider(BaseSpider):
             product_ids = product_ids[: self.products_per_page]
 
         logger.info(f"Number of products {len(product_ids)} to be scraped")
-        response.meta.update({"original_URL": response.url})
 
         for product_id in product_ids:
             yield ScrapyHttpRequest(
                 url=f"{self._product_api}{product_id}{self._filters}",
                 callback=self.parse_PRODUCT,
-                meta=response.meta,
+                meta=self.create_default_request_meta(response),
                 priority=2,  # higher prio than SERP => finish product requests first
             )
 

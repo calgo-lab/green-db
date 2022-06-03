@@ -76,14 +76,12 @@ class HMSpider(BaseSpider):
         product_count = len(data.get("products"))
         logger.info(f"Parsing SERP with {product_count} products & {len(all_product_links)} colors")
 
-        response.meta.update({"original_URL": response.url})
-
         for product_link in all_product_links:
             yield ScrapyHttpRequest(
                 url=response.urljoin(product_link),
                 callback=self.parse_PRODUCT,
                 priority=2,  # higher prio than SERP => finish product requests first
-                meta=self._playwright_meta | response.meta,
+                meta=self._playwright_meta | self.create_default_request_meta(response),
             )
 
         # Pagination: Request SERPS if we are on start_url (offset=0)

@@ -1,4 +1,5 @@
 import json
+from urllib.parse import urlparse
 from abc import abstractmethod
 from datetime import datetime
 from logging import getLogger
@@ -58,23 +59,21 @@ def load_meta_data(meta_data: str) -> dict:
         if isinstance(meta_data, dict):
             return meta_data  # type: ignore
         else:
-            logger.error(
-                "Argument 'meta_data' need to be of type dict or serialized JSON string."
-            )
+            logger.error("Argument 'meta_data' need to be of type dict or serialized JSON string.")
     else:
         return None  # type: ignore
 
 
 class BaseSpider(Spider):
     def __init__(
-            self,
-            timestamp: datetime,
-            start_urls: Optional[Union[str, List[str]]] = None,
-            category: Optional[str] = None,
-            search_term: Optional[str] = None,
-            meta_data: Optional[Union[str, Dict[str, str]]] = None,
-            products_per_page: Optional[int] = None,
-            **kwargs: Dict[str, Any]
+        self,
+        timestamp: datetime,
+        start_urls: Optional[Union[str, List[str]]] = None,
+        category: Optional[str] = None,
+        search_term: Optional[str] = None,
+        meta_data: Optional[Union[str, Dict[str, str]]] = None,
+        products_per_page: Optional[int] = None,
+        **kwargs: Dict[str, Any],
     ) -> None:
         """
         Base `class` for all spiders.
@@ -121,11 +120,20 @@ class BaseSpider(Spider):
                     "Argument 'start_urls' need to be of type list or (comma-separated) string."
                 )
             else:
-                self.start_urls = start_urls.split(",") if type(
-                    start_urls) == str else start_urls  # type: ignore # noqa
+                self.start_urls = (
+                    start_urls.split(",") if type(start_urls) == str else start_urls
+                )  # type: ignore # noqa
 
         # By default there will be no limit to the amount of products scraped per page
         self.products_per_page = int(products_per_page) if products_per_page else products_per_page
+
+    @staticmethod
+    def create_default_request_meta(response, original_url: Optional[str] = None):
+        return {
+            "original_URL": original_url if original_url else response.url,
+            "category": response.meta.get("category"),
+            "meta_data": response.meta.get("meta_data"),
+        }
 
     def start_requests(self) -> Iterator[SplashRequest]:
         """
@@ -138,9 +146,12 @@ class BaseSpider(Spider):
         if self.start_urls:
             for start_url in self.start_urls:
                 settings.append(
-                    {"start_urls": start_url,
-                     "category": self.category,
-                     "meta_data": self.meta_data})
+                    {
+                        "start_urls": start_url,
+                        "category": self.category,
+                        "meta_data": self.meta_data,
+                    }
+                )
         else:
             settings = SETTINGS.get(self.name)
 
@@ -151,7 +162,7 @@ class BaseSpider(Spider):
                 meta={
                     "category": setting.get("category"),
                     "meta_data": load_meta_data(setting.get("meta_data")),
-                    "original_URL": setting.get("start_urls"),
+                    "original_URL": '://'.join(urlparse(setting.get("start_urls"))[0:2]),
                 },
                 **{
                     "endpoint": "execute",
@@ -168,7 +179,7 @@ class BaseSpider(Spider):
             logger.info(f"Crawling setting: {setting}")
 
     def _save_SERP(
-            self, response: Union[SplashJsonResponse, ScrapyHttpResponse, ScrapyTextResponse]
+        self, response: Union[SplashJsonResponse, ScrapyHttpResponse, ScrapyTextResponse]
     ) -> None:
         """
         Helper method for child classes. Simply instantiates a `SrapedPage` object

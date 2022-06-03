@@ -14,9 +14,7 @@ logger = getLogger(__name__)
 class ZalandoSpider(BaseSpider):
     name = "zalando"
     allowed_domains = ["zalando.de"]
-    custom_settings = {
-        "DOWNLOAD_DELAY": 2
-    }
+    custom_settings = {"DOWNLOAD_DELAY": 2}
 
     def parse_SERP(
         self, response: SplashJsonResponse, is_first_page: bool = True
@@ -64,8 +62,7 @@ class ZalandoSpider(BaseSpider):
                 callback=self.parse_PRODUCT,
                 endpoint="execute",
                 priority=2,
-                meta={"category": response.meta.get("category"),
-                      "meta_data": response.meta.get("meta_data")},
+                meta=self.create_default_request_meta(response),
                 args={  # passed to Splash HTTP API
                     "wait": 5,
                     "lua_source": minimal_script,
@@ -83,9 +80,7 @@ class ZalandoSpider(BaseSpider):
                 url=next_page,
                 callback=self.parse_SERP,
                 cb_kwargs=dict(is_first_page=False),
-                meta={"original_URL": next_page,
-                      "category": response.meta.get("category"),
-                      "meta_data": response.meta.get("meta_data")},
+                meta=self.create_default_request_meta(response, original_url=next_page),
                 endpoint="execute",
                 priority=1,
                 args={  # passed to Splash HTTP API
