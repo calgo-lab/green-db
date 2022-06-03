@@ -14,6 +14,9 @@ logger = getLogger(__name__)
 class ZalandoSpider(BaseSpider):
     name = "zalando"
     allowed_domains = ["zalando.de"]
+    custom_settings = {
+        "DOWNLOAD_DELAY": 2
+    }
 
     def parse_SERP(
         self, response: SplashJsonResponse, is_first_page: bool = True
