@@ -19,7 +19,6 @@ class HMSpider(BaseSpider):
     StartRequestType = ScrapyHttpRequest
 
     custom_settings = {
-        "COOKIES_ENABLED": True,
         "DOWNLOAD_DELAY": 2,
         "USER_AGENT": "Green Consumption Assistant",
         "DOWNLOAD_HANDLERS": {
@@ -29,9 +28,9 @@ class HMSpider(BaseSpider):
         "TWISTED_REACTOR": "twisted.internet.asyncioreactor.AsyncioSelectorReactor",
         "LOG_LEVEL": "INFO",
         # Abort requests which are not of type document e.g. images, scripts, etc.
-        # full list of ressource types: https://playwright.dev/python/docs/api/class-request#request-resource-type
+        # all types: https://playwright.dev/python/docs/api/class-request#request-resource-type
         # Routing disables http caching (e.g. scripts are not saved)
-        "PLAYWRIGHT_ABORT_REQUEST": lambda req: req.resource_type in ["image", "font", "media"]
+        "PLAYWRIGHT_ABORT_REQUEST": lambda req: req.resource_type != "document",
     }
 
     _playwright_meta = {
@@ -46,9 +45,7 @@ class HMSpider(BaseSpider):
         super().__init__(timestamp, **kwargs)
         self.StartRequest = ScrapyHttpRequest
 
-    def parse_SERP(
-        self, response: ScrapyHttpResponse
-    ) -> Iterator[ScrapyHttpRequest]:
+    def parse_SERP(self, response: ScrapyHttpResponse) -> Iterator[ScrapyHttpRequest]:
         self._save_SERP(response)
 
         data = response.json()
@@ -57,8 +54,8 @@ class HMSpider(BaseSpider):
             set(
                 [
                     variant.get("articleLink")
-                    for product in data.get("products")
-                    for variant in product.get("swatches")
+                    for product in data.get("products", [])
+                    for variant in product.get("swatches", {})
                 ]
             )
         )
@@ -66,6 +63,8 @@ class HMSpider(BaseSpider):
         # products_count is just needed for debugging
         product_count = len(data.get("products"))
         logger.info(f"Parsing SERP with {product_count} products & {len(all_product_links)} colors")
+
+        response.meta.update({"original_URL": response.url})
 
         for product_link in all_product_links:
             yield ScrapyHttpRequest(
@@ -95,7 +94,7 @@ class HMSpider(BaseSpider):
 
         parsed_url = urlparse(url)
         url_query_params = parse_qs(parsed_url.query)
-        limit = int(url_query_params.get("page-size", ["72"])[0])  # default limit is 36 products/ page
+        limit = int(url_query_params.get("page-size", ["72"])[0])  # default limit is 72
         product_count = data.get("total", 0)
         logger.info(f"Total products in category: {product_count}")
         logger.info(f"Creating {math.floor(product_count / limit)} additional SERP Requests")
