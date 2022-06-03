@@ -46,9 +46,16 @@ def male() -> List[dict]:
 
 
 def female() -> List[dict]:
-    return combine_results(
+    durable_categories = combine_results(
         gender_mapping=gender_to_category, gender="female", categories_json_path=hm_file_path
     )
+    higg_categories = combine_results(
+        gender_mapping=gender_to_category, gender="female", categories_json_path=hm_file_path,
+        serp_filters = "/developpement-durable/9333-higgindex-womens/_jcr_content/productlisting."
+                       "display.json?sort=stock&image-size=small&image=stillLife&offset=0&page-size"
+                       "=576"
+    )
+    return durable_categories + higg_categories
 
 
 def get_settings() -> List[dict]:

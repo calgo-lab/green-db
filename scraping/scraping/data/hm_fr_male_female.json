@@ -523,7 +523,7 @@
             "female",
             "male"
         ],
-        "mapping": "veste"
+        "mapping": "JACKET"
     },
     "vêtementspourchien": {
         "name": "Vêtements pour chien",
