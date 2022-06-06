@@ -43,7 +43,7 @@ class HMSpider(BaseSpider):
     }
 
     @staticmethod
-    def _check_time():
+    def _check_time() -> None:
         """
         Checks the current time when the spider was initialized and awaits the necessary time to
         be compliant to robots.txt crawl time (This functionality is not supported by scrapy).

@@ -1,6 +1,5 @@
 import json
 import pkgutil
-from pathlib import Path
 from typing import List
 
 gender_to_category = {"female": "femme", "male": "homme"}
@@ -8,14 +7,14 @@ gender_to_category = {"female": "femme", "male": "homme"}
 hm_file_path = "data/hm_fr_male_female.json"
 
 
-def read_json(path: Path) -> dict:
-    return json.loads(pkgutil.get_data("scraping", path))
+def read_json(path: str) -> dict:
+    return json.loads(pkgutil.get_data("scraping", path).decode('utf-8'))
 
 
 def combine_results(
     gender_mapping: dict,
     gender: str,
-    categories_json_path: Path,
+    categories_json_path: str,
     serp_api: str = "https://www2.hm.com//fr_fr/",
     serp_filters: str = "/developpement-durable/our-products/_jcr_content/main/productlisting"
     ".display.json?sort=stock&image-size=small&image=model&offset=0&page-size"

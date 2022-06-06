@@ -8,14 +8,14 @@ gender_to_category = {"female": 28981, "male": 28982}
 asos_file_path = "data/asos_product_types.json"
 
 
-def read_json(path: Path) -> dict:
-    return json.loads(pkgutil.get_data("scraping", path))
+def read_json(path: str) -> dict:
+    return json.loads(pkgutil.get_data("scraping", path).decode('utf-8'))
 
 
 def combine_results(
     gender_mapping: dict,
     gender: str,
-    categories_json_path: Path,
+    categories_json_path: str,
     serp_api: str = "https://www.asos.com/api/product/search/v2/categories/",
     serp_filters: str = "&channel=mobile-web&country=FR&currency=EUR"
     "&keyStoreDataversion=dup0qtf-35&lang=fr-FR&limit=72&offset=0"

@@ -78,7 +78,6 @@ class BaseSpider(Spider):
 
         super().__init__(name=self.name, **kwargs)
 
-        self.meta_data: Dict[str, str] = {}
         self.timestamp = timestamp
         self.message_queue = MessageQueue()
 
@@ -92,7 +91,7 @@ class BaseSpider(Spider):
                 self.meta_data = meta_data
             else:
                 logger.error(
-                    "When setting 'start_urls', 'category' & 'meta_data' also needs to " "be set."
+                    "When setting 'start_urls', 'category' & 'meta_data' also needs to be set."
                 )
         else:
             logger.info("Spider will be initialized using start_script.")
@@ -104,7 +103,7 @@ class BaseSpider(Spider):
         self.products_per_page = int(products_per_page) if products_per_page else products_per_page
 
     @staticmethod
-    def parse_urls(start_urls):
+    def parse_urls(start_urls: Union[str, List[str]]):
         """
         Helper method to parse start_urls.
 
@@ -122,7 +121,7 @@ class BaseSpider(Spider):
             return start_urls.split(",") if type(start_urls) == str else start_urls  # type: ignore # noqa
 
     @staticmethod
-    def _parse_meta_data(meta_data: str) -> dict:
+    def _parse_meta_data(meta_data: Union[Dict[str, str], str]) -> dict:
         """
         Helper method to parse meta_data.
 
@@ -243,7 +242,8 @@ class BaseSpider(Spider):
         """
 
     @staticmethod
-    def create_default_request_meta(response, original_url: Optional[str] = None):
+    def create_default_request_meta(response: Union[ScrapyTextResponse,ScrapyHttpResponse],
+                                    original_url: Optional[str] = None) -> Dict:
         return {
             "original_URL": original_url if original_url else response.url,
             "category": response.meta.get("category"),
