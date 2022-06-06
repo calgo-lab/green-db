@@ -3,14 +3,6 @@ from __future__ import annotations
 import subprocess
 from configparser import ConfigParser
 from datetime import datetime
-from typing import Any, Iterator, List
-
-from amazon import get_settings as get_amazon_settings
-from asos import get_settings as get_asos_settings
-from otto import get_settings as get_otto_settings
-from zalando import get_settings as get_zalando_de_settings
-from zalando_fr import get_settings as get_zalando_fr_settings
-from zalando_uk import get_settings as get_zalando_uk_settings
 
 from core.constants import (
     TABLE_NAME_SCRAPING_AMAZON,
