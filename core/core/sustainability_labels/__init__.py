@@ -23,6 +23,7 @@ def _load_json_file(file_path: Path) -> dict:
     with open(file_path, "r") as file:
         return json.load(file)
 
+
 def _load_csv_file(file_path: Path) -> list:
     """
     Loads the given file at `file_path`.
@@ -34,7 +35,7 @@ def _load_csv_file(file_path: Path) -> list:
         dict: `dict` representation of `file_path`.
     """
     with open(file_path) as file:
-        return list(csv.DictReader(file, delimiter=','))
+        return list(csv.DictReader(file, delimiter=","))
 
 
 def load_and_get_sustainability_labels() -> dict:
@@ -51,13 +52,14 @@ def load_and_get_sustainability_labels() -> dict:
 
     for certificate in certificates:
         for evaluation in certificate_evaluations:
-            if certificate == evaluation['id']:
+            if certificate == evaluation["id"]:
                 certificates[certificate].update(evaluation)
 
     # add special labels
     certificates.update(special_labels)
 
     return certificates
+
 
 def create_CertificateType() -> EnumMeta:
     """

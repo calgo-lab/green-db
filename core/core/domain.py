@@ -79,7 +79,7 @@ class SustainabilityLabel(BaseModel):
     social_business_practice: Optional[conint(ge=0, le=100)]  # type: ignore
     social_social_rights: Optional[conint(ge=0, le=100)]  # type: ignore
     social_company_responsibility: Optional[conint(ge=0, le=100)]  # type: ignore
-    social_conflict_minerals : Optional[conint(ge=0, le=100)]  # type: ignore
+    social_conflict_minerals: Optional[conint(ge=0, le=100)]  # type: ignore
 
     class Config:
         orm_mode = True

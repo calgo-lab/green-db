@@ -222,4 +222,3 @@ class SustainabilityLabelsTable(GreenDBBaseTable, __TableMixin):
     social_social_rights = Column(INTEGER, nullable=True)
     social_company_responsibility = Column(INTEGER, nullable=True)
     social_conflict_minerals = Column(INTEGER, nullable=True)
-
