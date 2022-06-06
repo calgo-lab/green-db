@@ -1,6 +1,6 @@
 import math
 import time
-from datetime import datetime
+import datetime
 from logging import getLogger
 from typing import Iterator, Dict, Any
 from urllib.parse import parse_qs, urlparse
@@ -43,18 +43,21 @@ class HMSpider(BaseSpider):
     }
 
     @staticmethod
-    def check_time():
+    def _check_time():
         """
         Checks the current time when the spider was initialized and awaits the necessary time to
         be compliant to robots.txt crawl time (This functionality is not supported by scrapy).
         """
-        while datetime.now().hour in range(9, 19):
-            logger.info("H&M allows crawling from 0 to 9 am. Checking again in 1h to start crawl.")
-            time.sleep(60 * 60)
+        now = datetime.datetime.now()
+        if now.hour in range(7, 24):
+            next_day = now + datetime.timedelta(days=1)
+            wait_time = (datetime.datetime.combine(next_day, datetime.time.min) - now)
+            logger.info(f"H&M allows crawling from 0 to 9 am. Waiting {str(wait_time)} to start.")
+            time.sleep(wait_time.total_seconds())
 
-    def __init__(self, timestamp: datetime, **kwargs: Dict[str, Any]):
+    def __init__(self, timestamp: datetime.datetime, **kwargs: Dict[str, Any]):
         super().__init__(timestamp, **kwargs)
-        self.check_time()
+        self._check_time()
         self.StartRequest = ScrapyHttpRequest
 
     def parse_SERP(self, response: ScrapyHttpResponse) -> Iterator[ScrapyHttpRequest]:
