@@ -1,6 +1,9 @@
 import json
+from logging import getLogger
 import pkgutil
 from typing import List
+
+logger = getLogger(__name__)
 
 gender_to_category = {"female": "femme", "male": "homme"}
 
@@ -8,7 +11,11 @@ hm_file_path = "data/hm_fr_male_female.json"
 
 
 def read_json(path: str) -> dict:
-    return json.loads(pkgutil.get_data("scraping", path).decode('utf-8'))
+    if data := pkgutil.get_data("scraping", path):
+        return json.loads(data.decode("utf-8"))
+    else:
+        logger.error(f"Unable to read {path}")
+        return {}
 
 
 def combine_results(

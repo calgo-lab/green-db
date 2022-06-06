@@ -32,12 +32,12 @@ def test_hm_basic() -> None:
         category=category,
         name="Short en jean Hybrid Regular",
         description="Pantalon jogger 5 poches en denim extensible de coton mélangé. Modèle avec "
-                    "taille de hauteur classique soulignée par lien de serrage dissimulé devant "
-                    "et élastique habillé dans le dos. Braguette zippée surmontée d’un bouton. "
-                    "Jambes droites pour une bonne aisance de mouvement au niveau des cuisses et "
-                    "des genoux. Article bénéficiant de la technologie Lycra® Hybrid qui apporte "
-                    "une souplesse et un confort exceptionnels, sans pour autant renoncer à un "
-                    "aspect denim authentique.",
+        "taille de hauteur classique soulignée par lien de serrage dissimulé devant "
+        "et élastique habillé dans le dos. Braguette zippée surmontée d’un bouton. "
+        "Jambes droites pour une bonne aisance de mouvement au niveau des cuisses et "
+        "des genoux. Article bénéficiant de la technologie Lycra® Hybrid qui apporte "
+        "une souplesse et un confort exceptionnels, sans pour autant renoncer à un "
+        "aspect denim authentique.",
         brand="H&M",
         sustainability_labels=[
             "certificate:HM_CONSCIOUS",

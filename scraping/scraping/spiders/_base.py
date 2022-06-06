@@ -103,7 +103,7 @@ class BaseSpider(Spider):
         self.products_per_page = int(products_per_page) if products_per_page else products_per_page
 
     @staticmethod
-    def parse_urls(start_urls: Union[str, List[str]]):
+    def parse_urls(start_urls: Union[str, List[str]]) -> List[str]:
         """
         Helper method to parse start_urls.
 
@@ -242,8 +242,9 @@ class BaseSpider(Spider):
         """
 
     @staticmethod
-    def create_default_request_meta(response: Union[ScrapyTextResponse,ScrapyHttpResponse],
-                                    original_url: Optional[str] = None) -> Dict:
+    def create_default_request_meta(
+        response: Union[ScrapyTextResponse, ScrapyHttpResponse], original_url: Optional[str] = None
+    ) -> Dict:
         return {
             "original_URL": original_url if original_url else response.url,
             "category": response.meta.get("category"),
