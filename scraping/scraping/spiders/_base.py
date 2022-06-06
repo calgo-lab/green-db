@@ -13,22 +13,22 @@ from scrapy_splash import SplashJsonResponse, SplashRequest
 from core.constants import (
     TABLE_NAME_SCRAPING_AMAZON,
     TABLE_NAME_SCRAPING_ASOS,
+    TABLE_NAME_SCRAPING_HM,
     TABLE_NAME_SCRAPING_OTTO,
     TABLE_NAME_SCRAPING_ZALANDO_DE,
     TABLE_NAME_SCRAPING_ZALANDO_FR,
     TABLE_NAME_SCRAPING_ZALANDO_UK,
-    TABLE_NAME_SCRAPING_HM,
 )
 from core.domain import PageType, ScrapedPage
 
 from ..splash import minimal_script
+from ..start_scripts.amazon import get_settings as get_amazon_settings
 from ..start_scripts.asos import get_settings as get_asos_settings
+from ..start_scripts.hm import get_settings as get_hm_settings
 from ..start_scripts.otto import get_settings as get_otto_settings
 from ..start_scripts.zalando import get_settings as get_zalando_settings
 from ..start_scripts.zalando_fr import get_settings as get_zalando_fr_settings
 from ..start_scripts.zalando_uk import get_settings as get_zalando_uk_settings
-from ..start_scripts.hm import get_settings as get_hm_settings
-from ..start_scripts.amazon import get_settings as get_amazon_settings
 
 logger = getLogger(__name__)
 
@@ -91,8 +91,9 @@ class BaseSpider(Spider):
                 self.category = category
                 self.meta_data = meta_data
             else:
-                logger.error("When setting 'start_urls', 'category' & 'meta_data' also needs to "
-                             "be set.")
+                logger.error(
+                    "When setting 'start_urls', 'category' & 'meta_data' also needs to " "be set."
+                )
         else:
             logger.info("Spider will be initialized using start_script.")
 
@@ -118,7 +119,7 @@ class BaseSpider(Spider):
                 "Argument 'start_urls' need to be of type list or (comma-separated) string."
             )
         else:
-            return (start_urls.split(",") if type(start_urls) == str else start_urls)  # type: ignore # noqa
+            return start_urls.split(",") if type(start_urls) == str else start_urls  # type: ignore # noqa
 
     @staticmethod
     def _parse_meta_data(meta_data: str) -> dict:
@@ -136,8 +137,7 @@ class BaseSpider(Spider):
         if isinstance(meta_data, dict):
             return meta_data  # type: ignore
         else:
-            logger.error(
-                "Argument 'meta_data' need to be of type dict or serialized JSON string.")
+            logger.error("Argument 'meta_data' need to be of type dict or serialized JSON string.")
             return None  # type: ignore
 
     def start_requests(self) -> Iterator[SplashRequest]:
@@ -150,11 +150,13 @@ class BaseSpider(Spider):
             Iterator[SplashRequest]: Requests that will be performed
         """
         if self.start_urls:
-            settings = [{
+            settings = [
+                {
                     "start_urls": self.start_urls,
                     "category": self.category,
                     "meta_data": self.meta_data,
-            }]
+                }
+            ]
         else:
             settings = SETTINGS.get(self.name)
 

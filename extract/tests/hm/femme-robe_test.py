@@ -35,7 +35,11 @@ def test_hm_basic() -> None:
         "boutonnage devant et manches courtes. Ceinture à nouer sous la poitrine. "
         "Fentes latérales. Non doublée.",
         brand="H&M",
-        sustainability_labels=["certificate:HIGG_INDEX_MATERIALS", "certificate:HM_CONSCIOUS", "certificate:OTHER"],
+        sustainability_labels=[
+            "certificate:HIGG_INDEX_MATERIALS",
+            "certificate:HM_CONSCIOUS",
+            "certificate:OTHER",
+        ],
         price=34.99,
         currency="EUR",
         image_urls=[

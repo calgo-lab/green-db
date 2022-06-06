@@ -5,7 +5,7 @@ import json
 import re
 from codecs import decode
 from logging import getLogger
-from typing import List, Optional, Dict
+from typing import Dict, List, Optional
 
 import chompjs
 from bs4 import BeautifulSoup
@@ -14,7 +14,7 @@ from pydantic import ValidationError
 from core.domain import CertificateType, Product
 
 from ..parse import JSON_LD, ParsedPage
-from ..utils import safely_return_first_element, get_product_from_JSON_LD
+from ..utils import get_product_from_JSON_LD, safely_return_first_element
 
 logger = getLogger(__name__)
 
@@ -51,8 +51,8 @@ def extract_hm(parsed_page: ParsedPage) -> Optional[Product]:
         price = float(price)
 
     if product_data := _get_product_details(parsed_page.beautiful_soup):
-        sizes = [size.get('name') for size in product_data.get('sizes', [])]
-        size = ', '.join(sizes)  # size column expects str, so we join all sizes together
+        sizes = [size.get("name") for size in product_data.get("sizes", [])]
+        size = ", ".join(sizes)  # size column expects str, so we join all sizes together
 
     sustainability_labels = _get_sustainability(parsed_page.beautiful_soup, product_data)
 
@@ -97,7 +97,6 @@ _LABEL_MAPPING = {
     "Our Ocean™": CertificateType.OTHER,
     "Nylon régénéré ECONYL®": CertificateType.OTHER,
     "Circulose®": CertificateType.OTHER,
-
     # recycle
     "Coton recyclé": CertificateType.OTHER,
     "Duvet recyclé": CertificateType.OTHER,
@@ -110,7 +109,6 @@ _LABEL_MAPPING = {
     "Polyamide recyclé": CertificateType.OTHER,
     "Polyester recyclé": CertificateType.OTHER,
     "zinc recyclé": CertificateType.OTHER,
-
     # other
     "In-conversion cotton": CertificateType.OTHER,
     "Lin biologique": CertificateType.OTHER,
@@ -141,13 +139,13 @@ def _get_product_details(beautiful_soup: BeautifulSoup) -> Dict:
     Returns:
         Dict: product data JSON
     """
-    for script in beautiful_soup.find_all('script'):
+    for script in beautiful_soup.find_all("script"):
         if script.string:
-            if 'productArticleDetails = {' in script.string:
+            if "productArticleDetails = {" in script.string:
                 data = script.string.split("var productArticleDetails = ")[1][:-2]
                 data = re.sub(r"isDesktop \? \'.*' : ", "", data)
                 data = chompjs.parse_js_object(data)
-                article_code = data.get('articleCode', '')
+                article_code = data.get("articleCode", "")
                 return data.get(article_code, {})
     return {}
 
@@ -162,7 +160,7 @@ def _get_higg_label(product_data: Dict) -> CertificateType:
     Returns:
         CertificateType: CertificateType.HIGG_INDEX_MATERIALS
     """
-    if higg_level := product_data.get('higg', {}).get('levelAchievement'):
+    if higg_level := product_data.get("higg", {}).get("levelAchievement"):
         return _LABEL_MAPPING_HIGG.get(higg_level)
     return None
 
@@ -177,9 +175,9 @@ def _get_hm_conscious(product_data: Dict) -> CertificateType:
     Returns:
         CertificateType: CertificateType.HM_CONSCIOUS.
     """
-    if markers := product_data.get('marketingMarkers'):
+    if markers := product_data.get("marketingMarkers"):
         for marker in markers:
-            if marker.get('text') == 'Conscious choice':
+            if marker.get("text") == "Conscious choice":
                 return CertificateType.HM_CONSCIOUS
     return None
 

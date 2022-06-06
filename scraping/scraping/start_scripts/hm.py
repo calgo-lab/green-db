@@ -18,8 +18,8 @@ def combine_results(
     categories_json_path: Path,
     serp_api: str = "https://www2.hm.com//fr_fr/",
     serp_filters: str = "/developpement-durable/our-products/_jcr_content/main/productlisting"
-                        ".display.json?sort=stock&image-size=small&image=model&offset=0&page-size"
-                        "=576",
+    ".display.json?sort=stock&image-size=small&image=model&offset=0&page-size"
+    "=576",
 ) -> List[dict]:
     results = []
     categories = read_json(categories_json_path)
@@ -50,10 +50,12 @@ def female() -> List[dict]:
         gender_mapping=gender_to_category, gender="female", categories_json_path=hm_file_path
     )
     higg_categories = combine_results(
-        gender_mapping=gender_to_category, gender="female", categories_json_path=hm_file_path,
-        serp_filters = "/developpement-durable/9333-higgindex-womens/_jcr_content/productlisting."
-                       "display.json?sort=stock&image-size=small&image=stillLife&offset=0&page-size"
-                       "=576"
+        gender_mapping=gender_to_category,
+        gender="female",
+        categories_json_path=hm_file_path,
+        serp_filters="/developpement-durable/9333-higgindex-womens/_jcr_content/productlisting."
+        "display.json?sort=stock&image-size=small&image=stillLife&offset=0&page-size"
+        "=576",
     )
     return durable_categories + higg_categories
 

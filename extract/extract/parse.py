@@ -32,7 +32,7 @@ def parse_page(scraped_page: ScrapedPage) -> ParsedPage:
         ParsedPage: Representation that bundles the `scraped_page` with intermediate representations
     """
     beautiful_soup = BeautifulSoup(scraped_page.html, "html.parser")
-    if scraped_page.merchant == 'hm':
+    if scraped_page.merchant == "hm":
         schema_org = extract_schema_org_hm(scraped_page.html)
     else:
         schema_org = extract_schema_org(scraped_page.html)
@@ -87,6 +87,6 @@ def extract_schema_org_hm(page_html: str) -> dict:
     try:
         schema_org = extruct.extract(unescaped_html, syntaxes=_SYNTAXES)
     except JSONDecodeError:
-        unescaped_html = decode(page_html, 'unicode-escape')
-        schema_org = extruct.extract(unescaped_html, syntaxes=_SYNTAXES, errors='ignore')
+        unescaped_html = decode(page_html, "unicode-escape")
+        schema_org = extruct.extract(unescaped_html, syntaxes=_SYNTAXES, errors="ignore")
     return schema_org if schema_org else {}

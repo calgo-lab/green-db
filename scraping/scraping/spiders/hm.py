@@ -1,8 +1,8 @@
+import datetime
 import math
 import time
-import datetime
 from logging import getLogger
-from typing import Iterator, Dict, Any
+from typing import Any, Dict, Iterator
 from urllib.parse import parse_qs, urlparse
 
 from scrapy.http.request import Request as ScrapyHttpRequest
@@ -51,7 +51,7 @@ class HMSpider(BaseSpider):
         now = datetime.datetime.now()
         if now.hour in range(7, 24):
             next_day = now + datetime.timedelta(days=1)
-            wait_time = (datetime.datetime.combine(next_day, datetime.time.min) - now)
+            wait_time = datetime.datetime.combine(next_day, datetime.time.min) - now
             logger.info(f"H&M allows crawling from 0 to 9 am. Waiting {str(wait_time)} to start.")
             time.sleep(wait_time.total_seconds())
 
