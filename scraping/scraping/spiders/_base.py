@@ -111,14 +111,14 @@ class BaseSpider(Spider):
             start_urls: Additional meta information that could be useful downstream.
 
         Returns:
-            dict: meta_data represented as dict.
+            List[str]: start_urls represented as a List.
         """
         if not (type(start_urls) == str or type(start_urls) == list):
             logger.error(
                 "Argument 'start_urls' need to be of type list or (comma-separated) string."
             )
         else:
-            return start_urls.split(",") if type(start_urls) == str else start_urls  # type: ignore # noqa
+            return start_urls.split(",") if type(start_urls) == str else start_urls
 
     @staticmethod
     def _parse_meta_data(meta_data: Union[Dict[str, str], str]) -> dict:
@@ -245,6 +245,19 @@ class BaseSpider(Spider):
     def create_default_request_meta(
         response: Union[ScrapyTextResponse, ScrapyHttpResponse], original_url: Optional[str] = None
     ) -> Dict:
+        """
+        Helper method to create default request meta. All 'SERP' and 'PRODUCT' requests need to "
+        "implement this. It will propagate the meta information from the original/ parent request "
+        "to the child requests.
+
+        Args:
+            response (ScrapyTextResponse, ScrapyHttpResponse): Response from parent request.
+            original_url (str): Optional url to set as original/ parent url instead of response.url
+
+        Returns:
+            Dict: Dict with the default meta information to use in child request.
+        """
+
         return {
             "original_URL": original_url if original_url else response.url,
             "category": response.meta.get("category"),

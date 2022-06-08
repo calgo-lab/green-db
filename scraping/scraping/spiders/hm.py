@@ -17,7 +17,6 @@ logger = getLogger(__name__)
 class HMSpider(BaseSpider):
     name = "hm"
     allowed_domains = ["hm.com"]
-    StartRequestType = ScrapyHttpRequest
 
     custom_settings = {
         "DOWNLOAD_DELAY": 2,
@@ -55,7 +54,7 @@ class HMSpider(BaseSpider):
             logger.info(f"H&M allows crawling from 0 to 9 am. Waiting {str(wait_time)} to start.")
             time.sleep(wait_time.total_seconds())
 
-    def __init__(self, timestamp: datetime.datetime, **kwargs: Dict[str, Any]):
+    def __init__(self, timestamp: datetime.datetime, **kwargs):  # type: ignore
         super().__init__(timestamp, **kwargs)
         self._check_time()
         self.StartRequest = ScrapyHttpRequest

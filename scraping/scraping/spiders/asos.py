@@ -39,7 +39,7 @@ class AsosSpider(BaseSpider):
         "DEFAULT_REQUEST_HEADERS": headers,
     }
 
-    def __init__(self, timestamp: datetime, **kwargs: Dict[str, Any]):
+    def __init__(self, timestamp: datetime, **kwargs):  # type: ignore
         super().__init__(timestamp, **kwargs)
         self.StartRequest = ScrapyHttpRequest
 
