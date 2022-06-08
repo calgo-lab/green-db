@@ -160,13 +160,13 @@ class BaseSpider(Spider):
             settings = SETTINGS.get(self.name)  # type: ignore
 
         for setting in settings:
-            for start_url in self.parse_urls(setting.get("start_urls")):
+            for start_url in self.parse_urls(setting.get("start_urls")):  # type: ignore
                 yield self.StartRequest(
                     url=start_url,
                     callback=self.parse_SERP,
                     meta={
                         "category": setting.get("category"),
-                        "meta_data": self._parse_meta_data(setting.get("meta_data")),
+                        "meta_data": self._parse_meta_data(setting.get("meta_data")),  # type: ignore # noqa
                     },
                     **{
                         "endpoint": "execute",
