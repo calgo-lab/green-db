@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "scraping"
-version = "0.1.12"
+version = "0.1.13"
 description = ""
 license = "Apache-2.0"
 authors = ["Sebastian Jäger <message@sebastian-jaeger.me>"]
@@ -18,8 +18,7 @@ core = {path = "../core", develop = true}
 message_queue = {path = "../message-queue", develop = true}
 Scrapy = "^2.6.1"
 scrapy-splash = "^0.8.0"
-scrapy-playwright = "^0.0.14"
-asyncio = "^3.4.3"
+scrapy-playwright = "^0.0.17"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
