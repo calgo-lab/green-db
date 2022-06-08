@@ -47,6 +47,7 @@ class BaseSpider(Spider):
         # set default value
         self.request_timeout = getattr(self, "request_timeout", 0.5)
         self.table_name: str = getattr(self, "table_name", self.name)  # type: ignore
+        self.merchant, self.country_code = self.name.split("_")
 
         super().__init__(name=self.name, **kwargs)
 
@@ -111,7 +112,8 @@ class BaseSpider(Spider):
         """
         scraped_page = ScrapedPage(
             timestamp=self.timestamp,
-            merchant=self.name,
+            merchant=self.merchant,
+            country_code=self.country_code,
             url=response.url,
             html=response.body.decode("utf-8"),
             page_type=PageType.SERP,
@@ -138,7 +140,8 @@ class BaseSpider(Spider):
 
         scraped_page = ScrapedPage(
             timestamp=self.timestamp,
-            merchant=self.name,
+            merchant=self.merchant,
+            country_code=self.country_code,
             url=response.url,
             html=response.body.decode("utf-8"),
             page_type=PageType.PRODUCT,

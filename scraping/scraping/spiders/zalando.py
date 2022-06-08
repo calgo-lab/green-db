@@ -5,6 +5,7 @@ from urllib.parse import urlsplit
 
 from scrapy_splash import SplashJsonResponse, SplashRequest
 
+from core.constants import TABLE_NAME_SCRAPING_ZALANDO_DE
 from ..splash import minimal_script
 from ._base import BaseSpider
 
@@ -12,7 +13,7 @@ logger = getLogger(__name__)
 
 
 class ZalandoSpider(BaseSpider):
-    name = "zalando"
+    name = TABLE_NAME_SCRAPING_ZALANDO_DE
     allowed_domains = ["zalando.de"]
 
     def parse_SERP(
