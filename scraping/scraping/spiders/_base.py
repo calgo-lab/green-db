@@ -103,7 +103,7 @@ class BaseSpider(Spider):
         self.products_per_page = int(products_per_page) if products_per_page else products_per_page
 
     @staticmethod
-    def parse_urls(start_urls: Union[str, List[str]]) -> List[str]:
+    def parse_urls(start_urls: Union[str, List[str]]) -> List[str]:  # type: ignore
         """
         Helper method to parse start_urls.
 
@@ -118,10 +118,10 @@ class BaseSpider(Spider):
                 "Argument 'start_urls' need to be of type list or (comma-separated) string."
             )
         else:
-            return start_urls.split(",") if type(start_urls) == str else start_urls
+            return start_urls.split(",") if type(start_urls) == str else start_urls  # type: ignore
 
     @staticmethod
-    def _parse_meta_data(meta_data: Union[Dict[str, str], str]) -> dict:
+    def _parse_meta_data(meta_data: Union[Dict[str, str], str]) -> dict:  # type: ignore
         """
         Helper method to parse meta_data.
 
@@ -157,7 +157,7 @@ class BaseSpider(Spider):
                 }
             ]
         else:
-            settings = SETTINGS.get(self.name)
+            settings = SETTINGS.get(self.name)  # type: ignore
 
         for setting in settings:
             for start_url in self.parse_urls(setting.get("start_urls")):

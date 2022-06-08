@@ -2,7 +2,7 @@ import datetime
 import math
 import time
 from logging import getLogger
-from typing import Any, Dict, Iterator
+from typing import Iterator
 from urllib.parse import parse_qs, urlparse
 
 from scrapy.http.request import Request as ScrapyHttpRequest

@@ -1,6 +1,6 @@
 import json
-from logging import getLogger
 import pkgutil
+from logging import getLogger
 from typing import List
 
 logger = getLogger(__name__)
