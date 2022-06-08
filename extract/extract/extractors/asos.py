@@ -12,7 +12,7 @@ from pydantic import ValidationError
 from core.domain import CertificateType, Product
 
 from ..parse import ParsedPage
-from ..utils import safely_return_first_element
+from ..utils import safely_return_first_element, safely_convert_attribute_to_array
 
 logger = getLogger(__name__)
 
@@ -35,7 +35,8 @@ def extract_asos(parsed_page: ParsedPage) -> Optional[Product]:
     description = format_description(page_json.get("description", None))
     brand = page_json.get("brand", {}).get("name", None)
     first_offer = safely_return_first_element(page_json.get("variants", [{}]))
-    color = first_offer.get("colour", None)
+
+    color = safely_convert_attribute_to_array(first_offer.get("colour", None))
     currency = first_offer.get("price", {}).get("currency", None)
 
     images = page_json.get("media", {}).get("images", {})
@@ -45,7 +46,6 @@ def extract_asos(parsed_page: ParsedPage) -> Optional[Product]:
         price = float(price)
 
     sizes = [variant.get("displaySizeText", None) for variant in page_json.get("variants", [])]
-    sizes = ", ".join(sizes)  # size column expects str, so we join all sizes together
 
     url = _get_url(page_json.get("localisedData", []), "fr-FR")
     sustainability_labels = _get_sustainability(page_json.get("info", {}).get("aboutMe", ""))

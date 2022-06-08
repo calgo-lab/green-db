@@ -42,7 +42,7 @@ def test_zalando_fr_basic() -> None:
             "https://img01.ztat.net/article/spp-media-p1/326cc8c44327474ba483fb36e1b1e9a9/a09afe95b16d4feeb5814a2317d10ffc.jpg?imwidth=103&filter=packshot",  # noqa
             "https://img01.ztat.net/article/spp-media-p1/e28650c36c214e769df655e8def4566c/32e07b4688aa4e4ea92e9bd8273d13bb.jpg?imwidth=103",  # noqa
         ],
-        color="marine/bleu",
+        color=["marine/bleu"],
         size=None,
         gtin=None,
         asin=None,

@@ -12,7 +12,7 @@ from pydantic import ValidationError
 from core.domain import CertificateType, Product
 
 from ..parse import JSON_LD, ParsedPage
-from ..utils import safely_return_first_element
+from ..utils import safely_return_first_element, safely_convert_attribute_to_array
 
 logger = getLogger(__name__)
 
@@ -86,7 +86,7 @@ def extract_zalando(
     name = meta_data.get("name", None)
     description = meta_data.get("description", None)
     brand = meta_data.get("brand", {}).get("name", None)
-    color = meta_data.get("color", None)
+    color = safely_convert_attribute_to_array(meta_data.get("color", None))
 
     first_offer = safely_return_first_element(meta_data.get("offers", [{}]))
     currency = first_offer.get("priceCurrency", None)

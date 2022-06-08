@@ -3,7 +3,7 @@
 # type: ignore[attr-defined]
 import re
 from logging import getLogger
-from typing import Any, Callable, Optional
+from typing import Any, Callable, Optional, List
 
 from bs4 import BeautifulSoup
 from pydantic import ValidationError
@@ -11,7 +11,7 @@ from pydantic import ValidationError
 from core.domain import CertificateType, Product
 
 from ..parse import ParsedPage
-from ..utils import sustainability_labels_to_certificates
+from ..utils import sustainability_labels_to_certificates, safely_convert_attribute_to_array
 
 logger = getLogger(__name__)
 
@@ -45,8 +45,8 @@ def extract_amazon(parsed_page: ParsedPage) -> Optional[Product]:
     soup = parsed_page.beautiful_soup
 
     name = soup.find("span", {"id": "productTitle"}).text.strip()
-    color = _get_color(soup)
-    size = _get_sizes(soup)
+    color = safely_convert_attribute_to_array(_get_color(soup))
+    size = safely_convert_attribute_to_array(_get_sizes(soup))
     price = _get_price(parsed_page)
     image_urls = _get_image_urls(soup)
 
@@ -160,7 +160,7 @@ def _get_image_urls(soup: BeautifulSoup) -> Optional[list[str]]:
     return _handle_parse(targets, parse_image_urls)
 
 
-def _get_sizes(soup: BeautifulSoup) -> Optional[str]:
+def _get_sizes(soup: BeautifulSoup) -> Optional[List[str]]:
     """
     Helper function that extracts the product's sizes.
 
@@ -178,8 +178,7 @@ def _get_sizes(soup: BeautifulSoup) -> Optional[str]:
     ]
 
     def parse_sizes(sizes: list[BeautifulSoup]) -> str:
-        sizes = [size.text.strip() for size in sizes if size.text.strip()]
-        return ", ".join(sizes)
+        return [size.text.strip() for size in sizes if size.text.strip()]
 
     return _handle_parse(targets, parse_sizes)
 

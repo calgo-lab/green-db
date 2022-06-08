@@ -44,8 +44,8 @@ def test_asos_basic() -> None:
             "images.asos-media.com/products/other-stories-legging-de-yoga-cotele-densemble-en-tissu-recycle-beige-chine/24068707-3",  # noqa
             "images.asos-media.com/products/other-stories-legging-de-yoga-cotele-densemble-en-tissu-recycle-beige-chine/24068707-4",  # noqa
         ],
-        color="Beige chiné",
-        size="XS - FR 34-36, S - FR 38-40, M - FR 42-44, L - FR 46",
+        color=["Beige chiné"],
+        size=["XS - FR 34-36", "S - FR 38-40", "M - FR 42-44", "L - FR 46"],
         gtin=None,
         asin=None,
     )

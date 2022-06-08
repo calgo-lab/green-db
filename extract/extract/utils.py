@@ -1,4 +1,4 @@
-from typing import Any, List
+from typing import Any, List, Union
 
 from core.domain import CertificateType
 from core.sustainability_labels import load_and_get_sustainability_labels
@@ -26,7 +26,7 @@ def safely_return_first_element(list_object: List[Any], else_return: Any = {}) -
 
 
 def sustainability_labels_to_certificates(
-    certificate_strings: list[str], certificate_mapping: dict
+        certificate_strings: list[str], certificate_mapping: dict
 ) -> list[str]:
     """
     Helper function that maps the extracted HTML span texts to certificates.
@@ -59,7 +59,7 @@ def sustainability_labels_to_certificates(
 
 
 def _get_certificate_for_any_language(
-    localized_certificate_infos: list[dict], certificate_strings: list[str]
+        localized_certificate_infos: list[dict], certificate_strings: list[str]
 ) -> list[dict]:
     """
     Helper function that checks if a certificate matches in a language with a certificate name.
@@ -78,3 +78,22 @@ def _get_certificate_for_any_language(
         for localized_certificate_info in localized_certificate_infos
         if localized_certificate_info["name"].lower() in [x.lower() for x in certificate_strings]
     ]
+
+
+def safely_convert_attribute_to_array(attribute: Union[str, List[str]]) -> List[str]:
+    """
+    Helper function to convert an attribute to a list. If it's already a list `None` elements are
+    removed.
+
+    Args:
+        attribute (Union[str, List[str]]): single attribute as `str` or List of `str` objects with
+        each object containing for example a color or size.
+
+    Returns:
+        list[str]: `list` with `str` objects holding the attribute information.
+    """
+    if isinstance(attribute, str):
+        return [attribute]
+    elif isinstance(attribute, List):
+        return list(filter(None, attribute))
+    return None

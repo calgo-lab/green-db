@@ -33,21 +33,21 @@ def test_amazon_basic() -> None:
         category=category,
         name="THINK! Herren Kong_3-000371 chromfrei gegerbte, nachhaltige Wechselfußbett Boots",
         description="Think! ist ein traditionelles Schuhunternehmen und wahrt die Handwerkskunst. "
-        "Think! Schuhe sind handgefertigt und werden ausschließlich in Europa hergestellt. "
-        "Die Schuhe sind dabei individuell, gesund und nachhaltig produziert. Alle Innenleder "
-        "sind chromfrei gegerbt. Durch die schonende, pflanzliche Gerbung entsteht ein angenehmes "
-        "Klima im Schuh. Die beim Tragen entstehende Feuchtigkeit wird sofort aufgenommen und "
-        "hält die Füße trocken. Die in vielen Modellen eingesetzten KorkEinlagen wirken "
-        "antibakteriell. Die eingeschlossenen Luftkammern dämpfen jeden Schritt und lassen den "
-        "Füßen genug Luft zum Atmen.Lässig, individuell und bequem sind die KONG Schnürer für "
-        "Herren. Die asymmetrischen Schuhspitzen mit breiterem Vorderfußbereich sind anatomisch "
-        "geformt und bieten den Zehen reichlich Platz. Die Latexsohle hat integrierte Luftkammern. "
-        "Dadurch werden Stöße abgedämpft und der Fuß wird stabilisiert. Die Dämpfung schont die "
-        "Gelenke und die Bänder. Das sorgt für weiches, federleichtes Gehvergnügen. Das markante "
-        "Sohlenprofil bietet n Halt auf allen Oberflächen. KONG Modelle sind mit einem "
-        "Wechselfußbett ausgestattet. Das bedeutet, dass die Einlegesohlen ganz leicht durch "
-        "orthopädische Einlagen oder später durch neue KONG Einlagen ausgetauscht werden können. "
-        "Einige KONG Modelle wurden mit dem Österreichischen Umweltzeichen ausgezeichnet.",
+                    "Think! Schuhe sind handgefertigt und werden ausschließlich in Europa hergestellt. "
+                    "Die Schuhe sind dabei individuell, gesund und nachhaltig produziert. Alle Innenleder "
+                    "sind chromfrei gegerbt. Durch die schonende, pflanzliche Gerbung entsteht ein angenehmes "
+                    "Klima im Schuh. Die beim Tragen entstehende Feuchtigkeit wird sofort aufgenommen und "
+                    "hält die Füße trocken. Die in vielen Modellen eingesetzten KorkEinlagen wirken "
+                    "antibakteriell. Die eingeschlossenen Luftkammern dämpfen jeden Schritt und lassen den "
+                    "Füßen genug Luft zum Atmen.Lässig, individuell und bequem sind die KONG Schnürer für "
+                    "Herren. Die asymmetrischen Schuhspitzen mit breiterem Vorderfußbereich sind anatomisch "
+                    "geformt und bieten den Zehen reichlich Platz. Die Latexsohle hat integrierte Luftkammern. "
+                    "Dadurch werden Stöße abgedämpft und der Fuß wird stabilisiert. Die Dämpfung schont die "
+                    "Gelenke und die Bänder. Das sorgt für weiches, federleichtes Gehvergnügen. Das markante "
+                    "Sohlenprofil bietet n Halt auf allen Oberflächen. KONG Modelle sind mit einem "
+                    "Wechselfußbett ausgestattet. Das bedeutet, dass die Einlegesohlen ganz leicht durch "
+                    "orthopädische Einlagen oder später durch neue KONG Einlagen ausgetauscht werden können. "
+                    "Einige KONG Modelle wurden mit dem Österreichischen Umweltzeichen ausgezeichnet.",
         brand="Think!",
         sustainability_labels=["certificate:BLUE_ANGEL"],
         price=77.62,
@@ -61,9 +61,9 @@ def test_amazon_basic() -> None:
             "https://m.media-amazon.com/images/I/31CvUUqMkRL.jpg",
             "https://m.media-amazon.com/images/I/31Gkl-CPiiL.jpg",
         ],
-        color="3000 Cuoio Kombi",
-        size="40 EU, 40.5 EU, 41 EU, 41.5 EU, 42 EU, 42.5 EU, 43 EU, 43.5 EU, 44 EU, 44.5 EU, "
-        "45 EU, 45.5 EU, 46 EU, 46.5 EU, 47 EU, 47.5 EU",
+        color=["3000 Cuoio Kombi"],
+        size=['40 EU', '40.5 EU', '41 EU', '41.5 EU', '42 EU', '42.5 EU', '43 EU', '43.5 EU',
+              '44 EU', '44.5 EU', '45 EU', '45.5 EU', '46 EU', '46.5 EU', '47 EU', '47.5 EU'],
         gtin=None,
         asin="B08FSZSW2L",
     )
