@@ -20,19 +20,18 @@ class ZalandoSpider(BaseSpider):
         self, response: SplashJsonResponse, is_first_page: bool = True
     ) -> Iterator[SplashRequest]:
 
-        if urlsplit(response.url).path.strip("/") != urlsplit(
-            response.meta["original_URL"]
-        ).path.strip("/"):
+        if original_URL := response.meta.get("original_URL"):
+            if urlsplit(response.url).path.strip("/") != urlsplit(original_URL).path.strip("/"):
 
-            # If Zalando do not have results for a given filter,
-            # the will redirect to a page where results are found.
-            # Therefore, the URL path changes and we should return here
-            # and do not use those products,
-            # because this disturbs our product categories..
-            logger.info("Got redirected!")
-            logger.info(f"Request Path:  {urlsplit(response.meta['original_URL']).path.strip('/')}")
-            logger.info(f"Response Path: {urlsplit(response.url).path.strip('/')}")
-            return None
+                # If Zalando do not have results for a given filter,
+                # the will redirect to a page where results are found.
+                # Therefore, the URL path changes and we should return here
+                # and do not use those products,
+                # because this disturbs our product categories..
+                logger.info("Got redirected!")
+                logger.info(f"Request Path:  {urlsplit(original_URL).path.strip('/')}")
+                logger.info(f"Response Path: {urlsplit(response.url).path.strip('/')}")
+                return None
 
         # Save HTML to database
         self._save_SERP(response)
