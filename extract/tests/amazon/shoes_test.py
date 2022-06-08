@@ -1,4 +1,4 @@
-from core.constants import TABLE_NAME_SCRAPING_AMAZON
+from core.constants import TABLE_NAME_SCRAPING_AMAZON_DE
 from core.domain import Product
 from extract import extract_product
 
@@ -9,6 +9,7 @@ def test_amazon_basic() -> None:
     timestamp = "2022-04-28 19:00:00"
     url = "https://www.amazon.de/Think-Kong_3-000371-chromfrei-nachhaltige-Wechselfu%C3%9Fbett/dp/B08FSL34LS/ref=sr_1_2?qid=1651058159&refinements=p_n_cpf_eligible%3A22579885031&s=shoes&sr=1-2"  # noqa
     merchant = "amazon"
+    country_code = "DE"
     file_name = "shoes.html"
     category = "SHOES"
     meta_information = {
@@ -20,16 +21,18 @@ def test_amazon_basic() -> None:
     scraped_page = read_test_html(
         timestamp=timestamp,
         merchant=merchant,
+        country_code=country_code,
         file_name=file_name,
         category=category,
         meta_information=meta_information,
         url=url,
     )
-    actual = extract_product(TABLE_NAME_SCRAPING_AMAZON, scraped_page)
+    actual = extract_product(TABLE_NAME_SCRAPING_AMAZON_DE, scraped_page)
     expected = Product(
         timestamp=timestamp,
         url=url,
         merchant=merchant,
+        country_code=country_code,
         category=category,
         name="THINK! Herren Kong_3-000371 chromfrei gegerbte, nachhaltige Wechselfußbett Boots",
         description="Think! ist ein traditionelles Schuhunternehmen und wahrt die Handwerkskunst. "

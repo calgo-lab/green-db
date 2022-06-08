@@ -1,4 +1,4 @@
-from core.constants import TABLE_NAME_SCRAPING_AMAZON
+from core.constants import TABLE_NAME_SCRAPING_AMAZON_DE
 from core.domain import Product
 from extract import extract_product
 
@@ -9,6 +9,7 @@ def test_amazon_basic_img() -> None:
     timestamp = "2022-04-28 19:00:00"
     url = "https://www.amazon.de/Romberg-Boxershorts-Bio-Baumwolle-kratzenden-nachhaltig/dp/B0932XK47G/ref=sr_1_7?qid=1652774791&refinements=p_n_cpf_eligible%3A22579885031&s=apparel&sr=1-7&th=1"  # noqa
     merchant = "amazon"
+    country_code = "DE"
     file_name = "underwear.html"
     category = "UNDERWEAR"
     meta_information = {
@@ -20,16 +21,18 @@ def test_amazon_basic_img() -> None:
     scraped_page = read_test_html(
         timestamp=timestamp,
         merchant=merchant,
+        country_code=country_code,
         file_name=file_name,
         category=category,
         meta_information=meta_information,
         url=url,
     )
-    actual = extract_product(TABLE_NAME_SCRAPING_AMAZON, scraped_page)
+    actual = extract_product(TABLE_NAME_SCRAPING_AMAZON_DE, scraped_page)
     expected = Product(
         timestamp=timestamp,
         url=url,
         merchant=merchant,
+        country_code=country_code,
         category=category,
         name="Romberg Herren Boxershorts mit Schriftzug, 6er Pack aus nachhaltiger Bio-Baumwolle "
         "(GOTS Zertifiziert)",

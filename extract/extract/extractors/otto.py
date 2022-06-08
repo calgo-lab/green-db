@@ -21,7 +21,7 @@ logger = getLogger(__name__)
 NUM_IMAGE_URLS = 3
 
 
-def extract_otto(parsed_page: ParsedPage) -> Optional[Product]:
+def extract_otto_de(parsed_page: ParsedPage) -> Optional[Product]:
     """
     Extracts information of interest from HTML (and other intermediate representations)
     and returns `Product` object or `None` if anything failed. Works for otto.de
@@ -67,6 +67,7 @@ def extract_otto(parsed_page: ParsedPage) -> Optional[Product]:
             timestamp=parsed_page.scraped_page.timestamp,
             url=parsed_page.scraped_page.url,
             merchant=parsed_page.scraped_page.merchant,
+            country_code=parsed_page.scraped_page.country_code,
             category=parsed_page.scraped_page.category,
             name=name,
             description=description,

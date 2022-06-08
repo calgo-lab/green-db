@@ -5,9 +5,9 @@ from sqlalchemy import ARRAY, BIGINT, INTEGER, JSON, NUMERIC, TEXT, TIMESTAMP, V
 
 from core.constants import (
     TABLE_NAME_GREEN_DB,
-    TABLE_NAME_SCRAPING_AMAZON,
-    TABLE_NAME_SCRAPING_ASOS,
-    TABLE_NAME_SCRAPING_OTTO,
+    TABLE_NAME_SCRAPING_AMAZON_DE,
+    TABLE_NAME_SCRAPING_ASOS_FR,
+    TABLE_NAME_SCRAPING_OTTO_DE,
     TABLE_NAME_SCRAPING_ZALANDO_DE,
     TABLE_NAME_SCRAPING_ZALANDO_FR,
     TABLE_NAME_SCRAPING_ZALANDO_UK,
@@ -73,6 +73,7 @@ class ScrapingTable(__TableMixin):
     id = Column(INTEGER, nullable=False, autoincrement=True, primary_key=True)
     timestamp = Column(TIMESTAMP, nullable=False)
     merchant = Column(TEXT, nullable=False)
+    country_code = Column(TEXT, nullable=False)
     category = Column(TEXT, nullable=False)
     url = Column(TEXT, nullable=False)
     html = Column(TEXT, nullable=False)
@@ -125,7 +126,7 @@ class OTTOScrapingTable(ScrapingBaseTable, ScrapingTable):
         ScrapingTable ([type]): To inherit the table definition
     """
 
-    __tablename__ = TABLE_NAME_SCRAPING_OTTO
+    __tablename__ = TABLE_NAME_SCRAPING_OTTO_DE
 
 
 class AsosScrapingTable(ScrapingBaseTable, ScrapingTable):
@@ -137,7 +138,7 @@ class AsosScrapingTable(ScrapingBaseTable, ScrapingTable):
         ScrapingTable ([type]): To inherit the table definition
     """
 
-    __tablename__ = TABLE_NAME_SCRAPING_ASOS
+    __tablename__ = TABLE_NAME_SCRAPING_ASOS_FR
 
 
 class AmazonScrapingTable(ScrapingBaseTable, ScrapingTable):
@@ -148,7 +149,7 @@ class AmazonScrapingTable(ScrapingBaseTable, ScrapingTable):
         ScrapingTable ([type]): To inherit the table definition
     """
 
-    __tablename__ = TABLE_NAME_SCRAPING_AMAZON
+    __tablename__ = TABLE_NAME_SCRAPING_AMAZON_DE
 
 
 # Used to dynamically map a table name to the correct Table class.
@@ -156,9 +157,9 @@ SCRAPING_TABLE_CLASS_FOR: Dict[str, Type[ScrapingTable]] = {
     TABLE_NAME_SCRAPING_ZALANDO_DE: ZalandoDeScrapingTable,
     TABLE_NAME_SCRAPING_ZALANDO_FR: ZalandoFrScrapingTable,
     TABLE_NAME_SCRAPING_ZALANDO_UK: ZalandoUkScrapingTable,
-    TABLE_NAME_SCRAPING_OTTO: OTTOScrapingTable,
-    TABLE_NAME_SCRAPING_ASOS: AsosScrapingTable,
-    TABLE_NAME_SCRAPING_AMAZON: AmazonScrapingTable,
+    TABLE_NAME_SCRAPING_OTTO_DE: OTTOScrapingTable,
+    TABLE_NAME_SCRAPING_ASOS_FR: AsosScrapingTable,
+    TABLE_NAME_SCRAPING_AMAZON_DE: AmazonScrapingTable,
 }
 
 
@@ -176,6 +177,7 @@ class GreenDBTable(GreenDBBaseTable, __TableMixin):
     id = Column(INTEGER, nullable=False, autoincrement=True, primary_key=True)
     timestamp = Column(TIMESTAMP, nullable=False)
     merchant = Column(TEXT, nullable=False)
+    country_code = Column(TEXT, nullable=False)
     category = Column(TEXT, nullable=False)
     url = Column(TEXT, nullable=False)
     name = Column(TEXT, nullable=False)

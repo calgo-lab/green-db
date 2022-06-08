@@ -22,6 +22,7 @@ class CurrencyType(str, Enum):
 class ScrapedPage(BaseModel):
     timestamp: datetime
     merchant: str
+    country_code: str
     url: str
     html: str
     page_type: PageType
@@ -37,6 +38,7 @@ class Product(BaseModel):
     timestamp: datetime
     url: str
     merchant: str
+    country_code: str
     category: str
     name: str
     description: str

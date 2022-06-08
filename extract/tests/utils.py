@@ -9,6 +9,7 @@ TEST_DATA_DIR = Path(__file__).parent
 def read_test_html(
     timestamp: str,
     merchant: str,
+    country_code: str,
     file_name: str,
     category: str,
     meta_information: dict,
@@ -19,6 +20,7 @@ def read_test_html(
         return ScrapedPage(
             timestamp=datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S"),
             merchant=merchant,
+            country_code=country_code,
             url=url,
             html=f.read(),
             category=category,

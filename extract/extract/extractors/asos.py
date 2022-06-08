@@ -17,7 +17,7 @@ from ..utils import safely_return_first_element, safely_convert_attribute_to_arr
 logger = getLogger(__name__)
 
 
-def extract_asos(parsed_page: ParsedPage) -> Optional[Product]:
+def extract_asos_fr(parsed_page: ParsedPage) -> Optional[Product]:
     """
     Extracts information of interest from html, which in this case is a json
     and returns `Product` object or `None` if anything failed. Works for asos.com.
@@ -55,6 +55,7 @@ def extract_asos(parsed_page: ParsedPage) -> Optional[Product]:
             timestamp=parsed_page.scraped_page.timestamp,
             url=url,
             merchant=parsed_page.scraped_page.merchant,
+            country_code=parsed_page.scraped_page.country_code,
             category=parsed_page.scraped_page.category,
             name=name,
             description=description,

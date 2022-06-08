@@ -1,6 +1,6 @@
 from requests_mock import Adapter
 
-from core.constants import TABLE_NAME_SCRAPING_OTTO
+from core.constants import TABLE_NAME_SCRAPING_OTTO_DE
 from core.domain import Product
 from extract import extract_product
 
@@ -20,6 +20,7 @@ def test_otto_basic(requests_mock: Adapter) -> None:
     url = "https://www.otto.mock/"
     timestamp = "2022-02-17 12:49:00"
     merchant = "otto"
+    country_code = "DE"
     file_name = "damen-pullover.html"
     category = "SWEATER"
     meta_information = {"sex": "FEMALE", "family": "FASHION"}
@@ -27,17 +28,19 @@ def test_otto_basic(requests_mock: Adapter) -> None:
     scraped_page = read_test_html(
         timestamp=timestamp,
         merchant=merchant,
+        country_code=country_code,
         file_name=file_name,
         category=category,
         meta_information=meta_information,
         url=url,
     )
 
-    actual = extract_product(TABLE_NAME_SCRAPING_OTTO, scraped_page)
+    actual = extract_product(TABLE_NAME_SCRAPING_OTTO_DE, scraped_page)
     expected = Product(
         timestamp=timestamp,
         url=url,
         merchant=merchant,
+        country_code=country_code,
         category=category,
         name="s.Oliver Strickpullover »Pullover« (1-tlg)",
         description="s.Oliver Strickpullover »Pullover« (1-tlg) für 29,99€. mit regulärer Passform,"

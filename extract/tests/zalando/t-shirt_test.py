@@ -9,6 +9,7 @@ def test_zalando_basic() -> None:
     timestamp = "2022-04-22 12:49:00"
     url = "https://www.zalando.mock/"
     merchant = "zalando"
+    country_code = "DE"
     file_name = "t-shirt.html"
     category = "TSHIRT"
     meta_information = {
@@ -20,6 +21,7 @@ def test_zalando_basic() -> None:
     scraped_page = read_test_html(
         timestamp=timestamp,
         merchant=merchant,
+        country_code=country_code,
         file_name=file_name,
         category=category,
         meta_information=meta_information,
@@ -30,6 +32,7 @@ def test_zalando_basic() -> None:
         timestamp=timestamp,
         url=url,
         merchant=merchant,
+        country_code=country_code,
         category=category,
         name="JAAMES TURNTABLES - T-Shirt print - acid black",
         description=" ARMEDANGELS JAAMES TURNTABLES - T-Shirt print - acid black für "

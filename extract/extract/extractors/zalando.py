@@ -65,7 +65,7 @@ _LABEL_MAPPING = {
 }
 
 
-def extract_zalando(
+def extract_zalando_de(
     parsed_page: ParsedPage, label_mapping: Dict[str, CertificateType] = _LABEL_MAPPING
 ) -> Optional[Product]:
     """
@@ -114,6 +114,7 @@ def extract_zalando(
             timestamp=parsed_page.scraped_page.timestamp,
             url=parsed_page.scraped_page.url,
             merchant=parsed_page.scraped_page.merchant,
+            country_code=parsed_page.scraped_page.country_code,
             category=parsed_page.scraped_page.category,
             name=name,
             description=description,
