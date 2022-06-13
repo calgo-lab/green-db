@@ -52,6 +52,7 @@ def load_and_get_sustainability_labels() -> dict:
 
     for certificate in certificates:
         for evaluation in certificate_evaluations:
+            evaluation = {k.replace(":", "_"): v for k, v in evaluation.items()}
             if certificate == evaluation["id"]:
                 certificates[certificate].update(evaluation)
 
