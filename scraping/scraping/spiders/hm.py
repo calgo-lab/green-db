@@ -19,7 +19,6 @@ class HMSpider(BaseSpider):
     allowed_domains = ["hm.com"]
 
     custom_settings = {
-        #"CONCURRENT_REQUESTS": 1,
         "DOWNLOAD_DELAY": 2,
         "USER_AGENT": "Green Consumption Assistant",
         "DOWNLOAD_HANDLERS": {
@@ -27,7 +26,7 @@ class HMSpider(BaseSpider):
             "https": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
         },
         "TWISTED_REACTOR": "twisted.internet.asyncioreactor.AsyncioSelectorReactor",
-        # "LOG_LEVEL": "INFO",
+        "LOG_LEVEL": "INFO",
         # Abort requests which are not of type document e.g. images, scripts, etc.
         # all types: https://playwright.dev/python/docs/api/class-request#request-resource-type
         # Routing disables http caching (e.g. scripts are not saved)
