@@ -1,4 +1,4 @@
-id,name,category,cred_credibility,eco_chemicals,eco_lifetime,eco_water,eco_inputs,eco_quality,eco_energy,eco_waste_air,eco_environmental_management,social_labour_rights,social_business_practice,social_social_rights,social_company_responsibility,social_conflict_minerals
+id,name,category,cred:credibility,eco:chemicals,eco:lifetime,eco:water,eco:inputs,eco:quality,eco:energy,eco:waste_air,eco:environmental_management,social:labour_rights,social:business_practice,social:social_rights,social:company_responsibility,social:conflict_minerals
 certificate:BETTER_COTTON_INITIATIVE,Better Cotton Initiative (BCI),Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 certificate:BIORE,bioRe,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 certificate:BLUE_ANGEL,Blauer Engel,Fashion,93,86,0,81,100,100,0,24,40,55,0,0,0,0
