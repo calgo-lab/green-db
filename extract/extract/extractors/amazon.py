@@ -45,7 +45,7 @@ def extract_amazon(parsed_page: ParsedPage) -> Optional[Product]:
     Returns:
         Optional[Product]: Valid `Product` object or `None` if extraction failed
     """
-    language = re.sub("www\.amazon\.", "", urlparse(parsed_page.scraped_page.url).netloc) # noqa
+    language = re.sub("www\.amazon\.", "", urlparse(parsed_page.scraped_page.url).netloc)  # noqa
     soup = parsed_page.beautiful_soup
 
     name = soup.find("span", {"id": "productTitle"}).text.strip()
