@@ -45,7 +45,7 @@ def extract_amazon(parsed_page: ParsedPage) -> Optional[Product]:
     Returns:
         Optional[Product]: Valid `Product` object or `None` if extraction failed
     """
-    language = re.sub("www.amazon.", "", urlparse(parsed_page.scraped_page.url).netloc)
+    language = re.sub("www\.amazon\.", "", urlparse(parsed_page.scraped_page.url).netloc) # noqa
     soup = parsed_page.beautiful_soup
 
     name = soup.find("span", {"id": "productTitle"}).text.strip()
@@ -236,7 +236,7 @@ def _get_brand(soup: BeautifulSoup, language: str) -> Optional[str]:
     def parse_brand(brand: str) -> Optional[str]:
         info_locales = _LANGUAGE_LOCALES[language]["info"]
         if brand.startswith(info_locales[0]):
-            if len(info_locales) == 3:
+            if language == "de":
                 return brand[len(info_locales[0]) : -len(info_locales[1])]  # noqa
             else:
                 return brand[len(info_locales[0]) :]  # noqa
