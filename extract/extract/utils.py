@@ -92,8 +92,12 @@ def safely_convert_attribute_to_array(attribute: Union[str, List[str]]) -> List[
     Returns:
         list[str]: `list` with `str` objects holding the attribute information.
     """
+    attributes_to_remove = [None, 'None']
+
     if isinstance(attribute, str):
+        if attribute in attributes_to_remove:
+            return None
         return [attribute]
     elif isinstance(attribute, List):
-        return list(filter(None, attribute))
+        return list(filter(lambda attr: attr not in attributes_to_remove, attribute))
     return None
