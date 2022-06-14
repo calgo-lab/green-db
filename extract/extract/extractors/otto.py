@@ -124,16 +124,6 @@ _LABEL_MAPPING = {
     "": CertificateType.OTHER,
 }
 
-_LABEL_MAPPING_ENERGY = {
-    "A": CertificateType.EU_ENERGY_LABEL_A,
-    "B": CertificateType.EU_ENERGY_LABEL_B,
-    "C": CertificateType.EU_ENERGY_LABEL_C,
-    "D": CertificateType.EU_ENERGY_LABEL_D,
-    "E": CertificateType.EU_ENERGY_LABEL_E,
-    "F": CertificateType.EU_ENERGY_LABEL_F,
-    "G": CertificateType.EU_ENERGY_LABEL_G,
-}
-
 
 def _get_product_data(beautiful_soup: BeautifulSoup) -> dict:
     """
@@ -276,7 +266,7 @@ def _get_energy_labels(product_data: dict) -> List[str]:
             case [*json_array]:
                 json_values += json_array
 
-    return energy_labels
+    return [f"EU Energy label {letter}" for letter in energy_labels]
 
 
 def _get_sustainability(product_data: dict, parsed_url: ParseResult) -> List[str]:
@@ -303,6 +293,6 @@ def _get_sustainability(product_data: dict, parsed_url: ParseResult) -> List[str
         labels.update(_get_sustainability_info(sustainable_soup))
 
     return sorted(
-        sustainability_labels_to_certificates(labels.keys(), _LABEL_MAPPING)
-        + list({_LABEL_MAPPING_ENERGY.get(label) for label in energy_labels})
+        sustainability_labels_to_certificates(list(labels.keys()) + energy_labels, _LABEL_MAPPING)
     )
+

@@ -45,7 +45,7 @@ def test_otto_basic(requests_mock: Adapter) -> None:
         "00€. Nutzinhalt: 635 Liter, No Frost – nie wieder abtauen!, Metal Cooling "
         "bei OTTO",
         brand="Samsung",
-        sustainability_labels=["certificate:EU_ENERGY_LABEL_C", "certificate:UNKNOWN"],
+        sustainability_labels=["certificate:EU_ENERGY_LABEL_C"],
         image_urls=[
             "https://i.otto.mock/i/otto/02f85090-393a-5bd1-b56a-bac9f66295f7",
             "https://i.otto.mock/i/otto/e1f3b715-0081-5df1-9d50-14c19bc476e8",
