@@ -295,4 +295,3 @@ def _get_sustainability(product_data: dict, parsed_url: ParseResult) -> List[str
     return sorted(
         sustainability_labels_to_certificates(list(labels.keys()) + energy_labels, _LABEL_MAPPING)
     )
-
