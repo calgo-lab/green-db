@@ -9,10 +9,13 @@ RUN pip install redis rq poetry pydantic scrapy-playwright asyncio
 # easypi/scrapyd is based on debian:bullseye, so we have to manually install the missing deps:
 # fonts-ubuntu, ttf-ubuntu-font-family, libenchant1c2a, libicu66, libjpeg-turbo8
 
-# add non-free to all package sources, update and install wget
-RUN ex +"%s/$/ non-free/g" -cwq /etc/apt/sources.list \
-    && apt-get update \
-    && apt-get install -y wget
+# add non-free to all package sources
+RUN ex +"%s/$/ non-free/g" -cwq /etc/apt/sources.list
+RUN apt update && apt install --no-install-recommends -y \
+    wget \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt clean \
+    && apt autoremove
 
 # download and install the missing packages for playwright
 RUN wget -i - http://ftp.de.debian.org/debian/pool/non-free/f/fonts-ubuntu/fonts-ubuntu_0.83-4_all.deb \
@@ -30,12 +33,13 @@ RUN wget -i - http://ftp.de.debian.org/debian/pool/non-free/f/fonts-ubuntu/fonts
     libenchant1c2a_1.6.0-11.1+b1_amd64.deb \
     libicu66_66.1-2ubuntu2.1_amd64.deb \
     libjpeg-turbo8_2.0.3-0ubuntu1.20.04.1_amd64.deb \
-    && apt --fix-broken -y install
+    && apt --fix-broken -y --no-install-recommends install \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt clean \
+    && apt autoremove
 
 # install playwright with dependencies and chromium and cleanup:
-RUN playwright install --with-deps chromium \
-    && apt-get clean \
-    && apt autoremove
+RUN playwright install --with-deps chromium
 
 COPY core /green-db/core
 COPY message-queue /green-db/message-queue
