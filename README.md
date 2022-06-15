@@ -43,10 +43,10 @@ The GreenDB schema is highly inspired by [schema.org](https://schema.org). Howev
 
 ### Table: `sustainability-labels`
 
-| **column name**      | **id** | **timestamp** | **name** | **description** | **ecological_evaluation** | **social_evaluation** | **credibility_evaluation** |
-| -------------------- | ------ | ------------- | -------- | --------------- | ------------------------- | --------------------- | -------------------------- |
-| **column data type** | text   | timestamp     | text     | text            | int4                      | int4                  | int4                       |
-| **column nullable?** | no     | no            | no       | no              | yes                       | yes                   | yes                        |
+| **column name**      | **id** | **timestamp** | **name** | **description** | **cred_credibility** | **eco_chemicals** | **eco_lifetime** | **eco_water** | **eco_inputs** | **eco_quality** | **eco_energy** | **eco_waste_air** | **eco_environmental_management** | **social_labour_rights** | **social_business_practice** | **social_social_rights** | **social_company_responsibility** |
+| -------------------- | ------ | ------------- | -------- | --------------- | ---------------------| ------------------| -----------------|---------------|----------------|-----------------|----------------|-------------------|----------------------------------|--------------------------|------------------------------|--------------------------|-----------------------------------|
+| **column data type** | text   | timestamp     | text     | text            | int4                 | int4              | int4             | int4          | int4           | int4            | int4           | int4              | int4                             | int4                     | int4                         | int4                     | int4                              |
+| **column nullable?** | no     | no            | no       | no              | yes                  | yes               | yes              | yes           | yes            | yes             | yes            | yes               | yes                              | yes                      | yes                          | yes                      | yes                               |
 
 
 ## Cite us
