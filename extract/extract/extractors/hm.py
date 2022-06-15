@@ -140,13 +140,12 @@ def _get_product_details(beautiful_soup: BeautifulSoup) -> Dict:
         Dict: product data JSON
     """
     for script in beautiful_soup.find_all("script"):
-        if script.string:
-            if "productArticleDetails = {" in script.string:
-                data = script.string.split("var productArticleDetails = ")[1][:-2]
-                data = re.sub(r"isDesktop \? \'.*' : ", "", data)
-                data = chompjs.parse_js_object(data)
-                article_code = data.get("articleCode", "")
-                return data.get(article_code, {})
+        if script.string and "productArticleDetails = {" in script.string:
+            data = script.string.split("var productArticleDetails = ")[1][:-2]
+            data = re.sub(r"isDesktop \? \'.*' : ", "", data)
+            data = chompjs.parse_js_object(data)
+            article_code = data.get("articleCode", "")
+            return data.get(article_code, {})
     return {}
 
 
