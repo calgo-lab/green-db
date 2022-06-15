@@ -60,9 +60,9 @@ class BaseSpider(Spider):
         Also, defines an `abstractmethod` that needs to implemented.
 
         Args:
-            start_urls (Union[str, List[str]]): URL the spider should start at
-            category (str): All products found belong to this category
             timestamp (datetime): When was this scraping run started
+            start_urls (Optional[Union[str, List[str]]], optional): URL the spider should start at
+            category (Optional[str], optional): All products found belong to this category
             search_term (Optional[str], optional): Meta information about this scraping run.
                 Defaults to None.
             meta_data (Optional[Union[str, Dict[str, str]]], optional): Additional meta information
