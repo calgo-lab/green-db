@@ -161,6 +161,7 @@ class BaseSpider(Spider):
                 }
             return {}
 
+        # If a start URL is given, we need to create the settings manually
         if self.start_urls:
             settings = [
                 {
