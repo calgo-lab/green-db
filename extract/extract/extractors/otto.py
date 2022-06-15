@@ -266,6 +266,8 @@ def _get_energy_labels(product_data: dict) -> List[str]:
             case [*json_array]:
                 json_values += json_array
 
+    # Adding the prefix "EU Energy label" to allow automated mapping,
+    # see file: core.sustainability_labels.sustainability_labels.json
     return [f"EU Energy label {letter}" for letter in energy_labels]
 
 
