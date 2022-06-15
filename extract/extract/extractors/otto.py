@@ -119,7 +119,6 @@ _LABEL_MAPPING = {
     "Bio-Siegel": CertificateType.OTHER,
     "bioRe® Sustainable Textiles Standard": CertificateType.BIORE,
     "[REE]GROW": CertificateType.OTHER,
-    "Energieeffizientes Gerät": CertificateType.OTHER,
     "Birla Viscose": CertificateType.OTHER,
     "": CertificateType.OTHER,
 }
