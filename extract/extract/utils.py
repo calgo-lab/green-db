@@ -55,7 +55,7 @@ def sustainability_labels_to_certificates(
         if certificate_string in certificate_strings:
             result.append(certificate)
 
-    return sorted(result) or [CertificateType.UNKNOWN]  # type: ignore[attr-defined]
+    return sorted(set(result)) or [CertificateType.UNKNOWN]  # type: ignore[attr-defined]
 
 
 def _get_certificate_for_any_language(
