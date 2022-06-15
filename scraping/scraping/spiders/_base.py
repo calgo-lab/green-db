@@ -121,7 +121,7 @@ class BaseSpider(Spider):
             return start_urls.split(",") if type(start_urls) == str else start_urls  # type: ignore
 
     @staticmethod
-    def _parse_meta_data(meta_data: Union[Dict[str, str], str]) -> dict:  # type: ignore
+    def parse_meta_data(meta_data: Union[Dict[str, str], str]) -> dict:  # type: ignore
         """
         Helper method to parse meta_data.
 
@@ -166,7 +166,7 @@ class BaseSpider(Spider):
                     callback=self.parse_SERP,
                     meta={
                         "category": setting.get("category"),
-                        "meta_data": self._parse_meta_data(setting.get("meta_data")),  # type: ignore # noqa
+                        "meta_data": self.parse_meta_data(setting.get("meta_data")),  # type: ignore # noqa
                     },
                     **{
                         "endpoint": "execute",

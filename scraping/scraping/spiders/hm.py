@@ -73,7 +73,7 @@ class HMSpider(BaseSpider):
                 ]
             )
         )
-        
+
         product_count = len(data.get("products"))  # product_count is just needed for debugging
         logger.info(f"Parsing SERP with {product_count} products & {len(all_product_links)} colors")
 
