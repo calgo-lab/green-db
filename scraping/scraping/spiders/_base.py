@@ -148,6 +148,19 @@ class BaseSpider(Spider):
         Yields:
             Iterator[SplashRequest]: Requests that will be performed
         """
+
+        def get_request_specific_parameters() -> dict:
+            if self.StartRequest == SplashRequest:
+                return {
+                    "endpoint": "execute",
+                    "args": {  # passed to Splash HTTP API
+                        "wait": self.request_timeout,
+                        "lua_source": minimal_script,
+                        "timeout": 180,
+                    },
+                }
+            return {}
+
         if self.start_urls:
             settings = [
                 {
@@ -166,18 +179,9 @@ class BaseSpider(Spider):
                     callback=self.parse_SERP,
                     meta={
                         "category": setting.get("category"),
-                        "meta_data": self.parse_meta_data(setting.get("meta_data")),  # type: ignore # noqa
+                        "meta_data": self.parse_meta_data(setting.get("meta_data")),  # type: ignore
                     },
-                    **{
-                        "endpoint": "execute",
-                        "args": {  # passed to Splash HTTP API
-                            "wait": self.request_timeout,
-                            "lua_source": minimal_script,
-                            "timeout": 180,
-                        },
-                    }
-                    if self.StartRequest == SplashRequest
-                    else {},
+                    **get_request_specific_parameters(),
                 )
             logger.info(f"Crawling setting: {setting}")
 
