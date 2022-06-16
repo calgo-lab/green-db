@@ -1,8 +1,6 @@
 from datetime import datetime
 from typing import Dict, List, Type
 
-from sqlalchemy import ARRAY, BIGINT, INTEGER, JSON, NUMERIC, TEXT, TIMESTAMP, VARCHAR, Column
-
 from core.constants import (
     TABLE_NAME_GREEN_DB,
     TABLE_NAME_SCRAPING_AMAZON,
@@ -14,6 +12,7 @@ from core.constants import (
     TABLE_NAME_SCRAPING_ZALANDO_UK,
     TABLE_NAME_SUSTAINABILITY_LABELS,
 )
+from sqlalchemy import ARRAY, BIGINT, INTEGER, JSON, NUMERIC, TEXT, TIMESTAMP, VARCHAR, Column
 
 # TODO: Here decide which database to use
 from .postgres import (  # noqa

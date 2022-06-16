@@ -2,11 +2,10 @@ from datetime import datetime
 from logging import getLogger
 from typing import Iterator, List, Type
 
-from sqlalchemy import Column
-from sqlalchemy.orm import Query, Session
-
 from core.constants import DATABASE_NAME_GREEN_DB, DATABASE_NAME_SCRAPING
 from core.domain import Product, ScrapedPage, SustainabilityLabel
+from sqlalchemy import Column
+from sqlalchemy.orm import Query, Session
 
 from .tables import (
     SCRAPING_TABLE_CLASS_FOR,
