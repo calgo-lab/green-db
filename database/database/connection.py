@@ -199,19 +199,19 @@ class GreenDB(Connection):
         with self._session_factory() as db_session:
             # NOTE: this is slowly...
             # if we have many more labels to bootstrap, we should refactor it.
+            if (  # If current label version (timestamp) does not exists, add them
+                not db_session.query(
+                    SustainabilityLabelsTable.timestamp
+                )
+                .filter(
+                    SustainabilityLabelsTable.timestamp == sustainability_labels[0].timestamp
+                )
+                .first()
+            ):
 
-            for label in sustainability_labels:
-                if (  # If label not exist, row is added
-                    not db_session.query(
-                        SustainabilityLabelsTable.id, SustainabilityLabelsTable.timestamp
-                    )
-                    .filter(
-                        SustainabilityLabelsTable.id == label.id,
-                        SustainabilityLabelsTable.timestamp == label.timestamp,
-                    )
-                    .first()
-                ):
+                for label in sustainability_labels:
                     db_session.add(SustainabilityLabelsTable(**label.dict()))
+
             db_session.commit()
 
     def get_product(self, id: int) -> Product:
