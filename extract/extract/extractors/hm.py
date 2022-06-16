@@ -6,6 +6,7 @@ import re
 from codecs import decode
 from logging import getLogger
 from typing import Dict, List, Optional
+from urllib.parse import urlparse
 
 import chompjs
 from bs4 import BeautifulSoup
@@ -43,10 +44,14 @@ def extract_hm(parsed_page: ParsedPage) -> Optional[Product]:
 
     first_offer = safely_return_first_element(meta_data.get("offers", [{}]))
     currency = first_offer.get("priceCurrency", None)
+
     image_urls = meta_data.get("image", [])
     # convert to list if its only one image
     if isinstance(image_urls, str):
         image_urls = [image_urls]
+    # add https as scheme to all image urls if no scheme is set
+    image_urls = [urlparse(url, scheme="https").geturl() for url in image_urls]
+
     if price := first_offer.get("price", None):
         price = float(price)
 

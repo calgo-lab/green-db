@@ -46,7 +46,7 @@ def test_hm_basic() -> None:
         price=29.99,
         currency="EUR",
         image_urls=[
-            "//lp2.hm.com/hmgoepprod?set=quality%5B79%5D%2Csource%5B%2Fdd%2F3e"
+            "https://lp2.hm.com/hmgoepprod?set=quality%5B79%5D%2Csource%5B%2Fdd%2F3e"
             "%2Fdd3e47e1d6c7285c0a2e6ad00a79d577757e1330.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B"
             "%5D%2Ctype%5BDESCRIPTIVESTILLLIFE%5D%2Cres%5Bm%5D%2Chmver%5B2%5D&call=url["
             "file:/product/main]",
