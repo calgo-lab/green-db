@@ -6,6 +6,7 @@ from datetime import datetime
 
 from core.constants import (
     TABLE_NAME_SCRAPING_AMAZON,
+    TABLE_NAME_SCRAPING_AMAZON_FR,
     TABLE_NAME_SCRAPING_ASOS,
     TABLE_NAME_SCRAPING_HM,
     TABLE_NAME_SCRAPING_OTTO,

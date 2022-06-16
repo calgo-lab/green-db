@@ -6,6 +6,7 @@ from sqlalchemy import ARRAY, BIGINT, INTEGER, JSON, NUMERIC, TEXT, TIMESTAMP, V
 from core.constants import (
     TABLE_NAME_GREEN_DB,
     TABLE_NAME_SCRAPING_AMAZON,
+    TABLE_NAME_SCRAPING_AMAZON_FR,
     TABLE_NAME_SCRAPING_ASOS,
     TABLE_NAME_SCRAPING_HM,
     TABLE_NAME_SCRAPING_OTTO,
@@ -164,6 +165,17 @@ class AmazonScrapingTable(ScrapingBaseTable, ScrapingTable):
     __tablename__ = TABLE_NAME_SCRAPING_AMAZON
 
 
+class AmazonFrScrapingTable(ScrapingBaseTable, ScrapingTable):
+    """
+    The actual scraping table for Amazon France.
+    Args:
+        ScrapingBaseTable ([type]): `sqlalchemy` base class for the Scraping database
+        ScrapingTable ([type]): To inherit the table definition
+    """
+
+    __tablename__ = TABLE_NAME_SCRAPING_AMAZON_FR
+
+
 # Used to dynamically map a table name to the correct Table class.
 SCRAPING_TABLE_CLASS_FOR: Dict[str, Type[ScrapingTable]] = {
     TABLE_NAME_SCRAPING_ZALANDO_DE: ZalandoDeScrapingTable,
@@ -173,6 +185,7 @@ SCRAPING_TABLE_CLASS_FOR: Dict[str, Type[ScrapingTable]] = {
     TABLE_NAME_SCRAPING_ASOS: AsosScrapingTable,
     TABLE_NAME_SCRAPING_HM: HMScrapingTable,
     TABLE_NAME_SCRAPING_AMAZON: AmazonScrapingTable,
+    TABLE_NAME_SCRAPING_AMAZON_FR: AmazonFrScrapingTable,
 }
 
 
@@ -219,9 +232,20 @@ class SustainabilityLabelsTable(GreenDBBaseTable, __TableMixin):
     __tablename__ = TABLE_NAME_SUSTAINABILITY_LABELS
 
     id = Column(TEXT, nullable=False, autoincrement=False, primary_key=True)
-    timestamp = Column(TIMESTAMP, nullable=False)
+    timestamp = Column(TIMESTAMP, nullable=False, primary_key=True)
     name = Column(TEXT, nullable=False)
     description = Column(TEXT, nullable=False)
-    ecological_evaluation = Column(INTEGER, nullable=True)
-    social_evaluation = Column(INTEGER, nullable=True)
-    credibility_evaluation = Column(INTEGER, nullable=True)
+    cred_credibility = Column(INTEGER, nullable=True)
+    eco_chemicals = Column(INTEGER, nullable=True)
+    eco_lifetime = Column(INTEGER, nullable=True)
+    eco_water = Column(INTEGER, nullable=True)
+    eco_inputs = Column(INTEGER, nullable=True)
+    eco_quality = Column(INTEGER, nullable=True)
+    eco_energy = Column(INTEGER, nullable=True)
+    eco_waste_air = Column(INTEGER, nullable=True)
+    eco_environmental_management = Column(INTEGER, nullable=True)
+    social_labour_rights = Column(INTEGER, nullable=True)
+    social_business_practice = Column(INTEGER, nullable=True)
+    social_social_rights = Column(INTEGER, nullable=True)
+    social_company_responsibility = Column(INTEGER, nullable=True)
+    social_conflict_minerals = Column(INTEGER, nullable=True)

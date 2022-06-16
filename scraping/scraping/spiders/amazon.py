@@ -1,5 +1,6 @@
 from logging import getLogger
 from typing import Iterator
+from urllib.parse import urlparse
 
 from scrapy_splash import SplashJsonResponse, SplashRequest
 
@@ -22,6 +23,8 @@ class AmazonSpider(BaseSpider):
         """
         # Save HTML to database
         self._save_SERP(response)
+        parsed_url = urlparse(response.url)
+        url_domain = f"https://{parsed_url.netloc}"
         urls = response.css("div.a-row.a-size-base.a-color-base a::attr(href)").getall()
         prices = response.css(
             "div.a-row.a-size-base.a-color-base span.a-price-whole::text"
@@ -33,10 +36,11 @@ class AmazonSpider(BaseSpider):
         for url, price in zip(urls, prices):
             if "refinements=p_n_cpf_eligible" in url:
                 yield SplashRequest(
-                    url=f"https://www.amazon.de{url}",
+                    url=f"{url_domain}{url}",
                     callback=self.parse_PRODUCT,
-                    meta={"request_meta_information": {"price": price}}
-                    | self.create_default_request_meta(response),
+                    meta={"request_meta_information":
+                              {"price": price.encode("ascii", "ignore").decode()}}
+                         | self.create_default_request_meta(response),
                     endpoint="execute",
                     priority=1,  # higher priority than SERP
                     args={  # passed to Splash HTTP API
@@ -51,7 +55,7 @@ class AmazonSpider(BaseSpider):
         next_path = response.css(".s-pagination-selected+ .s-pagination-button::attr(href)").get()
         if next_path:
             page_number = response.css(".s-pagination-selected+ .s-pagination-button::text").get()
-            next_page = f"https://www.amazon.de{next_path}"
+            next_page = f"{url_domain}{next_path}"
 
             logger.info(f"Next page found, number {page_number} at {next_page}")
 
