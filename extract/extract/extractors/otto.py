@@ -14,7 +14,7 @@ from pydantic import ValidationError
 from core.domain import CertificateType, Product
 
 from ..parse import DUBLINCORE, JSON_LD, MICRODATA, ParsedPage
-from ..utils import safely_return_first_element
+from ..utils import safely_return_first_element, sustainability_labels_to_certificates
 
 logger = getLogger(__name__)
 
@@ -95,20 +95,15 @@ _LABEL_MAPPING = {
     "Vegetabil gegerbtes Leder": CertificateType.OTHER,
     "[REE]CYCLED": CertificateType.OTHER,
     "Recyceltes Material": CertificateType.OTHER,
-    "bluesign® APPROVED": CertificateType.BLUESIGN_APPROVED,
     "Primegreen": CertificateType.OTHER,
     "bluesign® PRODUCT": CertificateType.BLUESIGN_PRODUCT,
-    "Grüner Knopf": CertificateType.GREEN_BUTTON,
     "Organic Content Standard 100": CertificateType.ORGANIC_CONTENT_STANDARD_100,
     "Organic Content Standard blended": CertificateType.ORGANIC_CONTENT_STANDARD_BLENDED,
     "Bio-Baumwolle": CertificateType.OTHER,
     "Unterstützt Cotton made in Africa": CertificateType.COTTON_MADE_IN_AFRICA,
     "Primeblue": CertificateType.OTHER,
     "Fairtrade Cotton": CertificateType.FAIRTRADE_COTTON,
-    "Fairtrade Textile Production": CertificateType.FAIRTRADE_TEXTILE_PRODUCTION,
-    "Responsible Down Standard": CertificateType.RESPONSIBLE_DOWN_STANDARD,
     "BIONIC-FINISH®ECO (Rudolf Chemie)": CertificateType.OTHER,
-    "GOTS organic": CertificateType.GOTS_ORGANIC,
     "GOTS made with organic materials": CertificateType.GOTS_MADE_WITH_ORGANIC_MATERIALS,
     "Umweltfreundlicher Färbeprozess": CertificateType.OTHER,
     "TENCEL™ Lyocell": CertificateType.OTHER,
@@ -118,16 +113,12 @@ _LABEL_MAPPING = {
     "REPREVE®": CertificateType.OTHER,
     "Nachhaltige Viskose": CertificateType.OTHER,
     "ECONYL©": CertificateType.OTHER,
-    "Blauer Engel": CertificateType.GREEN_BUTTON,
     "Recycled Claim Standard blended": CertificateType.RECYCLED_CLAIM_STANDARD_BLENDED,
     "Recycled Claim Standard 100": CertificateType.RECYCLED_CLAIM_STANDARD_100,
     "Recycelter Kunststoff (Hartwaren)": CertificateType.OTHER,
     "Bio-Siegel": CertificateType.OTHER,
     "bioRe® Sustainable Textiles Standard": CertificateType.BIORE,
     "[REE]GROW": CertificateType.OTHER,
-    "ECOCERT": CertificateType.ECOCERT,
-    "EU Ecolabel": CertificateType.EU_ECOLABEL_TEXTILES,
-    "The Good Cashmere Standard®": CertificateType.GOOD_CASHMERE_STANDARD,
     "Energieeffizientes Gerät": CertificateType.OTHER,
     "Birla Viscose": CertificateType.OTHER,
     "": CertificateType.OTHER,
@@ -251,6 +242,35 @@ def _get_sustainability_info(beautiful_soup: BeautifulSoup) -> dict:
     return return_value
 
 
+def _get_energy_labels(product_data: dict) -> List[str]:
+    """
+    Helper function that extracts the EU_ENERGY_LABEL from the product_data json.
+
+    Args:
+        product_data (dict): Representation of the product data JSON
+
+    Returns:
+        List[str]: `list` of found energy_labels.
+    """
+
+    energy_labels = []
+    json_values = [product_data]
+
+    for json_value in json_values:
+        match json_value:
+            case {"showNewEnergyLabelInfoLayer": True, "energyEfficiencyClasses": [*attributes]}:
+                for attribute in attributes:
+                    energy_labels.append(attribute.get("energyLabel", {}).get("letter"))
+            case {**json_object}:
+                json_values += json_object.values()
+            case [*json_array]:
+                json_values += json_array
+
+    # Adding the prefix "EU Energy label" to allow automated mapping,
+    # see file: core.sustainability_labels.sustainability_labels.json
+    return [f"EU Energy label {letter}" for letter in energy_labels]
+
+
 def _get_sustainability(product_data: dict, parsed_url: ParseResult) -> List[str]:
     """
     Helper function that extracts the product's sustainability information.
@@ -263,8 +283,9 @@ def _get_sustainability(product_data: dict, parsed_url: ParseResult) -> List[str
         List[str]: Sorted `list` of found sustainability labels
     """
     sustainability_information_htmls = _get_sustainability_info_htmls(product_data, parsed_url)
+    energy_labels = _get_energy_labels(product_data)
 
-    if sustainability_information_htmls is None:
+    if sustainability_information_htmls is None and energy_labels is None:
         return []
 
     labels = {}
@@ -273,4 +294,6 @@ def _get_sustainability(product_data: dict, parsed_url: ParseResult) -> List[str
         sustainable_soup = BeautifulSoup(sustainability_information_html, "html.parser")
         labels.update(_get_sustainability_info(sustainable_soup))
 
-    return sorted({_LABEL_MAPPING.get(label, CertificateType.UNKNOWN) for label in labels.keys()})
+    return sorted(
+        sustainability_labels_to_certificates(list(labels.keys()) + energy_labels, _LABEL_MAPPING)
+    )

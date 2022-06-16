@@ -6,6 +6,7 @@ from datetime import datetime
 from typing import Any, Iterator, List
 
 from amazon import get_settings as get_amazon_settings
+from amazon_fr import get_settings as get_amazon_fr_settings
 from asos import get_settings as get_asos_settings
 from otto import get_settings as get_otto_settings
 from zalando import get_settings as get_zalando_de_settings
@@ -14,6 +15,7 @@ from zalando_uk import get_settings as get_zalando_uk_settings
 
 from core.constants import (
     TABLE_NAME_SCRAPING_AMAZON,
+    TABLE_NAME_SCRAPING_AMAZON_FR,
     TABLE_NAME_SCRAPING_ASOS,
     TABLE_NAME_SCRAPING_OTTO,
     TABLE_NAME_SCRAPING_ZALANDO_DE,
@@ -25,6 +27,7 @@ START_TIMESTAMP = datetime.utcnow()
 SETTINGS = [
     [(TABLE_NAME_SCRAPING_ASOS, x) for x in get_asos_settings()],
     [(TABLE_NAME_SCRAPING_AMAZON, x) for x in get_amazon_settings()],
+    [(TABLE_NAME_SCRAPING_AMAZON_FR, x) for x in get_amazon_fr_settings()],
     [(TABLE_NAME_SCRAPING_OTTO, x) for x in get_otto_settings()],
     [(TABLE_NAME_SCRAPING_ZALANDO_DE, x) for x in get_zalando_de_settings()],
     [(TABLE_NAME_SCRAPING_ZALANDO_FR, x) for x in get_zalando_fr_settings()],

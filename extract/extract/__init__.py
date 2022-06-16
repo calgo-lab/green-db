@@ -3,6 +3,7 @@ from typing import Optional
 from core import log
 from core.constants import (
     TABLE_NAME_SCRAPING_AMAZON,
+    TABLE_NAME_SCRAPING_AMAZON_FR,
     TABLE_NAME_SCRAPING_ASOS,
     TABLE_NAME_SCRAPING_OTTO,
     TABLE_NAME_SCRAPING_ZALANDO_DE,
@@ -12,6 +13,7 @@ from core.constants import (
 from core.domain import Product, ScrapedPage
 
 from .extractors.amazon import extract_amazon  # type: ignore[attr-defined]
+from .extractors.amazon_fr import extract_amazon_fr  # type: ignore[attr-defined]
 
 # Because we ignored the files `zalando.py` and `otto.py` we have to skip them here as well
 from .extractors.asos import extract_asos  # type: ignore[attr-defined]
@@ -26,6 +28,7 @@ log.setup_logger(__name__)
 # Maps a scraping table name to its extraction method
 EXTRACTOR_FOR_TABLE_NAME = {
     TABLE_NAME_SCRAPING_AMAZON: extract_amazon,
+    TABLE_NAME_SCRAPING_AMAZON_FR: extract_amazon_fr,
     TABLE_NAME_SCRAPING_ASOS: extract_asos,
     TABLE_NAME_SCRAPING_OTTO: extract_otto,
     TABLE_NAME_SCRAPING_ZALANDO_DE: extract_zalando,

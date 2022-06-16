@@ -197,14 +197,15 @@ class GreenDB(Connection):
         from core.sustainability_labels.bootstrap_database import sustainability_labels
 
         with self._session_factory() as db_session:
-            # NOTE: this is slowly..
+            # NOTE: this is slowly...
             # if we have many more labels to bootstrap, we should refactor it.
-            for label in sustainability_labels:
-                if (  # If label does not exist
-                    not db_session.query(SustainabilityLabelsTable.id)
-                    .filter(SustainabilityLabelsTable.id == label.id)
-                    .first()
-                ):
+            if (  # If current label version (timestamp) does not exists, add them
+                not db_session.query(SustainabilityLabelsTable.timestamp)
+                .filter(SustainabilityLabelsTable.timestamp == sustainability_labels[0].timestamp)
+                .first()
+            ):
+
+                for label in sustainability_labels:
                     db_session.add(SustainabilityLabelsTable(**label.dict()))
 
             db_session.commit()
