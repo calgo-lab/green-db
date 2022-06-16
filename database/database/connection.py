@@ -200,12 +200,8 @@ class GreenDB(Connection):
             # NOTE: this is slowly...
             # if we have many more labels to bootstrap, we should refactor it.
             if (  # If current label version (timestamp) does not exists, add them
-                not db_session.query(
-                    SustainabilityLabelsTable.timestamp
-                )
-                .filter(
-                    SustainabilityLabelsTable.timestamp == sustainability_labels[0].timestamp
-                )
+                not db_session.query(SustainabilityLabelsTable.timestamp)
+                .filter(SustainabilityLabelsTable.timestamp == sustainability_labels[0].timestamp)
                 .first()
             ):
 
