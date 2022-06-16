@@ -36,7 +36,7 @@ def _get_localized_certificate_attribute(
 sustainability_labels = [
     SustainabilityLabel(
         id=certificate_id,
-        timestamp=datetime(2022, 6, 14, 19),  # NOTE: Change me after updating sustainability labels
+        timestamp=datetime(2022, 6, 15, 19),  # NOTE: Change me after updating sustainability labels
         name=_get_localized_certificate_attribute(certificate_information, "name"),
         description=_get_localized_certificate_attribute(certificate_information, "description"),
         cred_credibility=certificate_information.get("cred_credibility", None),

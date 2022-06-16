@@ -201,7 +201,7 @@ class GreenDB(Connection):
             # if we have many more labels to bootstrap, we should refactor it.
 
             for label in sustainability_labels:
-                if (  # If label exist with different timestamp, row will be updated
+                if (  # If label not exist, row is added
                     not db_session.query(
                         SustainabilityLabelsTable.id, SustainabilityLabelsTable.timestamp
                     )
@@ -209,15 +209,6 @@ class GreenDB(Connection):
                         SustainabilityLabelsTable.id == label.id,
                         SustainabilityLabelsTable.timestamp == label.timestamp,
                     )
-                    .first()
-                ):
-                    db_session.query(SustainabilityLabelsTable).filter(
-                        SustainabilityLabelsTable.id == label.id
-                    ).update(label.dict())
-
-                elif (  # If label not exist, row is added
-                    not db_session.query(SustainabilityLabelsTable.id)
-                    .filter(SustainabilityLabelsTable.id == label.id)
                     .first()
                 ):
                     db_session.add(SustainabilityLabelsTable(**label.dict()))

@@ -205,7 +205,7 @@ class SustainabilityLabelsTable(GreenDBBaseTable, __TableMixin):
     __tablename__ = TABLE_NAME_SUSTAINABILITY_LABELS
 
     id = Column(TEXT, nullable=False, autoincrement=False, primary_key=True)
-    timestamp = Column(TIMESTAMP, nullable=False)
+    timestamp = Column(TIMESTAMP, nullable=False, primary_key=True)
     name = Column(TEXT, nullable=False)
     description = Column(TEXT, nullable=False)
     cred_credibility = Column(INTEGER, nullable=True)
