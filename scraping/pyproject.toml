@@ -20,12 +20,12 @@ Scrapy = "^2.6.1"
 scrapy-splash = "^0.8.0"
 
 [tool.poetry.dev-dependencies]
-pytest = "^5.2"
-flake8 = "^3.9.2"
-mypy = "^0.910"
+pytest = "^7.1.2"
+flake8 = "^4.0.1"
+mypy = "^0.961"
 isort = "^5.10.1"
-black = "^21.12b0"
-scrapyd-client = "^1.2.0"
+black = "^22.3.0"
+scrapyd-client = "^1.2.2"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
@@ -42,3 +42,4 @@ line_length = 100
 
 [tool.black]
 line-length = 100
+target-version = ["py39"]
