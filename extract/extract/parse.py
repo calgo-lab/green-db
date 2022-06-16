@@ -4,6 +4,7 @@ from json import JSONDecodeError
 
 import extruct
 from bs4 import BeautifulSoup
+
 from core.domain import ScrapedPage
 
 

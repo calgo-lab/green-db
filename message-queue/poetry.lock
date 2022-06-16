@@ -42,7 +42,6 @@ mypy-extensions = ">=0.4.3"
 pathspec = ">=0.9.0"
 platformdirs = ">=2"
 tomli = {version = ">=1.1.0", markers = "python_version < \"3.11\""}
-typing-extensions = {version = ">=3.10.0.0", markers = "python_version < \"3.10\""}
 
 [package.extras]
 colorama = ["colorama (>=0.4.3)"]
@@ -75,7 +74,7 @@ version = "0.1.12"
 description = ""
 category = "main"
 optional = false
-python-versions = "^3.9"
+python-versions = "^3.10"
 develop = true
 
 [package.dependencies]
@@ -345,8 +344,8 @@ python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
 
 [metadata]
 lock-version = "1.1"
-python-versions = "^3.9"
-content-hash = "738d39e6fdae1e8cc831ff3f6ff2ff2b4572ef8d42718ab47af8f8ff795c47db"
+python-versions = "^3.10"
+content-hash = "0ce3a5c02f468b14cb71c22b7f2806b00fc81002b4ae13ac44d7cd1d8874dfd6"
 
 [metadata.files]
 async-timeout = [

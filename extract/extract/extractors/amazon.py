@@ -7,8 +7,9 @@ from typing import Any, Callable, Optional
 from urllib.parse import urlparse
 
 from bs4 import BeautifulSoup
-from core.domain import CertificateType, Product
 from pydantic import ValidationError
+
+from core.domain import CertificateType, Product
 
 from ..parse import ParsedPage
 from ..utils import sustainability_labels_to_certificates

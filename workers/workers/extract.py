@@ -1,9 +1,10 @@
+from redis import Redis
+from rq import Connection, Worker
+
 from core.constants import WORKER_QUEUE_EXTRACT
 from core.redis import REDIS_HOST, REDIS_PASSWORD, REDIS_PORT, REDIS_USER
 from database.connection import GreenDB
 from extract import extract_product
-from redis import Redis
-from rq import Connection, Worker
 
 from . import CONNECTION_FOR_TABLE
 
