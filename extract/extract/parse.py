@@ -1,5 +1,4 @@
 import html
-from codecs import decode
 from dataclasses import dataclass
 from json import JSONDecodeError
 
@@ -71,6 +70,6 @@ def extract_schema_org(page_html: str) -> dict:
         try:
             schema_org = extruct.extract(page_html, syntaxes=_SYNTAXES)
         except JSONDecodeError:
-            unescaped_html = decode(page_html.encode("utf-8"), "unicode-escape")
+            unescaped_html = page_html.encode("utf-8").decode("unicode-escape")
             schema_org = extruct.extract(unescaped_html, syntaxes=_SYNTAXES, errors="ignore")
     return schema_org if schema_org else {}
