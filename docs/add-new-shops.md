@@ -13,7 +13,7 @@ If you want to add another to-be-scraped-shop, there are some files that need to
    - the most of its functionality is inherited from the [`BaseSpider`](../scraping/scraping/spiders/_base.py) implementation.
    - you need to implement `parse_SERP`. It yields `SplashRequest`'s for each product URL and `parse_PRODUCT` (from base-class) as callback.
    - further, it yields `SplashRequest` with the next SERP URL (pagination) and `parse_SERP` as callback.
-   - You need to set `meta` of each yielding request (SERP & PRODUCT) by using create_default_request_meta(response) from `BaseSpider`. This sets the meta information like category and gender for each request.
+   - You need to set `meta` of each yielding request (SERP & PRODUCT) by using `create_default_request_meta(response)` from `BaseSpider`. This sets the meta information like category and gender for each request.
 4. [`extract.extract.extractors.<shop-name>.py`](../extract/extract/__init__.py):
    - create a new file `<shop-name>.py`. (Check out others for examples)
    - implement a function with signature: `def extract_<shop-name>(parsed_page: ParsedPage) -> Optional[Product]:`
