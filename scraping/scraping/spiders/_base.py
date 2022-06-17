@@ -7,21 +7,51 @@ from typing import Any, Dict, Iterator, List, Optional, Union
 from message_queue import MessageQueue
 from scrapy import Spider
 from scrapy.http.response import Response as ScrapyHttpResponse
+from scrapy.http.response.text import TextResponse as ScrapyTextResponse
 from scrapy_splash import SplashJsonResponse, SplashRequest
 
+from core.constants import (
+    TABLE_NAME_SCRAPING_AMAZON,
+    TABLE_NAME_SCRAPING_AMAZON_FR,
+    TABLE_NAME_SCRAPING_ASOS,
+    TABLE_NAME_SCRAPING_HM,
+    TABLE_NAME_SCRAPING_OTTO,
+    TABLE_NAME_SCRAPING_ZALANDO_DE,
+    TABLE_NAME_SCRAPING_ZALANDO_FR,
+    TABLE_NAME_SCRAPING_ZALANDO_UK,
+)
 from core.domain import PageType, ScrapedPage
 
-from ..splash import scroll_end_of_page_script
+from ..splash import minimal_script
+from ..start_scripts.amazon import get_settings as get_amazon_settings
+from ..start_scripts.amazon_fr import get_settings as get_amazon_fr_settings
+from ..start_scripts.asos import get_settings as get_asos_settings
+from ..start_scripts.hm import get_settings as get_hm_settings
+from ..start_scripts.otto import get_settings as get_otto_settings
+from ..start_scripts.zalando import get_settings as get_zalando_settings
+from ..start_scripts.zalando_fr import get_settings as get_zalando_fr_settings
+from ..start_scripts.zalando_uk import get_settings as get_zalando_uk_settings
 
 logger = getLogger(__name__)
+
+SETTINGS = {
+    TABLE_NAME_SCRAPING_OTTO: get_otto_settings(),
+    TABLE_NAME_SCRAPING_ASOS: get_asos_settings(),
+    TABLE_NAME_SCRAPING_ZALANDO_DE: get_zalando_settings(),
+    TABLE_NAME_SCRAPING_ZALANDO_FR: get_zalando_fr_settings(),
+    TABLE_NAME_SCRAPING_ZALANDO_UK: get_zalando_uk_settings(),
+    TABLE_NAME_SCRAPING_HM: get_hm_settings(),
+    TABLE_NAME_SCRAPING_AMAZON: get_amazon_settings(),
+    TABLE_NAME_SCRAPING_AMAZON_FR: get_amazon_fr_settings(),
+}
 
 
 class BaseSpider(Spider):
     def __init__(
         self,
-        start_urls: Union[str, List[str]],
-        category: str,
         timestamp: datetime,
+        start_urls: Optional[Union[str, List[str]]] = None,
+        category: Optional[str] = None,
         search_term: Optional[str] = None,
         meta_data: Optional[Union[str, Dict[str, str]]] = None,
         products_per_page: Optional[int] = None,
@@ -33,9 +63,9 @@ class BaseSpider(Spider):
         Also, defines an `abstractmethod` that needs to implemented.
 
         Args:
-            start_urls (Union[str, List[str]]): URL the spider should start at
-            category (str): All products found belong to this category
             timestamp (datetime): When was this scraping run started
+            start_urls (Optional[Union[str, List[str]]], optional): URL the spider should start at
+            category (Optional[str], optional): All products found belong to this category
             search_term (Optional[str], optional): Meta information about this scraping run.
                 Defaults to None.
             meta_data (Optional[Union[str, Dict[str, str]]], optional): Additional meta information
@@ -47,61 +77,121 @@ class BaseSpider(Spider):
         # set default value
         self.request_timeout = getattr(self, "request_timeout", 0.5)
         self.table_name: str = getattr(self, "table_name", self.name)  # type: ignore
+        self.StartRequest = SplashRequest  # default StartRequest is set to SplashRequest
 
         super().__init__(name=self.name, **kwargs)
 
-        self.meta_data: Dict[str, str] = {}
         self.timestamp = timestamp
-        self.category = category
         self.message_queue = MessageQueue()
 
         if not self.name:
             logger.error("It's necessary to set the Spider's 'name' attribute.")
 
-        if meta_data:
-            meta_data = json.loads(meta_data) if type(meta_data) == str else meta_data
-
-            if type(meta_data) == dict:
+        if start_urls:
+            self.start_urls = start_urls
+            if category and meta_data:
+                self.category = category
                 self.meta_data = meta_data
             else:
                 logger.error(
-                    "Argument 'meta_data' need to be of type dict or serialized JSON string."
+                    "When setting 'start_urls', 'category' & 'meta_data' also needs to be set."
                 )
+        else:
+            logger.info("Spider will be initialized using start_script.")
 
         if search_term:
             self.meta_data["search_term"] = search_term  # type: ignore
 
+        # By default there will be no limit to the amount of products scraped per page
+        self.products_per_page = int(products_per_page) if products_per_page else products_per_page
+
+    @staticmethod
+    def parse_urls(start_urls: Union[str, List[str]]) -> List[str]:  # type: ignore
+        """
+        Helper method to parse start_urls.
+
+        Args:
+            start_urls: Additional meta information that could be useful downstream.
+
+        Returns:
+            List[str]: start_urls represented as a List.
+        """
         if not (type(start_urls) == str or type(start_urls) == list):
             logger.error(
                 "Argument 'start_urls' need to be of type list or (comma-separated) string."
             )
+        else:
+            return start_urls.split(",") if type(start_urls) == str else start_urls  # type: ignore
 
-        self.start_urls = start_urls.split(",") if type(start_urls) == str else start_urls  # type: ignore # noqa
+    @staticmethod
+    def parse_meta_data(meta_data: Union[Dict[str, str], str]) -> dict:  # type: ignore
+        """
+        Helper method to parse meta_data.
 
-        # By default there will be no limit to the amount of products scraped per page
-        self.products_per_page = int(products_per_page) if products_per_page else products_per_page
+        Args:
+            meta_data: Additional meta information that could be useful downstream.
+
+        Returns:
+            dict: meta_data represented as dict.
+        """
+
+        meta_data = json.loads(meta_data) if isinstance(meta_data, str) else meta_data  # type: ignore # noqa
+        if isinstance(meta_data, dict):
+            return meta_data  # type: ignore
+        else:
+            logger.error("Argument 'meta_data' need to be of type dict or serialized JSON string.")
+            return None  # type: ignore
 
     def start_requests(self) -> Iterator[SplashRequest]:
         """
-        The `Scrapy` framework executes this method.
+        The `Scrapy` framework executes this method. If start_urls are set, the spider will just
+        crawl the specified urls. If no start_urls are specified (default) the spider will read
+        all settings from its respective start_script file and generate start_requests.
 
         Yields:
             Iterator[SplashRequest]: Requests that will be performed
         """
-        for start_url in self.start_urls:
-            yield SplashRequest(
-                url=start_url,
-                callback=self.parse_SERP,
-                meta={"original_URL": start_url},
-                endpoint="execute",
-                args={  # passed to Splash HTTP API
-                    "wait": self.request_timeout,
-                    "lua_source": scroll_end_of_page_script,
-                    "timeout": 180,
-                },
-            )
 
-    def _save_SERP(self, response: Union[SplashJsonResponse, ScrapyHttpResponse]) -> None:
+        def get_request_specific_parameters() -> dict:
+            if self.StartRequest == SplashRequest:
+                return {
+                    "endpoint": "execute",
+                    "args": {  # passed to Splash HTTP API
+                        "wait": self.request_timeout,
+                        "lua_source": minimal_script,
+                        "timeout": 180,
+                    },
+                }
+            return {}
+
+        # If a start URL is given, we need to create the settings manually
+        if self.start_urls:
+            settings = [
+                {
+                    "start_urls": self.start_urls,
+                    "category": self.category,
+                    "meta_data": self.meta_data,
+                }
+            ]
+        else:
+            settings = SETTINGS.get(self.name)  # type: ignore
+
+        for setting in settings:
+            for start_url in self.parse_urls(setting.get("start_urls")):  # type: ignore
+                yield self.StartRequest(
+                    url=start_url,
+                    callback=self.parse_SERP,
+                    meta={
+                        "category": setting.get("category"),
+                        "meta_data": self.parse_meta_data(setting.get("meta_data")),  # type: ignore
+                    },
+                    **get_request_specific_parameters(),
+                )
+            logger.info(f"Crawling setting: {setting}")
+
+    def _save_SERP(
+        self, response: Union[SplashJsonResponse, ScrapyHttpResponse, ScrapyTextResponse]
+    ) -> None:
         """
         Helper method for child classes. Simply instantiates a `SrapedPage` object
             and enqueues this to the scraping `Queue`.
@@ -115,8 +205,8 @@ class BaseSpider(Spider):
             url=response.url,
             html=response.body.decode("utf-8"),
             page_type=PageType.SERP,
-            category=self.category,
-            meta_information=self.meta_data,
+            category=response.meta.get("category"),
+            meta_information=response.meta.get("meta_data"),
         )
 
         self.message_queue.add_scraping(table_name=self.table_name, scraped_page=scraped_page)
@@ -130,11 +220,8 @@ class BaseSpider(Spider):
             response (SplashJsonResponse): Response from a performed request
         """
 
-        request_meta_information = response.meta.get("request_meta_information", None)
-        if request_meta_information is not None:
-            meta_information = self.meta_data | request_meta_information
-        else:
-            meta_information = self.meta_data
+        request_meta_information = response.meta.get("request_meta_information", {})
+        meta_information = response.meta.get("meta_data") | request_meta_information
 
         scraped_page = ScrapedPage(
             timestamp=self.timestamp,
@@ -142,7 +229,7 @@ class BaseSpider(Spider):
             url=response.url,
             html=response.body.decode("utf-8"),
             page_type=PageType.PRODUCT,
-            category=self.category,
+            category=response.meta.get("category"),
             meta_information=meta_information,
         )
 
@@ -161,3 +248,26 @@ class BaseSpider(Spider):
         Yields:
             Iterator[SplashRequest]: New request for each product on `response` page and pagination
         """
+
+    @staticmethod
+    def create_default_request_meta(
+        response: Union[ScrapyTextResponse, ScrapyHttpResponse], original_url: Optional[str] = None
+    ) -> Dict:
+        """
+        Helper method to create default request meta. All 'SERP' and 'PRODUCT' requests need to "
+        "implement this. It will propagate the meta information from the original/ parent request "
+        "to the child requests.
+
+        Args:
+            response (ScrapyTextResponse, ScrapyHttpResponse): Response from parent request.
+            original_url (str): Optional url to set as original/ parent url instead of response.url
+
+        Returns:
+            Dict: Dict with the default meta information to use in child request.
+        """
+
+        return {
+            "original_URL": original_url if original_url else response.url,
+            "category": response.meta.get("category"),
+            "meta_data": response.meta.get("meta_data"),
+        }

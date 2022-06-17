@@ -18,6 +18,7 @@ core = {path = "../core", develop = true}
 message_queue = {path = "../message-queue", develop = true}
 Scrapy = "^2.6.1"
 scrapy-splash = "^0.8.0"
+scrapy-playwright = "^0.0.17"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

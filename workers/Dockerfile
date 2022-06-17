@@ -3,7 +3,7 @@ FROM python:3.10.2
 MAINTAINER calgo-lab
 
 # Pre-installed some packages
-RUN pip install redis rq psycopg2 poetry SQLAlchemy pydantic beautifulsoup4 extruct
+RUN pip install redis rq psycopg2 poetry SQLAlchemy pydantic beautifulsoup4 extruct chompjs
 
 COPY core /green-db/core
 COPY database /green-db/database

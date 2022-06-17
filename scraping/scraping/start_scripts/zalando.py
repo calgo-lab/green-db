@@ -1,5 +1,5 @@
 import json
-from typing import Dict, List, Tuple, Union
+from typing import List
 
 
 def combine_results(
@@ -101,5 +101,5 @@ def female() -> List[dict]:
     return combine_results(path_2_category, sex="FEMALE")
 
 
-def get_settings() -> List[Union[Dict[str, str], Dict[str, Tuple[str, Dict[str, str]]]]]:
+def get_settings() -> List[dict]:
     return male() + female()

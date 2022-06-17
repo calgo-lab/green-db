@@ -18,6 +18,7 @@ core = {path = "../core", develop = true}
 database = {path = "../database", develop = true}
 beautifulsoup4 = "^4.10.0"
 extruct = "^0.13.0"
+chompjs = "^1.1.6"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.0.1"
