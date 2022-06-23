@@ -4,6 +4,8 @@ from typing import List
 
 def combine_results(
     node_2_category: dict,
+    gender: str,
+    consumer_lifestage: str,
     metadata: dict,
 ) -> List[dict]:
     results = []
@@ -12,6 +14,8 @@ def combine_results(
             {
                 "start_urls": f"https://www.amazon.de/s?bbn={node}&rh=n%3A{node}%2Cp_n_cpf_eligible%3A22579885031",  # noqa
                 "category": category,
+                "gender": gender,
+                "consumer_lifestage": consumer_lifestage,
                 "meta_data": json.dumps(metadata),
             }
         )
@@ -38,7 +42,8 @@ def female() -> List[dict]:
         "1981835031": "JACKET",
     }
 
-    return combine_results(node_2_category, metadata={"family": "FASHION", "sex": "FEMALE"})
+    return combine_results(node_2_category, gender="FEMALE", consumer_lifestage="ADULT",
+                           metadata={"family": "FASHION"})
 
 
 def male() -> List[dict]:
@@ -61,7 +66,8 @@ def male() -> List[dict]:
         "1981365031": "JACKET",
     }
 
-    return combine_results(node_2_category, metadata={"family": "FASHION", "sex": "MALE"})
+    return combine_results(node_2_category, gender="MALE", consumer_lifestage="ADULT",
+                           metadata={"family": "FASHION"})
 
 
 def electronics() -> List[dict]:
@@ -72,7 +78,8 @@ def electronics() -> List[dict]:
         "427955031": "PRINTER",
     }
 
-    return combine_results(node_2_category, metadata={"family": "electronics"})
+    return combine_results(node_2_category, gender="UNCLASSIFIED",
+                           consumer_lifestage="UNCLASSIFIED", metadata={"family": "electronics"})
 
 
 def get_settings() -> List[dict]:

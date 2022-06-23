@@ -3,7 +3,7 @@
         "de": "Haarbänder",
         "fr": "Bandeaux",
         "gender": [
-            "female"
+            "FEMALE"
         ],
         "mapping": ""
     },
@@ -11,8 +11,8 @@
         "de": "Schuhe",
         "fr": "Chaussures",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": "SHOES"
     },
@@ -20,7 +20,7 @@
         "de": "Badeanzüge",
         "fr": "Maillots 1 pièce",
         "gender": [
-            "female"
+            "FEMALE"
         ],
         "mapping": "SWIMMWEAR"
     },
@@ -28,8 +28,8 @@
         "de": "Westen",
         "fr": "Doudounes sans manches",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": "JACKET"
     },
@@ -37,7 +37,7 @@
         "de": "Badeshorts",
         "fr": "Shorts de bain",
         "gender": [
-            "male"
+            "MALE"
         ],
         "mapping": "SWIMMWEAR"
     },
@@ -45,8 +45,8 @@
         "de": "Pyjama",
         "fr": "Pyjamas",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": "NIGHTWEAR"
     },
@@ -54,8 +54,8 @@
         "de": "Mützen",
         "fr": "Bonnets",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": ""
     },
@@ -63,7 +63,7 @@
         "de": "Jammers",
         "fr": "Cuissards",
         "gender": [
-            "male"
+            "MALE"
         ],
         "mapping": ["PANT", {"type": "SPORT"}]
     },
@@ -71,7 +71,7 @@
         "de": "Bademäntel",
         "fr": "Peignoirs",
         "gender": [
-            "female"
+            "FEMALE"
         ],
         "mapping": "SWIMMWEAR"
     },
@@ -79,7 +79,7 @@
         "de": "Leggings",
         "fr": "Leggings",
         "gender": [
-            "female"
+            "FEMALE"
         ],
         "mapping": "PANT"
     },
@@ -87,7 +87,7 @@
         "de": "Bauchbänder",
         "fr": "Bandeaux de grossesse",
         "gender": [
-            "female"
+            "FEMALE"
         ],
         "mapping": "UNDERWEAR"
     },
@@ -95,7 +95,7 @@
         "de": "Strumpfhalter",
         "fr": "Porte-jarretelles",
         "gender": [
-            "female"
+            "FEMALE"
         ],
         "mapping": "UNDERWEAR"
     },
@@ -103,8 +103,8 @@
         "de": "Trägershirts",
         "fr": "Débardeurs",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": "SHIRT"
     },
@@ -112,8 +112,8 @@
         "de": "Kleider",
         "fr": "Robes",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": "DRESS"
     },
@@ -121,8 +121,8 @@
         "de": "Mäntel",
         "fr": "Manteaux",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": "JACKET"
     },
@@ -130,7 +130,7 @@
         "de": "Strumpfhosen",
         "fr": "Collants",
         "gender": [
-            "female"
+            "FEMALE"
         ],
         "mapping": "PANT"
     },
@@ -138,7 +138,7 @@
         "de": "Enge Halsketten",
         "fr": "Colliers ras de cou",
         "gender": [
-            "female"
+            "FEMALE"
         ],
         "mapping": ""
     },
@@ -146,7 +146,7 @@
         "de": "Bikinihosen",
         "fr": "Bas de bikini",
         "gender": [
-            "female"
+            "FEMALE"
         ],
         "mapping": "SWIMMWEAR"
     },
@@ -154,8 +154,8 @@
         "de": "Rundschals",
         "fr": "Écharpes tubes",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": ""
     },
@@ -163,8 +163,8 @@
         "de": "Kompressionsshorts",
         "fr": "Shorts de compression",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": ["PANT", {"type": "SPORT"}]
     },
@@ -172,7 +172,7 @@
         "de": "Nail-Art",
         "fr": "Nail Art",
         "gender": [
-            "female"
+            "FEMALE"
         ],
         "mapping": ""
     },
@@ -180,7 +180,7 @@
         "de": "Boardshorts",
         "fr": "Boardshorts",
         "gender": [
-            "male"
+            "MALE"
         ],
         "mapping": "SWIMMWEAR"
     },
@@ -188,7 +188,7 @@
         "de": "Hygieneprodukte",
         "fr": "Produits d'hygiène",
         "gender": [
-            "female"
+            "FEMALE"
         ],
         "mapping": "UNDERWEAR"
     },
@@ -196,7 +196,7 @@
         "de": "Bikinis",
         "fr": "Bikinis",
         "gender": [
-            "female"
+            "FEMALE"
         ],
         "mapping": "SWIMMWEAR"
     },
@@ -204,8 +204,8 @@
         "de": "Hosen",
         "fr": "Pantalons",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": "PANT"
     },
@@ -213,8 +213,8 @@
         "de": "Jogginghosen",
         "fr": "Joggers",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": "PANT"
     },
@@ -222,7 +222,7 @@
         "de": "Schlafmasken",
         "fr": "Masques de sommeil",
         "gender": [
-            "female"
+            "FEMALE"
         ],
         "mapping": "NIGHTWEAR"
     },
@@ -230,7 +230,7 @@
         "de": "Einteiler",
         "fr": "Combis moulantes",
         "gender": [
-            "female"
+            "FEMALE"
         ],
         "mapping": "OVERALL"
     },
@@ -238,7 +238,7 @@
         "de": "Rugby-Hemden",
         "fr": "Maillots de rugby",
         "gender": [
-            "male"
+            "MALE"
         ],
         "mapping": "SHIRT"
     },
@@ -246,8 +246,8 @@
         "de": "Ringe",
         "fr": "Bagues",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": ""
     },
@@ -255,7 +255,7 @@
         "de": "Lingerie Bodys",
         "fr": "Bodys de la collection lingerie",
         "gender": [
-            "female"
+            "FEMALE"
         ],
         "mapping": "UNDERWEAR"
     },
@@ -263,8 +263,8 @@
         "de": "Gürtel",
         "fr": "Ceintures",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": ""
     },
@@ -272,7 +272,7 @@
         "de": "Sandalen",
         "fr": "Sandales",
         "gender": [
-            "female"
+            "FEMALE"
         ],
         "mapping": "SHOES"
     },
@@ -280,8 +280,8 @@
         "de": "Pullover",
         "fr": "Pulls",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": "SWEATER"
     },
@@ -289,8 +289,8 @@
         "de": "Polohemden",
         "fr": "Polos",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": "SHIRT"
     },
@@ -298,8 +298,8 @@
         "de": "Blusen",
         "fr": "Blouses",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": "BLOUSE"
     },
@@ -307,7 +307,7 @@
         "de": "Kurze Jumpsuits",
         "fr": "Combishorts",
         "gender": [
-            "female"
+            "FEMALE"
         ],
         "mapping": "OVERALL"
     },
@@ -315,8 +315,8 @@
         "de": "Socken",
         "fr": "Chaussettes",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": ""
     },
@@ -324,8 +324,8 @@
         "de": "Kopfbänder",
         "fr": "Bandeaux",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": ""
     },
@@ -333,8 +333,8 @@
         "de": "Kapuzenpullover",
         "fr": "Sweats à capuche",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": "SWEATER"
     },
@@ -342,8 +342,8 @@
         "de": "T-Shirts",
         "fr": "T-shirts",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": "SHIRT"
     },
@@ -351,7 +351,7 @@
         "de": "BHs",
         "fr": "Soutiens-gorge",
         "gender": [
-            "female"
+            "FEMALE"
         ],
         "mapping": "UNDERWEAR"
     },
@@ -359,7 +359,7 @@
         "de": "Schlafanzugoberteile",
         "fr": "Hauts de pyjama",
         "gender": [
-            "female"
+            "FEMALE"
         ],
         "mapping": "NIGHTWEAR"
     },
@@ -367,7 +367,7 @@
         "de": "Camisoles",
         "fr": "Caracos",
         "gender": [
-            "female"
+            "FEMALE"
         ],
         "mapping": "TOP"
     },
@@ -375,7 +375,7 @@
         "de": "Slips",
         "fr": "Combinaisons",
         "gender": [
-            "female"
+            "FEMALE"
         ],
         "mapping": "UNDERWEAR"
     },
@@ -383,7 +383,7 @@
         "de": "Einstecktücher",
         "fr": "Pochettes",
         "gender": [
-            "male"
+            "MALE"
         ],
         "mapping": ""
     },
@@ -391,8 +391,8 @@
         "de": "Sonnenbrillen",
         "fr": "Lunettes de soleil",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": ""
     },
@@ -400,8 +400,8 @@
         "de": "Taschen",
         "fr": "Sacs",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": "BAG"
     },
@@ -409,7 +409,7 @@
         "de": "Bandanas",
         "fr": "Bandanas",
         "gender": [
-            "male"
+            "MALE"
         ],
         "mapping": ""
     },
@@ -417,8 +417,8 @@
         "de": "Trägerhemden",
         "fr": "Débardeurs",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": "TOP"
     },
@@ -426,8 +426,8 @@
         "de": "Trainingsanzüge",
         "fr": "Survêtements",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": "TRACKSUIT"
     },
@@ -435,8 +435,8 @@
         "de": "Sneaker",
         "fr": "Baskets",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": "SHOES"
     },
@@ -444,7 +444,7 @@
         "de": "Crop Tops",
         "fr": "Tops courts",
         "gender": [
-            "female"
+            "FEMALE"
         ],
         "mapping": "TOP"
     },
@@ -452,7 +452,7 @@
         "de": "Nachthemden",
         "fr": "Nuisettes",
         "gender": [
-            "female"
+            "FEMALE"
         ],
         "mapping": "NIGHTWEAR"
     },
@@ -460,7 +460,7 @@
         "de": "Kompressionsstrumpfhosen",
         "fr": "Collants de compression",
         "gender": [
-            "male"
+            "MALE"
         ],
         "mapping": "UNDERWEAR"
     },
@@ -468,7 +468,7 @@
         "de": "Ponchos",
         "fr": "Ponchos",
         "gender": [
-            "female"
+            "FEMALE"
         ],
         "mapping": ""
     },
@@ -476,8 +476,8 @@
         "de": "Armbänder",
         "fr": "Bracelets",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": ""
     },
@@ -485,8 +485,8 @@
         "de": "Halswärmer",
         "fr": "Tours de cou",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": ""
     },
@@ -494,7 +494,7 @@
         "de": "Boxer",
         "fr": "Caleçon",
         "gender": [
-            "male"
+            "MALE"
         ],
         "mapping": "UNDERWEAR"
     },
@@ -502,7 +502,7 @@
         "de": "Haarclips",
         "fr": "Barrettes à cheveux",
         "gender": [
-            "female"
+            "FEMALE"
         ],
         "mapping": ""
     },
@@ -510,8 +510,8 @@
         "de": "Shorts",
         "fr": "Shorts",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": "PANT"
     },
@@ -519,8 +519,8 @@
         "de": "Hausschuhe",
         "fr": "Chaussons",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": "SHOES"
     },
@@ -528,8 +528,8 @@
         "de": "Kappen",
         "fr": "Casquettes",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": ""
     },
@@ -537,7 +537,7 @@
         "de": "Unterhosen",
         "fr": "Boxers",
         "gender": [
-            "male"
+            "MALE"
         ],
         "mapping": "UNDERWEAR"
     },
@@ -545,7 +545,7 @@
         "de": "Röcke",
         "fr": "Jupes",
         "gender": [
-            "female"
+            "FEMALE"
         ],
         "mapping": "SKIRT"
     },
@@ -553,7 +553,7 @@
         "de": "Sport-BHs",
         "fr": "Soutiens-gorge sport",
         "gender": [
-            "female"
+            "FEMALE"
         ],
         "mapping": ["UNDERWEAR", {"type": "SPORT"}]
     },
@@ -561,8 +561,8 @@
         "de": "Kombiteile",
         "fr": "Ensembles",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": ""
     },
@@ -570,8 +570,8 @@
         "de": "Jeans",
         "fr": "Jeans",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": "JEANS"
     },
@@ -579,8 +579,8 @@
         "de": "Latzhosen",
         "fr": "Salopettes",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": "PANT"
     },
@@ -588,8 +588,8 @@
         "de": "Brillen mit klaren Gläsern",
         "fr": "Lunettes à verres transparents",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": ""
     },
@@ -597,7 +597,7 @@
         "de": "Fußball-Shirts",
         "fr": "Maillots de football",
         "gender": [
-            "male"
+            "MALE"
         ],
         "mapping": ["SHIRT", {"type": "SPORT"}]
     },
@@ -605,8 +605,8 @@
         "de": "Handschuhe",
         "fr": "Gants",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": ""
     },
@@ -614,7 +614,7 @@
         "de": "Tuniken",
         "fr": "Tuniques",
         "gender": [
-            "female"
+            "FEMALE"
         ],
         "mapping": "SHIRT"
     },
@@ -622,8 +622,8 @@
         "de": "Schals",
         "fr": "Écharpes",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": ""
     },
@@ -631,7 +631,7 @@
         "de": "Meggings",
         "fr": "Meggings",
         "gender": [
-            "male"
+            "MALE"
         ],
         "mapping": "PANT"
     },
@@ -639,7 +639,7 @@
         "de": "Jeggings",
         "fr": "Jeggings",
         "gender": [
-            "female"
+            "FEMALE"
         ],
         "mapping": "JEANS"
     },
@@ -647,7 +647,7 @@
         "de": "Bikinioberteile",
         "fr": "Tops de bikini",
         "gender": [
-            "female"
+            "FEMALE"
         ],
         "mapping": "SWIMMWEAR"
     },
@@ -655,7 +655,7 @@
         "de": "Haarmarken",
         "fr": "Serre-têtes",
         "gender": [
-            "female"
+            "FEMALE"
         ],
         "mapping": ""
     },
@@ -663,8 +663,8 @@
         "de": "Hemden",
         "fr": "Chemises",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": "SHIRT"
     },
@@ -672,7 +672,7 @@
         "de": "Bustiers",
         "fr": "Bustiers",
         "gender": [
-            "female"
+            "FEMALE"
         ],
         "mapping": "UNDERWEAR"
     },
@@ -680,8 +680,8 @@
         "de": "Strickjacken",
         "fr": "Gilets",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": "JACKET"
     },
@@ -689,8 +689,8 @@
         "de": "Blazer",
         "fr": "Blazers",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": "SUIT"
     },
@@ -698,7 +698,7 @@
         "de": "Anzugjacken",
         "fr": "Vestons",
         "gender": [
-            "male"
+            "MALE"
         ],
         "mapping": "SUIT"
     },
@@ -706,7 +706,7 @@
         "de": "Slider",
         "fr": "Claquettes",
         "gender": [
-            "male"
+            "MALE"
         ],
         "mapping": "SHOES"
     },
@@ -714,8 +714,8 @@
         "de": "Ohrringe",
         "fr": "Boucles d'oreilles",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": ""
     },
@@ -723,8 +723,8 @@
         "de": "Stiefel",
         "fr": "Bottes",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": "SHOES"
     },
@@ -732,7 +732,7 @@
         "de": "Lingerie Bustier",
         "fr": "Brassières de la collection lingerie",
         "gender": [
-            "female"
+            "FEMALE"
         ],
         "mapping": "UNDERWEAR"
     },
@@ -740,7 +740,7 @@
         "de": "Accessoire-Sets",
         "fr": "Parures d'accessoires",
         "gender": [
-            "male"
+            "MALE"
         ],
         "mapping": ""
     },
@@ -748,8 +748,8 @@
         "de": "Jacken",
         "fr": "Vestes",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": "JACKET"
     },
@@ -757,8 +757,8 @@
         "de": "Tanga",
         "fr": "Strings",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": "UNDERWEAR"
     },
@@ -766,7 +766,7 @@
         "de": "Kurze, enge Badehosen",
         "fr": "Slips de bain",
         "gender": [
-            "male"
+            "MALE"
         ],
         "mapping": "SWIMMWEAR"
     },
@@ -774,8 +774,8 @@
         "de": "Overalls",
         "fr": "Bleus de travail",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": "OVERALL"
     },
@@ -783,8 +783,8 @@
         "de": "Slips",
         "fr": "Slips",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": "UNDERWEAR"
     },
@@ -792,8 +792,8 @@
         "de": "Hüte",
         "fr": "Chapeaux",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": ""
     },
@@ -801,8 +801,8 @@
         "de": "Westen",
         "fr": "Gilets",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": "JACKET"
     },
@@ -810,7 +810,7 @@
         "de": "Taschenketten",
         "fr": "Chaînes de poche",
         "gender": [
-            "male"
+            "MALE"
         ],
         "mapping": "BAG"
     },
@@ -818,8 +818,8 @@
         "de": "Freizeitkleidung – Sets",
         "fr": "Ensembles de vêtements confort",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": ""
     },
@@ -827,8 +827,8 @@
         "de": "Anzughosen",
         "fr": "Pantalons de costume",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": "SUIT"
     },
@@ -836,7 +836,7 @@
         "de": "Nasenringe",
         "fr": "Anneaux de nez",
         "gender": [
-            "male"
+            "MALE"
         ],
         "mapping": ""
     },
@@ -844,8 +844,8 @@
         "de": "Jumpsuits",
         "fr": "Combinaisons",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": "OVERALL"
     },
@@ -853,7 +853,7 @@
         "de": "Lauf-Strumpfhosen",
         "fr": "Collants de course",
         "gender": [
-            "male"
+            "MALE"
         ],
         "mapping": ["PANT", {"type": "SPORT"}]
     },
@@ -861,7 +861,7 @@
         "de": "Fußkettchen",
         "fr": "Bracelets de cheville",
         "gender": [
-            "female"
+            "FEMALE"
         ],
         "mapping": ""
     },
@@ -869,7 +869,7 @@
         "de": "Strandkleider",
         "fr": "Tenues de plage",
         "gender": [
-            "female"
+            "FEMALE"
         ],
         "mapping": "DRESS"
     },
@@ -877,8 +877,8 @@
         "de": "Pyjamahose",
         "fr": "Bas de pyjama",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": "NIGHTWEAR"
     },
@@ -886,7 +886,7 @@
         "de": "Bauchketten",
         "fr": "Chaînes de ventre",
         "gender": [
-            "female"
+            "FEMALE"
         ],
         "mapping": ""
     },
@@ -894,7 +894,7 @@
         "de": "Strumpfhalter",
         "fr": "Porte-jarretelles",
         "gender": [
-            "female"
+            "FEMALE"
         ],
         "mapping": "UNDERWEAR"
     },
@@ -902,8 +902,8 @@
         "de": "Fleece-Kleidung",
         "fr": "Polaires",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": "SWEATER"
     },
@@ -911,7 +911,7 @@
         "de": "Bodys",
         "fr": "Corsage",
         "gender": [
-            "female"
+            "FEMALE"
         ],
         "mapping": "TOP"
     },
@@ -919,7 +919,7 @@
         "de": "Geldbörsen",
         "fr": "Porte-monnaie",
         "gender": [
-            "female"
+            "FEMALE"
         ],
         "mapping": "BAG"
     },
@@ -927,8 +927,8 @@
         "de": "Kosmetiktaschen",
         "fr": "Trousses de toilette",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": "BAG"
     },
@@ -936,7 +936,7 @@
         "de": "Kartenhalter",
         "fr": "Porte-cartes",
         "gender": [
-            "female"
+            "FEMALE"
         ],
         "mapping": ""
     },
@@ -944,7 +944,7 @@
         "de": "Nachtwäsche-Sets",
         "fr": "Lot de pyjamas",
         "gender": [
-            "female"
+            "FEMALE"
         ],
         "mapping": "NIGHTWEAR"
     },
@@ -952,7 +952,7 @@
         "de": "Manschettenknöpfe",
         "fr": "Boutons de manchettes",
         "gender": [
-            "male"
+            "MALE"
         ],
         "mapping": ""
     },
@@ -960,8 +960,8 @@
         "de": "Kopftücher",
         "fr": "Bandeaux",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": ""
     },
@@ -969,7 +969,7 @@
         "de": "Krawatten",
         "fr": "Cravates",
         "gender": [
-            "male"
+            "MALE"
         ],
         "mapping": ""
     },
@@ -977,8 +977,8 @@
         "de": "Sweatshirts",
         "fr": "Sweats",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": "SWEATER"
     },
@@ -986,7 +986,7 @@
         "de": "Fliegen",
         "fr": "Nœuds papillon",
         "gender": [
-            "male"
+            "MALE"
         ],
         "mapping": ""
     },
@@ -994,7 +994,7 @@
         "de": "Harnische",
         "fr": "Harnais",
         "gender": [
-            "female"
+            "FEMALE"
         ],
         "mapping": ""
     },
@@ -1002,8 +1002,8 @@
         "de": "Chinohosen",
         "fr": "Pantalons chino",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": "PANT"
     },
@@ -1011,7 +1011,7 @@
         "de": "Korsettoberteile",
         "fr": "Tops style corset",
         "gender": [
-            "female"
+            "FEMALE"
         ],
         "mapping": "UNDERWEAR"
     },
@@ -1019,7 +1019,7 @@
         "de": "Jockstraps",
         "fr": "Jock-straps",
         "gender": [
-            "male"
+            "MALE"
         ],
         "mapping": "UNDERWEAR"
     },
@@ -1027,8 +1027,8 @@
         "de": "Gürteltaschen",
         "fr": "Sacs banane",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": "BAG"
     },
@@ -1036,7 +1036,7 @@
         "de": "Korsetts",
         "fr": "Corsets",
         "gender": [
-            "female"
+            "FEMALE"
         ],
         "mapping": "UNDERWEAR"
     },
@@ -1044,7 +1044,7 @@
         "de": "Onesies",
         "fr": "Onesies",
         "gender": [
-            "male"
+            "MALE"
         ],
         "mapping": "NIGHTWEAR"
     },
@@ -1052,7 +1052,7 @@
         "de": "Formende Unterwäsche",
         "fr": "Gaines et collants",
         "gender": [
-            "female"
+            "FEMALE"
         ],
         "mapping": "UNDERWEAR"
     },
@@ -1060,7 +1060,7 @@
         "de": "Unterwäsche-Sets",
         "fr": "Ensembles lingerie",
         "gender": [
-            "female"
+            "FEMALE"
         ],
         "mapping": "UNDERWEAR"
     },
@@ -1068,7 +1068,7 @@
         "de": "Armspangen",
         "fr": "Manchettes de bras",
         "gender": [
-            "female"
+            "FEMALE"
         ],
         "mapping": ""
     },
@@ -1076,7 +1076,7 @@
         "de": "Kompressionsoberteile",
         "fr": "Tops de compression",
         "gender": [
-            "male"
+            "MALE"
         ],
         "mapping": ["SHIRT", {"type": "SPORT"}]
     },
@@ -1084,8 +1084,8 @@
         "de": "Morgenmäntel",
         "fr": "Robes de chambre",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": "NIGHTWEAR"
     },
@@ -1093,8 +1093,8 @@
         "de": "Ketten",
         "fr": "Colliers",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": ""
     },
@@ -1102,7 +1102,7 @@
         "de": "Unterwäsche-Sets",
         "fr": "Ensembles lingerie",
         "gender": [
-            "male"
+            "MALE"
         ],
         "mapping": "NIGHTWEAR"
     },
@@ -1110,7 +1110,7 @@
         "de": "Sonnenbrillen-Accessoires",
         "fr": "Accessoires lunettes de soleil",
         "gender": [
-            "male"
+            "MALE"
         ],
         "mapping": ""
     },
@@ -1118,7 +1118,7 @@
         "de": "Kragen",
         "fr": "Cols",
         "gender": [
-            "female"
+            "FEMALE"
         ],
         "mapping": "JACKET"
     },
@@ -1126,8 +1126,8 @@
         "de": "Rucksäcke",
         "fr": "Sacs à dos",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
         "mapping": "BACKPACK"
     }

@@ -5,6 +5,7 @@ from typing import List
 def combine_results(
     path_2_category: dict,
     sex: str,
+    consumer_lifestage: str,
     filters: list = [
         "animal_welfare",
         "fair_conditions",
@@ -21,7 +22,9 @@ def combine_results(
             {
                 "start_urls": f"https://www.zalando.de/{path}/?cause={'.'.join(filters)}",
                 "category": category,
-                "meta_data": json.dumps({"family": "FASHION", "sex": sex, **meta_data}),
+                "gender": sex,
+                "consumer_lifestage": consumer_lifestage,
+                "meta_data": json.dumps({"family": "FASHION", **meta_data}),
             }
         )
     return results
@@ -59,7 +62,7 @@ def male() -> List[dict]:
         "sports-taschen-rucksaecke-herren": ("BAG", {"type": "SPORT"}),
     }
 
-    return combine_results(path_2_category, sex="MALE")
+    return combine_results(path_2_category, sex="MALE", consumer_lifestage="ADULT")
 
 
 def female() -> List[dict]:
@@ -98,7 +101,7 @@ def female() -> List[dict]:
         "sports-taschen-rucksaecke-damen": ("BAG", {"type": "SPORT"}),
     }
 
-    return combine_results(path_2_category, sex="FEMALE")
+    return combine_results(path_2_category, sex="FEMALE", consumer_lifestage="ADULT")
 
 
 def get_settings() -> List[dict]:

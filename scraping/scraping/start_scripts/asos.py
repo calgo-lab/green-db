@@ -5,7 +5,7 @@ from typing import List
 
 logger = getLogger(__name__)
 
-gender_to_category = {"female": 28981, "male": 28982}
+gender_to_category = {"FEMALE": 28981, "MALE": 28982}
 
 asos_file_path = "data/asos_product_types.json"
 
@@ -21,6 +21,7 @@ def read_json(path: str) -> dict:
 def combine_results(
     gender_mapping: dict,
     gender: str,
+    consumer_lifestage: str,
     categories_json_path: str,
     serp_api: str = "https://www.asos.com/api/product/search/v2/categories/",
     serp_filters: str = "&channel=mobile-web&country=FR&currency=EUR"
@@ -39,7 +40,9 @@ def combine_results(
                         "start_urls": f"{serp_api}{gender_mapping.get(gender)}"
                         f"?attribute_1047={id}{serp_filters}",
                         "category": category,
-                        "meta_data": json.dumps({"family": "FASHION", "sex": gender, **meta_data}),
+                        "gender": gender,
+                        "consumer_lifestage": consumer_lifestage,
+                        "meta_data": json.dumps({"family": "FASHION", **meta_data}),
                     }
                 )
     return results
@@ -47,13 +50,15 @@ def combine_results(
 
 def male() -> List[dict]:
     return combine_results(
-        gender_mapping=gender_to_category, gender="male", categories_json_path=asos_file_path
+        gender_mapping=gender_to_category, gender="MALE", consumer_lifestage="ADULT",
+        categories_json_path=asos_file_path
     )
 
 
 def female() -> List[dict]:
     return combine_results(
-        gender_mapping=gender_to_category, gender="female", categories_json_path=asos_file_path
+        gender_mapping=gender_to_category, gender="FEMALE", consumer_lifestage="ADULT",
+        categories_json_path=asos_file_path
     )
 
 
