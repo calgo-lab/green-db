@@ -21,7 +21,7 @@ def test_otto_basic(requests_mock: Adapter) -> None:
     url = "https://www.otto.mock/"
     timestamp = "2022-05-31 10:45:00"
     merchant = "otto"
-    country_code = "DE"
+    country = "DE"
     file_name = "electronics-fridge.html"
     category = "FRIDGE"
     meta_information = {"family": "electronics"}
@@ -29,7 +29,7 @@ def test_otto_basic(requests_mock: Adapter) -> None:
     scraped_page = read_test_html(
         timestamp=timestamp,
         merchant=merchant,
-        country_code=country_code,
+        country=country,
         file_name=file_name,
         category=category,
         meta_information=meta_information,
@@ -41,7 +41,7 @@ def test_otto_basic(requests_mock: Adapter) -> None:
         timestamp=timestamp,
         url=url,
         merchant=merchant,
-        country_code=country_code,
+        country=country,
         category=category,
         name="Samsung Side-by-Side RS6GA884CSL, 178 cm hoch, 91,2 cm breit",
         description="Samsung Side-by-Side RS6GA884CSL, 178 cm hoch, 91,2 cm breit für 1.999,"

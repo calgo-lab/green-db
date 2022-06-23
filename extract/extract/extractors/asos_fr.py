@@ -55,7 +55,7 @@ def extract_asos_fr(parsed_page: ParsedPage) -> Optional[Product]:
             timestamp=parsed_page.scraped_page.timestamp,
             url=url,
             merchant=parsed_page.scraped_page.merchant,
-            country_code=parsed_page.scraped_page.country_code,
+            country=parsed_page.scraped_page.country,
             category=parsed_page.scraped_page.category,
             name=name,
             description=description,

@@ -21,7 +21,7 @@ def test_otto_basic(requests_mock: Adapter) -> None:
     url = "https://www.otto.mock/"
     timestamp = "2022-04-20 15:14:00"
     merchant = "otto"
-    country_code = "DE"
+    country = "DE"
     file_name = "damen-shirt.html"
     category = "SHIRT"
     meta_information = {"sex": "FEMALE", "family": "FASHION"}
@@ -29,7 +29,7 @@ def test_otto_basic(requests_mock: Adapter) -> None:
     scraped_page = read_test_html(
         timestamp=timestamp,
         merchant=merchant,
-        country_code=country_code,
+        country=country,
         file_name=file_name,
         category=category,
         meta_information=meta_information,
@@ -41,7 +41,7 @@ def test_otto_basic(requests_mock: Adapter) -> None:
         timestamp=timestamp,
         url=url,
         merchant=merchant,
-        country_code=country_code,
+        country=country,
         category=category,
         name="Casual Looks Rundhalsshirt »Shirt«",
         description="Casual Looks Rundhalsshirt »Shirt« ab 12,99€. reine Baumwolle, gerade "

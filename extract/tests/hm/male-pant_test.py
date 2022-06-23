@@ -9,7 +9,7 @@ def test_hm_basic() -> None:
     timestamp = "2022-06-06 11:21:00"
     url = "https://www2.hm.com/fr_fr/productpage.1045436003.html"
     merchant = "hm"
-    country_code = "FR"
+    country = "FR"
     file_name = "male-pant-wrong-encoding.html"
     category = "PANT"
     meta_information = {
@@ -20,7 +20,7 @@ def test_hm_basic() -> None:
     scraped_page = read_test_html(
         timestamp=timestamp,
         merchant=merchant,
-        country_code=country_code,
+        country=country,
         file_name=file_name,
         category=category,
         meta_information=meta_information,
@@ -31,7 +31,7 @@ def test_hm_basic() -> None:
         timestamp=timestamp,
         url=url,
         merchant=merchant,
-        country_code=country_code,
+        country=country,
         category=category,
         name="Short en jean Hybrid Regular",
         description="Pantalon jogger 5 poches en denim extensible de coton mélangé. Modèle avec "

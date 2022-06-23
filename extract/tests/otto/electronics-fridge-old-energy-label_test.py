@@ -21,7 +21,7 @@ def test_otto_basic(requests_mock: Adapter) -> None:
     url = "https://www.otto.mock/"
     timestamp = "2022-05-31 10:45:00"
     merchant = "otto"
-    country_code = "DE"
+    country = "DE"
     file_name = "electronics-fridge-old-energy-label.html"
     category = "FRIDGE"
     meta_information = {"family": "electronics"}
@@ -29,7 +29,7 @@ def test_otto_basic(requests_mock: Adapter) -> None:
     scraped_page = read_test_html(
         timestamp=timestamp,
         merchant=merchant,
-        country_code=country_code,
+        country=country,
         file_name=file_name,
         category=category,
         meta_information=meta_information,
@@ -41,7 +41,7 @@ def test_otto_basic(requests_mock: Adapter) -> None:
         timestamp=timestamp,
         url=url,
         merchant=merchant,
-        country_code=country_code,
+        country=country,
         category=category,
         name="Privileg Family Edition Pyrolyse Backofen »PBWR6 OP8V2 IN«, "
         "mit 2-fach-Teleskopauszug, Pyrolyse-Selbstreinigung, 50 Monate Herstellergarantie",

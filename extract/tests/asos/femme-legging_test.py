@@ -9,7 +9,7 @@ def test_asos_basic() -> None:
     timestamp = "2022-03-29 13:21:00"
     url = "https://www.asos.com/fr/other-stories/other-stories-legging-de-yoga-cotele-densemble-en-tissu-recycle-beige-chine/prd/24068707"  # noqa
     merchant = "asos"
-    country_code = "FR"
+    country = "FR"
     file_name = "legging.json"
     category = "PANT"
     meta_information = {
@@ -20,7 +20,7 @@ def test_asos_basic() -> None:
     scraped_page = read_test_html(
         timestamp=timestamp,
         merchant=merchant,
-        country_code=country_code,
+        country=country,
         file_name=file_name,
         category=category,
         meta_information=meta_information,
@@ -31,7 +31,7 @@ def test_asos_basic() -> None:
         timestamp=timestamp,
         url=url,
         merchant=merchant,
-        country_code=country_code,
+        country=country,
         category=category,
         name="& Other Stories - Legging de yoga côtelé d'ensemble en tissu recyclé - Beige chiné",
         description="Legging par & Other Stories. Un modèle de notre sélection durable. "

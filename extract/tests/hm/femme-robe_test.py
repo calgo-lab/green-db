@@ -9,7 +9,7 @@ def test_hm_basic() -> None:
     timestamp = "2022-04-12 11:21:00"
     url = "https://www2.hm.com/fr_fr/productpage.1061531002.html"
     merchant = "hm"
-    country_code = "FR"
+    country = "FR"
     file_name = "femme-robe.html"
     category = "DRESS"
     meta_information = {
@@ -20,7 +20,7 @@ def test_hm_basic() -> None:
     scraped_page = read_test_html(
         timestamp=timestamp,
         merchant=merchant,
-        country_code=country_code,
+        country=country,
         file_name=file_name,
         category=category,
         meta_information=meta_information,
@@ -31,7 +31,7 @@ def test_hm_basic() -> None:
         timestamp=timestamp,
         url=url,
         merchant=merchant,
-        country_code=country_code,
+        country=country,
         category=category,
         name="MAMA Robe avec ceinture à nouer",
         description="Robe de longueur mi-mollet en viscose tissée. Modèle avec encolure en V, "

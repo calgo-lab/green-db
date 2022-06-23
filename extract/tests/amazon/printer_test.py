@@ -9,7 +9,7 @@ def test_amazon_electronics() -> None:
     timestamp = "2022-04-28 19:00:00"
     url = "https://www.amazon.de/Kyocera-Klimaschutz-System-Ecosys-P3145dn-Laserdrucker/dp/B07TXRHFYS/ref=sr_1_23?qid=1651401368&refinements=p_n_cpf_eligible%3A22579885031&s=computers&sr=1-23&th=1%22"  # noqa
     merchant = "amazon"
-    country_code = "DE"
+    country = "DE"
     file_name = "printer.html"
     category = "PRINTER"
     meta_information = {
@@ -21,7 +21,7 @@ def test_amazon_electronics() -> None:
     scraped_page = read_test_html(
         timestamp=timestamp,
         merchant=merchant,
-        country_code=country_code,
+        country=country,
         file_name=file_name,
         category=category,
         meta_information=meta_information,
@@ -32,7 +32,7 @@ def test_amazon_electronics() -> None:
         timestamp=timestamp,
         url=url,
         merchant=merchant,
-        country_code=country_code,
+        country=country,
         category=category,
         name="Kyocera Klimaschutz-System Ecosys P3145dn Laserdrucker: Schwarz-Weiß, "
         "Duplex-Einheit, 45 Seiten pro Minute. Inkl. Mobile Print Funktion",

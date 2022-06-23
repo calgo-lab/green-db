@@ -67,7 +67,7 @@ def extract_otto_de(parsed_page: ParsedPage) -> Optional[Product]:
             timestamp=parsed_page.scraped_page.timestamp,
             url=parsed_page.scraped_page.url,
             merchant=parsed_page.scraped_page.merchant,
-            country_code=parsed_page.scraped_page.country_code,
+            country=parsed_page.scraped_page.country,
             category=parsed_page.scraped_page.category,
             name=name,
             description=description,

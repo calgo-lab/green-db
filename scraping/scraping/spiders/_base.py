@@ -79,7 +79,7 @@ class BaseSpider(Spider):
         self.table_name: str = getattr(self, "table_name", self.name)  # type: ignore
         self.StartRequest = SplashRequest  # default StartRequest is set to SplashRequest
 
-        self.merchant, self.country_code = self.name.split("_")
+        self.merchant, self.country = self.name.split("_")
 
         super().__init__(name=self.name, **kwargs)
 
@@ -204,7 +204,7 @@ class BaseSpider(Spider):
         scraped_page = ScrapedPage(
             timestamp=self.timestamp,
             merchant=self.merchant,
-            country_code=self.country_code,
+            country=self.country,
             url=response.url,
             html=response.body.decode("utf-8"),
             page_type=PageType.SERP,
@@ -229,7 +229,7 @@ class BaseSpider(Spider):
         scraped_page = ScrapedPage(
             timestamp=self.timestamp,
             merchant=self.merchant,
-            country_code=self.country_code,
+            country=self.country,
             url=response.url,
             html=response.body.decode("utf-8"),
             page_type=PageType.PRODUCT,
