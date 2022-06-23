@@ -11,14 +11,14 @@ from scrapy.http.response.text import TextResponse as ScrapyTextResponse
 from scrapy_splash import SplashJsonResponse, SplashRequest
 
 from core.constants import (
-    TABLE_NAME_SCRAPING_AMAZON,
+    TABLE_NAME_SCRAPING_AMAZON_DE,
     TABLE_NAME_SCRAPING_AMAZON_FR,
-    TABLE_NAME_SCRAPING_ASOS,
-    TABLE_NAME_SCRAPING_HM,
-    TABLE_NAME_SCRAPING_OTTO,
+    TABLE_NAME_SCRAPING_ASOS_FR,
+    TABLE_NAME_SCRAPING_HM_FR,
+    TABLE_NAME_SCRAPING_OTTO_DE,
     TABLE_NAME_SCRAPING_ZALANDO_DE,
     TABLE_NAME_SCRAPING_ZALANDO_FR,
-    TABLE_NAME_SCRAPING_ZALANDO_UK,
+    TABLE_NAME_SCRAPING_ZALANDO_GB,
 )
 from core.domain import PageType, ScrapedPage
 
@@ -35,13 +35,13 @@ from ..start_scripts.zalando_uk import get_settings as get_zalando_uk_settings
 logger = getLogger(__name__)
 
 SETTINGS = {
-    TABLE_NAME_SCRAPING_OTTO: get_otto_settings(),
-    TABLE_NAME_SCRAPING_ASOS: get_asos_settings(),
+    TABLE_NAME_SCRAPING_OTTO_DE: get_otto_settings(),
+    TABLE_NAME_SCRAPING_ASOS_FR: get_asos_settings(),
     TABLE_NAME_SCRAPING_ZALANDO_DE: get_zalando_settings(),
     TABLE_NAME_SCRAPING_ZALANDO_FR: get_zalando_fr_settings(),
-    TABLE_NAME_SCRAPING_ZALANDO_UK: get_zalando_uk_settings(),
-    TABLE_NAME_SCRAPING_HM: get_hm_settings(),
-    TABLE_NAME_SCRAPING_AMAZON: get_amazon_settings(),
+    TABLE_NAME_SCRAPING_ZALANDO_GB: get_zalando_uk_settings(),
+    TABLE_NAME_SCRAPING_HM_FR: get_hm_settings(),
+    TABLE_NAME_SCRAPING_AMAZON_DE: get_amazon_settings(),
     TABLE_NAME_SCRAPING_AMAZON_FR: get_amazon_fr_settings(),
 }
 
