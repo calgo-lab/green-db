@@ -23,12 +23,12 @@ from core.constants import (
 from core.domain import PageType, ScrapedPage
 
 from ..splash import minimal_script
-from ..start_scripts.amazon import get_settings as get_amazon_settings
+from ..start_scripts.amazon_de import get_settings as get_amazon_settings
 from ..start_scripts.amazon_fr import get_settings as get_amazon_fr_settings
-from ..start_scripts.asos import get_settings as get_asos_settings
-from ..start_scripts.hm import get_settings as get_hm_settings
-from ..start_scripts.otto import get_settings as get_otto_settings
-from ..start_scripts.zalando import get_settings as get_zalando_settings
+from ..start_scripts.asos_fr import get_settings as get_asos_settings
+from ..start_scripts.hm_fr import get_settings as get_hm_settings
+from ..start_scripts.otto_de import get_settings as get_otto_settings
+from ..start_scripts.zalando_de import get_settings as get_zalando_settings
 from ..start_scripts.zalando_fr import get_settings as get_zalando_fr_settings
 from ..start_scripts.zalando_uk import get_settings as get_zalando_uk_settings
 
