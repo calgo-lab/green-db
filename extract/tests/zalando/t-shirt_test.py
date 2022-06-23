@@ -45,8 +45,8 @@ def test_zalando_basic() -> None:
             "https://img01.ztat.net/article/spp-media-p1/d477156d601a4d37801c933c3c80fb45/"
             "4ec5b5c24c3d4e9fb4cd424d18003622.jpg?imwidth=103&filter=packshot"
         ],
-        color=["acid black/dunkelgrau"],
-        size=None,
+        colors=["acid black/dunkelgrau"],
+        sizes=None,
         gtin=None,
         asin=None,
     )

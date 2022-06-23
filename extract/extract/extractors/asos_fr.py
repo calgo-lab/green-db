@@ -36,7 +36,7 @@ def extract_asos_fr(parsed_page: ParsedPage) -> Optional[Product]:
     brand = page_json.get("brand", {}).get("name", None)
     first_offer = safely_return_first_element(page_json.get("variants", [{}]))
 
-    color = safely_convert_attribute_to_array(first_offer.get("colour", None))
+    colors = safely_convert_attribute_to_array(first_offer.get("colour", None))
     currency = first_offer.get("price", {}).get("currency", None)
 
     images = page_json.get("media", {}).get("images", {})
@@ -64,8 +64,8 @@ def extract_asos_fr(parsed_page: ParsedPage) -> Optional[Product]:
             price=price,
             currency=currency,
             image_urls=image_urls,
-            color=color,
-            size=sizes,
+            colors=colors,
+            sizes=sizes,
             gtin=None,
             asin=None,
         )

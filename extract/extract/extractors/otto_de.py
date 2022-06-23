@@ -76,8 +76,8 @@ def extract_otto_de(parsed_page: ParsedPage) -> Optional[Product]:
             price=price,
             currency=currency,
             image_urls=image_urls,
-            color=None,
-            size=None,
+            colors=None,
+            sizes=None,
             gtin=gtin,
             asin=None,
         )

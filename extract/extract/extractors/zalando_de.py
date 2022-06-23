@@ -86,7 +86,7 @@ def extract_zalando_de(
     name = meta_data.get("name", None)
     description = meta_data.get("description", None)
     brand = meta_data.get("brand", {}).get("name", None)
-    color = safely_convert_attribute_to_array(meta_data.get("color", None))
+    colors = safely_convert_attribute_to_array(meta_data.get("color", None))
 
     first_offer = safely_return_first_element(meta_data.get("offers", [{}]))
     currency = first_offer.get("priceCurrency", None)
@@ -123,8 +123,8 @@ def extract_zalando_de(
             price=price,
             currency=currency,
             image_urls=image_urls,
-            color=color,
-            size=None,
+            colors=colors,
+            sizes=None,
             gtin=None,
             asin=None,
         )

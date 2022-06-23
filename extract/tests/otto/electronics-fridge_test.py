@@ -56,8 +56,8 @@ def test_otto_basic(requests_mock: Adapter) -> None:
         ],
         price=1999.00,
         currency="EUR",
-        color=None,
-        size=None,
+        colors=None,
+        sizes=None,
         gtin=8806092536593,
         asin=None,
     )

@@ -48,8 +48,8 @@ class Product(BaseModel):
     currency: CurrencyType
     image_urls: List[str]
 
-    color: Optional[List[str]]
-    size: Optional[List[str]]
+    colors: Optional[List[str]]
+    sizes: Optional[List[str]]
 
     # int, source: https://support.google.com/merchants/answer/6219078?hl=en
     gtin: Optional[int]

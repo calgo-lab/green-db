@@ -49,8 +49,8 @@ def extract_amazon_de(parsed_page: ParsedPage) -> Optional[Product]:
     soup = parsed_page.beautiful_soup
 
     name = soup.find("span", {"id": "productTitle"}).text.strip()
-    color = safely_convert_attribute_to_array(_get_color(soup))
-    size = safely_convert_attribute_to_array(_get_sizes(soup))
+    colors = safely_convert_attribute_to_array(_get_color(soup))
+    sizes = safely_convert_attribute_to_array(_get_sizes(soup))
     price = _get_price(parsed_page)
     image_urls = _get_image_urls(soup)
 
@@ -80,8 +80,8 @@ def extract_amazon_de(parsed_page: ParsedPage) -> Optional[Product]:
             price=price,
             currency=currency,
             image_urls=image_urls,
-            color=color,
-            size=size,
+            colors=colors,
+            sizes=sizes,
             gtin=None,
             asin=asin,
         )

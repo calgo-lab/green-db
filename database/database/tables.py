@@ -215,8 +215,8 @@ class GreenDBTable(GreenDBBaseTable, __TableMixin):
     currency = Column(TEXT, nullable=False)
     image_urls = Column(ARRAY(TEXT), nullable=False)
 
-    color = Column(ARRAY(TEXT), nullable=True)
-    size = Column(ARRAY(TEXT), nullable=True)
+    colors = Column(ARRAY(TEXT), nullable=True)
+    sizes = Column(ARRAY(TEXT), nullable=True)
 
     gtin = Column(BIGINT, nullable=True)
     asin = Column(TEXT, nullable=True)

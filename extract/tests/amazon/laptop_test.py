@@ -47,8 +47,8 @@ def test_amazon_electronics() -> None:
             "https://m.media-amazon.com/images/I/21FGojgZvcL.jpg",
             "https://m.media-amazon.com/images/I/21DU9eh-mHL.jpg",
         ],
-        color=["Black"],
-        size=None,
+        colors=["Black"],
+        sizes=None,
         gtin=None,
         asin="B08WC37LYB",
     )

@@ -54,8 +54,8 @@ def test_hm_basic() -> None:
             "%5D%2Ctype%5BDESCRIPTIVESTILLLIFE%5D%2Cres%5Bm%5D%2Chmver%5B2%5D&call=url["
             "file:/product/main]",
         ],
-        color=["Noir"],
-        size=["28", "29", "30", "31", "32", "33", "34", "36", "38", "40", "42", "28S", "29S", "30S",
+        colors=["Noir"],
+        sizes=["28", "29", "30", "31", "32", "33", "34", "36", "38", "40", "42", "28S", "29S", "30S",
               "31S", "32S", "33S", "34S", "36S"],
         gtin=None,
         asin=None,

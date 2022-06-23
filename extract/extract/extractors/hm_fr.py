@@ -41,7 +41,7 @@ def extract_hm_fr(parsed_page: ParsedPage) -> Optional[Product]:
     name = meta_data.get("name", None)
     description = meta_data.get("description", None)
     brand = meta_data.get("brand", {}).get("name", None)
-    color = safely_convert_attribute_to_array(meta_data.get("color", None))
+    colors = safely_convert_attribute_to_array(meta_data.get("color", None))
 
     first_offer = safely_return_first_element(meta_data.get("offers", [{}]))
     currency = first_offer.get("priceCurrency", None)
@@ -57,8 +57,8 @@ def extract_hm_fr(parsed_page: ParsedPage) -> Optional[Product]:
         price = float(price)
 
     if product_data := _get_product_details(parsed_page.beautiful_soup):
-        sizes = [size.get("name") for size in product_data.get("sizes", [])]
-        #size = ", ".join(sizes)  # size column expects str, so we join all sizes together
+        sizes = safely_convert_attribute_to_array(
+            [size.get("name") for size in product_data.get("sizes", [])])
 
     sustainability_labels = _get_sustainability(parsed_page.beautiful_soup, product_data)
 
@@ -76,8 +76,8 @@ def extract_hm_fr(parsed_page: ParsedPage) -> Optional[Product]:
             price=price,
             currency=currency,
             image_urls=image_urls,
-            color=color,
-            size=sizes,
+            colors=colors,
+            sizes=sizes,
             gtin=None,
             asin=None,
         )
