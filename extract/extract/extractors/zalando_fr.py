@@ -8,7 +8,7 @@ from typing import Dict, Optional
 from core.domain import CertificateType, Product
 
 from ..parse import ParsedPage
-from .zalando import extract_zalando_de
+from .zalando_de import extract_zalando_de
 
 logger = getLogger(__name__)
 

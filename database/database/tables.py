@@ -6,11 +6,13 @@ from sqlalchemy import ARRAY, BIGINT, INTEGER, JSON, NUMERIC, TEXT, TIMESTAMP, V
 from core.constants import (
     TABLE_NAME_GREEN_DB,
     TABLE_NAME_SCRAPING_AMAZON_DE,
+    TABLE_NAME_SCRAPING_AMAZON_FR,
     TABLE_NAME_SCRAPING_ASOS_FR,
+    TABLE_NAME_SCRAPING_HM_FR,
     TABLE_NAME_SCRAPING_OTTO_DE,
     TABLE_NAME_SCRAPING_ZALANDO_DE,
     TABLE_NAME_SCRAPING_ZALANDO_FR,
-    TABLE_NAME_SCRAPING_ZALANDO_UK,
+    TABLE_NAME_SCRAPING_ZALANDO_GB,
     TABLE_NAME_SUSTAINABILITY_LABELS,
 )
 
@@ -105,7 +107,7 @@ class ZalandoFrScrapingTable(ScrapingBaseTable, ScrapingTable):
     __tablename__ = TABLE_NAME_SCRAPING_ZALANDO_FR
 
 
-class ZalandoUkScrapingTable(ScrapingBaseTable, ScrapingTable):
+class ZalandoGbScrapingTable(ScrapingBaseTable, ScrapingTable):
     """
     The actual scraping table for Zalando.
 
@@ -117,7 +119,7 @@ class ZalandoUkScrapingTable(ScrapingBaseTable, ScrapingTable):
     __tablename__ = TABLE_NAME_SCRAPING_ZALANDO_UK
 
 
-class OTTOScrapingTable(ScrapingBaseTable, ScrapingTable):
+class OttoDeScrapingTable(ScrapingBaseTable, ScrapingTable):
     """
     The actual scraping table for Otto.
 
@@ -129,7 +131,7 @@ class OTTOScrapingTable(ScrapingBaseTable, ScrapingTable):
     __tablename__ = TABLE_NAME_SCRAPING_OTTO_DE
 
 
-class AsosScrapingTable(ScrapingBaseTable, ScrapingTable):
+class AsosFrScrapingTable(ScrapingBaseTable, ScrapingTable):
     """
     The actual scraping table for Asos.
 
@@ -141,7 +143,19 @@ class AsosScrapingTable(ScrapingBaseTable, ScrapingTable):
     __tablename__ = TABLE_NAME_SCRAPING_ASOS_FR
 
 
-class AmazonScrapingTable(ScrapingBaseTable, ScrapingTable):
+class HmFrScrapingTable(ScrapingBaseTable, ScrapingTable):
+    """
+    The actual scraping table for H&M.
+
+    Args:
+        ScrapingBaseTable ([type]): `sqlalchemy` base class for the Scraping database
+        ScrapingTable ([type]): To inherit the table definition
+    """
+
+    __tablename__ = TABLE_NAME_SCRAPING_HM_FR
+
+
+class AmazonDeScrapingTable(ScrapingBaseTable, ScrapingTable):
     """
     The actual scraping table for Amazon.
     Args:
@@ -152,14 +166,27 @@ class AmazonScrapingTable(ScrapingBaseTable, ScrapingTable):
     __tablename__ = TABLE_NAME_SCRAPING_AMAZON_DE
 
 
+class AmazonFrScrapingTable(ScrapingBaseTable, ScrapingTable):
+    """
+    The actual scraping table for Amazon France.
+    Args:
+        ScrapingBaseTable ([type]): `sqlalchemy` base class for the Scraping database
+        ScrapingTable ([type]): To inherit the table definition
+    """
+
+    __tablename__ = TABLE_NAME_SCRAPING_AMAZON_FR
+
+
 # Used to dynamically map a table name to the correct Table class.
 SCRAPING_TABLE_CLASS_FOR: Dict[str, Type[ScrapingTable]] = {
     TABLE_NAME_SCRAPING_ZALANDO_DE: ZalandoDeScrapingTable,
     TABLE_NAME_SCRAPING_ZALANDO_FR: ZalandoFrScrapingTable,
-    TABLE_NAME_SCRAPING_ZALANDO_UK: ZalandoUkScrapingTable,
-    TABLE_NAME_SCRAPING_OTTO_DE: OTTOScrapingTable,
-    TABLE_NAME_SCRAPING_ASOS_FR: AsosScrapingTable,
-    TABLE_NAME_SCRAPING_AMAZON_DE: AmazonScrapingTable,
+    TABLE_NAME_SCRAPING_ZALANDO_GB: ZalandoGbScrapingTable,
+    TABLE_NAME_SCRAPING_OTTO_DE: OttoDeScrapingTable,
+    TABLE_NAME_SCRAPING_ASOS_FR: AsosFrScrapingTable,
+    TABLE_NAME_SCRAPING_AMAZON_DE: AmazonDeScrapingTable,
+    TABLE_NAME_SCRAPING_AMAZON_FR: AmazonFrScrapingTable,
+    TABLE_NAME_SCRAPING_HM_FR: HmFrScrapingTable,
 }
 
 
@@ -207,9 +234,20 @@ class SustainabilityLabelsTable(GreenDBBaseTable, __TableMixin):
     __tablename__ = TABLE_NAME_SUSTAINABILITY_LABELS
 
     id = Column(TEXT, nullable=False, autoincrement=False, primary_key=True)
-    timestamp = Column(TIMESTAMP, nullable=False)
+    timestamp = Column(TIMESTAMP, nullable=False, primary_key=True)
     name = Column(TEXT, nullable=False)
     description = Column(TEXT, nullable=False)
-    ecological_evaluation = Column(INTEGER, nullable=True)
-    social_evaluation = Column(INTEGER, nullable=True)
-    credibility_evaluation = Column(INTEGER, nullable=True)
+    cred_credibility = Column(INTEGER, nullable=True)
+    eco_chemicals = Column(INTEGER, nullable=True)
+    eco_lifetime = Column(INTEGER, nullable=True)
+    eco_water = Column(INTEGER, nullable=True)
+    eco_inputs = Column(INTEGER, nullable=True)
+    eco_quality = Column(INTEGER, nullable=True)
+    eco_energy = Column(INTEGER, nullable=True)
+    eco_waste_air = Column(INTEGER, nullable=True)
+    eco_environmental_management = Column(INTEGER, nullable=True)
+    social_labour_rights = Column(INTEGER, nullable=True)
+    social_business_practice = Column(INTEGER, nullable=True)
+    social_social_rights = Column(INTEGER, nullable=True)
+    social_company_responsibility = Column(INTEGER, nullable=True)
+    social_conflict_minerals = Column(INTEGER, nullable=True)

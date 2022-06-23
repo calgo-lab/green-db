@@ -1,10 +1,10 @@
 from logging import getLogger
 from typing import Iterator
+from urllib.parse import urlparse
 
 from scrapy_splash import SplashJsonResponse, SplashRequest
-
 from core.constants import TABLE_NAME_SCRAPING_AMAZON_DE
-from ..splash import scroll_end_of_page_script
+from ..splash import minimal_script
 from ._base import BaseSpider
 
 logger = getLogger(__name__)
@@ -23,6 +23,8 @@ class AmazonSpider(BaseSpider):
         """
         # Save HTML to database
         self._save_SERP(response)
+        parsed_url = urlparse(response.url)
+        url_domain = f"https://{parsed_url.netloc}"
         urls = response.css("div.a-row.a-size-base.a-color-base a::attr(href)").getall()
         prices = response.css(
             "div.a-row.a-size-base.a-color-base span.a-price-whole::text"
@@ -34,15 +36,21 @@ class AmazonSpider(BaseSpider):
         for url, price in zip(urls, prices):
             if "refinements=p_n_cpf_eligible" in url:
                 yield SplashRequest(
-                    url=f"https://www.amazon.de{url}",
+                    url=f"{url_domain}{url}",
                     callback=self.parse_PRODUCT,
-                    meta={"request_meta_information": {"price": price}},
+                    meta={
+                        "request_meta_information": {
+                            "price": price.encode("ascii", "ignore").decode()
+                        }
+                    }
+                    | self.create_default_request_meta(response),
                     endpoint="execute",
                     priority=1,  # higher priority than SERP
                     args={  # passed to Splash HTTP API
                         "wait": self.request_timeout,
-                        "lua_source": scroll_end_of_page_script,
+                        "lua_source": minimal_script,
                         "timeout": 180,
+                        "allowed_content_type": "text/html",
                     },
                 )
 
@@ -50,19 +58,20 @@ class AmazonSpider(BaseSpider):
         next_path = response.css(".s-pagination-selected+ .s-pagination-button::attr(href)").get()
         if next_path:
             page_number = response.css(".s-pagination-selected+ .s-pagination-button::text").get()
-            next_page = f"https://www.amazon.de{next_path}"
+            next_page = f"{url_domain}{next_path}"
 
             logger.info(f"Next page found, number {page_number} at {next_page}")
 
             yield SplashRequest(
                 url=next_page,
                 callback=self.parse_SERP,
-                meta={"original_URL": next_page},
+                meta=self.create_default_request_meta(response, original_url=next_page),
                 endpoint="execute",
                 args={  # passed to Splash HTTP API
                     "wait": self.request_timeout,
-                    "lua_source": scroll_end_of_page_script,
+                    "lua_source": minimal_script,
                     "timeout": 180,
+                    "allowed_content_type": "text/html",
                 },
             )
         else:

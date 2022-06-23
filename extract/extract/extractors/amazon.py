@@ -4,6 +4,7 @@
 import re
 from logging import getLogger
 from typing import Any, Callable, Optional, List
+from urllib.parse import urlparse
 
 from bs4 import BeautifulSoup
 from pydantic import ValidationError
@@ -28,6 +29,8 @@ _LABEL_MAPPING = {
     "The Forest Stewardship Council": CertificateType.FOREST_STEWARDSHIP_COUNCIL,
     "Das offizielle Nordische Umweltzeichen": CertificateType.NORDIC_SWAN_ECOLABEL,
     "Reducing CO2": CertificateType.CARBON_TRUST_REDUCING,
+    "The Nordic Swan Ecolabel": CertificateType.NORDIC_SWAN_ECOLABEL,
+    "C02 compensé de ClimatePartner": CertificateType.CLIMATE_NEUTRAL_CLIMATE_PARTNER,
 }
 
 
@@ -42,6 +45,7 @@ def extract_amazon_de(parsed_page: ParsedPage) -> Optional[Product]:
     Returns:
         Optional[Product]: Valid `Product` object or `None` if extraction failed
     """
+    language = re.sub("www\.amazon\.", "", urlparse(parsed_page.scraped_page.url).netloc)  # noqa
     soup = parsed_page.beautiful_soup
 
     name = soup.find("span", {"id": "productTitle"}).text.strip()
@@ -58,7 +62,7 @@ def extract_amazon_de(parsed_page: ParsedPage) -> Optional[Product]:
         sustainability_texts, _LABEL_MAPPING
     )
 
-    brand = _get_brand(soup, "de")
+    brand = _get_brand(soup, language)
     description = _get_description(soup)
     asin = _find_from_details_section(soup, "ASIN")
 
@@ -223,14 +227,21 @@ def _get_brand(soup: BeautifulSoup, language: str) -> Optional[str]:
             "info": ("Besuche den ", "-Store", "Marke: "),
             "table": ("Marke", "Hersteller"),
         },
+        "fr": {
+            "info": ("Visiter la boutique ", "Marque\xa0: "),
+            "table": ("Marque", "Fabricant"),
+        },
     }
 
     def parse_brand(brand: str) -> Optional[str]:
         info_locales = _LANGUAGE_LOCALES[language]["info"]
         if brand.startswith(info_locales[0]):
-            return brand[len(info_locales[0]) : -len(info_locales[1])]  # noqa
-        if brand.startswith(info_locales[2]):
-            return brand[len(info_locales[2]) :]  # noqa
+            if language == "de":
+                return brand[len(info_locales[0]) : -len(info_locales[1])]  # noqa
+            else:
+                return brand[len(info_locales[0]) :]  # noqa
+        if brand.startswith(info_locales[-1]):
+            return brand[len(info_locales[-1]) :]  # noqa
         return None
 
     table_locales = _LANGUAGE_LOCALES[language]["table"]

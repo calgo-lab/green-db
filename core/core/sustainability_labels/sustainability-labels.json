@@ -81,6 +81,9 @@
                 "url": "https://bettercotton.org/"
             }
         },
+        "ids": {
+            "project-cece": "BCI"
+        },
         "image_url": "https://www.isealalliance.org/sites/default/files/2018-08/BCI_GREEN_CMYK.png"
     },
     "certificate:BIOCYCLIC_VEGAN_AGRICULTURE": {
@@ -170,7 +173,8 @@
             }
         },
         "ids": {
-            "amazon": "BLUESIGN_PRODUCT"
+            "amazon": "BLUESIGN_PRODUCT",
+            "project-cece": "BlueS"
         },
         "image_url": "https://m.media-amazon.com/images/G/01/Wisp/cpf/certificate/wisp_cpf_certificate_logoimage_bluesign.jpg"
     },
@@ -257,6 +261,9 @@
                 "name": "Business Social Compliance Initiative",
                 "description": "Ziel des amfori BSCI-Systems ist die schrittweise Verbesserung der Arbeitsbedingungen und der Schutz der Menschenrechte in der globalen Lieferkette der amfori-Mitglieder, die amfori BSCI nutzen. Unabh\u00e4ngige amfori-BSCI-Sozialaudits sind ein Instrument zur Risikoanalyse und Messung der Situation in Produktionsst\u00e4tten. Ein breites Schulungsangebot f\u00fcr amfori-Mitglieder und insbesondere Produktionsst\u00e4tten bietet eine gute M\u00f6glichkeit, mit der Unternehmen ihre Kenntnisse und die Praxis verbessern k\u00f6nnen, damit die Kriterien des amfori BSCI-Verhaltenskodizes eingehalten werden."
             }
+        },
+        "ids": {
+            "project-cece": "BSCI"
         }
     },
     "certificate:B_CORPORATION": {
@@ -281,6 +288,9 @@
                 "description": "Certified B Companies are a new kind of business that balances purpose and profit. They are legally required to consider the impact of their decisions on their workers, customers, suppliers, community, and the environment.",
                 "url": "https://bcorporation.eu/about-b-corps"
             }
+        },
+        "ids": {
+            "project-cece": "Bcorp"
         },
         "image_url": "https://s3.amazonaws.com/blab-impact-published-production/public/5cc1IEuizB6Ma9LA7ZiOpdED6ahKvD7NiwHDlwSI"
     },
@@ -1112,6 +1122,33 @@
             "de": {
                 "name": "Fairtrade International",
                 "description": "Produkte werden im Einklang mit ethischen und \u00f6kologischen Standards hergestellt, dies schlie\u00dft die Unterst\u00fctzung der Landwirte bei der Bek\u00e4mpfung des Klimawandels ein.",
+                "url": "https://www.fairtrade-deutschland.de/was-ist-fairtrade",
+                "badges": [
+                    "fair produziert"
+                ]
+            },
+            "fr": {
+                "name": "Fairtrade International",
+                "description": "promeut des produits fabriqu\u00e9s conform\u00e9ment aux normes \u00e9thiques et environnementales, notamment en aidant les agriculteurs \u00e0 relever les d\u00e9fis du changement climatique.",
+                "url": "https://maxhavelaarfrance.org/le-commerce-equitable/quest-ce-que-le-commerce-equitable/"
+            },
+            "en": {
+                "name": "Fairtrade International",
+                "description": "products are produced in line with ethical and environmental standards, including supporting farmers to tackle climate change challenges.",
+                "url": "https://www.fairtrade.org.uk/What-is-Fairtrade/"
+            }
+        },
+        "ids": {
+            "amazon": "FAIRTRADE_INTERNATIONAL",
+            "project-cece": "FT"
+        },
+        "image_url": "https://m.media-amazon.com/images/G/01/Wisp/cpf/certificate/Fairtrade_International_logo.png"
+    },
+    "certificate:FAIRTRADE_INTERNATIONAL_INGREDIENT": {
+        "languages": {
+            "de": {
+                "name": "Fairtrade International",
+                "description": "Produkte werden im Einklang mit ethischen und \u00f6kologischen Standards hergestellt, dies schlie\u00dft die Unterst\u00fctzung der Landwirte bei der Bek\u00e4mpfung des Klimawandels ein.",
                 "url": "https://www.fairtrade-deutschland.de/was-ist-fairtrade/fairtrade-siegel",
                 "badges": [
                     "fair produziert"
@@ -1209,6 +1246,9 @@
                 "description": "",
                 "url": "https://www.fairwear.org/about-us"
             }
+        },
+        "ids": {
+            "project-cece": "FWF"
         },
         "image_url": "https://rucksack-eck.de/wp-content/uploads/2020/08/fair-wear-foundation-logo.jpg"
     },
@@ -1332,7 +1372,7 @@
             },
             "fr": {
                 "name": "GOTS",
-                "description": "Global Organic Textile Standard (GOTS) garantit un respect des normes \u00e9cologiques et sociales \u00e0 chaque \u00e9tape de la cha\u00eene d'approvisionnement des textiles biologiques. Fabriqué à partir de plus de 70% de matériaux organiques.",
+                "description": "Global Organic Textile Standard (GOTS) garantit un respect des normes \u00e9cologiques et sociales \u00e0 chaque \u00e9tape de la cha\u00eene d'approvisionnement des textiles biologiques. Fabriqu\u00e9 \u00e0 partir de plus de 70% de mat\u00e9riaux organiques.",
                 "url": "https://www.global-standard.org/"
             },
             "en": {
@@ -1342,7 +1382,8 @@
             }
         },
         "ids": {
-            "amazon": "GLOBAL_ORGANIC_TEXTILES_STANDARD"
+            "amazon": "GLOBAL_ORGANIC_TEXTILES_STANDARD",
+            "project-cece": "GOTS"
         },
         "image_url": "https://m.media-amazon.com/images/G/01/Wisp/cpf/certificate/wisp_cpf_certificate_logoimage_gots.png"
     },
@@ -1351,7 +1392,11 @@
             "de": {
                 "name": "GOTS Bio",
                 "description": "Der Global Organic Textile Standard (GOTS) ist eine der f\u00fchrenden und vertrauensvollsten Zertifizierungen f\u00fcr Textilien aus Biofasern. Produkte mit dem 'Bio' Label bestehen zu mindestens 95% aus biologischem Material. Jeder Partner in der Zulieferkette wird \u00fcberpr\u00fcft, um eine umweltbewusste und sozial verantwortungsvolle Herstellung zu garantieren.",
-                "url": "https://www.global-standard.org/"
+                "url": "https://www.global-standard.org/",
+                "badges": [
+                    "umweltfreundlich",
+                    "fair produziert"
+                ]
             },
             "en": {
                 "name": "GOTS organic",
@@ -1382,7 +1427,8 @@
             }
         },
         "ids": {
-            "amazon": "GLOBAL_RECYCLED_STANDARD"
+            "amazon": "GLOBAL_RECYCLED_STANDARD",
+            "project-cece": "GRS"
         },
         "image_url": "https://m.media-amazon.com/images/G/01/Wisp/cpf/certificate/wisp_cpf_certificate_logoimage_grs.png"
     },
@@ -1518,6 +1564,9 @@
                 "name": "Naturtextil IVN zertifiziert BEST",
                 "description": "Der Standard spiegelt seit 2000 die IVN entworfenen Richtlinien f\u00fcr Naturtextilien wider und bildet die gesamte textile Produktionskette ab, in \u00f6kologischer und sozialverantwortlicher Hinsicht. Schwerpunkt ist der Einsatz von 100% nat\u00fcrlichen Bio-Fasern."
             }
+        },
+        "ids": {
+            "project-cece": "IVN"
         }
     },
     "certificate:KLIMANEUTRAL_NATUREOFFICE": {
@@ -1734,14 +1783,35 @@
                 "name": "OEKO-TEX 100",
                 "description": "Das Siegel zielt auf die Reduktion von Schadstoffen ab. Ist ein textiler Artikel mit dem STANDARD 100 by OEKO-TEX Label ausgezeichnet, wurden alle Bestandteile dieses Artikels, d.h. auch alle F\u00e4den, Kn\u00f6pfe und sonstige Accessoires, auf Schadstoffe gepr\u00fcft, sodass der Artikel somit gesundheitlich unbedenklich ist. Der Nachweis daf\u00fcr erfolgt \u00fcber die Untersuchung der Endprodukte auf sch\u00e4dliche Chemikalien."
             }
+        },
+        "ids": {
+            "project-cece": "OEKOTEX"
         }
     },
     "certificate:ORGANIC_CONTENT_STANDARD_100": {
         "languages": {
             "de": {
-                "name": "Organic Content Standard - 100",
-                "description": ""
+                "name": "OCS 100",
+                "description": "Organic Content Standard 100 Produkte werden aus mindestens 95 % biologisch angebauten Materialien hergestellt.",
+                "url": "https://textileexchange.org/standards/organic-content-standard/",
+                "badges": [
+                    "keine Gefahrstoffe"
+                ]
+            },
+            "fr": {
+                "name": "OCS 100",
+                "description": "Organic Content Standard 100 identifie des produits fabriqu\u00e9s avec au moins 95% de fibres biologiques.",
+                "url": "https://textileexchange.org/standards/organic-content-standard/"
+            },
+            "en": {
+                "name": "OCS 100",
+                "description": "Organic Content Standard 100 products are made with at least 95% organically grown materials.",
+                "url": "https://textileexchange.org/standards/organic-content-standard/"
             }
+        },
+        "image_url": "https://m.media-amazon.com/images/G/01/Wisp/cpf/certificate/wisp_cpf_certificate_logoimage_wisp_cpf_certificate_logoimage_ocs.png",
+        "ids": {
+            "amazon": "ORGANIC_CONTENT_STANDARD_100"
         }
     },
     "certificate:ORGANIC_CONTENT_STANDARD_BLENDED": {
@@ -1758,6 +1828,9 @@
                 "name": "PETA-approved",
                 "description": ""
             }
+        },
+        "ids": {
+            "project-cece": "PETA"
         }
     },
     "certificate:PETA_APPROVED_VEGAN": {
@@ -1862,12 +1935,27 @@
             }
         }
     },
+    "certificate:REACH": {
+        "languages": {
+            "en": {
+                "name": "REACH - UK Registration, Evaluation, Authorisation & restriction of Chemicals",
+                "description": "UK REACH is a regulation that applies to the majority of chemical substances that are manufactured in or imported into Great Britain (GB) (England, Scotland, Wales). This can be: (1) A substance on its own; (2) A substance in a mixture, for example ink or paint; (3) A substance that makes up an 'article' - an object that is produced with a special shape, surface or design, for example a car, furniture or clothes. REACH stands for registration , evaluation, authorisation and restriction of chemicals.",
+                "url": "https://www.hse.gov.uk/reach/about.htm"
+            }
+        },
+        "ids": {
+            "project-cece": "REACH"
+        }
+    },
     "certificate:RECYCLED_CLAIM_STANDARD_100": {
         "languages": {
             "de": {
                 "name": "RCS",
                 "description": "Produkte verwenden Materialien mit mindestens 95 % Recyclinganteil.",
-                "url": "https://textileexchange.org/standards/recycled-claim-standard-global-recycled-standard/"
+                "url": "https://textileexchange.org/standards/recycled-claim-standard-global-recycled-standard/",
+                "badges": [
+                    "recyceltes Material"
+                ]
             },
             "fr": {
                 "name": "RCS",
@@ -1890,7 +1978,10 @@
             "de": {
                 "name": "Recycled Blended",
                 "description": "Produkte verwenden Materialien mit mindestens 5 % Recyclinganteil.",
-                "url": "https://textileexchange.org/standards/recycled-claim-standard-global-recycled-standard/"
+                "url": "https://textileexchange.org/standards/recycled-claim-standard-global-recycled-standard/",
+                "badges": [
+                    "recyceltes Material"
+                ]
             },
             "fr": {
                 "name": "Recycled Blended",
@@ -1990,6 +2081,9 @@
                 "url": "https://sa-intl.org/programs/sa8000/"
             }
         },
+        "ids": {
+            "project-cece": "SA8000"
+        },
         "image_url": "https://sa-intl.org/wp-content/uploads/2020/01/SA8000_Official-Logo.jpg"
     },
     "certificate:SGS_INSTITUT_FRESENIUS": {
@@ -2020,6 +2114,9 @@
                 "description": "certifies organic products and endorses the relationship between soil, plants, animals and people.",
                 "url": "https://www.soilassociation.org/certification/"
             }
+        },
+        "ids": {
+            "project-cece": "SoilA"
         },
         "image_url": "https://m.media-amazon.com/images/G/01/Wisp/cpf/certificate/wisp_cpf_certificate_logoimage_soil-association.jpg"
     },
@@ -2071,6 +2168,18 @@
                 "name": "TCO Certified Smartphones 8.0",
                 "description": "Ziel von TCO ist es, den Fortschritt hin zu nachhaltigen IT-Produkten voranzutreiben. Zertifizierte Produkte m\u00fcssen w\u00e4hrend des gesamten Lebenszyklus umfassende \u00f6kologische und soziale Kriterien erf\u00fcllen. So m\u00fcssen die Fabriken, in denen zertifizierte Produkte hergestellt werden, Kriterien zu Arbeitszeiten, Arbeitsumgebung und L\u00f6hnen einhalten. Die Produkte m\u00fcssen Kriterien f\u00fcr Energieeffizienz, ergonomisches Design und einen begrenzten Gehalt an gef\u00e4hrlichen Stoffen erf\u00fcllen. Unabh\u00e4ngige, akkreditierte Organisationen verifizieren, dass Fabriken und Produkte alle Kriterien in TCO Certified erf\u00fcllen. Die Verifizierung erfolgt sowohl vor als auch nach der Ausstellung des Zertifikats und deckt den gesamten G\u00fcltigkeitszeitraum ab."
             }
+        }
+    },
+    "certificate:TEXTILE_EXCHANGE": {
+        "languages": {
+            "en": {
+                "name": "Textile Exchange",
+                "description": "Textile Exchange is a global nonprofit that creates leaders in the preferred fiber and materials industry.",
+                "url": "https://textileexchange.org/"
+            }
+        },
+        "ids": {
+            "project-cece": "TE"
         }
     },
     "certificate:TUEV_RHEINLAND_GREEN_PRODUCT_MARK_LAPTOPS": {
@@ -2142,6 +2251,9 @@
                 "name": "Worldwide Responsible Accredited Production",
                 "description": "Ziel ist eine sozialverantwortliche Produktion. Das Siegel verlangt die Einhaltung von Sozialstandards sowie der Arbeitsschutz- und -sicherheitsgesetze in den jeweiligen Produktionsl\u00e4ndern. Die WRAP- Prinzipien basieren auf internationalen Arbeitsplatzstandards und lokalen Gesetzen. Sie orientieren sich au\u00dferdem an den Konventionen der Internationalen Arbeitsorganisation."
             }
+        },
+        "ids": {
+            "project-cece": "WRAP"
         }
     },
     "certificate:WORLD_FAIR_TRADE_ORGANIZATION": {
@@ -2164,6 +2276,9 @@
                 "description": "",
                 "url": "https://wfto-europe.org/the-wfto-way/logo/"
             }
+        },
+        "ids": {
+            "project-cece": "WFTO"
         },
         "image_url": "https://wfto-europe.org/wp-content/themes/the-bootstrap-child/img/logo2.png"
     },

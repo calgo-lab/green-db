@@ -41,6 +41,8 @@ class OttoSpider(BaseSpider):
                 url=product_link,
                 callback=self.parse_PRODUCT,
                 endpoint="execute",
+                priority=2,
+                meta=self.create_default_request_meta(response),
                 args={  # passed to Splash HTTP API
                     "wait": 5,
                     "lua_source": minimal_script,
@@ -72,8 +74,10 @@ class OttoSpider(BaseSpider):
                 yield SplashRequest(
                     url=url,
                     callback=self.parse_SERP,
-                    meta={"o": int(pagination_info["o"])},
+                    meta={"o": int(pagination_info["o"])}
+                    | self.create_default_request_meta(response),
                     endpoint="execute",
+                    priority=1,
                     args={  # passed to Splash HTTP API
                         "wait": 5,
                         "lua_source": minimal_script,

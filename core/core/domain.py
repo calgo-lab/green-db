@@ -68,9 +68,20 @@ class SustainabilityLabel(BaseModel):
     timestamp: datetime
     name: str
     description: str
-    ecological_evaluation: Optional[conint(ge=0, le=100)]  # type: ignore
-    social_evaluation: Optional[conint(ge=0, le=100)]  # type: ignore
-    credibility_evaluation: Optional[conint(ge=0, le=100)]  # type: ignore
+    cred_credibility: Optional[conint(ge=0, le=100)]  # type: ignore
+    eco_chemicals: Optional[conint(ge=0, le=100)]  # type: ignore
+    eco_lifetime: Optional[conint(ge=0, le=100)]  # type: ignore
+    eco_water: Optional[conint(ge=0, le=100)]  # type: ignore
+    eco_inputs: Optional[conint(ge=0, le=100)]  # type: ignore
+    eco_quality: Optional[conint(ge=0, le=100)]  # type: ignore
+    eco_energy: Optional[conint(ge=0, le=100)]  # type: ignore
+    eco_waste_air: Optional[conint(ge=0, le=100)]  # type: ignore
+    eco_environmental_management: Optional[conint(ge=0, le=100)]  # type: ignore
+    social_labour_rights: Optional[conint(ge=0, le=100)]  # type: ignore
+    social_business_practice: Optional[conint(ge=0, le=100)]  # type: ignore
+    social_social_rights: Optional[conint(ge=0, le=100)]  # type: ignore
+    social_company_responsibility: Optional[conint(ge=0, le=100)]  # type: ignore
+    social_conflict_minerals: Optional[conint(ge=0, le=100)]  # type: ignore
 
     class Config:
         orm_mode = True
