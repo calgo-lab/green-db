@@ -9,13 +9,14 @@ from scrapy.http.request import Request as ScrapyHttpRequest
 from scrapy.http.response import Response as ScrapyHttpResponse
 from scrapy_playwright.page import PageMethod
 
+from core.constants import TABLE_NAME_SCRAPING_HM_FR
 from ._base import BaseSpider
 
 logger = getLogger(__name__)
 
 
 class HMSpider(BaseSpider):
-    name = "hm"
+    name = TABLE_NAME_SCRAPING_HM_FR
     allowed_domains = ["hm.com"]
 
     custom_settings = {
