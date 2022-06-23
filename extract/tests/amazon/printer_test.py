@@ -8,22 +8,27 @@ from ..utils import read_test_html
 def test_amazon_electronics() -> None:
     timestamp = "2022-04-28 19:00:00"
     url = "https://www.amazon.de/Kyocera-Klimaschutz-System-Ecosys-P3145dn-Laserdrucker/dp/B07TXRHFYS/ref=sr_1_23?qid=1651401368&refinements=p_n_cpf_eligible%3A22579885031&s=computers&sr=1-23&th=1%22"  # noqa
+    source = "amazon"
     merchant = "amazon"
     country = "DE"
     file_name = "printer.html"
     category = "PRINTER"
+    gender = "UNCLASSIFIED"
+    consumer_lifestage = "UNCLASSIFIED"
     meta_information = {
         "family": "electronics",
-        "sex": "MALE",
         "price": "599,00",
     }
 
     scraped_page = read_test_html(
         timestamp=timestamp,
+        source=source,
         merchant=merchant,
         country=country,
         file_name=file_name,
         category=category,
+        gender=gender,
+        consumer_lifestage=consumer_lifestage,
         meta_information=meta_information,
         url=url,
     )
@@ -31,9 +36,12 @@ def test_amazon_electronics() -> None:
     expected = Product(
         timestamp=timestamp,
         url=url,
+        source=source,
         merchant=merchant,
         country=country,
         category=category,
+        gender=gender,
+        consumer_lifestage=consumer_lifestage,
         name="Kyocera Klimaschutz-System Ecosys P3145dn Laserdrucker: Schwarz-Weiß, "
         "Duplex-Einheit, 45 Seiten pro Minute. Inkl. Mobile Print Funktion",
         description="Geben Sie Ihr Modell ein, um sicherzustellen, dass dieser Artikel passt.. "

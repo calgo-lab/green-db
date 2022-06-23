@@ -66,9 +66,12 @@ def extract_hm_fr(parsed_page: ParsedPage) -> Optional[Product]:
         return Product(
             timestamp=parsed_page.scraped_page.timestamp,
             url=parsed_page.scraped_page.url,
+            source=parsed_page.scraped_page.source,
             merchant=parsed_page.scraped_page.merchant,
             country=parsed_page.scraped_page.country,
             category=parsed_page.scraped_page.category,
+            gender=parsed_page.scraped_page.gender,
+            consumer_lifestage=parsed_page.scraped_page.consumer_lifestage,
             name=name,
             description=description,
             brand=brand,

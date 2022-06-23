@@ -52,6 +52,8 @@ class BaseSpider(Spider):
         timestamp: datetime,
         start_urls: Optional[Union[str, List[str]]] = None,
         category: Optional[str] = None,
+        gender: Optional[str] = None,
+        consumer_lifestage: Optional[str] = None,
         search_term: Optional[str] = None,
         meta_data: Optional[Union[str, Dict[str, str]]] = None,
         products_per_page: Optional[int] = None,
@@ -80,6 +82,7 @@ class BaseSpider(Spider):
         self.StartRequest = SplashRequest  # default StartRequest is set to SplashRequest
 
         self.merchant, self.country = self.name.split("_")
+        self.source = self.merchant  # TODO: change when source is no more equal to merchant
 
         super().__init__(name=self.name, **kwargs)
 
@@ -94,6 +97,9 @@ class BaseSpider(Spider):
             if category and meta_data:
                 self.category = category
                 self.meta_data = meta_data
+                # gender and consumer_liefestage will be None if not set
+                self.gender = gender
+                self.consumer_lifestage= consumer_lifestage
             else:
                 logger.error(
                     "When setting 'start_urls', 'category' & 'meta_data' also needs to be set."
@@ -172,6 +178,8 @@ class BaseSpider(Spider):
                 {
                     "start_urls": self.start_urls,
                     "category": self.category,
+                    "gender": self.gender,
+                    "consumer_lifestage": self.consumer_lifestage,
                     "meta_data": self.meta_data,
                 }
             ]
@@ -185,6 +193,8 @@ class BaseSpider(Spider):
                     callback=self.parse_SERP,
                     meta={
                         "category": setting.get("category"),
+                        "gender": setting.get("gender"),
+                        "consumer_lifestage": setting.get("consumer_lifestage"),
                         "meta_data": self.parse_meta_data(setting.get("meta_data")),  # type: ignore
                     },
                     **get_request_specific_parameters(),
@@ -203,12 +213,15 @@ class BaseSpider(Spider):
         """
         scraped_page = ScrapedPage(
             timestamp=self.timestamp,
+            source=self.source,
             merchant=self.merchant,
             country=self.country,
             url=response.url,
             html=response.body.decode("utf-8"),
             page_type=PageType.SERP,
             category=response.meta.get("category"),
+            gender=response.meta.get("gender"),
+            consumer_lifestage=response.meta.get("consumer_lifestage"),
             meta_information=response.meta.get("meta_data"),
         )
 
@@ -228,12 +241,15 @@ class BaseSpider(Spider):
 
         scraped_page = ScrapedPage(
             timestamp=self.timestamp,
+            source=self.source,
             merchant=self.merchant,
             country=self.country,
             url=response.url,
             html=response.body.decode("utf-8"),
             page_type=PageType.PRODUCT,
             category=response.meta.get("category"),
+            gender=response.meta.get("gender"),
+            consumer_lifestage=response.meta.get("consumer_lifestage"),
             meta_information=meta_information,
         )
 
@@ -273,5 +289,7 @@ class BaseSpider(Spider):
         return {
             "original_URL": original_url if original_url else response.url,
             "category": response.meta.get("category"),
+            "gender": response.meta.get("gender"),
+            "consumer_lifestage": response.meta.get("consumer_lifestage"),
             "meta_data": response.meta.get("meta_data"),
         }

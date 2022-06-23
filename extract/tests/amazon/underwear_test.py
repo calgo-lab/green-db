@@ -8,22 +8,27 @@ from ..utils import read_test_html
 def test_amazon_basic_img() -> None:
     timestamp = "2022-04-28 19:00:00"
     url = "https://www.amazon.de/Romberg-Boxershorts-Bio-Baumwolle-kratzenden-nachhaltig/dp/B0932XK47G/ref=sr_1_7?qid=1652774791&refinements=p_n_cpf_eligible%3A22579885031&s=apparel&sr=1-7&th=1"  # noqa
+    source = "amazon"
     merchant = "amazon"
     country = "DE"
     file_name = "underwear.html"
     category = "UNDERWEAR"
+    gender = "MALE"
+    consumer_lifestage = "ADULT"
     meta_information = {
         "family": "FASHION",
-        "sex": "MALE",
         "price": "49,95",
     }
 
     scraped_page = read_test_html(
         timestamp=timestamp,
+        source=source,
         merchant=merchant,
         country=country,
         file_name=file_name,
         category=category,
+        gender=gender,
+        consumer_lifestage=consumer_lifestage,
         meta_information=meta_information,
         url=url,
     )
@@ -31,9 +36,12 @@ def test_amazon_basic_img() -> None:
     expected = Product(
         timestamp=timestamp,
         url=url,
+        source=source,
         merchant=merchant,
         country=country,
         category=category,
+        gender=gender,
+        consumer_lifestage=consumer_lifestage,
         name="Romberg Herren Boxershorts mit Schriftzug, 6er Pack aus nachhaltiger Bio-Baumwolle "
         "(GOTS Zertifiziert)",
         description="BIO-BAUMWOLLE: Du willst den Unterschied machen? Entscheide Dich bewusst für "

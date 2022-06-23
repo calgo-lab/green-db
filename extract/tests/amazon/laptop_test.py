@@ -8,18 +8,24 @@ from ..utils import read_test_html
 def test_amazon_electronics() -> None:
     timestamp = "2022-04-28 19:00:00"
     url = "https://www.amazon.de/Lenovo-ThinkPad-i7-1160G7-Graphics-Windows/dp/B08WC37LYB/ref=sr_1_12?qid=1651408666&refinements=p_n_cpf_eligible%3A22579885031&s=computers&sr=1https://www.amazon.de/Lenovo-ThinkPad-i7-1160G7-Graphics-Windows/dp/B08WC37LYB/ref=sr_1_12?qid=1651408666&refinements=p_n_cpf_eligible%3A22579885031&s=computers&sr=1-12&th=1-12&th=1"  # noqa
+    source = "amazon"
     merchant = "amazon"
     country = "DE"
     file_name = "laptop.html"
     category = "LAPTOP"
+    gender = "UNCLASSIFIED"
+    consumer_lifestage = "UNCLASSIFIED"
     meta_information = {"family": "electronics", "price": "2998,0"}
 
     scraped_page = read_test_html(
         timestamp=timestamp,
+        source=source,
         merchant=merchant,
         country=country,
         file_name=file_name,
         category=category,
+        gender=gender,
+        consumer_lifestage=consumer_lifestage,
         meta_information=meta_information,
         url=url,
     )
@@ -27,9 +33,12 @@ def test_amazon_electronics() -> None:
     expected = Product(
         timestamp=timestamp,
         url=url,
+        source=source,
         merchant=merchant,
         country=country,
         category=category,
+        gender=gender,
+        consumer_lifestage=consumer_lifestage,
         name="Lenovo ThinkPad X1 Nano - Laptop Black 16GB RAM 1TB SSD",
         description="Lenovo ThinkPad X1 Nano Gen 1 Notebook 33 cm (13 Zoll), 2K "
         "(Intel Core i7-1160G7, 16 GB RAM, 1 TB SSD, Intel Iris Xe Graphics, Windows 10 Pro), "

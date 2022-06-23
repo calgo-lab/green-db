@@ -21,6 +21,7 @@ class CurrencyType(str, Enum):
 
 class ScrapedPage(BaseModel):
     timestamp: datetime
+    source: str
     merchant: str
     country: str
     url: str
@@ -28,6 +29,10 @@ class ScrapedPage(BaseModel):
     page_type: PageType
     category: str
     meta_information: dict
+
+    # TODO: Add class for gender and consumer_lifestage with values from GS1 GPC
+    gender: Optional[str]
+    consumer_lifestage: Optional[str]
 
     class Config:
         orm_mode = True
@@ -37,6 +42,7 @@ class ScrapedPage(BaseModel):
 class Product(BaseModel):
     timestamp: datetime
     url: str
+    source: str
     merchant: str
     country: str
     category: str
@@ -48,6 +54,8 @@ class Product(BaseModel):
     currency: CurrencyType
     image_urls: List[str]
 
+    gender: Optional[str]
+    consumer_lifestage: Optional[str]
     colors: Optional[List[str]]
     sizes: Optional[List[str]]
 

@@ -8,21 +8,26 @@ from ..utils import read_test_html
 def test_hm_basic() -> None:
     timestamp = "2022-06-06 11:21:00"
     url = "https://www2.hm.com/fr_fr/productpage.1045436003.html"
+    source = "hm"
     merchant = "hm"
     country = "FR"
     file_name = "male-pant-wrong-encoding.html"
     category = "PANT"
+    gender = "MALE"
+    consumer_lifestage = "ADULT"
     meta_information = {
         "family": "FASHION",
-        "sex": "MALE",
     }
 
     scraped_page = read_test_html(
         timestamp=timestamp,
+        source=source,
         merchant=merchant,
         country=country,
         file_name=file_name,
         category=category,
+        gender=gender,
+        consumer_lifestage=consumer_lifestage,
         meta_information=meta_information,
         url=url,
     )
@@ -30,9 +35,12 @@ def test_hm_basic() -> None:
     expected = Product(
         timestamp=timestamp,
         url=url,
+        source=source,
         merchant=merchant,
         country=country,
         category=category,
+        gender=gender,
+        consumer_lifestage=consumer_lifestage,
         name="Short en jean Hybrid Regular",
         description="Pantalon jogger 5 poches en denim extensible de coton mélangé. Modèle avec "
         "taille de hauteur classique soulignée par lien de serrage dissimulé devant "

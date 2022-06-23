@@ -20,18 +20,24 @@ def test_otto_basic(requests_mock: Adapter) -> None:
     # original_url: https://www.otto.de/p/h-i-s-rundhalsshirt-packung-3-tlg-3er-pack-mit-druck-1379261103/#variationId=1379261260 # noqa
     url = "https://www.otto.mock/"
     timestamp = "2022-04-19 12:49:00"
+    source = "otto"
     merchant = "otto"
     country = "DE"
     file_name = "herren-shirt.html"
     category = "SHIRT"
-    meta_information = {"sex": "MALE", "family": "FASHION"}
+    gender = "MALE"
+    consumer_lifestage = "ADULT"
+    meta_information = {"family": "FASHION"}
 
     scraped_page = read_test_html(
         timestamp=timestamp,
+        source=source,
         merchant=merchant,
         country=country,
         file_name=file_name,
         category=category,
+        gender=gender,
+        consumer_lifestage=consumer_lifestage,
         meta_information=meta_information,
         url=url,
     )
@@ -40,9 +46,12 @@ def test_otto_basic(requests_mock: Adapter) -> None:
     expected = Product(
         timestamp=timestamp,
         url=url,
+        source=source,
         merchant=merchant,
         country=country,
         category=category,
+        gender=gender,
+        consumer_lifestage=consumer_lifestage,
         name="H.I.S Rundhalsshirt (Packung, 3-tlg., 3er-Pack) mit Druck",
         description="H.I.S Rundhalsshirt (Packung, 3-tlg., 3er-Pack) mit Druck für 29,"
         "99€. Kontrastfarbenes Band mit HIS Schriftzug im Ausschnitt, Pflegeleichtes "

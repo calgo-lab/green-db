@@ -14,7 +14,7 @@ from core.constants import (
 from core.domain import Product, ScrapedPage
 
 # Because we ignored the files `zalando_de.py` and `otto_de.py` we have to skip them here as well
-from .extractors.amazon import extract_amazon_de  # type: ignore[attr-defined]
+from .extractors.amazon_de import extract_amazon_de  # type: ignore[attr-defined]
 from .extractors.amazon_fr import extract_amazon_fr  # type: ignore[attr-defined]
 from .extractors.asos_fr import extract_asos_fr  # type: ignore[attr-defined]
 from .extractors.hm_fr import extract_hm_fr  # type: ignore[attr-defined]

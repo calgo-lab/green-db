@@ -6,7 +6,7 @@ from typing import Optional
 from core.domain import Product
 
 from ..parse import ParsedPage
-from .amazon import extract_amazon_de
+from .amazon_de import extract_amazon_de
 
 
 def extract_amazon_fr(parsed_page: ParsedPage) -> Optional[Product]:

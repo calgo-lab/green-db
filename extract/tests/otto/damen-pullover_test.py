@@ -19,18 +19,24 @@ def test_otto_basic(requests_mock: Adapter) -> None:
 
     url = "https://www.otto.mock/"
     timestamp = "2022-02-17 12:49:00"
+    source = "otto"
     merchant = "otto"
     country = "DE"
     file_name = "damen-pullover.html"
     category = "SWEATER"
-    meta_information = {"sex": "FEMALE", "family": "FASHION"}
+    gender = "FEMALE"
+    consumer_lifestage = "ADULT"
+    meta_information = {"family": "FASHION"}
 
     scraped_page = read_test_html(
         timestamp=timestamp,
+        source=source,
         merchant=merchant,
         country=country,
         file_name=file_name,
         category=category,
+        gender=gender,
+        consumer_lifestage=consumer_lifestage,
         meta_information=meta_information,
         url=url,
     )
@@ -39,9 +45,12 @@ def test_otto_basic(requests_mock: Adapter) -> None:
     expected = Product(
         timestamp=timestamp,
         url=url,
+        source=source,
         merchant=merchant,
         country=country,
         category=category,
+        gender=gender,
+        consumer_lifestage=consumer_lifestage,
         name="s.Oliver Strickpullover »Pullover« (1-tlg)",
         description="s.Oliver Strickpullover »Pullover« (1-tlg) für 29,99€. mit regulärer Passform,"
         " hat einen V-Ausschnitt, hat eine Rippblende am Ausschnitt bei OTTO",

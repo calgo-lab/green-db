@@ -8,22 +8,27 @@ from ..utils import read_test_html
 def test_zalando_basic() -> None:
     timestamp = "2022-04-22 12:49:00"
     url = "https://www.zalando.mock/"
+    source = "zalando"
     merchant = "zalando"
     country = "DE"
     file_name = "t-shirt.html"
     category = "TSHIRT"
+    gender = "MALE"
+    consumer_lifestage = "ADULT"
     meta_information = {
         "family": "FASHION",
         "sustainability": "reusing_materials",
-        "sex": "MALE",
     }
 
     scraped_page = read_test_html(
         timestamp=timestamp,
+        source=source,
         merchant=merchant,
         country=country,
         file_name=file_name,
         category=category,
+        gender=gender,
+        consumer_lifestage=consumer_lifestage,
         meta_information=meta_information,
         url=url,
     )
@@ -31,9 +36,12 @@ def test_zalando_basic() -> None:
     expected = Product(
         timestamp=timestamp,
         url=url,
+        source=source,
         merchant=merchant,
         country=country,
         category=category,
+        gender=gender,
+        consumer_lifestage=consumer_lifestage,
         name="JAAMES TURNTABLES - T-Shirt print - acid black",
         description=" ARMEDANGELS JAAMES TURNTABLES - T-Shirt print - acid black für "
         "14,90\xa0€ (2022-04-22) versandkostenfrei bei Zalando bestellen.",

@@ -8,18 +8,24 @@ from ..utils import read_test_html
 def test_zalando_fr_basic() -> None:
     timestamp = "2022-04-22 12:31:50"
     url = "https://www.zalando.mock/"
+    source = "zalando"
     merchant = "zalando_fr"
     country = "FR"
     file_name = "pants.html"
     category = "PANT"
-    meta_information = {"family": "FASHION", "sustainability": "water_saving", "sex": "FEMALE"}
+    gender = "FEMALE"
+    consumer_lifestage = "ADULT"
+    meta_information = {"family": "FASHION", "sustainability": "water_saving"}
 
     scraped_page = read_test_html(
         timestamp=timestamp,
+        source=source,
         merchant=merchant,
         country=country,
         file_name=file_name,
         category=category,
+        gender=gender,
+        consumer_lifestage=consumer_lifestage,
         meta_information=meta_information,
         url=url,
     )
@@ -27,9 +33,12 @@ def test_zalando_fr_basic() -> None:
     expected = Product(
         timestamp=timestamp,
         url=url,
+        source=source,
         merchant=merchant,
         country=country,
         category=category,
+        gender=gender,
+        consumer_lifestage=consumer_lifestage,
         name="Pantalon classique - marine",
         description="Pantalon classique hessnatur Pantalon classique - marine marine/bleu: € 159,95 chez Zalando (au 2022-04-22). Livraison et retours gratuits* et service client gratuit au 0800 797 34.",  # noqa
         brand="hessnatur",

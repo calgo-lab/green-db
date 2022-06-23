@@ -8,10 +8,13 @@ TEST_DATA_DIR = Path(__file__).parent
 
 def read_test_html(
     timestamp: str,
+    source: str,
     merchant: str,
     country: str,
     file_name: str,
     category: str,
+    gender: str,
+    consumer_lifestage: str,
     meta_information: dict,
     url: str = "dummy_url",
 ) -> ScrapedPage:
@@ -19,11 +22,14 @@ def read_test_html(
     with open(path, encoding="utf-8") as f:
         return ScrapedPage(
             timestamp=datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S"),
+            source=source,
             merchant=merchant,
             country=country,
             url=url,
             html=f.read(),
             category=category,
+            gender=gender,
+            consumer_lifestage=consumer_lifestage,
             page_type=PageType("PRODUCT"),
             meta_information=meta_information,
         )

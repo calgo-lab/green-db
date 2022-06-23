@@ -20,18 +20,24 @@ def test_otto_basic(requests_mock: Adapter) -> None:
     # original url: https://www.otto.de/p/samsung-side-by-side-rs6ga884csl-178-cm-hoch-91-2-cm-breit-1524534276/#variationId=1524535294 # noqa
     url = "https://www.otto.mock/"
     timestamp = "2022-05-31 10:45:00"
+    source = "otto"
     merchant = "otto"
     country = "DE"
     file_name = "electronics-fridge.html"
     category = "FRIDGE"
+    gender = "UNCLASSIFIED"
+    consumer_lifestage = "UNCLASSIFIED"
     meta_information = {"family": "electronics"}
 
     scraped_page = read_test_html(
         timestamp=timestamp,
+        source=source,
         merchant=merchant,
         country=country,
         file_name=file_name,
         category=category,
+        gender=gender,
+        consumer_lifestage=consumer_lifestage,
         meta_information=meta_information,
         url=url,
     )
@@ -40,9 +46,12 @@ def test_otto_basic(requests_mock: Adapter) -> None:
     expected = Product(
         timestamp=timestamp,
         url=url,
+        source=source,
         merchant=merchant,
         country=country,
         category=category,
+        gender=gender,
+        consumer_lifestage=consumer_lifestage,
         name="Samsung Side-by-Side RS6GA884CSL, 178 cm hoch, 91,2 cm breit",
         description="Samsung Side-by-Side RS6GA884CSL, 178 cm hoch, 91,2 cm breit für 1.999,"
         "00€. Nutzinhalt: 635 Liter, No Frost – nie wieder abtauen!, Metal Cooling "

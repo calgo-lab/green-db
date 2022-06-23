@@ -20,18 +20,24 @@ def test_otto_basic(requests_mock: Adapter) -> None:
     # original url: https://www.otto.de/p/casual-looks-rundhalsshirt-shirt-645503675/#variationId=144423297 # noqa
     url = "https://www.otto.mock/"
     timestamp = "2022-04-20 15:14:00"
+    source = "otto"
     merchant = "otto"
     country = "DE"
     file_name = "damen-shirt.html"
     category = "SHIRT"
-    meta_information = {"sex": "FEMALE", "family": "FASHION"}
+    gender = "FEMALE"
+    consumer_lifestage = "ADULT"
+    meta_information = {"family": "FASHION"}
 
     scraped_page = read_test_html(
         timestamp=timestamp,
+        source=source,
         merchant=merchant,
         country=country,
         file_name=file_name,
         category=category,
+        gender=gender,
+        consumer_lifestage=consumer_lifestage,
         meta_information=meta_information,
         url=url,
     )
@@ -40,9 +46,12 @@ def test_otto_basic(requests_mock: Adapter) -> None:
     expected = Product(
         timestamp=timestamp,
         url=url,
+        source=source,
         merchant=merchant,
         country=country,
         category=category,
+        gender=gender,
+        consumer_lifestage=consumer_lifestage,
         name="Casual Looks Rundhalsshirt »Shirt«",
         description="Casual Looks Rundhalsshirt »Shirt« ab 12,99€. reine Baumwolle, gerade "
         "Schnittführung, figurfreundliche Schnittführung, angenehmer Tragekomfort bei"

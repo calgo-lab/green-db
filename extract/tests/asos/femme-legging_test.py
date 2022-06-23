@@ -8,21 +8,26 @@ from ..utils import read_test_html
 def test_asos_basic() -> None:
     timestamp = "2022-03-29 13:21:00"
     url = "https://www.asos.com/fr/other-stories/other-stories-legging-de-yoga-cotele-densemble-en-tissu-recycle-beige-chine/prd/24068707"  # noqa
+    source = "asos"
     merchant = "asos"
     country = "FR"
     file_name = "legging.json"
     category = "PANT"
+    gender = "FEMALE"
+    consumer_lifestage = "ADULT"
     meta_information = {
         "family": "FASHION",
-        "sex": "FEMALE",
     }
 
     scraped_page = read_test_html(
         timestamp=timestamp,
+        source=source,
         merchant=merchant,
         country=country,
         file_name=file_name,
         category=category,
+        gender=gender,
+        consumer_lifestage=consumer_lifestage,
         meta_information=meta_information,
         url=url,
     )
@@ -30,9 +35,12 @@ def test_asos_basic() -> None:
     expected = Product(
         timestamp=timestamp,
         url=url,
+        source=source,
         merchant=merchant,
         country=country,
         category=category,
+        gender=gender,
+        consumer_lifestage=consumer_lifestage,
         name="& Other Stories - Legging de yoga côtelé d'ensemble en tissu recyclé - Beige chiné",
         description="Legging par & Other Stories. Un modèle de notre sélection durable. "
         "Soutien-gorge vendu séparément. Taille haute. Taille élastiquée. Coupe "

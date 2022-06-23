@@ -74,12 +74,15 @@ class ScrapingTable(__TableMixin):
 
     id = Column(INTEGER, nullable=False, autoincrement=True, primary_key=True)
     timestamp = Column(TIMESTAMP, nullable=False)
+    source = Column(TEXT, nullable=False)
     merchant = Column(TEXT, nullable=False)
     country = Column(TEXT, nullable=False)
     category = Column(TEXT, nullable=False)
     url = Column(TEXT, nullable=False)
     html = Column(TEXT, nullable=False)
     page_type = Column(VARCHAR(length=10), nullable=False)
+    gender = Column(TEXT, nullable=True)
+    consumer_lifestage = Column(TEXT, nullable=True)
     meta_information = Column(JSON, nullable=True)
 
 
@@ -203,6 +206,7 @@ class GreenDBTable(GreenDBBaseTable, __TableMixin):
 
     id = Column(INTEGER, nullable=False, autoincrement=True, primary_key=True)
     timestamp = Column(TIMESTAMP, nullable=False)
+    source = Column(TEXT, nullable=False)
     merchant = Column(TEXT, nullable=False)
     country = Column(TEXT, nullable=False)
     category = Column(TEXT, nullable=False)
@@ -215,6 +219,8 @@ class GreenDBTable(GreenDBBaseTable, __TableMixin):
     currency = Column(TEXT, nullable=False)
     image_urls = Column(ARRAY(TEXT), nullable=False)
 
+    gender = Column(TEXT, nullable=True)
+    consumer_lifestage = Column(TEXT, nullable=True)
     colors = Column(ARRAY(TEXT), nullable=True)
     sizes = Column(ARRAY(TEXT), nullable=True)
 
