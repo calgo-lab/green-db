@@ -119,7 +119,7 @@ class ZalandoGbScrapingTable(ScrapingBaseTable, ScrapingTable):
         ScrapingTable ([type]): To inherit the table definition
     """
 
-    __tablename__ = TABLE_NAME_SCRAPING_ZALANDO_UK
+    __tablename__ = TABLE_NAME_SCRAPING_ZALANDO_GB
 
 
 class OttoDeScrapingTable(ScrapingBaseTable, ScrapingTable):
