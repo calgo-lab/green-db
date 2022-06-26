@@ -32,6 +32,7 @@ def parse_page(scraped_page: ScrapedPage) -> ParsedPage:
     """
     beautiful_soup = BeautifulSoup(scraped_page.html, "html.parser")
     schema_org = extract_schema_org(scraped_page.html)
+
     return ParsedPage(
         scraped_page=scraped_page, beautiful_soup=beautiful_soup, schema_org=schema_org
     )
@@ -61,8 +62,14 @@ def extract_schema_org(page_html: str) -> dict:
     # otto schema extraction fails sometimes for json-ld when unescaped (no official fix yet)
     # see: https://github.com/scrapinghub/extruct/issues/175
     # Fix: using the escaped html works for otto
+    # For h&m the escaped html sometimes does not work either, so we try again with unicode-escape
+    # and ignore any errors that might be raised.
     try:
         schema_org = extruct.extract(unescaped_html, syntaxes=_SYNTAXES)
     except JSONDecodeError:
-        schema_org = extruct.extract(page_html, syntaxes=_SYNTAXES)
+        try:
+            schema_org = extruct.extract(page_html, syntaxes=_SYNTAXES)
+        except JSONDecodeError:
+            unescaped_html = page_html.encode("utf-8").decode("unicode-escape")
+            schema_org = extruct.extract(unescaped_html, syntaxes=_SYNTAXES, errors="ignore")
     return schema_org if schema_org else {}

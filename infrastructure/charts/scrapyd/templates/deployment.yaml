@@ -35,7 +35,7 @@ spec:
           {{- if .Values.config }}
           volumeMounts:
           - name: config-volume
-            mountPath: /root
+            mountPath: /etc/scrapyd/conf.d
           {{- end }}
           ports:
             - name: http

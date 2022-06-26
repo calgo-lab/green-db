@@ -8,6 +8,7 @@ from core.constants import (
     TABLE_NAME_SCRAPING_AMAZON,
     TABLE_NAME_SCRAPING_AMAZON_FR,
     TABLE_NAME_SCRAPING_ASOS,
+    TABLE_NAME_SCRAPING_HM,
     TABLE_NAME_SCRAPING_OTTO,
     TABLE_NAME_SCRAPING_ZALANDO_DE,
     TABLE_NAME_SCRAPING_ZALANDO_FR,
@@ -141,6 +142,18 @@ class AsosScrapingTable(ScrapingBaseTable, ScrapingTable):
     __tablename__ = TABLE_NAME_SCRAPING_ASOS
 
 
+class HMScrapingTable(ScrapingBaseTable, ScrapingTable):
+    """
+    The actual scraping table for H&M.
+
+    Args:
+        ScrapingBaseTable ([type]): `sqlalchemy` base class for the Scraping database
+        ScrapingTable ([type]): To inherit the table definition
+    """
+
+    __tablename__ = TABLE_NAME_SCRAPING_HM
+
+
 class AmazonScrapingTable(ScrapingBaseTable, ScrapingTable):
     """
     The actual scraping table for Amazon.
@@ -170,6 +183,7 @@ SCRAPING_TABLE_CLASS_FOR: Dict[str, Type[ScrapingTable]] = {
     TABLE_NAME_SCRAPING_ZALANDO_UK: ZalandoUkScrapingTable,
     TABLE_NAME_SCRAPING_OTTO: OTTOScrapingTable,
     TABLE_NAME_SCRAPING_ASOS: AsosScrapingTable,
+    TABLE_NAME_SCRAPING_HM: HMScrapingTable,
     TABLE_NAME_SCRAPING_AMAZON: AmazonScrapingTable,
     TABLE_NAME_SCRAPING_AMAZON_FR: AmazonFrScrapingTable,
 }

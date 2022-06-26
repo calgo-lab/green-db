@@ -1,21 +1,27 @@
 import json
-from pathlib import Path
+import pkgutil
+from logging import getLogger
 from typing import List
+
+logger = getLogger(__name__)
 
 gender_to_category = {"female": 28981, "male": 28982}
 
-asos_file_path = Path(__file__).parent.parent / "data/asos_product_types.json"
+asos_file_path = "data/asos_product_types.json"
 
 
-def read_json(path: Path) -> dict:
-    with open(path, "r", encoding="utf8") as f:
-        return json.loads(f.read())
+def read_json(path: str) -> dict:
+    if data := pkgutil.get_data("scraping", path):
+        return json.loads(data.decode("utf-8"))
+    else:
+        logger.error(f"Unable to read {path}")
+        return {}
 
 
 def combine_results(
     gender_mapping: dict,
     gender: str,
-    categories_json_path: Path,
+    categories_json_path: str,
     serp_api: str = "https://www.asos.com/api/product/search/v2/categories/",
     serp_filters: str = "&channel=mobile-web&country=FR&currency=EUR"
     "&keyStoreDataversion=dup0qtf-35&lang=fr-FR&limit=72&offset=0"

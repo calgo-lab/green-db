@@ -42,7 +42,8 @@ class AmazonSpider(BaseSpider):
                         "request_meta_information": {
                             "price": price.encode("ascii", "ignore").decode()
                         }
-                    },
+                    }
+                    | self.create_default_request_meta(response),
                     endpoint="execute",
                     priority=1,  # higher priority than SERP
                     args={  # passed to Splash HTTP API
@@ -64,7 +65,7 @@ class AmazonSpider(BaseSpider):
             yield SplashRequest(
                 url=next_page,
                 callback=self.parse_SERP,
-                meta={"original_URL": next_page},
+                meta=self.create_default_request_meta(response, original_url=next_page),
                 endpoint="execute",
                 args={  # passed to Splash HTTP API
                     "wait": self.request_timeout,
