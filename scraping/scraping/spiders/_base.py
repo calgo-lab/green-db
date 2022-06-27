@@ -23,25 +23,25 @@ from core.constants import (
 from core.domain import PageType, ScrapedPage
 
 from ..splash import minimal_script
-from ..start_scripts.amazon_de import get_settings as get_amazon_settings
+from ..start_scripts.amazon_de import get_settings as get_amazon_de_settings
 from ..start_scripts.amazon_fr import get_settings as get_amazon_fr_settings
-from ..start_scripts.asos_fr import get_settings as get_asos_settings
-from ..start_scripts.hm_fr import get_settings as get_hm_settings
-from ..start_scripts.otto_de import get_settings as get_otto_settings
-from ..start_scripts.zalando_de import get_settings as get_zalando_settings
+from ..start_scripts.asos_fr import get_settings as get_asos_fr_settings
+from ..start_scripts.hm_fr import get_settings as get_hm_fr_settings
+from ..start_scripts.otto_de import get_settings as get_otto_de_settings
+from ..start_scripts.zalando_de import get_settings as get_zalando_de_settings
 from ..start_scripts.zalando_fr import get_settings as get_zalando_fr_settings
 from ..start_scripts.zalando_uk import get_settings as get_zalando_uk_settings
 
 logger = getLogger(__name__)
 
 SETTINGS = {
-    TABLE_NAME_SCRAPING_OTTO_DE: get_otto_settings(),
-    TABLE_NAME_SCRAPING_ASOS_FR: get_asos_settings(),
-    TABLE_NAME_SCRAPING_ZALANDO_DE: get_zalando_settings(),
+    TABLE_NAME_SCRAPING_OTTO_DE: get_otto_de_settings(),
+    TABLE_NAME_SCRAPING_ASOS_FR: get_asos_fr_settings(),
+    TABLE_NAME_SCRAPING_ZALANDO_DE: get_zalando_de_settings(),
     TABLE_NAME_SCRAPING_ZALANDO_FR: get_zalando_fr_settings(),
     TABLE_NAME_SCRAPING_ZALANDO_GB: get_zalando_uk_settings(),
-    TABLE_NAME_SCRAPING_HM_FR: get_hm_settings(),
-    TABLE_NAME_SCRAPING_AMAZON_DE: get_amazon_settings(),
+    TABLE_NAME_SCRAPING_HM_FR: get_hm_fr_settings(),
+    TABLE_NAME_SCRAPING_AMAZON_DE: get_amazon_de_settings(),
     TABLE_NAME_SCRAPING_AMAZON_FR: get_amazon_fr_settings(),
 }
 
