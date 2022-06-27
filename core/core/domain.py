@@ -19,6 +19,24 @@ class CurrencyType(str, Enum):
     GBP = "GBP"
 
 
+class GenderType(str, Enum):
+    FEMALE = "FEMALE"
+    MALE = "MALE"
+    UNISEX = "UNISEX"
+    UNIDENTIFIED = "UNIDENTIFIED"
+    UNCLASSIFIED = "UNCLASSIFIED"
+
+
+class ConsumerLifestageType(str, Enum):
+    ADULT = "ADULT"
+    ALL_AGES = "ALL AGES"
+    BABY_INFANT = "BABY/INFANT"
+    CHILD_1_to_2_YEARS = "CHILD 1-2 YEARS"
+    CHILD_2_YEARS_ONWARDS = "CHILD 2 YEARS ONWARDS"
+    UNIDENTIFIED = "UNIDENTIFIED"
+    UNCLASSIFIED = "UNCLASSIFIED"
+
+
 class ScrapedPage(BaseModel):
     timestamp: datetime
     source: str
@@ -31,8 +49,8 @@ class ScrapedPage(BaseModel):
     meta_information: dict
 
     # TODO: Add class for gender and consumer_lifestage with values from GS1 GPC
-    gender: Optional[str]
-    consumer_lifestage: Optional[str]
+    gender: GenderType
+    consumer_lifestage: ConsumerLifestageType
 
     class Config:
         orm_mode = True
@@ -54,8 +72,8 @@ class Product(BaseModel):
     currency: CurrencyType
     image_urls: List[str]
 
-    gender: Optional[str]
-    consumer_lifestage: Optional[str]
+    gender: GenderType
+    consumer_lifestage: ConsumerLifestageType
     colors: Optional[List[str]]
     sizes: Optional[List[str]]
 

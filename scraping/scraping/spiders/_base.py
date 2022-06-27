@@ -94,15 +94,15 @@ class BaseSpider(Spider):
 
         if start_urls:
             self.start_urls = start_urls
-            if category and meta_data:
+            if category and meta_data and gender and consumer_lifestage:
                 self.category = category
                 self.meta_data = meta_data
-                # gender and consumer_liefestage will be None if not set
                 self.gender = gender
                 self.consumer_lifestage= consumer_lifestage
             else:
                 logger.error(
-                    "When setting 'start_urls', 'category' & 'meta_data' also needs to be set."
+                    "When setting 'start_urls', 'category', 'gender', 'consumer_lifestage' & "
+                    "'meta_data' also needs to be set."
                 )
         else:
             logger.info("Spider will be initialized using start_script.")
