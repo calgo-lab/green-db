@@ -25,8 +25,6 @@ def test_otto_basic(requests_mock: Adapter) -> None:
     country = "DE"
     file_name = "electronics-fridge.html"
     category = "FRIDGE"
-    gender = "UNCLASSIFIED"
-    consumer_lifestage = "UNCLASSIFIED"
     meta_information = {"family": "electronics"}
 
     scraped_page = read_test_html(
@@ -36,8 +34,6 @@ def test_otto_basic(requests_mock: Adapter) -> None:
         country=country,
         file_name=file_name,
         category=category,
-        gender=gender,
-        consumer_lifestage=consumer_lifestage,
         meta_information=meta_information,
         url=url,
     )
@@ -50,8 +46,8 @@ def test_otto_basic(requests_mock: Adapter) -> None:
         merchant=merchant,
         country=country,
         category=category,
-        gender=gender,
-        consumer_lifestage=consumer_lifestage,
+        gender=None,
+        consumer_lifestage=None,
         name="Samsung Side-by-Side RS6GA884CSL, 178 cm hoch, 91,2 cm breit",
         description="Samsung Side-by-Side RS6GA884CSL, 178 cm hoch, 91,2 cm breit für 1.999,"
         "00€. Nutzinhalt: 635 Liter, No Frost – nie wieder abtauen!, Metal Cooling "

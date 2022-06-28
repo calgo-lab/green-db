@@ -25,8 +25,6 @@ def test_otto_basic(requests_mock: Adapter) -> None:
     country = "DE"
     file_name = "electronics-fridge-old-energy-label.html"
     category = "FRIDGE"
-    gender = "UNCLASSIFIED"
-    consumer_lifestage = "UNCLASSIFIED"
     meta_information = {"family": "electronics"}
 
     scraped_page = read_test_html(
@@ -36,8 +34,6 @@ def test_otto_basic(requests_mock: Adapter) -> None:
         country=country,
         file_name=file_name,
         category=category,
-        gender=gender,
-        consumer_lifestage=consumer_lifestage,
         meta_information=meta_information,
         url=url,
     )
@@ -50,8 +46,8 @@ def test_otto_basic(requests_mock: Adapter) -> None:
         merchant=merchant,
         country=country,
         category=category,
-        gender=gender,
-        consumer_lifestage=consumer_lifestage,
+        gender=None,
+        consumer_lifestage=None,
         name="Privileg Family Edition Pyrolyse Backofen »PBWR6 OP8V2 IN«, "
         "mit 2-fach-Teleskopauszug, Pyrolyse-Selbstreinigung, 50 Monate Herstellergarantie",
         description="Privileg Family Edition Pyrolyse Backofen »PBWR6 OP8V2 IN«, "

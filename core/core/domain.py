@@ -48,9 +48,8 @@ class ScrapedPage(BaseModel):
     category: str
     meta_information: dict
 
-    # TODO: Add class for gender and consumer_lifestage with values from GS1 GPC
-    gender: GenderType
-    consumer_lifestage: ConsumerLifestageType
+    gender: Optional[GenderType]
+    consumer_lifestage: Optional[ConsumerLifestageType]
 
     class Config:
         orm_mode = True
@@ -72,8 +71,8 @@ class Product(BaseModel):
     currency: CurrencyType
     image_urls: List[str]
 
-    gender: GenderType
-    consumer_lifestage: ConsumerLifestageType
+    gender: Optional[GenderType]
+    consumer_lifestage: Optional[ConsumerLifestageType]
     colors: Optional[List[str]]
     sizes: Optional[List[str]]
 

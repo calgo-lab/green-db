@@ -137,8 +137,6 @@ def household() -> List[dict]:
             {
                 "start_urls": f"{base_path}/{path}/{filter}",
                 "category": category,
-                "gender": "UNCLASSIFIED",
-                "consumer_lifestage": "UNCLASSIFIED",
                 "meta_data": json.dumps({"family": "electronics"}),
             }
         )

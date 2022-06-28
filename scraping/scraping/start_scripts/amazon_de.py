@@ -1,12 +1,12 @@
 import json
-from typing import List
+from typing import List, Optional
 
 
 def combine_results(
     node_2_category: dict,
-    gender: str,
-    consumer_lifestage: str,
     metadata: dict,
+    gender: Optional[str]=None,
+    consumer_lifestage: Optional[str]=None,
 ) -> List[dict]:
     results = []
     for node, category in node_2_category.items():
@@ -82,8 +82,6 @@ def electronics() -> List[dict]:
 
     return combine_results(
         node_2_category,
-        gender="UNCLASSIFIED",
-        consumer_lifestage="UNCLASSIFIED",
         metadata={"family": "electronics"},
     )
 

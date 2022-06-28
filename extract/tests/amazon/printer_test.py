@@ -13,8 +13,6 @@ def test_amazon_electronics() -> None:
     country = "DE"
     file_name = "printer.html"
     category = "PRINTER"
-    gender = "UNCLASSIFIED"
-    consumer_lifestage = "UNCLASSIFIED"
     meta_information = {
         "family": "electronics",
         "price": "599,00",
@@ -27,8 +25,6 @@ def test_amazon_electronics() -> None:
         country=country,
         file_name=file_name,
         category=category,
-        gender=gender,
-        consumer_lifestage=consumer_lifestage,
         meta_information=meta_information,
         url=url,
     )
@@ -40,8 +36,8 @@ def test_amazon_electronics() -> None:
         merchant=merchant,
         country=country,
         category=category,
-        gender=gender,
-        consumer_lifestage=consumer_lifestage,
+        gender=None,
+        consumer_lifestage=None,
         name="Kyocera Klimaschutz-System Ecosys P3145dn Laserdrucker: Schwarz-Weiß, "
         "Duplex-Einheit, 45 Seiten pro Minute. Inkl. Mobile Print Funktion",
         description="Geben Sie Ihr Modell ein, um sicherzustellen, dass dieser Artikel passt.. "

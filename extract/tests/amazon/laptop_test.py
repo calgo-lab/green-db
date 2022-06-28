@@ -13,8 +13,6 @@ def test_amazon_electronics() -> None:
     country = "DE"
     file_name = "laptop.html"
     category = "LAPTOP"
-    gender = "UNCLASSIFIED"
-    consumer_lifestage = "UNCLASSIFIED"
     meta_information = {"family": "electronics", "price": "2998,0"}
 
     scraped_page = read_test_html(
@@ -24,8 +22,6 @@ def test_amazon_electronics() -> None:
         country=country,
         file_name=file_name,
         category=category,
-        gender=gender,
-        consumer_lifestage=consumer_lifestage,
         meta_information=meta_information,
         url=url,
     )
@@ -37,8 +33,8 @@ def test_amazon_electronics() -> None:
         merchant=merchant,
         country=country,
         category=category,
-        gender=gender,
-        consumer_lifestage=consumer_lifestage,
+        gender=None,
+        consumer_lifestage=None,
         name="Lenovo ThinkPad X1 Nano - Laptop Black 16GB RAM 1TB SSD",
         description="Lenovo ThinkPad X1 Nano Gen 1 Notebook 33 cm (13 Zoll), 2K "
         "(Intel Core i7-1160G7, 16 GB RAM, 1 TB SSD, Intel Iris Xe Graphics, Windows 10 Pro), "

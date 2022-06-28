@@ -93,7 +93,7 @@ class BaseSpider(Spider):
 
         if start_urls:
             self.start_urls = start_urls
-            if category and meta_data and gender and consumer_lifestage:
+            if category and meta_data:
                 self.category = category
                 self.meta_data = meta_data
                 self.gender = gender
