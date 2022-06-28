@@ -54,7 +54,7 @@ def extract_amazon(parsed_page: ParsedPage) -> Optional[Product]:
     price = _get_price(parsed_page)
     image_urls = _get_image_urls(soup)
 
-    currency = "EUR"
+    currency = "GBP" if language == "uk.co" else "EUR"
 
     sustainability_spans = soup.find_all("span", id=re.compile("CPF-BTF-Certificate-Name"))
     sustainability_texts = [span.text for span in sustainability_spans]
@@ -230,6 +230,10 @@ def _get_brand(soup: BeautifulSoup, language: str) -> Optional[str]:
         "fr": {
             "info": ("Visiter la boutique ", "Marque\xa0: "),
             "table": ("Marque", "Fabricant"),
+        },
+        "uk.co": {
+            "info": ("Visit the ", " Store", "Brand: "),
+            "table": ("Brand", "Manufacturer"),
         },
     }
 
