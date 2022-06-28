@@ -100,7 +100,7 @@ def _get_certificate_for_any_language(
     ]
 
 
-def safely_convert_attribute_to_array(attribute: Union[str, List[str]]) -> List[str]:
+def safely_convert_attribute_to_array(attribute: Union[str, List[str]]) -> Union[List[str], None]:
     """
     Helper function to convert an attribute to a list. If it's already a list `None` elements are
     removed.

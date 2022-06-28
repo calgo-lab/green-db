@@ -4,12 +4,6 @@ from datetime import datetime
 from logging import getLogger
 from typing import Any, Dict, Iterator, List, Optional, Union
 
-from message_queue import MessageQueue
-from scrapy import Spider
-from scrapy.http.response import Response as ScrapyHttpResponse
-from scrapy.http.response.text import TextResponse as ScrapyTextResponse
-from scrapy_splash import SplashJsonResponse, SplashRequest
-
 from core.constants import (
     TABLE_NAME_SCRAPING_AMAZON_DE,
     TABLE_NAME_SCRAPING_AMAZON_FR,
@@ -21,6 +15,11 @@ from core.constants import (
     TABLE_NAME_SCRAPING_ZALANDO_GB,
 )
 from core.domain import PageType, ScrapedPage
+from message_queue import MessageQueue
+from scrapy import Spider
+from scrapy.http.response import Response as ScrapyHttpResponse
+from scrapy.http.response.text import TextResponse as ScrapyTextResponse
+from scrapy_splash import SplashJsonResponse, SplashRequest
 
 from ..splash import minimal_script
 from ..start_scripts.amazon_de import get_settings as get_amazon_de_settings
@@ -99,7 +98,7 @@ class BaseSpider(Spider):
                 self.meta_data = meta_data
                 self.gender = gender
                 self.consumer_lifestage = consumer_lifestage
-            else
+            else:
                 logger.error(
                     "When setting 'start_urls', 'category', 'gender', 'consumer_lifestage' & "
                     "'meta_data' also needs to be set."

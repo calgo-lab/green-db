@@ -42,8 +42,9 @@ def female() -> List[dict]:
         "1981835031": "JACKET",
     }
 
-    return combine_results(node_2_category, gender="FEMALE", consumer_lifestage="ADULT",
-                           metadata={"family": "FASHION"})
+    return combine_results(
+        node_2_category, gender="FEMALE", consumer_lifestage="ADULT", metadata={"family": "FASHION"}
+    )
 
 
 def male() -> List[dict]:
@@ -66,8 +67,9 @@ def male() -> List[dict]:
         "1981365031": "JACKET",
     }
 
-    return combine_results(node_2_category, gender="MALE", consumer_lifestage="ADULT",
-                           metadata={"family": "FASHION"})
+    return combine_results(
+        node_2_category, gender="MALE", consumer_lifestage="ADULT", metadata={"family": "FASHION"}
+    )
 
 
 def electronics() -> List[dict]:
@@ -78,8 +80,12 @@ def electronics() -> List[dict]:
         "427955031": "PRINTER",
     }
 
-    return combine_results(node_2_category, gender="UNCLASSIFIED",
-                           consumer_lifestage="UNCLASSIFIED", metadata={"family": "electronics"})
+    return combine_results(
+        node_2_category,
+        gender="UNCLASSIFIED",
+        consumer_lifestage="UNCLASSIFIED",
+        metadata={"family": "electronics"},
+    )
 
 
 def get_settings() -> List[dict]:

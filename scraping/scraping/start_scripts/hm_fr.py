@@ -50,15 +50,19 @@ def combine_results(
 
 def male() -> List[dict]:
     return combine_results(
-        gender_mapping=gender_to_category, gender="MALE", consumer_lifestage="ADULT",
-        categories_json_path=hm_file_path
+        gender_mapping=gender_to_category,
+        gender="MALE",
+        consumer_lifestage="ADULT",
+        categories_json_path=hm_file_path,
     )
 
 
 def female() -> List[dict]:
     durable_categories = combine_results(
-        gender_mapping=gender_to_category, gender="FEMALE", consumer_lifestage="ADULT",
-        categories_json_path=hm_file_path
+        gender_mapping=gender_to_category,
+        gender="FEMALE",
+        consumer_lifestage="ADULT",
+        categories_json_path=hm_file_path,
     )
     higg_categories = combine_results(
         gender_mapping=gender_to_category,
