@@ -12,7 +12,7 @@ from pydantic import ValidationError
 from core.domain import CertificateType, Product
 
 from ..parse import ParsedPage
-from ..utils import safely_return_first_element, safely_convert_attribute_to_array
+from ..utils import safely_convert_attribute_to_array, safely_return_first_element
 
 logger = getLogger(__name__)
 

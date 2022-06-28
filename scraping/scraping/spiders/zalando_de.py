@@ -6,6 +6,7 @@ from urllib.parse import urlsplit
 from scrapy_splash import SplashJsonResponse, SplashRequest
 
 from core.constants import TABLE_NAME_SCRAPING_ZALANDO_DE
+
 from ..splash import minimal_script
 from ._base import BaseSpider
 

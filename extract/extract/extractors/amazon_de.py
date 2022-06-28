@@ -3,7 +3,7 @@
 # type: ignore[attr-defined]
 import re
 from logging import getLogger
-from typing import Any, Callable, Optional, List
+from typing import Any, Callable, List, Optional
 from urllib.parse import urlparse
 
 from bs4 import BeautifulSoup
@@ -12,7 +12,7 @@ from pydantic import ValidationError
 from core.domain import CertificateType, Product
 
 from ..parse import ParsedPage
-from ..utils import sustainability_labels_to_certificates, safely_convert_attribute_to_array
+from ..utils import safely_convert_attribute_to_array, sustainability_labels_to_certificates
 
 logger = getLogger(__name__)
 

@@ -9,6 +9,7 @@ from scrapy.http.request import Request as ScrapyHttpRequest
 from scrapy.http.response import Response as ScrapyHttpResponse
 
 from core.constants import TABLE_NAME_SCRAPING_ASOS_FR
+
 from ._base import BaseSpider
 
 logger = getLogger(__name__)

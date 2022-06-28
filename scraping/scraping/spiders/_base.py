@@ -98,8 +98,8 @@ class BaseSpider(Spider):
                 self.category = category
                 self.meta_data = meta_data
                 self.gender = gender
-                self.consumer_lifestage= consumer_lifestage
-            else:
+                self.consumer_lifestage = consumer_lifestage
+            else
                 logger.error(
                     "When setting 'start_urls', 'category', 'gender', 'consumer_lifestage' & "
                     "'meta_data' also needs to be set."

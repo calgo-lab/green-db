@@ -78,7 +78,7 @@ def test_amazon_basic_img() -> None:
             "https://m.media-amazon.com/images/I/41F+QWQPJ7L.jpg",
         ],
         colors=["Navy mit Schriftzug"],
-        sizes=['S', 'M', 'L', 'XL', 'XXL', '3XL'],
+        sizes=["S", "M", "L", "XL", "XXL", "3XL"],
         gtin=None,
         asin="B089658KBB",
     )

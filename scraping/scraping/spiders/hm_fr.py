@@ -10,6 +10,7 @@ from scrapy.http.response import Response as ScrapyHttpResponse
 from scrapy_playwright.page import PageMethod
 
 from core.constants import TABLE_NAME_SCRAPING_HM_FR
+
 from ._base import BaseSpider
 
 logger = getLogger(__name__)

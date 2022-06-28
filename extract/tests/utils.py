@@ -1,7 +1,7 @@
 from datetime import datetime
 from pathlib import Path
 
-from core.domain import PageType, ScrapedPage, ConsumerLifestageType, GenderType
+from core.domain import PageType, ScrapedPage
 
 TEST_DATA_DIR = Path(__file__).parent
 

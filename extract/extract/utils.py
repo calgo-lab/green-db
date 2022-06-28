@@ -46,7 +46,7 @@ def get_product_from_JSON_LD(json_ld: List[Any], else_return: Any = {}) -> Any:
 
 
 def sustainability_labels_to_certificates(
-        certificate_strings: list[str], certificate_mapping: dict
+    certificate_strings: list[str], certificate_mapping: dict
 ) -> list[str]:
     """
     Helper function that maps the extracted HTML span texts to certificates.
@@ -79,7 +79,7 @@ def sustainability_labels_to_certificates(
 
 
 def _get_certificate_for_any_language(
-        localized_certificate_infos: list[dict], certificate_strings: list[str]
+    localized_certificate_infos: list[dict], certificate_strings: list[str]
 ) -> list[dict]:
     """
     Helper function that checks if a certificate matches in a language with a certificate name.
@@ -112,7 +112,7 @@ def safely_convert_attribute_to_array(attribute: Union[str, List[str]]) -> List[
     Returns:
         list[str]: `list` with `str` objects holding the attribute information.
     """
-    attributes_to_remove = [None, 'None']
+    attributes_to_remove = [None, "None"]
 
     if isinstance(attribute, str):
         if attribute in attributes_to_remove:

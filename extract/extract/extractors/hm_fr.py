@@ -15,8 +15,11 @@ from pydantic import ValidationError
 from core.domain import CertificateType, Product
 
 from ..parse import JSON_LD, ParsedPage
-from ..utils import get_product_from_JSON_LD, safely_return_first_element, \
-    safely_convert_attribute_to_array
+from ..utils import (
+    get_product_from_JSON_LD,
+    safely_convert_attribute_to_array,
+    safely_return_first_element,
+)
 
 logger = getLogger(__name__)
 
@@ -58,7 +61,8 @@ def extract_hm_fr(parsed_page: ParsedPage) -> Optional[Product]:
 
     if product_data := _get_product_details(parsed_page.beautiful_soup):
         sizes = safely_convert_attribute_to_array(
-            [size.get("name") for size in product_data.get("sizes", [])])
+            [size.get("name") for size in product_data.get("sizes", [])]
+        )
 
     sustainability_labels = _get_sustainability(parsed_page.beautiful_soup, product_data)
 
