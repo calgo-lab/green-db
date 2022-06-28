@@ -67,6 +67,8 @@ class BaseSpider(Spider):
             timestamp (datetime): When was this scraping run started
             start_urls (Optional[Union[str, List[str]]], optional): URL the spider should start at
             category (Optional[str], optional): All products found belong to this category
+            gender (Optional[str]): All products found belong to this gender
+            consumer_lifestage (Optional[str]): All products found belong to this consumer_lifestage
             search_term (Optional[str], optional): Meta information about this scraping run.
                 Defaults to None.
             meta_data (Optional[Union[str, Dict[str, str]]], optional): Additional meta information
@@ -75,39 +77,38 @@ class BaseSpider(Spider):
                 scraped for each starting page. Defaults to None.
         """
 
-        # set default value
-        self.request_timeout = getattr(self, "request_timeout", 0.5)
-        self.table_name: str = getattr(self, "table_name", self.name)  # type: ignore
-        self.StartRequest = SplashRequest  # default StartRequest is set to SplashRequest
-
-        self.merchant, self.country = self.name.split("_")
-        self.source = self.merchant  # TODO: change when source is no more equal to merchant
+        if not self.name:
+            logger.error("It's necessary to set the Spider's 'name' attribute.")
 
         super().__init__(name=self.name, **kwargs)
+        self.table_name: str = getattr(self, "table_name", self.name)  # type: ignore
+        self.merchant, self.country = self.name.rsplit("_", 1)
+
+        # set default value
+        self.request_timeout = getattr(self, "request_timeout", 0.5)
+        self.StartRequest = SplashRequest  # default StartRequest is set to SplashRequest
+        self.source = self.merchant  # TODO: change when source is no more equal to merchant
 
         self.timestamp = timestamp
         self.message_queue = MessageQueue()
 
-        if not self.name:
-            logger.error("It's necessary to set the Spider's 'name' attribute.")
-
         if start_urls:
             self.start_urls = start_urls
-            if category and meta_data:
+            if category:
                 self.category = category
                 self.meta_data = meta_data
                 self.gender = gender
                 self.consumer_lifestage = consumer_lifestage
+                if search_term and self.meta_data:
+                    self.meta_data |= {"search_term": search_term}  # type: ignore
+                elif search_term:
+                    self.meta_data = {"search_term": search_term}  # type: ignore
             else:
                 logger.error(
-                    "When setting 'start_urls', 'category', 'gender', 'consumer_lifestage' & "
-                    "'meta_data' also needs to be set."
+                    "When setting 'start_urls', 'category', also needs to be set."
                 )
         else:
             logger.info("Spider will be initialized using start_script.")
-
-        if search_term:
-            self.meta_data["search_term"] = search_term  # type: ignore
 
         # By default there will be no limit to the amount of products scraped per page
         self.products_per_page = int(products_per_page) if products_per_page else products_per_page
@@ -141,13 +142,14 @@ class BaseSpider(Spider):
         Returns:
             dict: meta_data represented as dict.
         """
-
-        meta_data = json.loads(meta_data) if isinstance(meta_data, str) else meta_data  # type: ignore # noqa
-        if isinstance(meta_data, dict):
-            return meta_data  # type: ignore
-        else:
-            logger.error("Argument 'meta_data' need to be of type dict or serialized JSON string.")
-            return None  # type: ignore
+        if meta_data:
+            meta_data = json.loads(meta_data) if isinstance(meta_data, str) else meta_data  # type: ignore # noqa
+            if isinstance(meta_data, dict):
+                return meta_data  # type: ignore
+            else:
+                logger.error("Argument 'meta_data' need to be of type dict or serialized JSON string.")
+                return None  # type: ignore
+        return None
 
     def start_requests(self) -> Iterator[SplashRequest]:
         """
@@ -235,8 +237,10 @@ class BaseSpider(Spider):
             response (SplashJsonResponse): Response from a performed request
         """
 
-        request_meta_information = response.meta.get("request_meta_information", {})
-        meta_information = response.meta.get("meta_data") | request_meta_information
+        if meta_information := response.meta.get("meta_data"):
+            meta_information |= response.meta.get("request_meta_information", {})
+        else:
+            meta_information = response.meta.get("request_meta_information")
 
         scraped_page = ScrapedPage(
             timestamp=self.timestamp,

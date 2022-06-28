@@ -46,7 +46,7 @@ class ScrapedPage(BaseModel):
     html: str
     page_type: PageType
     category: str
-    meta_information: dict
+    meta_information: Optional[dict]
 
     gender: Optional[GenderType]
     consumer_lifestage: Optional[ConsumerLifestageType]
