@@ -44,12 +44,12 @@ class ScrapedPage(BaseModel):
     country: str
     url: str
     html: str
-    page_type: PageType
     category: str
-    meta_information: Optional[dict]
-
     gender: Optional[GenderType]
     consumer_lifestage: Optional[ConsumerLifestageType]
+
+    page_type: PageType
+    meta_information: Optional[dict]
 
     class Config:
         orm_mode = True
