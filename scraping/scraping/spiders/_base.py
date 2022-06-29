@@ -20,7 +20,7 @@ from core.constants import (
     TABLE_NAME_SCRAPING_ZALANDO_FR,
     TABLE_NAME_SCRAPING_ZALANDO_GB,
 )
-from core.domain import PageType, ScrapedPage
+from core.domain import CountryType, GenderType, PageType, ScrapedPage
 
 from ..splash import minimal_script
 from ..start_scripts.amazon_de import get_settings as get_amazon_de_settings
@@ -83,7 +83,10 @@ class BaseSpider(Spider):
 
         super().__init__(name=self.name, **kwargs)
         self.table_name: str = getattr(self, "table_name", self.name)  # type: ignore
-        self.merchant, self.country = self.name.rsplit("_", 1)
+
+        merchant, country = self.name.rsplit("_", 1)
+        self.merchant = merchant
+        self.country = CountryType(country)
 
         # set default value
         self.request_timeout = getattr(self, "request_timeout", 0.5)
@@ -222,7 +225,7 @@ class BaseSpider(Spider):
             html=response.body.decode("utf-8"),
             page_type=PageType.SERP,
             category=response.meta.get("category"),
-            gender=response.meta.get("gender"),
+            gender=GenderType(response.meta.get("gender")),
             consumer_lifestage=response.meta.get("consumer_lifestage"),
             meta_information=response.meta.get("meta_data"),
         )
@@ -252,7 +255,7 @@ class BaseSpider(Spider):
             html=response.body.decode("utf-8"),
             page_type=PageType.PRODUCT,
             category=response.meta.get("category"),
-            gender=response.meta.get("gender"),
+            gender=GenderType(response.meta.get("gender")),
             consumer_lifestage=response.meta.get("consumer_lifestage"),
             meta_information=meta_information,
         )

@@ -2,20 +2,20 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
-from core.domain import PageType, ScrapedPage
+from core.domain import ConsumerLifestageType, CountryType, GenderType, PageType, ScrapedPage
 
 
 def read_test_html(
     timestamp: str,
     source: str,
     merchant: str,
-    country: str,
+    country: CountryType,
     file_name: str,
     category: str,
     meta_information: dict,
     url: str = "dummy_url",
-    gender: Optional[str] = None,
-    consumer_lifestage: Optional[str] = None,
+    gender: Optional[GenderType] = None,
+    consumer_lifestage: Optional[ConsumerLifestageType] = None,
 ) -> ScrapedPage:
     path = TEST_DATA_DIR / merchant / "data" / file_name
     with open(path, encoding="utf-8") as f:
