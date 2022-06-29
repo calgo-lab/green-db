@@ -16,8 +16,8 @@ from core.domain import CertificateType, Product
 
 from ..parse import JSON_LD, ParsedPage
 from ..utils import (
+    check_and_create_attributes_list,
     get_product_from_JSON_LD,
-    safely_convert_attribute_to_array,
     safely_return_first_element,
 )
 
@@ -44,7 +44,7 @@ def extract_hm_fr(parsed_page: ParsedPage) -> Optional[Product]:
     name = meta_data.get("name", None)
     description = meta_data.get("description", None)
     brand = meta_data.get("brand", {}).get("name", None)
-    colors = safely_convert_attribute_to_array(meta_data.get("color", None))
+    colors = check_and_create_attributes_list(meta_data.get("color", None))
 
     first_offer = safely_return_first_element(meta_data.get("offers", [{}]))
     currency = first_offer.get("priceCurrency", None)
@@ -60,7 +60,7 @@ def extract_hm_fr(parsed_page: ParsedPage) -> Optional[Product]:
         price = float(price)
 
     if product_data := _get_product_details(parsed_page.beautiful_soup):
-        sizes = safely_convert_attribute_to_array(
+        sizes = check_and_create_attributes_list(
             [size.get("name") for size in product_data.get("sizes", [])]
         )
 

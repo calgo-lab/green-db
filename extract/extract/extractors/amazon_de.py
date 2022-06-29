@@ -12,7 +12,7 @@ from pydantic import ValidationError
 from core.domain import CertificateType, Product
 
 from ..parse import ParsedPage
-from ..utils import safely_convert_attribute_to_array, sustainability_labels_to_certificates
+from ..utils import check_and_create_attributes_list, sustainability_labels_to_certificates
 
 logger = getLogger(__name__)
 
@@ -49,8 +49,8 @@ def extract_amazon_de(parsed_page: ParsedPage) -> Optional[Product]:
     soup = parsed_page.beautiful_soup
 
     name = soup.find("span", {"id": "productTitle"}).text.strip()
-    colors = safely_convert_attribute_to_array(_get_color(soup))
-    sizes = safely_convert_attribute_to_array(_get_sizes(soup))
+    colors = check_and_create_attributes_list(_get_color(soup))
+    sizes = check_and_create_attributes_list(_get_sizes(soup))
     price = _get_price(parsed_page)
     image_urls = _get_image_urls(soup)
 

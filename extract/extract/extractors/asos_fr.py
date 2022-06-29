@@ -12,7 +12,7 @@ from pydantic import ValidationError
 from core.domain import CertificateType, Product
 
 from ..parse import ParsedPage
-from ..utils import safely_convert_attribute_to_array, safely_return_first_element
+from ..utils import check_and_create_attributes_list, safely_return_first_element
 
 logger = getLogger(__name__)
 
@@ -36,7 +36,7 @@ def extract_asos_fr(parsed_page: ParsedPage) -> Optional[Product]:
     brand = page_json.get("brand", {}).get("name", None)
     first_offer = safely_return_first_element(page_json.get("variants", [{}]))
 
-    colors = safely_convert_attribute_to_array(first_offer.get("colour", None))
+    colors = check_and_create_attributes_list(first_offer.get("colour", None))
     currency = first_offer.get("price", {}).get("currency", None)
 
     images = page_json.get("media", {}).get("images", {})

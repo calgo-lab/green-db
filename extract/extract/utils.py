@@ -100,7 +100,7 @@ def _get_certificate_for_any_language(
     ]
 
 
-def safely_convert_attribute_to_array(attribute: Union[str, List[str]]) -> Union[List[str], None]:
+def check_and_create_attributes_list(attributes: Union[str, List[str]]) -> Union[List[str], None]:
     """
     Helper function to convert an attribute to a list. If it's already a list `None` elements are
     removed.
@@ -114,10 +114,10 @@ def safely_convert_attribute_to_array(attribute: Union[str, List[str]]) -> Union
     """
     attributes_to_remove = [None, "None"]
 
-    if isinstance(attribute, str):
-        if attribute in attributes_to_remove:
+    if isinstance(attributes, str):
+        if attributes in attributes_to_remove:
             return None
-        return [attribute]
-    elif isinstance(attribute, List):
-        return list(filter(lambda attr: attr not in attributes_to_remove, attribute))
+        return [attributes]
+    elif isinstance(attributes, List):
+        return list(filter(lambda attr: attr not in attributes_to_remove, attributes))
     return None
