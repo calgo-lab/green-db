@@ -2,6 +2,7 @@
 # For this reason, we ignore those errors here.
 # type: ignore[attr-defined]
 import re
+from enum import Enum
 from logging import getLogger
 from typing import Any, Callable, Optional
 from urllib.parse import urlparse
@@ -34,6 +35,28 @@ _LABEL_MAPPING = {
 }
 
 
+class _Language(Enum):
+    de = "de"
+    fr = "fr"
+    en = "uk.co"
+
+
+_LANGUAGE_LOCALES = {
+    _Language.de: {
+        "info": ("Besuche den ", "-Store", "Marke: "),
+        "table": ("Marke", "Hersteller"),
+    },
+    _Language.fr: {
+        "info": ("Visiter la boutique ", "Marque\xa0: "),
+        "table": ("Marque", "Fabricant"),
+    },
+    _Language.en: {
+        "info": ("Visit the ", " Store", "Brand: "),
+        "table": ("Brand", "Manufacturer"),
+    },
+}
+
+
 def extract_amazon(parsed_page: ParsedPage) -> Optional[Product]:
     """
     Extracts information of interest from HTML (and other intermediate representations)
@@ -45,7 +68,10 @@ def extract_amazon(parsed_page: ParsedPage) -> Optional[Product]:
     Returns:
         Optional[Product]: Valid `Product` object or `None` if extraction failed
     """
-    language = re.sub("www\.amazon\.", "", urlparse(parsed_page.scraped_page.url).netloc)  # noqa
+    top_level_domain = re.sub(
+        "www\.amazon\.", "", urlparse(parsed_page.scraped_page.url).netloc  # noqa
+    )
+    language = _Language(top_level_domain)
     soup = parsed_page.beautiful_soup
 
     name = soup.find("span", {"id": "productTitle"}).text.strip()
@@ -54,7 +80,7 @@ def extract_amazon(parsed_page: ParsedPage) -> Optional[Product]:
     price = _get_price(parsed_page)
     image_urls = _get_image_urls(soup)
 
-    currency = "GBP" if language == "uk.co" else "EUR"
+    currency = "GBP" if language == _Language.en else "EUR"
 
     sustainability_spans = soup.find_all("span", id=re.compile("CPF-BTF-Certificate-Name"))
     sustainability_texts = [span.text for span in sustainability_spans]
@@ -222,25 +248,10 @@ def _get_brand(soup: BeautifulSoup, language: str) -> Optional[str]:
         soup.find("div", {"id": "bylineInfo_feature_div"}).a.text,
     ]
 
-    _LANGUAGE_LOCALES = {
-        "de": {
-            "info": ("Besuche den ", "-Store", "Marke: "),
-            "table": ("Marke", "Hersteller"),
-        },
-        "fr": {
-            "info": ("Visiter la boutique ", "Marque\xa0: "),
-            "table": ("Marque", "Fabricant"),
-        },
-        "uk.co": {
-            "info": ("Visit the ", " Store", "Brand: "),
-            "table": ("Brand", "Manufacturer"),
-        },
-    }
-
     def parse_brand(brand: str) -> Optional[str]:
         info_locales = _LANGUAGE_LOCALES[language]["info"]
         if brand.startswith(info_locales[0]):
-            if language == "de":
+            if language == _Language.de:
                 return brand[len(info_locales[0]) : -len(info_locales[1])]  # noqa
             else:
                 return brand[len(info_locales[0]) :]  # noqa
