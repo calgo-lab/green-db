@@ -10,11 +10,7 @@ certificates = load_and_get_sustainability_labels()
 def _get_localized_certificate_attribute(
     certificate_information: Dict[str, Dict[str, Any]],
     attribute: str,
-    language_order: List[str] = [
-        CountryType.DE.value.lower(),
-        CountryType.EN.value.lower(),
-        CountryType.FR.value.lower(),
-    ],
+    language_order: List[str] = ["de", "en", "fr"], # TODO: replace with enum?
 ) -> str:
     """
     Helper function to retrieve an `attribute` from `certificate_information`
