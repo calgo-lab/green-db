@@ -21,7 +21,7 @@ class CurrencyType(str, Enum):
 
 class CountryType(str, Enum):
     DE = "DE"
-    EN = "EN"
+    GB = "GB"
     FR = "FR"
 
 
