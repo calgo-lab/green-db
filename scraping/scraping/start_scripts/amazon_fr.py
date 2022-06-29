@@ -43,7 +43,7 @@ def female() -> List[dict]:
         node_2_category,
         gender="FEMALE",
         consumer_lifestage="ADULT",
-        metadata={"family": "FASHION", "sex": "FEMALE"},
+        metadata={"family": "FASHION"},
     )
 
 
@@ -66,7 +66,7 @@ def male() -> List[dict]:
         node_2_category,
         gender="MALE",
         consumer_lifestage="ADULT",
-        metadata={"family": "FASHION", "sex": "MALE"},
+        metadata={"family": "FASHION"},
     )
 
 

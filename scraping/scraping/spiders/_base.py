@@ -147,7 +147,7 @@ class BaseSpider(Spider):
                 return meta_data  # type: ignore
             else:
                 logger.error(
-                    "Argument 'meta_data' needs to be of type dict or serialized JSON " "string."
+                    "Argument 'meta_data' needs to be of type dict or serialized JSON string."
                 )
                 return None  # type: ignore
         return None
