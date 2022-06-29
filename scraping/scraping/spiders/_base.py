@@ -4,6 +4,12 @@ from datetime import datetime
 from logging import getLogger
 from typing import Any, Dict, Iterator, List, Optional, Union
 
+from message_queue import MessageQueue
+from scrapy import Spider
+from scrapy.http.response import Response as ScrapyHttpResponse
+from scrapy.http.response.text import TextResponse as ScrapyTextResponse
+from scrapy_splash import SplashJsonResponse, SplashRequest
+
 from core.constants import (
     TABLE_NAME_SCRAPING_AMAZON_DE,
     TABLE_NAME_SCRAPING_AMAZON_FR,
@@ -15,11 +21,6 @@ from core.constants import (
     TABLE_NAME_SCRAPING_ZALANDO_GB,
 )
 from core.domain import PageType, ScrapedPage
-from message_queue import MessageQueue
-from scrapy import Spider
-from scrapy.http.response import Response as ScrapyHttpResponse
-from scrapy.http.response.text import TextResponse as ScrapyTextResponse
-from scrapy_splash import SplashJsonResponse, SplashRequest
 
 from ..splash import minimal_script
 from ..start_scripts.amazon_de import get_settings as get_amazon_de_settings
@@ -104,9 +105,7 @@ class BaseSpider(Spider):
                 elif search_term:
                     self.meta_data = {"search_term": search_term}  # type: ignore
             else:
-                logger.error(
-                    "When setting 'start_urls', 'category', also needs to be set."
-                )
+                logger.error("When setting 'start_urls', 'category', also needs to be set.")
         else:
             logger.info("Spider will be initialized using start_script.")
 
@@ -132,7 +131,7 @@ class BaseSpider(Spider):
             return start_urls.split(",") if type(start_urls) == str else start_urls  # type: ignore
 
     @staticmethod
-    def parse_meta_data(meta_data: Union[Dict[str, str], str]) -> dict:  # type: ignore
+    def parse_meta_data(meta_data: Union[Dict[str, str], str]) -> Union[dict, None]:  # type: ignore
         """
         Helper method to parse meta_data.
 
@@ -147,7 +146,9 @@ class BaseSpider(Spider):
             if isinstance(meta_data, dict):
                 return meta_data  # type: ignore
             else:
-                logger.error("Argument 'meta_data' need to be of type dict or serialized JSON string.")
+                logger.error(
+                    "Argument 'meta_data' needs to be of type dict or serialized JSON " "string."
+                )
                 return None  # type: ignore
         return None
 

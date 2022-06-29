@@ -5,8 +5,8 @@ from typing import List, Optional
 def combine_results(
     node_2_category: dict,
     metadata: dict,
-    gender: Optional[str]=None,
-    consumer_lifestage: Optional[str]=None,
+    gender: Optional[str] = None,
+    consumer_lifestage: Optional[str] = None,
 ) -> List[dict]:
     results = []
     for node, category in node_2_category.items():
