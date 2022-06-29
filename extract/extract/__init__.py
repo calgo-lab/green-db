@@ -1,3 +1,6 @@
+# Because we ignored the files `zalando_de.py` and `otto_de.py` we have to skip them here as well
+# type: ignore[attr-defined]
+
 from typing import Optional
 
 from core import log
@@ -13,15 +16,14 @@ from core.constants import (
 )
 from core.domain import Product, ScrapedPage
 
-# Because we ignored the files `zalando_de.py` and `otto_de.py` we have to skip them here as well
-from .extractors.amazon_de import extract_amazon_de  # type: ignore[attr-defined]
-from .extractors.amazon_fr import extract_amazon_fr  # type: ignore[attr-defined]
-from .extractors.asos_fr import extract_asos_fr  # type: ignore[attr-defined]
-from .extractors.hm_fr import extract_hm_fr  # type: ignore[attr-defined]
-from .extractors.otto_de import extract_otto_de  # type: ignore[attr-defined]
-from .extractors.zalando_de import extract_zalando_de  # type: ignore[attr-defined]
-from .extractors.zalando_fr import extract_zalando_fr  # type: ignore[attr-defined]
-from .extractors.zalando_gb import extract_zalando_uk  # type: ignore[attr-defined]
+from .extractors.amazon_de import extract_amazon_de
+from .extractors.amazon_fr import extract_amazon_fr
+from .extractors.asos_fr import extract_asos_fr
+from .extractors.hm_fr import extract_hm_fr
+from .extractors.otto_de import extract_otto_de
+from .extractors.zalando_de import extract_zalando_de
+from .extractors.zalando_fr import extract_zalando_fr
+from .extractors.zalando_gb import extract_zalando_uk
 from .parse import parse_page
 
 log.setup_logger(__name__)
