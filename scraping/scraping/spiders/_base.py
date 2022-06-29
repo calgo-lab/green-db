@@ -226,7 +226,7 @@ class BaseSpider(Spider):
             page_type=PageType.SERP,
             category=response.meta.get("category"),
             gender=GenderType(response.meta.get("gender")),
-            consumer_lifestage=response.meta.get("consumer_lifestage"),
+            consumer_lifestage=ConsumerLifestageType(response.meta.get("consumer_lifestage")),
             meta_information=response.meta.get("meta_data"),
         )
 
@@ -256,7 +256,7 @@ class BaseSpider(Spider):
             page_type=PageType.PRODUCT,
             category=response.meta.get("category"),
             gender=GenderType(response.meta.get("gender")),
-            consumer_lifestage=response.meta.get("consumer_lifestage"),
+            consumer_lifestage=ConsumerLifestageType(response.meta.get("consumer_lifestage")),
             meta_information=meta_information,
         )
 
