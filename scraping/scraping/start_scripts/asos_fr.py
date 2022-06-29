@@ -31,7 +31,7 @@ def combine_results(
     results = []
     categories = read_json(categories_json_path)
     for id, info in categories.items():
-        mapping = info.get("mapping")
+        mapping = info.get("category")
         if mapping:  # exclude categories for which we do not have a mapping yet
             if gender in info.get("gender"):
                 category, meta_data = mapping if type(mapping) == list else (mapping, {})
