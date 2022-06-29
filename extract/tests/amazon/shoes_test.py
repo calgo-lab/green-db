@@ -1,5 +1,12 @@
 from core.constants import TABLE_NAME_SCRAPING_AMAZON_DE
-from core.domain import Product
+from core.domain import (
+    CertificateType,
+    ConsumerLifestageType,
+    CountryType,
+    CurrencyType,
+    GenderType,
+    Product,
+)
 from extract import extract_product
 
 from ..utils import read_test_html
@@ -10,11 +17,11 @@ def test_amazon_basic() -> None:
     url = "https://www.amazon.de/Think-Kong_3-000371-chromfrei-nachhaltige-Wechselfu%C3%9Fbett/dp/B08FSL34LS/ref=sr_1_2?qid=1651058159&refinements=p_n_cpf_eligible%3A22579885031&s=shoes&sr=1-2"  # noqa
     source = "amazon"
     merchant = "amazon"
-    country = "DE"
+    country = CountryType.DE
     file_name = "shoes.html"
     category = "SHOES"
-    gender = "MALE"
-    consumer_lifestage = "ADULT"
+    gender = GenderType.MALE
+    consumer_lifestage = ConsumerLifestageType.ADULT
     meta_information = {
         "family": "FASHION",
         "price": "77,62",
@@ -60,9 +67,9 @@ def test_amazon_basic() -> None:
         "orthopädische Einlagen oder später durch neue KONG Einlagen ausgetauscht werden können. "
         "Einige KONG Modelle wurden mit dem Österreichischen Umweltzeichen ausgezeichnet.",
         brand="Think!",
-        sustainability_labels=["certificate:BLUE_ANGEL"],
+        sustainability_labels=[CertificateType.BLUE_ANGEL],
         price=77.62,
-        currency="EUR",
+        currency=CurrencyType.EUR,
         image_urls=[
             "https://m.media-amazon.com/images/I/31qGkKiX4GL.jpg",
             "https://m.media-amazon.com/images/I/31CkE5Ya1IL.jpg",

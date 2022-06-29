@@ -1,5 +1,12 @@
 from core.constants import TABLE_NAME_SCRAPING_HM_FR
-from core.domain import Product
+from core.domain import (
+    CertificateType,
+    ConsumerLifestageType,
+    CountryType,
+    CurrencyType,
+    GenderType,
+    Product,
+)
 from extract import extract_product
 
 from ..utils import read_test_html
@@ -10,11 +17,11 @@ def test_hm_basic() -> None:
     url = "https://www2.hm.com/fr_fr/productpage.1061531002.html"
     source = "hm"
     merchant = "hm"
-    country = "FR"
+    country = CountryType.FR
     file_name = "femme-robe.html"
     category = "DRESS"
-    gender = "FEMALE"
-    consumer_lifestage = "ADULT"
+    gender = GenderType.FEMALE
+    consumer_lifestage = ConsumerLifestageType.ADULT
     meta_information = {
         "family": "FASHION",
     }
@@ -47,12 +54,12 @@ def test_hm_basic() -> None:
         "Fentes latérales. Non doublée.",
         brand="H&M",
         sustainability_labels=[
-            "certificate:HIGG_INDEX_MATERIALS",
-            "certificate:HM_CONSCIOUS",
-            "certificate:OTHER",
+            CertificateType.HIGG_INDEX_MATERIALS,
+            CertificateType.HM_CONSCIOUS,
+            CertificateType.OTHER,
         ],
         price=34.99,
-        currency="EUR",
+        currency=CurrencyType.EUR,
         image_urls=[
             "https://lp2.hm.com/hmgoepprod?set=quality%5B79%5D%2Csource%5B%2F9a%2F1d"
             "%2F9a1dcde9a8e1bfa9866256583cd0eef503d21f97.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B"

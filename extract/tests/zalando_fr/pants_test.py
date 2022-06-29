@@ -1,5 +1,12 @@
 from core.constants import TABLE_NAME_SCRAPING_ZALANDO_FR
-from core.domain import Product
+from core.domain import (
+    CertificateType,
+    ConsumerLifestageType,
+    CountryType,
+    CurrencyType,
+    GenderType,
+    Product,
+)
 from extract import extract_product
 
 from ..utils import read_test_html
@@ -10,11 +17,11 @@ def test_zalando_fr_basic() -> None:
     url = "https://www.zalando.mock/"
     source = "zalando"
     merchant = "zalando_fr"
-    country = "FR"
+    country = CountryType.FR
     file_name = "pants.html"
     category = "PANT"
-    gender = "FEMALE"
-    consumer_lifestage = "ADULT"
+    gender = GenderType.FEMALE
+    consumer_lifestage = ConsumerLifestageType.ADULT
     meta_information = {"family": "FASHION", "sustainability": "water_saving"}
 
     scraped_page = read_test_html(
@@ -42,9 +49,9 @@ def test_zalando_fr_basic() -> None:
         name="Pantalon classique - marine",
         description="Pantalon classique hessnatur Pantalon classique - marine marine/bleu: € 159,95 chez Zalando (au 2022-04-22). Livraison et retours gratuits* et service client gratuit au 0800 797 34.",  # noqa
         brand="hessnatur",
-        sustainability_labels=["certificate:OTHER"],
+        sustainability_labels=[CertificateType.OTHER],
         price=159.95,
-        currency="EUR",
+        currency=CurrencyType.EUR,
         image_urls=[
             "https://img01.ztat.net/article/spp-media-p1/06b423a888294f4dbbb8efa96e468457/5507c3b658844293828db28c2e30ba08.jpg?imwidth=103",  # noqa
             "https://img01.ztat.net/article/spp-media-p1/7267552eb1784d1b97dd69e1eacb5c97/05e940cac34241c098fd4b4c9c705a0a.jpg?imwidth=103",  # noqa

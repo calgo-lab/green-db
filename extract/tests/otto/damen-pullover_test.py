@@ -1,7 +1,14 @@
 from requests_mock import Adapter
 
 from core.constants import TABLE_NAME_SCRAPING_OTTO_DE
-from core.domain import Product
+from core.domain import (
+    CertificateType,
+    ConsumerLifestageType,
+    CountryType,
+    CurrencyType,
+    GenderType,
+    Product,
+)
 from extract import extract_product
 
 from ..utils import read_test_html
@@ -21,11 +28,11 @@ def test_otto_basic(requests_mock: Adapter) -> None:
     timestamp = "2022-02-17 12:49:00"
     source = "otto"
     merchant = "otto"
-    country = "DE"
+    country = CountryType.DE
     file_name = "damen-pullover.html"
     category = "SWEATER"
-    gender = "FEMALE"
-    consumer_lifestage = "ADULT"
+    gender = GenderType.FEMALE
+    consumer_lifestage = ConsumerLifestageType.ADULT
     meta_information = {"family": "FASHION"}
 
     scraped_page = read_test_html(
@@ -55,14 +62,14 @@ def test_otto_basic(requests_mock: Adapter) -> None:
         description="s.Oliver Strickpullover »Pullover« (1-tlg) für 29,99€. mit regulärer Passform,"
         " hat einen V-Ausschnitt, hat eine Rippblende am Ausschnitt bei OTTO",
         brand="s.Oliver",
-        sustainability_labels=["certificate:UNKNOWN"],
+        sustainability_labels=[CertificateType.UNKNOWN],
         image_urls=[
             "https://i.otto.mock/i/otto/c5580e48-fb81-5e76-aec5-eb68201af88a",
             "https://i.otto.mock/i/otto/f9ac60e4-ab47-5ae1-a449-25d4fe3d9307",
             "https://i.otto.mock/i/otto/1979af3b-ee61-52cb-bd64-1642ab0a65a7",
         ],
         price=29.99,
-        currency="EUR",
+        currency=CurrencyType.EUR,
         colors=None,
         sizes=None,
         gtin=4065208505739,

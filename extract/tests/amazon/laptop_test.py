@@ -1,5 +1,5 @@
 from core.constants import TABLE_NAME_SCRAPING_AMAZON_DE
-from core.domain import Product
+from core.domain import CertificateType, CountryType, CurrencyType, Product
 from extract import extract_product
 
 from ..utils import read_test_html
@@ -10,7 +10,7 @@ def test_amazon_electronics() -> None:
     url = "https://www.amazon.de/Lenovo-ThinkPad-i7-1160G7-Graphics-Windows/dp/B08WC37LYB/ref=sr_1_12?qid=1651408666&refinements=p_n_cpf_eligible%3A22579885031&s=computers&sr=1https://www.amazon.de/Lenovo-ThinkPad-i7-1160G7-Graphics-Windows/dp/B08WC37LYB/ref=sr_1_12?qid=1651408666&refinements=p_n_cpf_eligible%3A22579885031&s=computers&sr=1-12&th=1-12&th=1"  # noqa
     source = "amazon"
     merchant = "amazon"
-    country = "DE"
+    country = CountryType.DE
     file_name = "laptop.html"
     category = "LAPTOP"
     meta_information = {"family": "electronics", "price": "2998,0"}
@@ -40,9 +40,9 @@ def test_amazon_electronics() -> None:
         "(Intel Core i7-1160G7, 16 GB RAM, 1 TB SSD, Intel Iris Xe Graphics, Windows 10 Pro), "
         "Schwarz spanische QWERTY-Tastatur",
         brand="Lenovo",
-        sustainability_labels=["certificate:EPEAT"],
+        sustainability_labels=[CertificateType.EPEAT],
         price=2998.0,
-        currency="EUR",
+        currency=CurrencyType.EUR,
         image_urls=[
             "https://m.media-amazon.com/images/I/41q5QmxMFYL.jpg",
             "https://m.media-amazon.com/images/I/41ii1ViuGuL.jpg",

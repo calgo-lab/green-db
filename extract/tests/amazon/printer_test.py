@@ -1,5 +1,5 @@
 from core.constants import TABLE_NAME_SCRAPING_AMAZON_DE
-from core.domain import Product
+from core.domain import CertificateType, CountryType, CurrencyType, Product
 from extract import extract_product
 
 from ..utils import read_test_html
@@ -10,7 +10,7 @@ def test_amazon_electronics() -> None:
     url = "https://www.amazon.de/Kyocera-Klimaschutz-System-Ecosys-P3145dn-Laserdrucker/dp/B07TXRHFYS/ref=sr_1_23?qid=1651401368&refinements=p_n_cpf_eligible%3A22579885031&s=computers&sr=1-23&th=1%22"  # noqa
     source = "amazon"
     merchant = "amazon"
-    country = "DE"
+    country = CountryType.DE
     file_name = "printer.html"
     category = "PRINTER"
     meta_information = {
@@ -53,9 +53,9 @@ def test_amazon_electronics() -> None:
         "geeignet und konzipiert. Sicherheit: Umfangreiche, integrierte Sicherheitsfunktionen "
         "für Unternehmensnetzwerke durch SSL, IPsec und Vertraulichen Druck",
         brand="Kyocera",
-        sustainability_labels=["certificate:BLUE_ANGEL"],
+        sustainability_labels=[CertificateType.BLUE_ANGEL],
         price=599.00,
-        currency="EUR",
+        currency=CurrencyType.EUR,
         image_urls=[
             "https://m.media-amazon.com/images/I/41UAg0LchaL.jpg",
             "https://m.media-amazon.com/images/I/41ybCjXFRkL.jpg",

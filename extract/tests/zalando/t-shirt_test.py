@@ -1,5 +1,12 @@
 from core.constants import TABLE_NAME_SCRAPING_ZALANDO_DE
-from core.domain import Product
+from core.domain import (
+    CertificateType,
+    ConsumerLifestageType,
+    CountryType,
+    CurrencyType,
+    GenderType,
+    Product,
+)
 from extract import extract_product
 
 from ..utils import read_test_html
@@ -10,11 +17,11 @@ def test_zalando_basic() -> None:
     url = "https://www.zalando.mock/"
     source = "zalando"
     merchant = "zalando"
-    country = "DE"
+    country = CountryType.DE
     file_name = "t-shirt.html"
     category = "TSHIRT"
-    gender = "MALE"
-    consumer_lifestage = "ADULT"
+    gender = GenderType.MALE
+    consumer_lifestage = ConsumerLifestageType.ADULT
     meta_information = {
         "family": "FASHION",
         "sustainability": "reusing_materials",
@@ -46,9 +53,9 @@ def test_zalando_basic() -> None:
         description=" ARMEDANGELS JAAMES TURNTABLES - T-Shirt print - acid black für "
         "14,90\xa0€ (2022-04-22) versandkostenfrei bei Zalando bestellen.",
         brand="ARMEDANGELS",
-        sustainability_labels=["certificate:GOTS_ORGANIC"],
+        sustainability_labels=[CertificateType.GOTS_ORGANIC],
         price=14.90,
-        currency="EUR",
+        currency=CurrencyType.EUR,
         image_urls=[
             "https://img01.ztat.net/article/spp-media-p1/d477156d601a4d37801c933c3c80fb45/"
             "4ec5b5c24c3d4e9fb4cd424d18003622.jpg?imwidth=103&filter=packshot"

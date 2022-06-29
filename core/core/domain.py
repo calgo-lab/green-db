@@ -19,6 +19,12 @@ class CurrencyType(str, Enum):
     GBP = "GBP"
 
 
+class CountryType(str, Enum):
+    DE = "DE"
+    EN = "EN"
+    FR = "FR"
+
+
 class GenderType(str, Enum):
     FEMALE = "FEMALE"
     MALE = "MALE"
@@ -41,7 +47,7 @@ class ScrapedPage(BaseModel):
     timestamp: datetime
     source: str
     merchant: str
-    country: str
+    country: CountryType
     url: str
     html: str
     category: str
@@ -61,7 +67,7 @@ class Product(BaseModel):
     url: str
     source: str
     merchant: str
-    country: str
+    country: CountryType
     category: str
     name: str
     description: str

@@ -1,7 +1,7 @@
 from requests_mock import Adapter
 
 from core.constants import TABLE_NAME_SCRAPING_OTTO_DE
-from core.domain import Product
+from core.domain import CertificateType, CountryType, CurrencyType, Product
 from extract import extract_product
 
 from ..utils import read_test_html
@@ -22,7 +22,7 @@ def test_otto_basic(requests_mock: Adapter) -> None:
     timestamp = "2022-05-31 10:45:00"
     source = "otto"
     merchant = "otto"
-    country = "DE"
+    country = CountryType.DE
     file_name = "electronics-fridge-old-energy-label.html"
     category = "FRIDGE"
     meta_information = {"family": "electronics"}
@@ -54,14 +54,14 @@ def test_otto_basic(requests_mock: Adapter) -> None:
         "mit 2-fach-Teleskopauszug, Pyrolyse-Selbstreinigung, 50 Monate "
         "Herstellergarantie für 333,00€ bei OTTO",
         brand="Privileg Family Edition",
-        sustainability_labels=["certificate:UNKNOWN"],
+        sustainability_labels=[CertificateType.UNKNOWN],
         image_urls=[
             "https://i.otto.mock/i/otto/19651738",
             "https://i.otto.mock/i/otto/19651739",
             "https://i.otto.mock/i/otto/19651740",
         ],
         price=333.00,
-        currency="EUR",
+        currency=CurrencyType.EUR,
         colors=None,
         sizes=None,
         gtin=8003437938573,

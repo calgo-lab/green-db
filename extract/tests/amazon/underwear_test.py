@@ -1,5 +1,12 @@
 from core.constants import TABLE_NAME_SCRAPING_AMAZON_DE
-from core.domain import Product
+from core.domain import (
+    CertificateType,
+    ConsumerLifestageType,
+    CountryType,
+    CurrencyType,
+    GenderType,
+    Product,
+)
 from extract import extract_product
 
 from ..utils import read_test_html
@@ -10,11 +17,11 @@ def test_amazon_basic_img() -> None:
     url = "https://www.amazon.de/Romberg-Boxershorts-Bio-Baumwolle-kratzenden-nachhaltig/dp/B0932XK47G/ref=sr_1_7?qid=1652774791&refinements=p_n_cpf_eligible%3A22579885031&s=apparel&sr=1-7&th=1"  # noqa
     source = "amazon"
     merchant = "amazon"
-    country = "DE"
+    country = CountryType.DE
     file_name = "underwear.html"
     category = "UNDERWEAR"
-    gender = "MALE"
-    consumer_lifestage = "ADULT"
+    gender = GenderType.MALE
+    consumer_lifestage = ConsumerLifestageType.ADULT
     meta_information = {
         "family": "FASHION",
         "price": "49,95",
@@ -65,9 +72,9 @@ def test_amazon_basic_img() -> None:
         "Boxershorts gedruckt. So musst Du nie wieder lästige Etiketten aus Deiner "
         "Unterwäsche herausschneiden.",
         brand="Romberg",
-        sustainability_labels=["certificate:GOTS_MADE_WITH_ORGANIC_MATERIALS"],
+        sustainability_labels=[CertificateType.GOTS_MADE_WITH_ORGANIC_MATERIALS],
         price=49.95,
-        currency="EUR",
+        currency=CurrencyType.EUR,
         image_urls=[
             "https://m.media-amazon.com/images/I/41b6Pwz5lrL.jpg",
             "https://m.media-amazon.com/images/I/41ySTdJA8AL.jpg",

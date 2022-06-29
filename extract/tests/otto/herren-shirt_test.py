@@ -1,7 +1,14 @@
 from requests_mock import Adapter
 
 from core.constants import TABLE_NAME_SCRAPING_OTTO_DE
-from core.domain import Product
+from core.domain import (
+    CertificateType,
+    ConsumerLifestageType,
+    CountryType,
+    CurrencyType,
+    GenderType,
+    Product,
+)
 from extract import extract_product
 
 from ..utils import read_test_html
@@ -22,11 +29,11 @@ def test_otto_basic(requests_mock: Adapter) -> None:
     timestamp = "2022-04-19 12:49:00"
     source = "otto"
     merchant = "otto"
-    country = "DE"
+    country = CountryType.DE
     file_name = "herren-shirt.html"
     category = "SHIRT"
-    gender = "MALE"
-    consumer_lifestage = "ADULT"
+    gender = GenderType.MALE
+    consumer_lifestage = ConsumerLifestageType.ADULT
     meta_information = {"family": "FASHION"}
 
     scraped_page = read_test_html(
@@ -57,14 +64,14 @@ def test_otto_basic(requests_mock: Adapter) -> None:
         "99€. Kontrastfarbenes Band mit HIS Schriftzug im Ausschnitt, Pflegeleichtes "
         "Material bei OTTO",
         brand="H.I.S",
-        sustainability_labels=["certificate:UNKNOWN"],
+        sustainability_labels=[CertificateType.UNKNOWN],
         image_urls=[
             "https://i.otto.mock/i/otto/05cb3291-9921-5253-85d0-1e97c3dd5b37",
             "https://i.otto.mock/i/otto/77656fe2-ac3f-5242-9bb0-61b5d2f768a6",
             "https://i.otto.mock/i/otto/7072f590-6798-549a-bf2d-e8e82c6a6ed5",
         ],
         price=29.99,
-        currency="EUR",
+        currency=CurrencyType.EUR,
         colors=None,
         sizes=None,
         gtin=8907890476439,

@@ -1,5 +1,12 @@
 from core.constants import TABLE_NAME_SCRAPING_ASOS_FR
-from core.domain import Product
+from core.domain import (
+    CertificateType,
+    ConsumerLifestageType,
+    CountryType,
+    CurrencyType,
+    GenderType,
+    Product,
+)
 from extract import extract_product
 
 from ..utils import read_test_html
@@ -10,11 +17,11 @@ def test_asos_basic() -> None:
     url = "https://www.asos.com/fr/other-stories/other-stories-legging-de-yoga-cotele-densemble-en-tissu-recycle-beige-chine/prd/24068707"  # noqa
     source = "asos"
     merchant = "asos"
-    country = "FR"
+    country = CountryType.FR
     file_name = "legging.json"
     category = "PANT"
-    gender = "FEMALE"
-    consumer_lifestage = "ADULT"
+    gender = GenderType.FEMALE
+    consumer_lifestage = ConsumerLifestageType.ADULT
     meta_information = {
         "family": "FASHION",
     }
@@ -46,9 +53,9 @@ def test_asos_basic() -> None:
         "Soutien-gorge vendu séparément. Taille haute. Taille élastiquée. Coupe "
         "moulante. Flatte la silhouette",
         brand="& Other Stories",
-        sustainability_labels=["certificate:OTHER"],
+        sustainability_labels=[CertificateType.OTHER],
         price=49.0,
-        currency="EUR",
+        currency=CurrencyType.EUR,
         image_urls=[
             "images.asos-media.com/products/other-stories-legging-de-yoga-cotele-densemble-en-tissu-recycle-beige-chine/24068707-1-beigemelange",  # noqa
             "images.asos-media.com/products/other-stories-legging-de-yoga-cotele-densemble-en-tissu-recycle-beige-chine/24068707-2",  # noqa
