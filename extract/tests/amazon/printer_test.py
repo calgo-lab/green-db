@@ -53,7 +53,7 @@ def test_amazon_electronics() -> None:
         "geeignet und konzipiert. Sicherheit: Umfangreiche, integrierte Sicherheitsfunktionen "
         "für Unternehmensnetzwerke durch SSL, IPsec und Vertraulichen Druck",
         brand="Kyocera",
-        sustainability_labels=[CertificateType.BLUE_ANGEL],
+        sustainability_labels=[CertificateType.BLUE_ANGEL],  # type: ignore[attr-defined]
         price=599.00,
         currency=CurrencyType.EUR,
         image_urls=[

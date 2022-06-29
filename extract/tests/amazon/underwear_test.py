@@ -72,7 +72,7 @@ def test_amazon_basic_img() -> None:
         "Boxershorts gedruckt. So musst Du nie wieder lästige Etiketten aus Deiner "
         "Unterwäsche herausschneiden.",
         brand="Romberg",
-        sustainability_labels=[CertificateType.GOTS_MADE_WITH_ORGANIC_MATERIALS],
+        sustainability_labels=[CertificateType.GOTS_MADE_WITH_ORGANIC_MATERIALS],  # type: ignore[attr-defined]
         price=49.95,
         currency=CurrencyType.EUR,
         image_urls=[

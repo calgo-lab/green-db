@@ -64,7 +64,7 @@ def test_otto_basic(requests_mock: Adapter) -> None:
         "99€. Kontrastfarbenes Band mit HIS Schriftzug im Ausschnitt, Pflegeleichtes "
         "Material bei OTTO",
         brand="H.I.S",
-        sustainability_labels=[CertificateType.UNKNOWN],
+        sustainability_labels=[CertificateType.UNKNOWN],  # type: ignore[attr-defined]
         image_urls=[
             "https://i.otto.mock/i/otto/05cb3291-9921-5253-85d0-1e97c3dd5b37",
             "https://i.otto.mock/i/otto/77656fe2-ac3f-5242-9bb0-61b5d2f768a6",

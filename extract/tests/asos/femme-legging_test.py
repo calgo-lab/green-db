@@ -53,7 +53,7 @@ def test_asos_basic() -> None:
         "Soutien-gorge vendu séparément. Taille haute. Taille élastiquée. Coupe "
         "moulante. Flatte la silhouette",
         brand="& Other Stories",
-        sustainability_labels=[CertificateType.OTHER],
+        sustainability_labels=[CertificateType.OTHER],  # type: ignore[attr-defined]
         price=49.0,
         currency=CurrencyType.EUR,
         image_urls=[

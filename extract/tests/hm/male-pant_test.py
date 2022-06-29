@@ -58,8 +58,8 @@ def test_hm_basic() -> None:
         "aspect denim authentique.",
         brand="H&M",
         sustainability_labels=[
-            CertificateType.HM_CONSCIOUS,
-            CertificateType.OTHER,
+            CertificateType.HM_CONSCIOUS,  # type: ignore[attr-defined]
+            CertificateType.OTHER,  # type: ignore[attr-defined]
         ],
         price=29.99,
         currency=CurrencyType.EUR,

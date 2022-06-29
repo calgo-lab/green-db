@@ -54,9 +54,9 @@ def test_hm_basic() -> None:
         "Fentes latérales. Non doublée.",
         brand="H&M",
         sustainability_labels=[
-            CertificateType.HIGG_INDEX_MATERIALS,
-            CertificateType.HM_CONSCIOUS,
-            CertificateType.OTHER,
+            CertificateType.HIGG_INDEX_MATERIALS,  # type: ignore[attr-defined]
+            CertificateType.HM_CONSCIOUS,  # type: ignore[attr-defined]
+            CertificateType.OTHER,  # type: ignore[attr-defined]
         ],
         price=34.99,
         currency=CurrencyType.EUR,

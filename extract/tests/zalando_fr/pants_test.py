@@ -49,7 +49,7 @@ def test_zalando_fr_basic() -> None:
         name="Pantalon classique - marine",
         description="Pantalon classique hessnatur Pantalon classique - marine marine/bleu: € 159,95 chez Zalando (au 2022-04-22). Livraison et retours gratuits* et service client gratuit au 0800 797 34.",  # noqa
         brand="hessnatur",
-        sustainability_labels=[CertificateType.OTHER],
+        sustainability_labels=[CertificateType.OTHER],  # type: ignore[attr-defined]
         price=159.95,
         currency=CurrencyType.EUR,
         image_urls=[

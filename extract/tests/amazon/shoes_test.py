@@ -67,7 +67,7 @@ def test_amazon_basic() -> None:
         "orthopädische Einlagen oder später durch neue KONG Einlagen ausgetauscht werden können. "
         "Einige KONG Modelle wurden mit dem Österreichischen Umweltzeichen ausgezeichnet.",
         brand="Think!",
-        sustainability_labels=[CertificateType.BLUE_ANGEL],
+        sustainability_labels=[CertificateType.BLUE_ANGEL],  # type: ignore[attr-defined]
         price=77.62,
         currency=CurrencyType.EUR,
         image_urls=[
