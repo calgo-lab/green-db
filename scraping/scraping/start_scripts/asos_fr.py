@@ -3,9 +3,11 @@ import pkgutil
 from logging import getLogger
 from typing import List
 
+from core.domain import ConsumerLifestageType, GenderType
+
 logger = getLogger(__name__)
 
-gender_to_category = {"FEMALE": 28981, "MALE": 28982}
+gender_to_category = {GenderType.FEMALE.value: 28981, GenderType.MALE.value: 28982}
 
 asos_file_path = "data/asos_product_types.json"
 
@@ -51,8 +53,8 @@ def combine_results(
 def male() -> List[dict]:
     return combine_results(
         gender_mapping=gender_to_category,
-        gender="MALE",
-        consumer_lifestage="ADULT",
+        gender=GenderType.MALE.value,
+        consumer_lifestage=ConsumerLifestageType.ADULT.value,
         categories_json_path=asos_file_path,
     )
 
@@ -60,8 +62,8 @@ def male() -> List[dict]:
 def female() -> List[dict]:
     return combine_results(
         gender_mapping=gender_to_category,
-        gender="FEMALE",
-        consumer_lifestage="ADULT",
+        gender=GenderType.FEMALE.value,
+        consumer_lifestage=ConsumerLifestageType.ADULT.value,
         categories_json_path=asos_file_path,
     )
 

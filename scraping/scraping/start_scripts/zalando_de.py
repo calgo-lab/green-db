@@ -1,6 +1,8 @@
 import json
 from typing import List
 
+from core.domain import ConsumerLifestageType, GenderType
+
 
 def combine_results(
     path_2_category: dict,
@@ -62,7 +64,11 @@ def male() -> List[dict]:
         "sports-taschen-rucksaecke-herren": ("BAG", {"type": "SPORT"}),
     }
 
-    return combine_results(path_2_category, gender="MALE", consumer_lifestage="ADULT")
+    return combine_results(
+        path_2_category,
+        gender=GenderType.MALE.value,
+        consumer_lifestage=ConsumerLifestageType.ADULT.value,
+    )
 
 
 def female() -> List[dict]:
@@ -101,7 +107,11 @@ def female() -> List[dict]:
         "sports-taschen-rucksaecke-damen": ("BAG", {"type": "SPORT"}),
     }
 
-    return combine_results(path_2_category, gender="FEMALE", consumer_lifestage="ADULT")
+    return combine_results(
+        path_2_category,
+        gender=GenderType.FEMALE.value,
+        consumer_lifestage=ConsumerLifestageType.ADULT.value,
+    )
 
 
 def get_settings() -> List[dict]:

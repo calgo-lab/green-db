@@ -1,6 +1,8 @@
 import json
 from typing import List
 
+from core.domain import ConsumerLifestageType, GenderType
+
 
 def female_clothes() -> List[dict]:
     base_path = "https://www.otto.de/damen/mode"
@@ -29,8 +31,8 @@ def female_clothes() -> List[dict]:
             {
                 "start_urls": f"{base_path}/{path}/{filter}",
                 "category": category,
-                "gender": "FEMALE",
-                "consumer_lifestage": "ADULT",
+                "gender": GenderType.FEMALE.value,
+                "consumer_lifestage": ConsumerLifestageType.ADULT.value,
                 "meta_data": json.dumps({"family": "FASHION"}),
             }
         )
@@ -59,8 +61,8 @@ def male_clothes() -> List[dict]:
             {
                 "start_urls": f"{base_path}/{path}/{filter}",
                 "category": category,
-                "gender": "MALE",
-                "consumer_lifestage": "ADULT",
+                "gender": GenderType.MALE.value,
+                "consumer_lifestage": ConsumerLifestageType.ADULT.value,
                 "meta_data": json.dumps({"family": "FASHION"}),
             }
         )
@@ -71,7 +73,7 @@ def shoes() -> List[dict]:
     base_path = "https://www.otto.de"
     filter = "?nachhaltigkeit=alle-nachhaltigen-artikel"
 
-    sex_to_path = {"MALE": "herren", "FEMALE": "damen"}
+    sex_to_path = {GenderType.MALE.value: "herren", GenderType.FEMALE.value: "damen"}
 
     results = []
     for sex, path in sex_to_path.items():
@@ -80,7 +82,7 @@ def shoes() -> List[dict]:
                 "start_urls": f"{base_path}/{path}/schuhe/{filter}",
                 "category": "SHOES",
                 "gender": sex,
-                "consumer_lifestage": "ADULT",
+                "consumer_lifestage": ConsumerLifestageType.ADULT.value,
                 "meta_data": json.dumps({"sex": sex, "family": "FASHION"}),
             }
         )
@@ -91,7 +93,7 @@ def bags() -> List[dict]:
     base_path = "https://www.otto.de"
     filter = "?nachhaltigkeit=alle-nachhaltigen-artikel"
 
-    sex_to_path = {"MALE": "herren", "FEMALE": "damen"}
+    sex_to_path = {GenderType.MALE.value: "herren", GenderType.FEMALE.value: "damen"}
 
     results = []
     for sex, path in sex_to_path.items():
@@ -100,7 +102,7 @@ def bags() -> List[dict]:
                 "start_urls": f"{base_path}/{path}/taschen/rucksaecke/{filter}",
                 "category": "BACKPACK",
                 "gender": sex,
-                "consumer_lifestage": "ADULT",
+                "consumer_lifestage": ConsumerLifestageType.ADULT.value,
                 "meta_data": json.dumps({"sex": sex, "family": "FASHION"}),
             }
         )
@@ -109,7 +111,7 @@ def bags() -> List[dict]:
                 "start_urls": f"{base_path}/{path}/taschen/{filter}",
                 "category": "BAG",
                 "gender": sex,
-                "consumer_lifestage": "ADULT",
+                "consumer_lifestage": ConsumerLifestageType.ADULT.value,
                 "meta_data": json.dumps({"sex": sex, "family": "FASHION"}),
             }
         )

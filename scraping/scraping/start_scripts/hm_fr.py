@@ -3,9 +3,11 @@ import pkgutil
 from logging import getLogger
 from typing import List
 
+from core.domain import ConsumerLifestageType, GenderType
+
 logger = getLogger(__name__)
 
-gender_to_category = {"FEMALE": "femme", "MALE": "homme"}
+gender_to_category = {GenderType.FEMALE.value: "femme", GenderType.MALE.value: "homme"}
 
 hm_file_path = "data/hm_fr_male_female.json"
 
@@ -51,8 +53,8 @@ def combine_results(
 def male() -> List[dict]:
     return combine_results(
         gender_mapping=gender_to_category,
-        gender="MALE",
-        consumer_lifestage="ADULT",
+        gender=GenderType.MALE.value,
+        consumer_lifestage=ConsumerLifestageType.ADULT.value,
         categories_json_path=hm_file_path,
     )
 
@@ -60,14 +62,14 @@ def male() -> List[dict]:
 def female() -> List[dict]:
     durable_categories = combine_results(
         gender_mapping=gender_to_category,
-        gender="FEMALE",
-        consumer_lifestage="ADULT",
+        gender=GenderType.FEMALE.value,
+        consumer_lifestage=ConsumerLifestageType.ADULT.value,
         categories_json_path=hm_file_path,
     )
     higg_categories = combine_results(
         gender_mapping=gender_to_category,
-        gender="FEMALE",
-        consumer_lifestage="ADULT",
+        gender=GenderType.FEMALE.value,
+        consumer_lifestage=ConsumerLifestageType.ADULT.value,
         categories_json_path=hm_file_path,
         serp_filters="/developpement-durable/9333-higgindex-womens/_jcr_content/productlisting."
         "display.json?sort=stock&image-size=small&image=stillLife&offset=0&page-size"

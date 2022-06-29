@@ -1,6 +1,8 @@
 import json
 from typing import List, Optional
 
+from core.domain import ConsumerLifestageType, GenderType
+
 
 def combine_results(
     node_2_category: dict,
@@ -43,7 +45,10 @@ def female() -> List[dict]:
     }
 
     return combine_results(
-        node_2_category, gender="FEMALE", consumer_lifestage="ADULT", metadata={"family": "FASHION"}
+        node_2_category,
+        gender=GenderType.FEMALE.value,
+        consumer_lifestage=ConsumerLifestageType.ADULT.value,
+        metadata={"family": "FASHION"},
     )
 
 
@@ -68,7 +73,10 @@ def male() -> List[dict]:
     }
 
     return combine_results(
-        node_2_category, gender="MALE", consumer_lifestage="ADULT", metadata={"family": "FASHION"}
+        node_2_category,
+        gender=GenderType.MALE.value,
+        consumer_lifestage=ConsumerLifestageType.ADULT.value,
+        metadata={"family": "FASHION"},
     )
 
 
