@@ -20,7 +20,7 @@ from core.constants import (
     TABLE_NAME_SCRAPING_ZALANDO_FR,
     TABLE_NAME_SCRAPING_ZALANDO_GB,
 )
-from core.domain import CountryType, GenderType, PageType, ScrapedPage
+from core.domain import ConsumerLifestageType, CountryType, GenderType, PageType, ScrapedPage
 
 from ..splash import minimal_script
 from ..start_scripts.amazon_de import get_settings as get_amazon_de_settings
@@ -101,8 +101,8 @@ class BaseSpider(Spider):
             if category:
                 self.category = category
                 self.meta_data = meta_data
-                self.gender = gender
-                self.consumer_lifestage = consumer_lifestage
+                self.gender = GenderType(gender)
+                self.consumer_lifestage = ConsumerLifestageType(consumer_lifestage)
                 if search_term and self.meta_data:
                     self.meta_data |= {"search_term": search_term}  # type: ignore
                 elif search_term:
