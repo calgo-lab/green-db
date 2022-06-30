@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Any, Dict, List
 
-from ..domain import CountryType, SustainabilityLabel
+from ..domain import SustainabilityLabel
 from . import load_and_get_sustainability_labels
 
 certificates = load_and_get_sustainability_labels()

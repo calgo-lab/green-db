@@ -1,7 +1,7 @@
 import json
 from typing import List, Optional
 
-from core.domain import GenderType, ConsumerLifestageType
+from core.domain import ConsumerLifestageType, GenderType
 
 
 def combine_results(
@@ -41,10 +41,12 @@ def female() -> List[dict]:
         "1731462031": "JACKET",
     }
 
-    return combine_results(node_2_category,
-                           gender=GenderType.FEMALE.value,
-                           consumer_lifestage=ConsumerLifestageType.ADULT.value,
-                           metadata={"family": "FASHION"})
+    return combine_results(
+        node_2_category,
+        gender=GenderType.FEMALE.value,
+        consumer_lifestage=ConsumerLifestageType.ADULT.value,
+        metadata={"family": "FASHION"},
+    )
 
 
 def male() -> List[dict]:
@@ -63,10 +65,12 @@ def male() -> List[dict]:
         "1730993031": "JACKET",
     }
 
-    return combine_results(node_2_category,
-                           gender=GenderType.MALE.value,
-                           consumer_lifestage=ConsumerLifestageType.ADULT.value,
-                           metadata={"family": "FASHION"})
+    return combine_results(
+        node_2_category,
+        gender=GenderType.MALE.value,
+        consumer_lifestage=ConsumerLifestageType.ADULT.value,
+        metadata={"family": "FASHION"},
+    )
 
 
 def electronics() -> List[dict]:
