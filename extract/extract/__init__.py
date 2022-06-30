@@ -1,4 +1,3 @@
-# Because we ignored the files `zalando_de.py` and `otto_de.py` we have to skip them here as well
 # type: ignore[attr-defined]
 
 from typing import Optional

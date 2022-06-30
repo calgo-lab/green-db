@@ -1,6 +1,5 @@
-# Since the Enum 'CertificateType' is dynamically generated, mypy can't know the attributes.
-# For this reason, we ignore those errors here.
 # type: ignore[attr-defined]
+
 import json
 import re
 from logging import getLogger
