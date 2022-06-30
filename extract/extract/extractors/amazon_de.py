@@ -37,7 +37,7 @@ _LABEL_MAPPING = {
 class _Language(Enum):
     de = "de"
     fr = "fr"
-    en = "uk.co"
+    en = "co.uk"
 
 
 _LANGUAGE_LOCALES = {
