@@ -74,7 +74,10 @@ def extract_amazon(parsed_page: ParsedPage) -> Optional[Product]:
     language = _Language(top_level_domain)
     soup = parsed_page.beautiful_soup
 
-    name = soup.find("span", {"id": "productTitle"}).text.strip()
+    # `find` returns `None` if element does not exist
+    if name := soup.find("span", {"id": "productTitle"}):
+        name = name.text.strip()
+
     color = _get_color(soup)
     size = _get_sizes(soup)
     price = _get_price(parsed_page)
