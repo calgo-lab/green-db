@@ -13,6 +13,7 @@ from scrapy_splash import SplashJsonResponse, SplashRequest
 from core.constants import (
     TABLE_NAME_SCRAPING_AMAZON_DE,
     TABLE_NAME_SCRAPING_AMAZON_FR,
+    TABLE_NAME_SCRAPING_AMAZON_GB,
     TABLE_NAME_SCRAPING_ASOS_FR,
     TABLE_NAME_SCRAPING_HM_FR,
     TABLE_NAME_SCRAPING_OTTO_DE,
@@ -25,6 +26,7 @@ from core.domain import ConsumerLifestageType, CountryType, GenderType, PageType
 from ..splash import minimal_script
 from ..start_scripts.amazon_de import get_settings as get_amazon_de_settings
 from ..start_scripts.amazon_fr import get_settings as get_amazon_fr_settings
+from ..start_scripts.amazon_gb import get_settings as get_amazon_gb_settings
 from ..start_scripts.asos_fr import get_settings as get_asos_fr_settings
 from ..start_scripts.hm_fr import get_settings as get_hm_fr_settings
 from ..start_scripts.otto_de import get_settings as get_otto_de_settings
@@ -43,6 +45,7 @@ SETTINGS = {
     TABLE_NAME_SCRAPING_HM_FR: get_hm_fr_settings(),
     TABLE_NAME_SCRAPING_AMAZON_DE: get_amazon_de_settings(),
     TABLE_NAME_SCRAPING_AMAZON_FR: get_amazon_fr_settings(),
+    TABLE_NAME_SCRAPING_AMAZON_GB: get_amazon_gb_settings(),
 }
 
 

@@ -6,6 +6,7 @@ from core import log
 from core.constants import (
     TABLE_NAME_SCRAPING_AMAZON_DE,
     TABLE_NAME_SCRAPING_AMAZON_FR,
+    TABLE_NAME_SCRAPING_AMAZON_GB,
     TABLE_NAME_SCRAPING_ASOS_FR,
     TABLE_NAME_SCRAPING_HM_FR,
     TABLE_NAME_SCRAPING_OTTO_DE,
@@ -17,6 +18,7 @@ from core.domain import Product, ScrapedPage
 
 from .extractors.amazon_de import extract_amazon_de
 from .extractors.amazon_fr import extract_amazon_fr
+from .extractors.amazon_gb import extract_amazon_gb
 from .extractors.asos_fr import extract_asos_fr
 from .extractors.hm_fr import extract_hm_fr
 from .extractors.otto_de import extract_otto_de
@@ -31,6 +33,7 @@ log.setup_logger(__name__)
 EXTRACTOR_FOR_TABLE_NAME = {
     TABLE_NAME_SCRAPING_AMAZON_DE: extract_amazon_de,
     TABLE_NAME_SCRAPING_AMAZON_FR: extract_amazon_fr,
+    TABLE_NAME_SCRAPING_AMAZON_GB: extract_amazon_gb,
     TABLE_NAME_SCRAPING_ASOS_FR: extract_asos_fr,
     TABLE_NAME_SCRAPING_HM_FR: extract_hm_fr,
     TABLE_NAME_SCRAPING_OTTO_DE: extract_otto_de,
