@@ -82,7 +82,9 @@ class BaseSpider(Spider):
         """
 
         if not self.name:
-            logger.error("It's necessary to set the Spider's 'name' attribute.")
+            error_message = "It's necessary to set the Spider's 'name' attribute."
+            logger.error(error_message)
+            raise ValueError(error_message)
 
         super().__init__(name=self.name, **kwargs)
         self.table_name: str = getattr(self, "table_name", self.name)  # type: ignore
@@ -111,7 +113,9 @@ class BaseSpider(Spider):
                 elif search_term:
                     self.meta_data = {"search_term": search_term}  # type: ignore
             else:
-                logger.error("When setting 'start_urls', 'category', also needs to be set.")
+                error_message = "When setting 'start_urls', 'category', also needs to be set."
+                logger.error(error_message)
+                raise ValueError(error_message)
         else:
             logger.info("Spider will be initialized using start_script.")
 
@@ -119,7 +123,7 @@ class BaseSpider(Spider):
         self.products_per_page = int(products_per_page) if products_per_page else products_per_page
 
     @staticmethod
-    def parse_urls(start_urls: Union[str, List[str]]) -> List[str]:  # type: ignore
+    def parse_urls(start_urls: Union[str, List[str]]) -> List[str]:
         """
         Helper method to parse start_urls.
 
@@ -129,15 +133,20 @@ class BaseSpider(Spider):
         Returns:
             List[str]: start_urls represented as a List.
         """
-        if not (type(start_urls) == str or type(start_urls) == list):
-            logger.error(
+        if not (
+            (type(start_urls) == str)
+            or ((type(start_urls) == list) and (all([type(x) == str for x in start_urls])))
+        ):
+            error_message = (
                 "Argument 'start_urls' need to be of type list or (comma-separated) string."
             )
-        else:
-            return start_urls.split(",") if type(start_urls) == str else start_urls  # type: ignore
+            logger.error(error_message)
+            raise ValueError(error_message)
+
+        return start_urls.split(",") if type(start_urls) == str else start_urls  # type: ignore
 
     @staticmethod
-    def parse_meta_data(meta_data: Union[Dict[str, str], str]) -> Union[dict, None]:  # type: ignore
+    def parse_meta_data(meta_data: Union[Dict[str, str], str]) -> Union[dict, None]:
         """
         Helper method to parse meta_data.
 
@@ -150,12 +159,12 @@ class BaseSpider(Spider):
         if meta_data:
             meta_data = json.loads(meta_data) if isinstance(meta_data, str) else meta_data  # type: ignore # noqa
             if isinstance(meta_data, dict):
-                return meta_data  # type: ignore
+                return meta_data
             else:
                 logger.error(
                     "Argument 'meta_data' needs to be of type dict or serialized JSON string."
                 )
-                return None  # type: ignore
+                return None
         return None
 
     def start_requests(self) -> Iterator[SplashRequest]:

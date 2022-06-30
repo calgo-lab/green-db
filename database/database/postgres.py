@@ -45,9 +45,11 @@ def __check_database(database_name: str) -> None:
         database_name (str): Name of database to check
     """
     if database_name not in POSTGRES_URL_FOR.keys():
-        logger.error(
+        error_message = (
             f"'database_name' not valid! Need to be one of: {', '.join(POSTGRES_URL_FOR.keys())}"
         )
+        logger.error(error_message)
+        raise ValueError(error_message)
 
 
 def bootstrap_tables(database_name: str) -> None:
