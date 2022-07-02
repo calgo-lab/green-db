@@ -18,6 +18,7 @@ logger = getLogger(__name__)
 
 class HMSpider(BaseSpider):
     name = TABLE_NAME_SCRAPING_HM_FR
+    source, _ = name.rsplit("_", 1)
     allowed_domains = ["hm.com"]
 
     custom_settings = {

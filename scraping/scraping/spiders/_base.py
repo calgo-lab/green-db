@@ -86,6 +86,11 @@ class BaseSpider(Spider):
             logger.error(error_message)
             raise ValueError(error_message)
 
+        if not self.source:
+            error_message = "It's necessary to set the Spider's 'source' attribute."
+            logger.error(error_message)
+            raise ValueError(error_message)
+
         super().__init__(name=self.name, **kwargs)
         self.table_name: str = getattr(self, "table_name", self.name)  # type: ignore
 
@@ -96,7 +101,6 @@ class BaseSpider(Spider):
         # set default value
         self.request_timeout = getattr(self, "request_timeout", 0.5)
         self.StartRequest = SplashRequest  # default StartRequest is set to SplashRequest
-        self.source = self.merchant  # TODO: change when source is no more equal to merchant
 
         self.timestamp = timestamp
         self.message_queue = MessageQueue()

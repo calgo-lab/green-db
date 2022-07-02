@@ -17,6 +17,7 @@ logger = getLogger(__name__)
 
 class AsosSpider(BaseSpider):
     name = TABLE_NAME_SCRAPING_ASOS_FR
+    source, _ = name.rsplit("_", 1)
     allowed_domains = ["asos.com"]
     _product_api = "https://www.asos.com/api/product/catalogue/v3/products/"
     _filters = "?currency=EUR&lang=fr-FR&sizeSchema=FR&store=FR&keyStoreDataversion=dup0qtf-35"
