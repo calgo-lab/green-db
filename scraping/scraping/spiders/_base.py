@@ -100,7 +100,7 @@ class BaseSpider(Spider):
 
         # set default value
         self.request_timeout = getattr(self, "request_timeout", 0.5)
-        self.StartRequest = SplashRequest  # default StartRequest is set to SplashRequest
+        self.StartRequest = SplashRequest
 
         self.timestamp = timestamp
         self.message_queue = MessageQueue()
