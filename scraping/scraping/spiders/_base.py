@@ -111,8 +111,9 @@ class BaseSpider(Spider):
                 self.category = category
                 self.meta_data = meta_data
                 self.gender = GenderType(gender) if gender else None
-                self.consumer_lifestage = ConsumerLifestageType(consumer_lifestage) \
-                    if consumer_lifestage else None
+                self.consumer_lifestage = (
+                    ConsumerLifestageType(consumer_lifestage) if consumer_lifestage else None
+                )
                 if search_term and self.meta_data:
                     self.meta_data |= {"search_term": search_term}  # type: ignore
                 elif search_term:
