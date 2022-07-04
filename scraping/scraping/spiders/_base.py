@@ -115,9 +115,9 @@ class BaseSpider(Spider):
                     ConsumerLifestageType(consumer_lifestage) if consumer_lifestage else None
                 )
                 if search_term and self.meta_data:
-                    self.meta_data |= {"search_term": search_term}  # type: ignore
+                    self.meta_data |= {"search_term": search_term}
                 elif search_term:
-                    self.meta_data = {"search_term": search_term}  # type: ignore
+                    self.meta_data = {"search_term": search_term}
             else:
                 error_message = "When setting 'start_urls', 'category', also needs to be set."
                 logger.error(error_message)
