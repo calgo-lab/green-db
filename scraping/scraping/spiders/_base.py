@@ -109,7 +109,7 @@ class BaseSpider(Spider):
             self.start_urls = start_urls
             if category:
                 self.category = category
-                self.meta_data = meta_data
+                self.meta_data = self.parse_meta_data(meta_data)
                 self.gender = GenderType(gender) if gender else None
                 self.consumer_lifestage = (
                     ConsumerLifestageType(consumer_lifestage) if consumer_lifestage else None
@@ -152,7 +152,7 @@ class BaseSpider(Spider):
         return start_urls.split(",") if type(start_urls) == str else start_urls  # type: ignore
 
     @staticmethod
-    def parse_meta_data(meta_data: Union[Dict[str, str], str]) -> Union[dict, None]:
+    def parse_meta_data(meta_data: Union[Dict[str, str], str, None]) -> Union[dict, None]:
         """
         Helper method to parse meta_data.
 
