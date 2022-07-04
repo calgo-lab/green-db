@@ -110,8 +110,9 @@ class BaseSpider(Spider):
             if category:
                 self.category = category
                 self.meta_data = meta_data
-                self.gender = GenderType(gender)
-                self.consumer_lifestage = ConsumerLifestageType(consumer_lifestage)
+                self.gender = GenderType(gender) if gender else None
+                self.consumer_lifestage = ConsumerLifestageType(consumer_lifestage) \
+                    if consumer_lifestage else None
                 if search_term and self.meta_data:
                     self.meta_data |= {"search_term": search_term}  # type: ignore
                 elif search_term:
@@ -232,6 +233,7 @@ class BaseSpider(Spider):
         Args:
             response (SplashJsonResponse): Response from a performed request
         """
+
         scraped_page = ScrapedPage(
             timestamp=self.timestamp,
             source=self.source,
@@ -241,8 +243,8 @@ class BaseSpider(Spider):
             html=response.body.decode("utf-8"),
             page_type=PageType.SERP,
             category=response.meta.get("category"),
-            gender=GenderType(response.meta.get("gender")),
-            consumer_lifestage=ConsumerLifestageType(response.meta.get("consumer_lifestage")),
+            gender=response.meta.get("gender"),
+            consumer_lifestage=response.meta.get("consumer_lifestage"),
             meta_information=response.meta.get("meta_data"),
         )
 
@@ -271,8 +273,8 @@ class BaseSpider(Spider):
             html=response.body.decode("utf-8"),
             page_type=PageType.PRODUCT,
             category=response.meta.get("category"),
-            gender=GenderType(response.meta.get("gender")),
-            consumer_lifestage=ConsumerLifestageType(response.meta.get("consumer_lifestage")),
+            gender=response.meta.get("gender"),
+            consumer_lifestage=response.meta.get("consumer_lifestage"),
             meta_information=meta_information,
         )
 
