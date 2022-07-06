@@ -32,8 +32,11 @@ class MetaAwareDupeFilter(SplashAwareDupeFilter):
         returns new fingerprint.
 
         Args:
-        request Union[ScrapyHttpRequest, SplashRequest]: Request object on which to yield a request
-        include_headers Optional[Iterable[Union[bytes, str]]]: request headers to consider
+            request (Union[ScrapyHttpRequest, SplashRequest]): Request object on which to yield a request
+            include_headers (Optional[Iterable[Union[bytes, str]]], optional): Request headers to consider. Defaults to None.
+
+        Returns:
+            str: Request fingerprint
         """
         splash_fp = splash_request_fingerprint(request, include_headers=include_headers)
         meta = {k: v for k, v in request.meta.items() if k in META_KEYS_FOR_FINGERPRINT}
