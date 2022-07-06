@@ -40,7 +40,7 @@ class MetaAwareDupeFilter(SplashAwareDupeFilter):
         fp_dict = meta | {"splash_fp": splash_fp}
         return dict_hash(fp_dict)
 
-    def request_fingerprint(self, request):
+    def request_fingerprint(self, request: Union[ScrapyHttpRequest, SplashRequest]):
         """
         Return the request fingerprint. The request fingerprint is a hash that uniquely identifies
         the resource the request points to.

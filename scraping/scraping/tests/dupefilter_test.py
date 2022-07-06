@@ -1,8 +1,9 @@
 from itertools import combinations
 from typing import List
 
-from core.domain import ConsumerLifestageType, GenderType
 from scrapy import Request
+
+from core.domain import ConsumerLifestageType, GenderType
 
 from ..dupefilter import MetaAwareDupeFilter
 
@@ -14,7 +15,7 @@ def create_test_requests() -> List:
     categories = ["BLOUSE", "SHIRT"]
 
     def create_request(
-        category: str, gender: GenderType, consumer_lifestage: ConsumerLifestageType, url: str = url
+        category: str, gender: str, consumer_lifestage: str, url: str = url
     ) -> Request:
         return Request(
             url=url,
@@ -26,9 +27,9 @@ def create_test_requests() -> List:
         )
 
     return [
-        create_request(category, gender.value, age.value)
+        create_request(category, gender.value, consumer_lifestage.value)
         for gender in GenderType
-        for age in ConsumerLifestageType
+        for consumer_lifestage in ConsumerLifestageType
         for category in categories
     ]
 
