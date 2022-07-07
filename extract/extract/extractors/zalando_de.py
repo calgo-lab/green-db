@@ -6,7 +6,6 @@ from datetime import datetime
 from logging import getLogger
 from typing import Dict, Iterator, Optional
 
-from bs4 import BeautifulSoup
 from pydantic import ValidationError
 
 from core.domain import CertificateType, Product

@@ -32,20 +32,23 @@ class MetaAwareDupeFilter(SplashAwareDupeFilter):
         returns new fingerprint.
 
         Args:
-            request (Union[ScrapyHttpRequest, SplashRequest]): Request object on which to yield a request
-            include_headers (Optional[Iterable[Union[bytes, str]]], optional): Request headers to consider. Defaults to None.
+            request (Union[ScrapyHttpRequest, SplashRequest]): Request object on which to yield a
+            request.
+            include_headers (Optional[Iterable[Union[bytes, str]]], optional): Request headers to
+            consider. Defaults to None.
 
         Returns:
-            str: Request fingerprint
+            str: Request fingerprint, which is a hash that uniquely identifies the resource.
         """
         splash_fp = splash_request_fingerprint(request, include_headers=include_headers)
         meta = {k: v for k, v in request.meta.items() if k in META_KEYS_FOR_FINGERPRINT}
         fp_dict = meta | {"splash_fp": splash_fp}
         return dict_hash(fp_dict)
 
-    def request_fingerprint(self, request: Union[ScrapyHttpRequest, SplashRequest]):
+    def request_fingerprint(self, request: Union[ScrapyHttpRequest, SplashRequest]) -> str:
         """
         Return the request fingerprint. The request fingerprint is a hash that uniquely identifies
-        the resource the request points to.
+        the resource the request points to. This overrides the 'request_fingerprint' method in
+        'SplashAwareDupeFilter'.
         """
         return self.meta_request_fingerprint(request)
