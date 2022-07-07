@@ -1,10 +1,12 @@
 from logging import getLogger
 
-from .zalando import ZalandoSpider
+from core.constants import TABLE_NAME_SCRAPING_ZALANDO_FR
+
+from .zalando_de import ZalandoSpider
 
 logger = getLogger(__name__)
 
 
 class ZalandoFrSpider(ZalandoSpider):
-    name = "zalando_fr"
+    name = TABLE_NAME_SCRAPING_ZALANDO_FR
     allowed_domains = ["zalando.fr"]

@@ -5,15 +5,15 @@ from sqlalchemy import ARRAY, BIGINT, INTEGER, JSON, NUMERIC, TEXT, TIMESTAMP, V
 
 from core.constants import (
     TABLE_NAME_GREEN_DB,
-    TABLE_NAME_SCRAPING_AMAZON,
+    TABLE_NAME_SCRAPING_AMAZON_DE,
     TABLE_NAME_SCRAPING_AMAZON_FR,
-    TABLE_NAME_SCRAPING_AMAZON_UK,
-    TABLE_NAME_SCRAPING_ASOS,
-    TABLE_NAME_SCRAPING_HM,
-    TABLE_NAME_SCRAPING_OTTO,
+    TABLE_NAME_SCRAPING_AMAZON_GB,
+    TABLE_NAME_SCRAPING_ASOS_FR,
+    TABLE_NAME_SCRAPING_HM_FR,
+    TABLE_NAME_SCRAPING_OTTO_DE,
     TABLE_NAME_SCRAPING_ZALANDO_DE,
     TABLE_NAME_SCRAPING_ZALANDO_FR,
-    TABLE_NAME_SCRAPING_ZALANDO_UK,
+    TABLE_NAME_SCRAPING_ZALANDO_GB,
     TABLE_NAME_SUSTAINABILITY_LABELS,
 )
 
@@ -75,11 +75,15 @@ class ScrapingTable(__TableMixin):
 
     id = Column(INTEGER, nullable=False, autoincrement=True, primary_key=True)
     timestamp = Column(TIMESTAMP, nullable=False)
+    source = Column(TEXT, nullable=False)
     merchant = Column(TEXT, nullable=False)
+    country = Column(TEXT, nullable=False)
     category = Column(TEXT, nullable=False)
     url = Column(TEXT, nullable=False)
     html = Column(TEXT, nullable=False)
     page_type = Column(VARCHAR(length=10), nullable=False)
+    gender = Column(TEXT, nullable=True)
+    consumer_lifestage = Column(TEXT, nullable=True)
     meta_information = Column(JSON, nullable=True)
 
 
@@ -107,7 +111,7 @@ class ZalandoFrScrapingTable(ScrapingBaseTable, ScrapingTable):
     __tablename__ = TABLE_NAME_SCRAPING_ZALANDO_FR
 
 
-class ZalandoUkScrapingTable(ScrapingBaseTable, ScrapingTable):
+class ZalandoGbScrapingTable(ScrapingBaseTable, ScrapingTable):
     """
     The actual scraping table for Zalando.
 
@@ -116,10 +120,10 @@ class ZalandoUkScrapingTable(ScrapingBaseTable, ScrapingTable):
         ScrapingTable ([type]): To inherit the table definition
     """
 
-    __tablename__ = TABLE_NAME_SCRAPING_ZALANDO_UK
+    __tablename__ = TABLE_NAME_SCRAPING_ZALANDO_GB
 
 
-class OTTOScrapingTable(ScrapingBaseTable, ScrapingTable):
+class OttoDeScrapingTable(ScrapingBaseTable, ScrapingTable):
     """
     The actual scraping table for Otto.
 
@@ -128,10 +132,10 @@ class OTTOScrapingTable(ScrapingBaseTable, ScrapingTable):
         ScrapingTable ([type]): To inherit the table definition
     """
 
-    __tablename__ = TABLE_NAME_SCRAPING_OTTO
+    __tablename__ = TABLE_NAME_SCRAPING_OTTO_DE
 
 
-class AsosScrapingTable(ScrapingBaseTable, ScrapingTable):
+class AsosFrScrapingTable(ScrapingBaseTable, ScrapingTable):
     """
     The actual scraping table for Asos.
 
@@ -140,10 +144,10 @@ class AsosScrapingTable(ScrapingBaseTable, ScrapingTable):
         ScrapingTable ([type]): To inherit the table definition
     """
 
-    __tablename__ = TABLE_NAME_SCRAPING_ASOS
+    __tablename__ = TABLE_NAME_SCRAPING_ASOS_FR
 
 
-class HMScrapingTable(ScrapingBaseTable, ScrapingTable):
+class HmFrScrapingTable(ScrapingBaseTable, ScrapingTable):
     """
     The actual scraping table for H&M.
 
@@ -152,10 +156,10 @@ class HMScrapingTable(ScrapingBaseTable, ScrapingTable):
         ScrapingTable ([type]): To inherit the table definition
     """
 
-    __tablename__ = TABLE_NAME_SCRAPING_HM
+    __tablename__ = TABLE_NAME_SCRAPING_HM_FR
 
 
-class AmazonScrapingTable(ScrapingBaseTable, ScrapingTable):
+class AmazonDeScrapingTable(ScrapingBaseTable, ScrapingTable):
     """
     The actual scraping table for Amazon.
     Args:
@@ -163,7 +167,7 @@ class AmazonScrapingTable(ScrapingBaseTable, ScrapingTable):
         ScrapingTable ([type]): To inherit the table definition
     """
 
-    __tablename__ = TABLE_NAME_SCRAPING_AMAZON
+    __tablename__ = TABLE_NAME_SCRAPING_AMAZON_DE
 
 
 class AmazonFrScrapingTable(ScrapingBaseTable, ScrapingTable):
@@ -177,7 +181,7 @@ class AmazonFrScrapingTable(ScrapingBaseTable, ScrapingTable):
     __tablename__ = TABLE_NAME_SCRAPING_AMAZON_FR
 
 
-class AmazonUkScrapingTable(ScrapingBaseTable, ScrapingTable):
+class AmazonGbScrapingTable(ScrapingBaseTable, ScrapingTable):
     """
     The actual scraping table for Amazon United Kingdom.
     Args:
@@ -185,20 +189,20 @@ class AmazonUkScrapingTable(ScrapingBaseTable, ScrapingTable):
         ScrapingTable ([type]): To inherit the table definition
     """
 
-    __tablename__ = TABLE_NAME_SCRAPING_AMAZON_UK
+    __tablename__ = TABLE_NAME_SCRAPING_AMAZON_GB
 
 
 # Used to dynamically map a table name to the correct Table class.
 SCRAPING_TABLE_CLASS_FOR: Dict[str, Type[ScrapingTable]] = {
     TABLE_NAME_SCRAPING_ZALANDO_DE: ZalandoDeScrapingTable,
     TABLE_NAME_SCRAPING_ZALANDO_FR: ZalandoFrScrapingTable,
-    TABLE_NAME_SCRAPING_ZALANDO_UK: ZalandoUkScrapingTable,
-    TABLE_NAME_SCRAPING_OTTO: OTTOScrapingTable,
-    TABLE_NAME_SCRAPING_ASOS: AsosScrapingTable,
-    TABLE_NAME_SCRAPING_HM: HMScrapingTable,
-    TABLE_NAME_SCRAPING_AMAZON: AmazonScrapingTable,
+    TABLE_NAME_SCRAPING_ZALANDO_GB: ZalandoGbScrapingTable,
+    TABLE_NAME_SCRAPING_OTTO_DE: OttoDeScrapingTable,
+    TABLE_NAME_SCRAPING_ASOS_FR: AsosFrScrapingTable,
+    TABLE_NAME_SCRAPING_AMAZON_DE: AmazonDeScrapingTable,
     TABLE_NAME_SCRAPING_AMAZON_FR: AmazonFrScrapingTable,
-    TABLE_NAME_SCRAPING_AMAZON_UK: AmazonUkScrapingTable,
+    TABLE_NAME_SCRAPING_AMAZON_GB: AmazonGbScrapingTable,
+    TABLE_NAME_SCRAPING_HM_FR: HmFrScrapingTable,
 }
 
 
@@ -215,7 +219,9 @@ class GreenDBTable(GreenDBBaseTable, __TableMixin):
 
     id = Column(INTEGER, nullable=False, autoincrement=True, primary_key=True)
     timestamp = Column(TIMESTAMP, nullable=False)
+    source = Column(TEXT, nullable=False)
     merchant = Column(TEXT, nullable=False)
+    country = Column(TEXT, nullable=False)
     category = Column(TEXT, nullable=False)
     url = Column(TEXT, nullable=False)
     name = Column(TEXT, nullable=False)
@@ -226,8 +232,10 @@ class GreenDBTable(GreenDBBaseTable, __TableMixin):
     currency = Column(TEXT, nullable=False)
     image_urls = Column(ARRAY(TEXT), nullable=False)
 
-    color = Column(TEXT, nullable=True)
-    size = Column(TEXT, nullable=True)
+    gender = Column(TEXT, nullable=True)
+    consumer_lifestage = Column(TEXT, nullable=True)
+    colors = Column(ARRAY(TEXT), nullable=True)
+    sizes = Column(ARRAY(TEXT), nullable=True)
 
     gtin = Column(BIGINT, nullable=True)
     asin = Column(TEXT, nullable=True)

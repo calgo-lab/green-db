@@ -21,7 +21,7 @@ scrapy-splash = "^0.8.0"
 scrapy-playwright = "^0.0.17"
 
 [tool.poetry.dev-dependencies]
-pytest = "^5.2"
+pytest = "^7.1.2"
 flake8 = "^3.9.2"
 mypy = "^0.910"
 isort = "^5.10.1"

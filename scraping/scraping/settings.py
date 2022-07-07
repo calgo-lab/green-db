@@ -98,7 +98,7 @@ DOWNLOADER_MIDDLEWARES = {
 # HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 # Further Splash settings
-DUPEFILTER_CLASS = "scrapy_splash.SplashAwareDupeFilter"
+DUPEFILTER_CLASS = "scraping.dupefilter.MetaAwareDupeFilter"
 HTTPCACHE_STORAGE = "scrapy_splash.SplashAwareFSCacheStorage"
 
 SPLASH_URL = "http://splash:8050"

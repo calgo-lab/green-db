@@ -1,6 +1,15 @@
-from core.constants import TABLE_NAME_SCRAPING_AMAZON
-from core.domain import Product
-from extract import extract_product
+from core.constants import TABLE_NAME_SCRAPING_AMAZON_DE
+from core.domain import (
+    CertificateType,
+    ConsumerLifestageType,
+    CountryType,
+    CurrencyType,
+    GenderType,
+    Product,
+)
+
+# TODO: This is a false positive of mypy
+from extract import extract_product  # type: ignore
 
 from ..utils import read_test_html
 
@@ -8,29 +17,40 @@ from ..utils import read_test_html
 def test_amazon_basic_img() -> None:
     timestamp = "2022-04-28 19:00:00"
     url = "https://www.amazon.de/Romberg-Boxershorts-Bio-Baumwolle-kratzenden-nachhaltig/dp/B0932XK47G/ref=sr_1_7?qid=1652774791&refinements=p_n_cpf_eligible%3A22579885031&s=apparel&sr=1-7&th=1"  # noqa
+    source = "amazon"
     merchant = "amazon"
+    country = CountryType.DE
     file_name = "underwear.html"
     category = "UNDERWEAR"
+    gender = GenderType.MALE
+    consumer_lifestage = ConsumerLifestageType.ADULT
     meta_information = {
         "family": "FASHION",
-        "sex": "MALE",
         "price": "49,95",
     }
 
     scraped_page = read_test_html(
         timestamp=timestamp,
+        source=source,
         merchant=merchant,
+        country=country,
         file_name=file_name,
         category=category,
+        gender=gender,
+        consumer_lifestage=consumer_lifestage,
         meta_information=meta_information,
         url=url,
     )
-    actual = extract_product(TABLE_NAME_SCRAPING_AMAZON, scraped_page)
+    actual = extract_product(TABLE_NAME_SCRAPING_AMAZON_DE, scraped_page)
     expected = Product(
         timestamp=timestamp,
         url=url,
+        source=source,
         merchant=merchant,
+        country=country,
         category=category,
+        gender=gender,
+        consumer_lifestage=consumer_lifestage,
         name="Romberg Herren Boxershorts mit Schriftzug, 6er Pack aus nachhaltiger Bio-Baumwolle "
         "(GOTS Zertifiziert)",
         description="BIO-BAUMWOLLE: Du willst den Unterschied machen? Entscheide Dich bewusst für "
@@ -54,9 +74,9 @@ def test_amazon_basic_img() -> None:
         "Boxershorts gedruckt. So musst Du nie wieder lästige Etiketten aus Deiner "
         "Unterwäsche herausschneiden.",
         brand="Romberg",
-        sustainability_labels=["certificate:GOTS_MADE_WITH_ORGANIC_MATERIALS"],
+        sustainability_labels=[CertificateType.GOTS_MADE_WITH_ORGANIC_MATERIALS],  # type: ignore[attr-defined] # noqa
         price=49.95,
-        currency="EUR",
+        currency=CurrencyType.EUR,
         image_urls=[
             "https://m.media-amazon.com/images/I/41b6Pwz5lrL.jpg",
             "https://m.media-amazon.com/images/I/41ySTdJA8AL.jpg",
@@ -66,8 +86,8 @@ def test_amazon_basic_img() -> None:
             "https://m.media-amazon.com/images/I/41xkOVB1dML.jpg",
             "https://m.media-amazon.com/images/I/41F+QWQPJ7L.jpg",
         ],
-        color="Navy mit Schriftzug",
-        size="S, M, L, XL, XXL, 3XL",
+        colors=["Navy mit Schriftzug"],
+        sizes=["S", "M", "L", "XL", "XXL", "3XL"],
         gtin=None,
         asin="B089658KBB",
     )

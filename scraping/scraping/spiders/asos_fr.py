@@ -8,13 +8,16 @@ from urllib.parse import parse_qs, urlparse
 from scrapy.http.request import Request as ScrapyHttpRequest
 from scrapy.http.response import Response as ScrapyHttpResponse
 
+from core.constants import TABLE_NAME_SCRAPING_ASOS_FR
+
 from ._base import BaseSpider
 
 logger = getLogger(__name__)
 
 
 class AsosSpider(BaseSpider):
-    name = "asos"
+    name = TABLE_NAME_SCRAPING_ASOS_FR
+    source, _ = name.rsplit("_", 1)
     allowed_domains = ["asos.com"]
     _product_api = "https://www.asos.com/api/product/catalogue/v3/products/"
     _filters = "?currency=EUR&lang=fr-FR&sizeSchema=FR&store=FR&keyStoreDataversion=dup0qtf-35"

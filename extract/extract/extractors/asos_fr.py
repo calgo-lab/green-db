@@ -1,6 +1,5 @@
-# Since the Enum 'CertificateType' is dynamically generated, mypy can't know the attributes.
-# For this reason, we ignore those errors here.
 # type: ignore[attr-defined]
+
 import json
 import re
 from logging import getLogger
@@ -12,12 +11,12 @@ from pydantic import ValidationError
 from core.domain import CertificateType, Product
 
 from ..parse import ParsedPage
-from ..utils import safely_return_first_element
+from ..utils import check_and_create_attributes_list, safely_return_first_element
 
 logger = getLogger(__name__)
 
 
-def extract_asos(parsed_page: ParsedPage) -> Optional[Product]:
+def extract_asos_fr(parsed_page: ParsedPage) -> Optional[Product]:
     """
     Extracts information of interest from html, which in this case is a json
     and returns `Product` object or `None` if anything failed. Works for asos.com.
@@ -35,7 +34,8 @@ def extract_asos(parsed_page: ParsedPage) -> Optional[Product]:
     description = format_description(page_json.get("description", None))
     brand = page_json.get("brand", {}).get("name", None)
     first_offer = safely_return_first_element(page_json.get("variants", [{}]))
-    color = first_offer.get("colour", None)
+
+    colors = check_and_create_attributes_list(first_offer.get("colour", None))
     currency = first_offer.get("price", {}).get("currency", None)
 
     images = page_json.get("media", {}).get("images", {})
@@ -45,7 +45,6 @@ def extract_asos(parsed_page: ParsedPage) -> Optional[Product]:
         price = float(price)
 
     sizes = [variant.get("displaySizeText", None) for variant in page_json.get("variants", [])]
-    sizes = ", ".join(sizes)  # size column expects str, so we join all sizes together
 
     url = _get_url(page_json.get("localisedData", []), "fr-FR")
     sustainability_labels = _get_sustainability(page_json.get("info", {}).get("aboutMe", ""))
@@ -54,8 +53,12 @@ def extract_asos(parsed_page: ParsedPage) -> Optional[Product]:
         return Product(
             timestamp=parsed_page.scraped_page.timestamp,
             url=url,
+            source=parsed_page.scraped_page.source,
             merchant=parsed_page.scraped_page.merchant,
+            country=parsed_page.scraped_page.country,
             category=parsed_page.scraped_page.category,
+            gender=parsed_page.scraped_page.gender,
+            consumer_lifestage=parsed_page.scraped_page.consumer_lifestage,
             name=name,
             description=description,
             brand=brand,
@@ -63,8 +66,8 @@ def extract_asos(parsed_page: ParsedPage) -> Optional[Product]:
             price=price,
             currency=currency,
             image_urls=image_urls,
-            color=color,
-            size=sizes,
+            colors=colors,
+            sizes=sizes,
             gtin=None,
             asin=None,
         )

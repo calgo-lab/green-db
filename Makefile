@@ -46,3 +46,4 @@ start-job-test-deploy:
 
 test:
 	$(MAKE) -C extract test
+	$(MAKE) -C scraping test

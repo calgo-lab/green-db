@@ -1,6 +1,5 @@
-# Since the Enum 'CertificateType' is dynamically generated, mypy can't know the attributes.
-# For this reason, we ignore those errors here.
 # type: ignore[attr-defined]
+
 
 import json
 from logging import getLogger
@@ -21,7 +20,7 @@ logger = getLogger(__name__)
 NUM_IMAGE_URLS = 3
 
 
-def extract_otto(parsed_page: ParsedPage) -> Optional[Product]:
+def extract_otto_de(parsed_page: ParsedPage) -> Optional[Product]:
     """
     Extracts information of interest from HTML (and other intermediate representations)
     and returns `Product` object or `None` if anything failed. Works for otto.de
@@ -66,8 +65,12 @@ def extract_otto(parsed_page: ParsedPage) -> Optional[Product]:
         return Product(
             timestamp=parsed_page.scraped_page.timestamp,
             url=parsed_page.scraped_page.url,
+            source=parsed_page.scraped_page.source,
             merchant=parsed_page.scraped_page.merchant,
+            country=parsed_page.scraped_page.country,
             category=parsed_page.scraped_page.category,
+            gender=parsed_page.scraped_page.gender,
+            consumer_lifestage=parsed_page.scraped_page.consumer_lifestage,
             name=name,
             description=description,
             brand=brand,
@@ -75,8 +78,8 @@ def extract_otto(parsed_page: ParsedPage) -> Optional[Product]:
             price=price,
             currency=currency,
             image_urls=image_urls,
-            color=None,
-            size=None,
+            colors=None,
+            sizes=None,
             gtin=gtin,
             asin=None,
         )

@@ -1,18 +1,17 @@
-# Since the Enum 'CertificateType' is dynamically generated, mypy can't know the attributes.
-# For this reason, we ignore those errors here.
 # type: ignore[attr-defined]
+
 import json
 import urllib
+from datetime import datetime
 from logging import getLogger
 from typing import Dict, Iterator, Optional
 
-from bs4 import BeautifulSoup
 from pydantic import ValidationError
 
 from core.domain import CertificateType, Product
 
 from ..parse import JSON_LD, ParsedPage
-from ..utils import safely_return_first_element
+from ..utils import check_and_create_attributes_list, safely_return_first_element
 
 logger = getLogger(__name__)
 
@@ -33,6 +32,7 @@ _LABEL_MAPPING = {
     "Hergestellt aus 30-50% recycelten Materialien": CertificateType.OTHER,
     "Sustainable Textile Production (STeP) by OEKO-TEX®": CertificateType.STEP_OEKO_TEX,
     "Global Recycled Standard": CertificateType.GLOBAL_RECYCLED_STANDARD,
+    "Global Recycle Standard": CertificateType.GLOBAL_RECYCLED_STANDARD,  # TODO: this is probably a typo on zalando's end # noqa
     "Hergestellt aus mindestens 50% Lyocell": CertificateType.OTHER,
     "Biologisch abbaubar": CertificateType.OTHER,
     "bluesign®": CertificateType.OTHER,
@@ -65,7 +65,7 @@ _LABEL_MAPPING = {
 }
 
 
-def extract_zalando(
+def extract_zalando_de(
     parsed_page: ParsedPage, label_mapping: Dict[str, CertificateType] = _LABEL_MAPPING
 ) -> Optional[Product]:
     """
@@ -86,7 +86,7 @@ def extract_zalando(
     name = meta_data.get("name", None)
     description = meta_data.get("description", None)
     brand = meta_data.get("brand", {}).get("name", None)
-    color = meta_data.get("color", None)
+    colors = check_and_create_attributes_list(meta_data.get("color", None))
 
     first_offer = safely_return_first_element(meta_data.get("offers", [{}]))
     currency = first_offer.get("priceCurrency", None)
@@ -94,7 +94,7 @@ def extract_zalando(
     if price := first_offer.get("price", None):
         price = float(price)
 
-    sustainability_strings = set(get_sustainability_strings(parsed_page.beautiful_soup))
+    sustainability_strings = set(get_sustainability_strings(parsed_page))
     sustainability_labels = sorted(
         {
             label_mapping.get(sustainability_string, CertificateType.UNKNOWN)
@@ -113,8 +113,12 @@ def extract_zalando(
         return Product(
             timestamp=parsed_page.scraped_page.timestamp,
             url=parsed_page.scraped_page.url,
+            source=parsed_page.scraped_page.source,
             merchant=parsed_page.scraped_page.merchant,
+            country=parsed_page.scraped_page.country,
             category=parsed_page.scraped_page.category,
+            gender=parsed_page.scraped_page.gender,
+            consumer_lifestage=parsed_page.scraped_page.consumer_lifestage,
             name=name,
             description=description,
             brand=brand,
@@ -122,8 +126,8 @@ def extract_zalando(
             price=price,
             currency=currency,
             image_urls=image_urls,
-            color=color,
-            size=None,
+            colors=colors,
+            sizes=None,
             gtin=None,
             asin=None,
         )
@@ -135,22 +139,30 @@ def extract_zalando(
         return None
 
 
-def get_sustainability_strings(beautiful_soup: BeautifulSoup) -> Iterator[str]:
+def get_sustainability_strings(parsed_page: ParsedPage) -> Iterator[str]:
     """
     Extracts the sustainability information from HTML. Splash does not load all the information
     into the html anymore,so we have to extract the sustainability information from a JSON, stored
     inside a script tag.
 
     Args:
-        beautiful_soup (BeautifulSoup): Parsed HTML
+        parsed_page (ParsedPage): `ParsedPage` object
 
     Returns:
         Iterator[str]: found sustainability strings
     """
 
-    data = json.loads(
-        beautiful_soup.find("script", {"type": "application/json", "class": "re-1-13"}).get_text()
-    )
+    # based on the timestamp the data is extracted differently, allowing backwards compatibility
+    if parsed_page.scraped_page.timestamp < datetime(2022, 7, 7, 0, 0, 0):
+        data = parsed_page.beautiful_soup.find(
+            "script", {"type": "application/json", "class": "re-1-13"}
+        )
+    else:
+        data = parsed_page.beautiful_soup.find(
+            "script", {"type": "application/json", "class": "re-1-12"}
+        )
+
+    data = json.loads(data.get_text())
 
     # Loop over all nested items to find the JSON objects holding the sustainability information
     json_values = [data]

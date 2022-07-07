@@ -1,6 +1,15 @@
-from core.constants import TABLE_NAME_SCRAPING_AMAZON
-from core.domain import Product
-from extract import extract_product
+from core.constants import TABLE_NAME_SCRAPING_AMAZON_DE
+from core.domain import (
+    CertificateType,
+    ConsumerLifestageType,
+    CountryType,
+    CurrencyType,
+    GenderType,
+    Product,
+)
+
+# TODO: This is a false positive of mypy
+from extract import extract_product  # type: ignore
 
 from ..utils import read_test_html
 
@@ -8,29 +17,40 @@ from ..utils import read_test_html
 def test_amazon_basic() -> None:
     timestamp = "2022-04-28 19:00:00"
     url = "https://www.amazon.de/Think-Kong_3-000371-chromfrei-nachhaltige-Wechselfu%C3%9Fbett/dp/B08FSL34LS/ref=sr_1_2?qid=1651058159&refinements=p_n_cpf_eligible%3A22579885031&s=shoes&sr=1-2"  # noqa
+    source = "amazon"
     merchant = "amazon"
+    country = CountryType.DE
     file_name = "shoes.html"
     category = "SHOES"
+    gender = GenderType.MALE
+    consumer_lifestage = ConsumerLifestageType.ADULT
     meta_information = {
         "family": "FASHION",
-        "sex": "MALE",
         "price": "77,62",
     }
 
     scraped_page = read_test_html(
         timestamp=timestamp,
+        source=source,
         merchant=merchant,
+        country=country,
         file_name=file_name,
         category=category,
+        gender=gender,
+        consumer_lifestage=consumer_lifestage,
         meta_information=meta_information,
         url=url,
     )
-    actual = extract_product(TABLE_NAME_SCRAPING_AMAZON, scraped_page)
+    actual = extract_product(TABLE_NAME_SCRAPING_AMAZON_DE, scraped_page)
     expected = Product(
         timestamp=timestamp,
         url=url,
+        source=source,
         merchant=merchant,
+        country=country,
         category=category,
+        gender=gender,
+        consumer_lifestage=consumer_lifestage,
         name="THINK! Herren Kong_3-000371 chromfrei gegerbte, nachhaltige Wechselfußbett Boots",
         description="Think! ist ein traditionelles Schuhunternehmen und wahrt die Handwerkskunst. "
         "Think! Schuhe sind handgefertigt und werden ausschließlich in Europa hergestellt. "
@@ -49,9 +69,9 @@ def test_amazon_basic() -> None:
         "orthopädische Einlagen oder später durch neue KONG Einlagen ausgetauscht werden können. "
         "Einige KONG Modelle wurden mit dem Österreichischen Umweltzeichen ausgezeichnet.",
         brand="Think!",
-        sustainability_labels=["certificate:BLUE_ANGEL"],
+        sustainability_labels=[CertificateType.BLUE_ANGEL],  # type: ignore[attr-defined]
         price=77.62,
-        currency="EUR",
+        currency=CurrencyType.EUR,
         image_urls=[
             "https://m.media-amazon.com/images/I/31qGkKiX4GL.jpg",
             "https://m.media-amazon.com/images/I/31CkE5Ya1IL.jpg",
@@ -61,9 +81,25 @@ def test_amazon_basic() -> None:
             "https://m.media-amazon.com/images/I/31CvUUqMkRL.jpg",
             "https://m.media-amazon.com/images/I/31Gkl-CPiiL.jpg",
         ],
-        color="3000 Cuoio Kombi",
-        size="40 EU, 40.5 EU, 41 EU, 41.5 EU, 42 EU, 42.5 EU, 43 EU, 43.5 EU, 44 EU, 44.5 EU, "
-        "45 EU, 45.5 EU, 46 EU, 46.5 EU, 47 EU, 47.5 EU",
+        colors=["3000 Cuoio Kombi"],
+        sizes=[
+            "40 EU",
+            "40.5 EU",
+            "41 EU",
+            "41.5 EU",
+            "42 EU",
+            "42.5 EU",
+            "43 EU",
+            "43.5 EU",
+            "44 EU",
+            "44.5 EU",
+            "45 EU",
+            "45.5 EU",
+            "46 EU",
+            "46.5 EU",
+            "47 EU",
+            "47.5 EU",
+        ],
         gtin=None,
         asin="B08FSZSW2L",
     )
