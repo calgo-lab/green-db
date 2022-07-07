@@ -13,7 +13,7 @@ from ..utils import read_test_html
 
 
 def test_zalando_basic() -> None:
-    timestamp = "2022-04-22 12:49:00"
+    timestamp = "2022-07-07 10:00:00"
     url = "https://www.zalando.mock/"
     source = "zalando"
     merchant = "zalando"
@@ -50,8 +50,8 @@ def test_zalando_basic() -> None:
         gender=gender,
         consumer_lifestage=consumer_lifestage,
         name="JAAMES TURNTABLES - T-Shirt print - acid black",
-        description=" ARMEDANGELS JAAMES TURNTABLES - T-Shirt print - acid black für "
-        "14,90\xa0€ (2022-04-22) versandkostenfrei bei Zalando bestellen.",
+        description=" ARMEDANGELS JAAMES TURNTABLES - T-Shirt print - acid black für 14,90 € "
+        "(2022-07-07) Gratisversand für Bestellungen im Wert von über 24,90 €",
         brand="ARMEDANGELS",
         sustainability_labels=[CertificateType.GOTS_ORGANIC],  # type: ignore[attr-defined]
         price=14.90,
