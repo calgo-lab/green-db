@@ -138,6 +138,24 @@ def extract_zalando_de(
         return None
 
 
+def get_json_data(json_file: str) -> Any:
+    """
+    Helper function to parse mangled json files.
+    
+    Args:
+        json_file (str): Either a plain json file or a json file encoded as an xml CDATA string
+
+    Returns:
+        Iterator[str]: found sustainability strings
+    """
+    
+    try:
+        return json.loads(json_file)
+    except:
+        json_file = ElementTree.fromstring(f'<root>{json_file}</root>').text
+        return json.loads(json_file)
+
+
 def get_sustainability_strings(parsed_page: ParsedPage) -> Iterator[str]:
     """
     Extracts the sustainability information from HTML. Splash does not load all the information
@@ -145,33 +163,22 @@ def get_sustainability_strings(parsed_page: ParsedPage) -> Iterator[str]:
     inside a script tag.
 
     Args:
-        beautiful_soup (BeautifulSoup): Parsed HTML
+        parsed_page (ParsedPage): Parsed Page
 
     Returns:
         Iterator[str]: found sustainability strings
     """
-
-    # based on the timestamp the data is extracted differently, allowing backwards compatibility
-    if parsed_page.scraped_page.timestamp < datetime(2022, 7, 7, 0, 0, 0):
-        data = parsed_page.beautiful_soup.find(
-            "script", {"type": "application/json", "class": "re-1-13"}
-        )
-    else:
-        data = parsed_page.beautiful_soup.find(
-            "script", {"type": "application/json", "class": "re-1-12"}
-        )
-
-    data = json.loads(data.get_text())
-
-    # Loop over all nested items to find the JSON objects holding the sustainability information
-    json_values = [data]
-    for json_value in json_values:
-        match json_value:
-            case {"sustainabilityClusterKind": "certificates", "attributes": [*attributes]}:
-                for attribute in attributes:
-                    if "label" in attribute:
-                        yield urllib.parse.unquote(attribute["label"])
-            case {**json_object}:
-                json_values += json_object.values()
-            case [*json_array]:
-                json_values += json_array
+    
+    # Loop over all JSON objects on the page to find sustainability information
+    for json_file in parsed_page.beautiful_soup.findAll("script", {"type": "application/json"}):
+        json_values = [get_json_data(json_file.get_text())]
+        for json_value in json_values:
+            match json_value:
+                case {"sustainabilityClusterKind": "certificates", "attributes": [*attributes]}:
+                    for attribute in attributes:
+                        if "label" in attribute:
+                            yield urllib.parse.unquote(attribute["label"])
+                case {**json_object}:
+                    json_values += json_object.values()
+                case [*json_array]:
+                    json_values += json_array
