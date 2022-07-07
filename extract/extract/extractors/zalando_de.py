@@ -1,9 +1,10 @@
 # type: ignore[attr-defined]
+
 import json
 import urllib
+from datetime import datetime
 from logging import getLogger
-from typing import Any, Dict, Iterator, Optional
-from xml.etree import ElementTree
+from typing import Dict, Iterator, Optional
 
 from pydantic import ValidationError
 
@@ -141,18 +142,18 @@ def extract_zalando_de(
 def get_json_data(json_file: str) -> Any:
     """
     Helper function to parse mangled json files.
-
+    
     Args:
         json_file (str): Either a plain json file or a json file encoded as an xml CDATA string
 
     Returns:
         Iterator[str]: found sustainability strings
     """
-
+    
     try:
         return json.loads(json_file)
     except:
-        json_file = ElementTree.fromstring(f"<root>{json_file}</root>").text
+        json_file = ElementTree.fromstring(f'<root>{json_file}</root>').text
         return json.loads(json_file)
 
 
@@ -168,7 +169,7 @@ def get_sustainability_strings(parsed_page: ParsedPage) -> Iterator[str]:
     Returns:
         Iterator[str]: found sustainability strings
     """
-
+    
     # Loop over all JSON objects on the page to find sustainability information
     for json_file in parsed_page.beautiful_soup.findAll("script", {"type": "application/json"}):
         json_values = [get_json_data(json_file.get_text())]
