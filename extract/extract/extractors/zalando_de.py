@@ -146,7 +146,7 @@ def get_sustainability_strings(parsed_page: ParsedPage) -> Iterator[str]:
     inside a script tag.
 
     Args:
-        beautiful_soup (BeautifulSoup): Parsed HTML
+        parsed_page (ParsedPage): `ParsedPage` object
 
     Returns:
         Iterator[str]: found sustainability strings
