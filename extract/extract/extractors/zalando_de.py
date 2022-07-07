@@ -31,6 +31,7 @@ _LABEL_MAPPING = {
     "Hergestellt aus 30-50% recycelten Materialien": CertificateType.OTHER,
     "Sustainable Textile Production (STeP) by OEKO-TEX®": CertificateType.STEP_OEKO_TEX,
     "Global Recycled Standard": CertificateType.GLOBAL_RECYCLED_STANDARD,
+    "Global Recycle Standard": CertificateType.GLOBAL_RECYCLED_STANDARD,  # TODO: this is probably a typo on zalando's end # noqa
     "Hergestellt aus mindestens 50% Lyocell": CertificateType.OTHER,
     "Biologisch abbaubar": CertificateType.OTHER,
     "bluesign®": CertificateType.OTHER,
