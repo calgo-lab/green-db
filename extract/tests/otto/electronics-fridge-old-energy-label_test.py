@@ -2,7 +2,9 @@ from requests_mock import Adapter
 
 from core.constants import TABLE_NAME_SCRAPING_OTTO_DE
 from core.domain import CertificateType, CountryType, CurrencyType, Product
-from extract import extract_product
+
+# TODO: This is a false positive of mypy
+from extract import extract_product  # type: ignore
 
 from ..utils import read_test_html
 

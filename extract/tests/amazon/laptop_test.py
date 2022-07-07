@@ -1,6 +1,8 @@
 from core.constants import TABLE_NAME_SCRAPING_AMAZON_DE
 from core.domain import CertificateType, CountryType, CurrencyType, Product
-from extract import extract_product
+
+# TODO: This is a false positive of mypy
+from extract import extract_product  # type: ignore
 
 from ..utils import read_test_html
 

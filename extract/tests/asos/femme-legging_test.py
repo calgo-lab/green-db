@@ -7,7 +7,9 @@ from core.domain import (
     GenderType,
     Product,
 )
-from extract import extract_product
+
+# TODO: This is a false positive of mypy
+from extract import extract_product  # type: ignore
 
 from ..utils import read_test_html
 
