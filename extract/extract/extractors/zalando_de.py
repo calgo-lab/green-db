@@ -2,6 +2,7 @@
 
 import json
 import urllib
+from datetime import datetime
 from logging import getLogger
 from typing import Dict, Iterator, Optional
 
@@ -93,7 +94,7 @@ def extract_zalando_de(
     if price := first_offer.get("price", None):
         price = float(price)
 
-    sustainability_strings = set(get_sustainability_strings(parsed_page.beautiful_soup))
+    sustainability_strings = set(get_sustainability_strings(parsed_page))
     sustainability_labels = sorted(
         {
             label_mapping.get(sustainability_string, CertificateType.UNKNOWN)
@@ -138,7 +139,7 @@ def extract_zalando_de(
         return None
 
 
-def get_sustainability_strings(beautiful_soup: BeautifulSoup) -> Iterator[str]:
+def get_sustainability_strings(parsed_page: ParsedPage) -> Iterator[str]:
     """
     Extracts the sustainability information from HTML. Splash does not load all the information
     into the html anymore,so we have to extract the sustainability information from a JSON, stored
@@ -151,9 +152,17 @@ def get_sustainability_strings(beautiful_soup: BeautifulSoup) -> Iterator[str]:
         Iterator[str]: found sustainability strings
     """
 
-    data = json.loads(
-        beautiful_soup.find("script", {"type": "application/json", "class": "re-1-13"}).get_text()
-    )
+    # based on the timestamp the data is extracted differently, allowing backwards compatibility
+    if parsed_page.scraped_page.timestamp < datetime(2022, 7, 7, 0, 0, 0):
+        data = parsed_page.beautiful_soup.find(
+            "script", {"type": "application/json", "class": "re-1-13"}
+        )
+    else:
+        data = parsed_page.beautiful_soup.find(
+            "script", {"type": "application/json", "class": "re-1-12"}
+        )
+
+    data = json.loads(data.get_text())
 
     # Loop over all nested items to find the JSON objects holding the sustainability information
     json_values = [data]
