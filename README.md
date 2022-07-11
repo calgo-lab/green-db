@@ -38,7 +38,7 @@ The GreenDB schema is highly inspired by [schema.org](https://schema.org). Howev
 | **column nullable**  | no     | yes      | yes      | no            | no      | no         |  no          | no          | no           | no       | no              | no        | no                        | no        | no           | no             | yes       | yes      | yes        | yes                    |
 
 
-**Please note**: Currently, we use our own `category` strings, which are not documented. However, we plan to switch to [Google's product category](https://support.google.com/merchants/answer/6324436?hl=en) to rely on a public definition of the `category` column.
+**Please note**: Currently, we use our own `category` strings, which are not documented. However, we plan to switch to the [GS1 Global Product Classification](https://www.gs1.org/standards/gpc) taxonomy to rely on a public definition of the `category` column.
 
 
 ### Table: `sustainability-labels`
@@ -72,7 +72,7 @@ If you are using our code or the GreenDB dataset, please reference the [preprint
 
 - [x] In the near future, we plan to extend the GreenDB to more shops and non-German markets. We hope to drastically increase its product and sustainability label coverage and make it, therefore, more interesting to a wider range of potential users.
 
-- [ ] As mentioned above, we plan to switch to a publicly available product taxonomy to replace the `category` column. Further, we work on minor refactorings to be fully compatible to schema.org.
+- [ ] As mentioned above, we plan to switch to the [GS1 Global Product Classification](https://www.gs1.org/standards/gpc) taxonomy to replace the `category` column. Further, we work on minor refactorings to be fully compatible to schema.org.
 
 
 ## Contact
