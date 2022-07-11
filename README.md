@@ -32,10 +32,10 @@ The GreenDB schema is highly inspired by [schema.org](https://schema.org). Howev
 
 ### Table: `green-db`
 
-| **column name**      | **id** | **gtin** | **asin** | **timestamp** | **url** | **merchant** | **category** | **name** | **description** | **brand** | **sustainability_labels** | **price** | **currency** | **image_urls** | **color** | **size** |
-| -------------------- | ------ | -------- | -------- | ------------- | ------- | ------------ | ------------ | -------- | --------------- | --------- | ------------------------- | --------- | ------------ | -------------- | --------- | -------- |
-| **column data type** | int4   | int8     | text     | timestamp     | text    | text         | text         | text     | text            | text      | array[text]               | numeric   | text         | array[text]    | text      | text     |
-| **column nullable**  | no     | yes      | yes      | no            | no      | no           | no           | no       | no              | no        | no                        | no        | no           | no             | yes       | yes      |
+| **column name**      | **id** | **gtin** | **asin** | **timestamp** | **url** | **source** | **merchant** | **country** | **category** | **name** | **description** | **brand** | **sustainability_labels** | **price** | **currency** | **image_urls** | **color** | **size** | **gender** | **consumer_lifestage** |
+| -------------------- | ------ | -------- | -------- | ------------- | ------- |------------|--------------|-------------| ------------ | -------- | --------------- | --------- | ------------------------- | --------- | ------------ | -------------- | --------- | -------- |------------|------------------------|
+| **column data type** | int4   | int8     | text     | timestamp     | text    | text       | text         | text        | text         | text     | text            | text      | array[text]               | numeric   | text         | array[text]    | text      | text     | text       | text                   |
+| **column nullable**  | no     | yes      | yes      | no            | no      | no         |  no          | no          | no           | no       | no              | no        | no                        | no        | no           | no             | yes       | yes      | yes        | yes                    |
 
 
 **Please note**: Currently, we use our own `category` strings, which are not documented. However, we plan to switch to [Google's product category](https://support.google.com/merchants/answer/6324436?hl=en) to rely on a public definition of the `category` column.
