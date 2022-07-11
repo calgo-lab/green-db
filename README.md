@@ -32,10 +32,10 @@ The GreenDB schema is highly inspired by [schema.org](https://schema.org). Howev
 
 ### Table: `green-db`
 
-| **column name**      | **id** | **gtin** | **asin** | **timestamp** | **url** | **source** | **merchant** | **country** | **category** | **name** | **description** | **brand** | **sustainability_labels** | **price** | **currency** | **image_urls** | **color** | **size** | **gender** | **consumer_lifestage** |
-| -------------------- | ------ | -------- | -------- | ------------- | ------- |------------|--------------|-------------| ------------ | -------- | --------------- | --------- | ------------------------- | --------- | ------------ | -------------- | --------- | -------- |------------|------------------------|
-| **column data type** | int4   | int8     | text     | timestamp     | text    | text       | text         | text        | text         | text     | text            | text      | array[text]               | numeric   | text         | array[text]    | text      | text     | text       | text                   |
-| **column nullable**  | no     | yes      | yes      | no            | no      | no         |  no          | no          | no           | no       | no              | no        | no                        | no        | no           | no             | yes       | yes      | yes        | yes                    |
+| **column name**      | **id** | **gtin** | **asin** | **timestamp** | **url** | **source** | **merchant** | **country** | **category** | **name** | **description** | **brand** | **sustainability_labels** | **price** | **currency** | **image_urls** | **colors**  | **sizes**   | **gender** | **consumer_lifestage** |
+| -------------------- | ------ | -------- | -------- | ------------- | ------- |------------|--------------|-------------| ------------ | -------- | --------------- | --------- | ------------------------- | --------- | ------------ | -------------- |-------------|-------------|------------|------------------------|
+| **column data type** | int4   | int8     | text     | timestamp     | text    | text       | text         | text        | text         | text     | text            | text      | array[text]               | numeric   | text         | array[text]    | array[text] | array[text] | text       | text                   |
+| **column nullable**  | no     | yes      | yes      | no            | no      | no         |  no          | no          | no           | no       | no              | no        | no                        | no        | no           | no             | yes         | yes         | yes        | yes                    |
 
 
 **Please note**: Currently, we use our own `category` strings, which are not documented. However, we plan to switch to the [GS1 Global Product Classification](https://www.gs1.org/standards/gpc) taxonomy to rely on a public definition of the `category` column.
