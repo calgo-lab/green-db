@@ -1,4 +1,4 @@
-from typing import Any, List
+from typing import Any, List, Union
 
 from core.domain import CertificateType
 from core.sustainability_labels import load_and_get_sustainability_labels
@@ -98,3 +98,26 @@ def _get_certificate_for_any_language(
         for localized_certificate_info in localized_certificate_infos
         if localized_certificate_info["name"].lower() in [x.lower() for x in certificate_strings]
     ]
+
+
+def check_and_create_attributes_list(attributes: Union[str, List[str]]) -> Union[List[str], None]:
+    """
+    Helper function to convert an attribute to a list. If it's already a list `None` elements are
+    removed.
+
+    Args:
+        attribute (Union[str, List[str]]): single attribute as `str` or List of `str` objects with
+        each object containing for example a color or size.
+
+    Returns:
+        list[str]: `list` with `str` objects holding the attribute information.
+    """
+    attributes_to_remove = [None, "None"]
+
+    if isinstance(attributes, str):
+        if attributes in attributes_to_remove:
+            return None
+        return [attributes]
+    elif isinstance(attributes, List):
+        return list(filter(lambda attr: attr not in attributes_to_remove, attributes))
+    return None

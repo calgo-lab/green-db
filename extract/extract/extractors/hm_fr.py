@@ -1,6 +1,5 @@
-# Since the Enum 'CertificateType' is dynamically generated, mypy can't know the attributes.
-# For this reason, we ignore those errors here.
 # type: ignore[attr-defined]
+
 import json
 import re
 from codecs import decode
@@ -15,12 +14,16 @@ from pydantic import ValidationError
 from core.domain import CertificateType, Product
 
 from ..parse import JSON_LD, ParsedPage
-from ..utils import get_product_from_JSON_LD, safely_return_first_element
+from ..utils import (
+    check_and_create_attributes_list,
+    get_product_from_JSON_LD,
+    safely_return_first_element,
+)
 
 logger = getLogger(__name__)
 
 
-def extract_hm(parsed_page: ParsedPage) -> Optional[Product]:
+def extract_hm_fr(parsed_page: ParsedPage) -> Optional[Product]:
     """
     Extracts information of interest from HTML (and other intermediate representations)
     and returns `Product` object or `None` if anything failed. Works for www2.hm.com/fr_fr
@@ -40,7 +43,7 @@ def extract_hm(parsed_page: ParsedPage) -> Optional[Product]:
     name = meta_data.get("name", None)
     description = meta_data.get("description", None)
     brand = meta_data.get("brand", {}).get("name", None)
-    color = meta_data.get("color", None)
+    colors = check_and_create_attributes_list(meta_data.get("color", None))
 
     first_offer = safely_return_first_element(meta_data.get("offers", [{}]))
     currency = first_offer.get("priceCurrency", None)
@@ -56,8 +59,9 @@ def extract_hm(parsed_page: ParsedPage) -> Optional[Product]:
         price = float(price)
 
     if product_data := _get_product_details(parsed_page.beautiful_soup):
-        sizes = [size.get("name") for size in product_data.get("sizes", [])]
-        size = ", ".join(sizes)  # size column expects str, so we join all sizes together
+        sizes = check_and_create_attributes_list(
+            [size.get("name") for size in product_data.get("sizes", [])]
+        )
 
     sustainability_labels = _get_sustainability(parsed_page.beautiful_soup, product_data)
 
@@ -65,8 +69,12 @@ def extract_hm(parsed_page: ParsedPage) -> Optional[Product]:
         return Product(
             timestamp=parsed_page.scraped_page.timestamp,
             url=parsed_page.scraped_page.url,
+            source=parsed_page.scraped_page.source,
             merchant=parsed_page.scraped_page.merchant,
+            country=parsed_page.scraped_page.country,
             category=parsed_page.scraped_page.category,
+            gender=parsed_page.scraped_page.gender,
+            consumer_lifestage=parsed_page.scraped_page.consumer_lifestage,
             name=name,
             description=description,
             brand=brand,
@@ -74,8 +82,8 @@ def extract_hm(parsed_page: ParsedPage) -> Optional[Product]:
             price=price,
             currency=currency,
             image_urls=image_urls,
-            color=color,
-            size=size,
+            colors=colors,
+            sizes=sizes,
             gtin=None,
             asin=None,
         )

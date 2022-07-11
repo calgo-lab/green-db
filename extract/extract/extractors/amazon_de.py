@@ -1,9 +1,9 @@
-# Since the Enum 'CertificateType' is dynamically generated, mypy can't know the attributes.
-# For this reason, we ignore those errors here.
 # type: ignore[attr-defined]
+
 import re
+from enum import Enum
 from logging import getLogger
-from typing import Any, Callable, Optional
+from typing import Any, Callable, List, Optional
 from urllib.parse import urlparse
 
 from bs4 import BeautifulSoup
@@ -12,7 +12,7 @@ from pydantic import ValidationError
 from core.domain import CertificateType, Product
 
 from ..parse import ParsedPage
-from ..utils import sustainability_labels_to_certificates
+from ..utils import check_and_create_attributes_list, sustainability_labels_to_certificates
 
 logger = getLogger(__name__)
 
@@ -34,7 +34,29 @@ _LABEL_MAPPING = {
 }
 
 
-def extract_amazon(parsed_page: ParsedPage) -> Optional[Product]:
+class _Language(Enum):
+    de = "de"
+    fr = "fr"
+    en = "co.uk"
+
+
+_LANGUAGE_LOCALES = {
+    _Language.de: {
+        "info": ("Besuche den ", "-Store", "Marke: "),
+        "table": ("Marke", "Hersteller"),
+    },
+    _Language.fr: {
+        "info": ("Visiter la boutique ", "Marque\xa0: "),
+        "table": ("Marque", "Fabricant"),
+    },
+    _Language.en: {
+        "info": ("Visit the ", " Store", "Brand: "),
+        "table": ("Brand", "Manufacturer"),
+    },
+}
+
+
+def extract_amazon_de(parsed_page: ParsedPage) -> Optional[Product]:
     """
     Extracts information of interest from HTML (and other intermediate representations)
     and returns `Product` object or `None` if anything failed. Works for amazon.de.
@@ -45,16 +67,22 @@ def extract_amazon(parsed_page: ParsedPage) -> Optional[Product]:
     Returns:
         Optional[Product]: Valid `Product` object or `None` if extraction failed
     """
-    language = re.sub("www\.amazon\.", "", urlparse(parsed_page.scraped_page.url).netloc)  # noqa
+    top_level_domain = re.sub(
+        "www\.amazon\.", "", urlparse(parsed_page.scraped_page.url).netloc  # noqa
+    )
+    language = _Language(top_level_domain)
     soup = parsed_page.beautiful_soup
 
-    name = soup.find("span", {"id": "productTitle"}).text.strip()
-    color = _get_color(soup)
-    size = _get_sizes(soup)
+    # `find` returns `None` if element does not exist
+    if name := soup.find("span", {"id": "productTitle"}):
+        name = name.text.strip()
+
+    colors = check_and_create_attributes_list(_get_color(soup))
+    sizes = check_and_create_attributes_list(_get_sizes(soup))
     price = _get_price(parsed_page)
     image_urls = _get_image_urls(soup)
 
-    currency = "EUR"
+    currency = "GBP" if language == _Language.en else "EUR"
 
     sustainability_spans = soup.find_all("span", id=re.compile("CPF-BTF-Certificate-Name"))
     sustainability_texts = [span.text for span in sustainability_spans]
@@ -70,8 +98,12 @@ def extract_amazon(parsed_page: ParsedPage) -> Optional[Product]:
         return Product(
             timestamp=parsed_page.scraped_page.timestamp,
             url=parsed_page.scraped_page.url,
+            source=parsed_page.scraped_page.source,
             merchant=parsed_page.scraped_page.merchant,
+            country=parsed_page.scraped_page.country,
             category=parsed_page.scraped_page.category,
+            gender=parsed_page.scraped_page.gender,
+            consumer_lifestage=parsed_page.scraped_page.consumer_lifestage,
             name=name,
             description=description,
             brand=brand,
@@ -79,8 +111,8 @@ def extract_amazon(parsed_page: ParsedPage) -> Optional[Product]:
             price=price,
             currency=currency,
             image_urls=image_urls,
-            color=color,
-            size=size,
+            colors=colors,
+            sizes=sizes,
             gtin=None,
             asin=asin,
         )
@@ -164,7 +196,7 @@ def _get_image_urls(soup: BeautifulSoup) -> Optional[list[str]]:
     return _handle_parse(targets, parse_image_urls)
 
 
-def _get_sizes(soup: BeautifulSoup) -> Optional[str]:
+def _get_sizes(soup: BeautifulSoup) -> Optional[List[str]]:
     """
     Helper function that extracts the product's sizes.
 
@@ -182,8 +214,7 @@ def _get_sizes(soup: BeautifulSoup) -> Optional[str]:
     ]
 
     def parse_sizes(sizes: list[BeautifulSoup]) -> str:
-        sizes = [size.text.strip() for size in sizes if size.text.strip()]
-        return ", ".join(sizes)
+        return [size.text.strip() for size in sizes if size.text.strip()]
 
     return _handle_parse(targets, parse_sizes)
 
@@ -222,21 +253,10 @@ def _get_brand(soup: BeautifulSoup, language: str) -> Optional[str]:
         soup.find("div", {"id": "bylineInfo_feature_div"}).a.text,
     ]
 
-    _LANGUAGE_LOCALES = {
-        "de": {
-            "info": ("Besuche den ", "-Store", "Marke: "),
-            "table": ("Marke", "Hersteller"),
-        },
-        "fr": {
-            "info": ("Visiter la boutique ", "Marque\xa0: "),
-            "table": ("Marque", "Fabricant"),
-        },
-    }
-
     def parse_brand(brand: str) -> Optional[str]:
         info_locales = _LANGUAGE_LOCALES[language]["info"]
         if brand.startswith(info_locales[0]):
-            if language == "de":
+            if language == _Language.de:
                 return brand[len(info_locales[0]) : -len(info_locales[1])]  # noqa
             else:
                 return brand[len(info_locales[0]) :]  # noqa

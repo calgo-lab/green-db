@@ -4,6 +4,8 @@ from urllib.parse import urlparse
 
 from scrapy_splash import SplashJsonResponse, SplashRequest
 
+from core.constants import TABLE_NAME_SCRAPING_AMAZON_DE
+
 from ..splash import minimal_script
 from ._base import BaseSpider
 
@@ -11,7 +13,8 @@ logger = getLogger(__name__)
 
 
 class AmazonSpider(BaseSpider):
-    name = "amazon"
+    name = TABLE_NAME_SCRAPING_AMAZON_DE
+    source, _ = name.rsplit("_", 1)
     allowed_domains = ["amazon.de"]
 
     def parse_SERP(self, response: SplashJsonResponse) -> Iterator[SplashRequest]:

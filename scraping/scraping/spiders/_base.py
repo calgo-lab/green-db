@@ -11,38 +11,41 @@ from scrapy.http.response.text import TextResponse as ScrapyTextResponse
 from scrapy_splash import SplashJsonResponse, SplashRequest
 
 from core.constants import (
-    TABLE_NAME_SCRAPING_AMAZON,
+    TABLE_NAME_SCRAPING_AMAZON_DE,
     TABLE_NAME_SCRAPING_AMAZON_FR,
-    TABLE_NAME_SCRAPING_ASOS,
-    TABLE_NAME_SCRAPING_HM,
-    TABLE_NAME_SCRAPING_OTTO,
+    TABLE_NAME_SCRAPING_AMAZON_GB,
+    TABLE_NAME_SCRAPING_ASOS_FR,
+    TABLE_NAME_SCRAPING_HM_FR,
+    TABLE_NAME_SCRAPING_OTTO_DE,
     TABLE_NAME_SCRAPING_ZALANDO_DE,
     TABLE_NAME_SCRAPING_ZALANDO_FR,
-    TABLE_NAME_SCRAPING_ZALANDO_UK,
+    TABLE_NAME_SCRAPING_ZALANDO_GB,
 )
-from core.domain import PageType, ScrapedPage
+from core.domain import ConsumerLifestageType, CountryType, GenderType, PageType, ScrapedPage
 
 from ..splash import minimal_script
-from ..start_scripts.amazon import get_settings as get_amazon_settings
+from ..start_scripts.amazon_de import get_settings as get_amazon_de_settings
 from ..start_scripts.amazon_fr import get_settings as get_amazon_fr_settings
-from ..start_scripts.asos import get_settings as get_asos_settings
-from ..start_scripts.hm import get_settings as get_hm_settings
-from ..start_scripts.otto import get_settings as get_otto_settings
-from ..start_scripts.zalando import get_settings as get_zalando_settings
+from ..start_scripts.amazon_gb import get_settings as get_amazon_gb_settings
+from ..start_scripts.asos_fr import get_settings as get_asos_fr_settings
+from ..start_scripts.hm_fr import get_settings as get_hm_fr_settings
+from ..start_scripts.otto_de import get_settings as get_otto_de_settings
+from ..start_scripts.zalando_de import get_settings as get_zalando_de_settings
 from ..start_scripts.zalando_fr import get_settings as get_zalando_fr_settings
-from ..start_scripts.zalando_uk import get_settings as get_zalando_uk_settings
+from ..start_scripts.zalando_gb import get_settings as get_zalando_gb_settings
 
 logger = getLogger(__name__)
 
 SETTINGS = {
-    TABLE_NAME_SCRAPING_OTTO: get_otto_settings(),
-    TABLE_NAME_SCRAPING_ASOS: get_asos_settings(),
-    TABLE_NAME_SCRAPING_ZALANDO_DE: get_zalando_settings(),
+    TABLE_NAME_SCRAPING_OTTO_DE: get_otto_de_settings(),
+    TABLE_NAME_SCRAPING_ASOS_FR: get_asos_fr_settings(),
+    TABLE_NAME_SCRAPING_ZALANDO_DE: get_zalando_de_settings(),
     TABLE_NAME_SCRAPING_ZALANDO_FR: get_zalando_fr_settings(),
-    TABLE_NAME_SCRAPING_ZALANDO_UK: get_zalando_uk_settings(),
-    TABLE_NAME_SCRAPING_HM: get_hm_settings(),
-    TABLE_NAME_SCRAPING_AMAZON: get_amazon_settings(),
+    TABLE_NAME_SCRAPING_ZALANDO_GB: get_zalando_gb_settings(),
+    TABLE_NAME_SCRAPING_HM_FR: get_hm_fr_settings(),
+    TABLE_NAME_SCRAPING_AMAZON_DE: get_amazon_de_settings(),
     TABLE_NAME_SCRAPING_AMAZON_FR: get_amazon_fr_settings(),
+    TABLE_NAME_SCRAPING_AMAZON_GB: get_amazon_gb_settings(),
 }
 
 
@@ -52,6 +55,8 @@ class BaseSpider(Spider):
         timestamp: datetime,
         start_urls: Optional[Union[str, List[str]]] = None,
         category: Optional[str] = None,
+        gender: Optional[str] = None,
+        consumer_lifestage: Optional[str] = None,
         search_term: Optional[str] = None,
         meta_data: Optional[Union[str, Dict[str, str]]] = None,
         products_per_page: Optional[int] = None,
@@ -66,6 +71,8 @@ class BaseSpider(Spider):
             timestamp (datetime): When was this scraping run started
             start_urls (Optional[Union[str, List[str]]], optional): URL the spider should start at
             category (Optional[str], optional): All products found belong to this category
+            gender (Optional[str]): All products found belong to this gender
+            consumer_lifestage (Optional[str]): All products found belong to this consumer_lifestage
             search_term (Optional[str], optional): Meta information about this scraping run.
                 Defaults to None.
             meta_data (Optional[Union[str, Dict[str, str]]], optional): Additional meta information
@@ -74,39 +81,55 @@ class BaseSpider(Spider):
                 scraped for each starting page. Defaults to None.
         """
 
-        # set default value
-        self.request_timeout = getattr(self, "request_timeout", 0.5)
-        self.table_name: str = getattr(self, "table_name", self.name)  # type: ignore
-        self.StartRequest = SplashRequest  # default StartRequest is set to SplashRequest
+        if not self.name:
+            error_message = "It's necessary to set the Spider's 'name' attribute."
+            logger.error(error_message)
+            raise ValueError(error_message)
+
+        if not self.source:
+            error_message = "It's necessary to set the Spider's 'source' attribute."
+            logger.error(error_message)
+            raise ValueError(error_message)
 
         super().__init__(name=self.name, **kwargs)
+        self.table_name: str = getattr(self, "table_name", self.name)  # type: ignore
+
+        merchant, country = self.name.rsplit("_", 1)
+        self.merchant = merchant
+        self.country = CountryType(country)
+
+        # set default value
+        self.request_timeout = getattr(self, "request_timeout", 0.5)
+        self.StartRequest = SplashRequest
 
         self.timestamp = timestamp
         self.message_queue = MessageQueue()
 
-        if not self.name:
-            logger.error("It's necessary to set the Spider's 'name' attribute.")
-
         if start_urls:
             self.start_urls = start_urls
-            if category and meta_data:
+            if category:
                 self.category = category
-                self.meta_data = meta_data
-            else:
-                logger.error(
-                    "When setting 'start_urls', 'category' & 'meta_data' also needs to be set."
+                self.meta_data = self.parse_meta_data(meta_data)
+                self.gender = GenderType(gender) if gender else None
+                self.consumer_lifestage = (
+                    ConsumerLifestageType(consumer_lifestage) if consumer_lifestage else None
                 )
+                if search_term and self.meta_data:
+                    self.meta_data |= {"search_term": search_term}
+                elif search_term:
+                    self.meta_data = {"search_term": search_term}
+            else:
+                error_message = "When setting 'start_urls', 'category', also needs to be set."
+                logger.error(error_message)
+                raise ValueError(error_message)
         else:
             logger.info("Spider will be initialized using start_script.")
-
-        if search_term:
-            self.meta_data["search_term"] = search_term  # type: ignore
 
         # By default there will be no limit to the amount of products scraped per page
         self.products_per_page = int(products_per_page) if products_per_page else products_per_page
 
     @staticmethod
-    def parse_urls(start_urls: Union[str, List[str]]) -> List[str]:  # type: ignore
+    def parse_urls(start_urls: Union[str, List[str]]) -> List[str]:
         """
         Helper method to parse start_urls.
 
@@ -116,15 +139,20 @@ class BaseSpider(Spider):
         Returns:
             List[str]: start_urls represented as a List.
         """
-        if not (type(start_urls) == str or type(start_urls) == list):
-            logger.error(
+        if not (
+            (type(start_urls) == str)
+            or ((type(start_urls) == list) and (all([type(x) == str for x in start_urls])))
+        ):
+            error_message = (
                 "Argument 'start_urls' need to be of type list or (comma-separated) string."
             )
-        else:
-            return start_urls.split(",") if type(start_urls) == str else start_urls  # type: ignore
+            logger.error(error_message)
+            raise ValueError(error_message)
+
+        return start_urls.split(",") if type(start_urls) == str else start_urls  # type: ignore
 
     @staticmethod
-    def parse_meta_data(meta_data: Union[Dict[str, str], str]) -> dict:  # type: ignore
+    def parse_meta_data(meta_data: Union[Dict[str, str], str, None]) -> Union[dict, None]:
         """
         Helper method to parse meta_data.
 
@@ -134,13 +162,16 @@ class BaseSpider(Spider):
         Returns:
             dict: meta_data represented as dict.
         """
-
-        meta_data = json.loads(meta_data) if isinstance(meta_data, str) else meta_data  # type: ignore # noqa
-        if isinstance(meta_data, dict):
-            return meta_data  # type: ignore
-        else:
-            logger.error("Argument 'meta_data' need to be of type dict or serialized JSON string.")
-            return None  # type: ignore
+        if meta_data:
+            meta_data = json.loads(meta_data) if isinstance(meta_data, str) else meta_data  # type: ignore # noqa
+            if isinstance(meta_data, dict):
+                return meta_data
+            else:
+                logger.error(
+                    "Argument 'meta_data' needs to be of type dict or serialized JSON string."
+                )
+                return None
+        return None
 
     def start_requests(self) -> Iterator[SplashRequest]:
         """
@@ -170,6 +201,8 @@ class BaseSpider(Spider):
                 {
                     "start_urls": self.start_urls,
                     "category": self.category,
+                    "gender": self.gender,
+                    "consumer_lifestage": self.consumer_lifestage,
                     "meta_data": self.meta_data,
                 }
             ]
@@ -183,6 +216,8 @@ class BaseSpider(Spider):
                     callback=self.parse_SERP,
                     meta={
                         "category": setting.get("category"),
+                        "gender": setting.get("gender"),
+                        "consumer_lifestage": setting.get("consumer_lifestage"),
                         "meta_data": self.parse_meta_data(setting.get("meta_data")),  # type: ignore
                     },
                     **get_request_specific_parameters(),
@@ -199,13 +234,18 @@ class BaseSpider(Spider):
         Args:
             response (SplashJsonResponse): Response from a performed request
         """
+
         scraped_page = ScrapedPage(
             timestamp=self.timestamp,
-            merchant=self.name,
+            source=self.source,
+            merchant=self.merchant,
+            country=self.country,
             url=response.url,
             html=response.body.decode("utf-8"),
             page_type=PageType.SERP,
             category=response.meta.get("category"),
+            gender=response.meta.get("gender"),
+            consumer_lifestage=response.meta.get("consumer_lifestage"),
             meta_information=response.meta.get("meta_data"),
         )
 
@@ -220,16 +260,22 @@ class BaseSpider(Spider):
             response (SplashJsonResponse): Response from a performed request
         """
 
-        request_meta_information = response.meta.get("request_meta_information", {})
-        meta_information = response.meta.get("meta_data") | request_meta_information
+        if meta_information := response.meta.get("meta_data"):
+            meta_information |= response.meta.get("request_meta_information", {})
+        else:
+            meta_information = response.meta.get("request_meta_information")
 
         scraped_page = ScrapedPage(
             timestamp=self.timestamp,
-            merchant=self.name,
+            source=self.source,
+            merchant=self.merchant,
+            country=self.country,
             url=response.url,
             html=response.body.decode("utf-8"),
             page_type=PageType.PRODUCT,
             category=response.meta.get("category"),
+            gender=response.meta.get("gender"),
+            consumer_lifestage=response.meta.get("consumer_lifestage"),
             meta_information=meta_information,
         )
 
@@ -269,5 +315,7 @@ class BaseSpider(Spider):
         return {
             "original_URL": original_url if original_url else response.url,
             "category": response.meta.get("category"),
+            "gender": response.meta.get("gender"),
+            "consumer_lifestage": response.meta.get("consumer_lifestage"),
             "meta_data": response.meta.get("meta_data"),
         }

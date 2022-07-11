@@ -5,6 +5,8 @@ from urllib.parse import urlsplit
 
 from scrapy_splash import SplashJsonResponse, SplashRequest
 
+from core.constants import TABLE_NAME_SCRAPING_ZALANDO_DE
+
 from ..splash import minimal_script
 from ._base import BaseSpider
 
@@ -12,7 +14,8 @@ logger = getLogger(__name__)
 
 
 class ZalandoSpider(BaseSpider):
-    name = "zalando"
+    name = TABLE_NAME_SCRAPING_ZALANDO_DE
+    source, _ = name.rsplit("_", 1)
     allowed_domains = ["zalando.de"]
     custom_settings = {"DOWNLOAD_DELAY": 2}
 

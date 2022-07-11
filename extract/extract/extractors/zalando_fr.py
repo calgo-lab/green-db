@@ -1,6 +1,5 @@
-# Since the Enum 'CertificateType' is dynamically generated, mypy can't know the attributes.
-# For this reason, we ignore those errors here.
 # type: ignore[attr-defined]
+
 
 from logging import getLogger
 from typing import Dict, Optional
@@ -8,7 +7,7 @@ from typing import Dict, Optional
 from core.domain import CertificateType, Product
 
 from ..parse import ParsedPage
-from .zalando import extract_zalando
+from .zalando_de import extract_zalando_de
 
 logger = getLogger(__name__)
 
@@ -55,4 +54,4 @@ _LABEL_MAPPING = {
 def extract_zalando_fr(
     parsed_page: ParsedPage, label_mapping: Dict[str, CertificateType] = _LABEL_MAPPING
 ) -> Optional[Product]:
-    return extract_zalando(parsed_page=parsed_page, label_mapping=label_mapping)
+    return extract_zalando_de(parsed_page=parsed_page, label_mapping=label_mapping)

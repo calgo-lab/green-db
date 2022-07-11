@@ -132,7 +132,9 @@ class Scraping(Connection):
             table_name (str): Scraping `table_name` to connect to
         """
         if table_name not in SCRAPING_TABLE_CLASS_FOR.keys():
-            logger.error(f"Can't handle table: '{table_name}'")
+            error_message = f"Can't handle table: '{table_name}'"
+            logger.error(error_message)
+            raise ValueError(error_message)
 
         self.__table_name = table_name
         super().__init__(SCRAPING_TABLE_CLASS_FOR[self.__table_name], DATABASE_NAME_SCRAPING)

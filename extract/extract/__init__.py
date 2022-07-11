@@ -1,43 +1,45 @@
+# type: ignore[attr-defined]
+
 from typing import Optional
 
 from core import log
 from core.constants import (
-    TABLE_NAME_SCRAPING_AMAZON,
+    TABLE_NAME_SCRAPING_AMAZON_DE,
     TABLE_NAME_SCRAPING_AMAZON_FR,
-    TABLE_NAME_SCRAPING_ASOS,
-    TABLE_NAME_SCRAPING_HM,
-    TABLE_NAME_SCRAPING_OTTO,
+    TABLE_NAME_SCRAPING_AMAZON_GB,
+    TABLE_NAME_SCRAPING_ASOS_FR,
+    TABLE_NAME_SCRAPING_HM_FR,
+    TABLE_NAME_SCRAPING_OTTO_DE,
     TABLE_NAME_SCRAPING_ZALANDO_DE,
     TABLE_NAME_SCRAPING_ZALANDO_FR,
-    TABLE_NAME_SCRAPING_ZALANDO_UK,
+    TABLE_NAME_SCRAPING_ZALANDO_GB,
 )
 from core.domain import Product, ScrapedPage
 
-from .extractors.amazon import extract_amazon  # type: ignore[attr-defined]
-from .extractors.amazon_fr import extract_amazon_fr  # type: ignore[attr-defined]
-
-# Because we ignored the files `zalando.py` and `otto.py` we have to skip them here as well
-from .extractors.asos import extract_asos  # type: ignore[attr-defined]
-from .extractors.hm import extract_hm  # type: ignore[attr-defined]
-from .extractors.otto import extract_otto  # type: ignore[attr-defined]
-from .extractors.zalando import extract_zalando  # type: ignore[attr-defined]
-from .extractors.zalando_fr import extract_zalando_fr  # type: ignore[attr-defined]
-from .extractors.zalando_uk import extract_zalando_uk  # type: ignore[attr-defined]
+from .extractors.amazon_de import extract_amazon_de
+from .extractors.amazon_fr import extract_amazon_fr
+from .extractors.amazon_gb import extract_amazon_gb
+from .extractors.asos_fr import extract_asos_fr
+from .extractors.hm_fr import extract_hm_fr
+from .extractors.otto_de import extract_otto_de
+from .extractors.zalando_de import extract_zalando_de
+from .extractors.zalando_fr import extract_zalando_fr
+from .extractors.zalando_gb import extract_zalando_uk
 from .parse import parse_page
 
 log.setup_logger(__name__)
 
 # Maps a scraping table name to its extraction method
 EXTRACTOR_FOR_TABLE_NAME = {
-    TABLE_NAME_SCRAPING_AMAZON: extract_amazon,
+    TABLE_NAME_SCRAPING_AMAZON_DE: extract_amazon_de,
     TABLE_NAME_SCRAPING_AMAZON_FR: extract_amazon_fr,
-    TABLE_NAME_SCRAPING_ASOS: extract_asos,
-    TABLE_NAME_SCRAPING_OTTO: extract_otto,
-    TABLE_NAME_SCRAPING_ZALANDO_DE: extract_zalando,
+    TABLE_NAME_SCRAPING_AMAZON_GB: extract_amazon_gb,
+    TABLE_NAME_SCRAPING_ASOS_FR: extract_asos_fr,
+    TABLE_NAME_SCRAPING_HM_FR: extract_hm_fr,
+    TABLE_NAME_SCRAPING_OTTO_DE: extract_otto_de,
+    TABLE_NAME_SCRAPING_ZALANDO_DE: extract_zalando_de,
     TABLE_NAME_SCRAPING_ZALANDO_FR: extract_zalando_fr,
-    TABLE_NAME_SCRAPING_ASOS: extract_asos,
-    TABLE_NAME_SCRAPING_HM: extract_hm,
-    TABLE_NAME_SCRAPING_ZALANDO_UK: extract_zalando_uk,
+    TABLE_NAME_SCRAPING_ZALANDO_GB: extract_zalando_uk,
 }
 
 

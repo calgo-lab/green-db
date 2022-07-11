@@ -19,14 +19,43 @@ class CurrencyType(str, Enum):
     GBP = "GBP"
 
 
+class CountryType(str, Enum):
+    DE = "DE"
+    GB = "GB"
+    FR = "FR"
+
+
+class GenderType(str, Enum):
+    FEMALE = "FEMALE"
+    MALE = "MALE"
+    UNISEX = "UNISEX"
+    UNIDENTIFIED = "UNIDENTIFIED"
+    UNCLASSIFIED = "UNCLASSIFIED"
+
+
+class ConsumerLifestageType(str, Enum):
+    ADULT = "ADULT"
+    ALL_AGES = "ALL AGES"
+    BABY_INFANT = "BABY/INFANT"
+    CHILD_1_to_2_YEARS = "CHILD 1-2 YEARS"
+    CHILD_2_YEARS_ONWARDS = "CHILD 2 YEARS ONWARDS"
+    UNIDENTIFIED = "UNIDENTIFIED"
+    UNCLASSIFIED = "UNCLASSIFIED"
+
+
 class ScrapedPage(BaseModel):
     timestamp: datetime
+    source: str
     merchant: str
+    country: CountryType
     url: str
     html: str
-    page_type: PageType
     category: str
-    meta_information: dict
+    gender: Optional[GenderType]
+    consumer_lifestage: Optional[ConsumerLifestageType]
+
+    page_type: PageType
+    meta_information: Optional[dict]
 
     class Config:
         orm_mode = True
@@ -36,7 +65,9 @@ class ScrapedPage(BaseModel):
 class Product(BaseModel):
     timestamp: datetime
     url: str
+    source: str
     merchant: str
+    country: CountryType
     category: str
     name: str
     description: str
@@ -46,8 +77,10 @@ class Product(BaseModel):
     currency: CurrencyType
     image_urls: List[str]
 
-    color: Optional[str]
-    size: Optional[str]
+    gender: Optional[GenderType]
+    consumer_lifestage: Optional[ConsumerLifestageType]
+    colors: Optional[List[str]]
+    sizes: Optional[List[str]]
 
     # int, source: https://support.google.com/merchants/answer/6219078?hl=en
     gtin: Optional[int]

@@ -3,1132 +3,1162 @@
         "de": "Haarbänder",
         "fr": "Bandeaux",
         "gender": [
-            "female"
+            "FEMALE"
         ],
-        "mapping": ""
+        "category": ""
     },
     "8609": {
         "de": "Schuhe",
         "fr": "Chaussures",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": "SHOES"
+        "category": "SHOES"
     },
     "8559": {
         "de": "Badeanzüge",
         "fr": "Maillots 1 pièce",
         "gender": [
-            "female"
+            "FEMALE"
         ],
-        "mapping": "SWIMMWEAR"
+        "category": "SWIMMWEAR"
     },
     "8399": {
         "de": "Westen",
         "fr": "Doudounes sans manches",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": "JACKET"
+        "category": "JACKET"
     },
     "8576": {
         "de": "Badeshorts",
         "fr": "Shorts de bain",
         "gender": [
-            "male"
+            "MALE"
         ],
-        "mapping": "SWIMMWEAR"
+        "category": "SWIMMWEAR"
     },
     "8388": {
         "de": "Pyjama",
         "fr": "Pyjamas",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": "NIGHTWEAR"
+        "category": "NIGHTWEAR"
     },
     "8238": {
         "de": "Mützen",
         "fr": "Bonnets",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": ""
+        "category": ""
     },
     "9337": {
         "de": "Jammers",
         "fr": "Cuissards",
         "gender": [
-            "male"
+            "MALE"
         ],
-        "mapping": ["PANT", {"type": "SPORT"}]
+        "category": [
+            "PANT",
+            {
+                "type": "SPORT"
+            }
+        ]
     },
     "8467": {
         "de": "Bademäntel",
         "fr": "Peignoirs",
         "gender": [
-            "female"
+            "FEMALE"
         ],
-        "mapping": "SWIMMWEAR"
+        "category": "SWIMMWEAR"
     },
     "8385": {
         "de": "Leggings",
         "fr": "Leggings",
         "gender": [
-            "female"
+            "FEMALE"
         ],
-        "mapping": "PANT"
+        "category": "PANT"
     },
     "9344": {
         "de": "Bauchbänder",
         "fr": "Bandeaux de grossesse",
         "gender": [
-            "female"
+            "FEMALE"
         ],
-        "mapping": "UNDERWEAR"
+        "category": "UNDERWEAR"
     },
     "8737": {
         "de": "Strumpfhalter",
         "fr": "Porte-jarretelles",
         "gender": [
-            "female"
+            "FEMALE"
         ],
-        "mapping": "UNDERWEAR"
+        "category": "UNDERWEAR"
     },
     "8414": {
         "de": "Trägershirts",
         "fr": "Débardeurs",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": "SHIRT"
+        "category": "SHIRT"
     },
     "8416": {
         "de": "Kleider",
         "fr": "Robes",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": "DRESS"
+        "category": "DRESS"
     },
     "8406": {
         "de": "Mäntel",
         "fr": "Manteaux",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": "JACKET"
+        "category": "JACKET"
     },
     "8374": {
         "de": "Strumpfhosen",
         "fr": "Collants",
         "gender": [
-            "female"
+            "FEMALE"
         ],
-        "mapping": "PANT"
+        "category": "PANT"
     },
     "8286": {
         "de": "Enge Halsketten",
         "fr": "Colliers ras de cou",
         "gender": [
-            "female"
+            "FEMALE"
         ],
-        "mapping": ""
+        "category": ""
     },
     "9834": {
         "de": "Bikinihosen",
         "fr": "Bas de bikini",
         "gender": [
-            "female"
+            "FEMALE"
         ],
-        "mapping": "SWIMMWEAR"
+        "category": "SWIMMWEAR"
     },
     "8273": {
         "de": "Rundschals",
         "fr": "Écharpes tubes",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": ""
+        "category": ""
     },
     "9308": {
         "de": "Kompressionsshorts",
         "fr": "Shorts de compression",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": ["PANT", {"type": "SPORT"}]
+        "category": [
+            "PANT",
+            {
+                "type": "SPORT"
+            }
+        ]
     },
     "8544": {
         "de": "Nail-Art",
         "fr": "Nail Art",
         "gender": [
-            "female"
+            "FEMALE"
         ],
-        "mapping": ""
+        "category": ""
     },
     "8574": {
         "de": "Boardshorts",
         "fr": "Boardshorts",
         "gender": [
-            "male"
+            "MALE"
         ],
-        "mapping": "SWIMMWEAR"
+        "category": "SWIMMWEAR"
     },
     "10883": {
         "de": "Hygieneprodukte",
         "fr": "Produits d'hygiène",
         "gender": [
-            "female"
+            "FEMALE"
         ],
-        "mapping": "UNDERWEAR"
+        "category": "UNDERWEAR"
     },
     "9233": {
         "de": "Bikinis",
         "fr": "Bikinis",
         "gender": [
-            "female"
+            "FEMALE"
         ],
-        "mapping": "SWIMMWEAR"
+        "category": "SWIMMWEAR"
     },
     "8397": {
         "de": "Hosen",
         "fr": "Pantalons",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": "PANT"
+        "category": "PANT"
     },
     "8407": {
         "de": "Jogginghosen",
         "fr": "Joggers",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": "PANT"
+        "category": "PANT"
     },
     "8520": {
         "de": "Schlafmasken",
         "fr": "Masques de sommeil",
         "gender": [
-            "female"
+            "FEMALE"
         ],
-        "mapping": "NIGHTWEAR"
+        "category": "NIGHTWEAR"
     },
     "8567": {
         "de": "Einteiler",
         "fr": "Combis moulantes",
         "gender": [
-            "female"
+            "FEMALE"
         ],
-        "mapping": "OVERALL"
+        "category": "OVERALL"
     },
     "9304": {
         "de": "Rugby-Hemden",
         "fr": "Maillots de rugby",
         "gender": [
-            "male"
+            "MALE"
         ],
-        "mapping": "SHIRT"
+        "category": "SHIRT"
     },
     "8612": {
         "de": "Ringe",
         "fr": "Bagues",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": ""
+        "category": ""
     },
     "9747": {
         "de": "Lingerie Bodys",
         "fr": "Bodys de la collection lingerie",
         "gender": [
-            "female"
+            "FEMALE"
         ],
-        "mapping": "UNDERWEAR"
+        "category": "UNDERWEAR"
     },
     "8253": {
         "de": "Gürtel",
         "fr": "Ceintures",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": ""
+        "category": ""
     },
     "8600": {
         "de": "Sandalen",
         "fr": "Sandales",
         "gender": [
-            "female"
+            "FEMALE"
         ],
-        "mapping": "SHOES"
+        "category": "SHOES"
     },
     "8387": {
         "de": "Pullover",
         "fr": "Pulls",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": "SWEATER"
+        "category": "SWEATER"
     },
     "10888": {
         "de": "Polohemden",
         "fr": "Polos",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": "SHIRT"
+        "category": "SHIRT"
     },
     "8392": {
         "de": "Blusen",
         "fr": "Blouses",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": "BLOUSE"
+        "category": "BLOUSE"
     },
     "8403": {
         "de": "Kurze Jumpsuits",
         "fr": "Combishorts",
         "gender": [
-            "female"
+            "FEMALE"
         ],
-        "mapping": "OVERALL"
+        "category": "OVERALL"
     },
     "8366": {
         "de": "Socken",
         "fr": "Chaussettes",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": ""
+        "category": ""
     },
     "8248": {
         "de": "Kopfbänder",
         "fr": "Bandeaux",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": ""
+        "category": ""
     },
     "8391": {
         "de": "Kapuzenpullover",
         "fr": "Sweats à capuche",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": "SWEATER"
+        "category": "SWEATER"
     },
     "8415": {
         "de": "T-Shirts",
         "fr": "T-shirts",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": "SHIRT"
+        "category": "SHIRT"
     },
     "8565": {
         "de": "BHs",
         "fr": "Soutiens-gorge",
         "gender": [
-            "female"
+            "FEMALE"
         ],
-        "mapping": "UNDERWEAR"
+        "category": "UNDERWEAR"
     },
     "9040": {
         "de": "Schlafanzugoberteile",
         "fr": "Hauts de pyjama",
         "gender": [
-            "female"
+            "FEMALE"
         ],
-        "mapping": "NIGHTWEAR"
+        "category": "NIGHTWEAR"
     },
     "8417": {
         "de": "Camisoles",
         "fr": "Caracos",
         "gender": [
-            "female"
+            "FEMALE"
         ],
-        "mapping": "TOP"
+        "category": "TOP"
     },
     "8563": {
         "de": "Slips",
         "fr": "Combinaisons",
         "gender": [
-            "female"
+            "FEMALE"
         ],
-        "mapping": "UNDERWEAR"
+        "category": "UNDERWEAR"
     },
     "8259": {
         "de": "Einstecktücher",
         "fr": "Pochettes",
         "gender": [
-            "male"
+            "MALE"
         ],
-        "mapping": ""
+        "category": ""
     },
     "8244": {
         "de": "Sonnenbrillen",
         "fr": "Lunettes de soleil",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": ""
+        "category": ""
     },
     "8283": {
         "de": "Taschen",
         "fr": "Sacs",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": "BAG"
+        "category": "BAG"
     },
     "8257": {
         "de": "Bandanas",
         "fr": "Bandanas",
         "gender": [
-            "male"
+            "MALE"
         ],
-        "mapping": ""
+        "category": ""
     },
     "9335": {
         "de": "Trägerhemden",
         "fr": "Débardeurs",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": "TOP"
+        "category": "TOP"
     },
     "8472": {
         "de": "Trainingsanzüge",
         "fr": "Survêtements",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": "TRACKSUIT"
+        "category": "TRACKSUIT"
     },
     "8606": {
         "de": "Sneaker",
         "fr": "Baskets",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": "SHOES"
+        "category": "SHOES"
     },
     "8398": {
         "de": "Crop Tops",
         "fr": "Tops courts",
         "gender": [
-            "female"
+            "FEMALE"
         ],
-        "mapping": "TOP"
+        "category": "TOP"
     },
     "8715": {
         "de": "Nachthemden",
         "fr": "Nuisettes",
         "gender": [
-            "female"
+            "FEMALE"
         ],
-        "mapping": "NIGHTWEAR"
+        "category": "NIGHTWEAR"
     },
     "9312": {
         "de": "Kompressionsstrumpfhosen",
         "fr": "Collants de compression",
         "gender": [
-            "male"
+            "MALE"
         ],
-        "mapping": "UNDERWEAR"
+        "category": "UNDERWEAR"
     },
     "8264": {
         "de": "Ponchos",
         "fr": "Ponchos",
         "gender": [
-            "female"
+            "FEMALE"
         ],
-        "mapping": ""
+        "category": ""
     },
     "8591": {
         "de": "Armbänder",
         "fr": "Bracelets",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": ""
+        "category": ""
     },
     "8241": {
         "de": "Halswärmer",
         "fr": "Tours de cou",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": ""
+        "category": ""
     },
     "8577": {
         "de": "Boxer",
         "fr": "Caleçon",
         "gender": [
-            "male"
+            "MALE"
         ],
-        "mapping": "UNDERWEAR"
+        "category": "UNDERWEAR"
     },
     "8369": {
         "de": "Haarclips",
         "fr": "Barrettes à cheveux",
         "gender": [
-            "female"
+            "FEMALE"
         ],
-        "mapping": ""
+        "category": ""
     },
     "8386": {
         "de": "Shorts",
         "fr": "Shorts",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": "PANT"
+        "category": "PANT"
     },
     "8597": {
         "de": "Hausschuhe",
         "fr": "Chaussons",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": "SHOES"
+        "category": "SHOES"
     },
     "8275": {
         "de": "Kappen",
         "fr": "Casquettes",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": ""
+        "category": ""
     },
     "8572": {
         "de": "Unterhosen",
         "fr": "Boxers",
         "gender": [
-            "male"
+            "MALE"
         ],
-        "mapping": "UNDERWEAR"
+        "category": "UNDERWEAR"
     },
     "8402": {
         "de": "Röcke",
         "fr": "Jupes",
         "gender": [
-            "female"
+            "FEMALE"
         ],
-        "mapping": "SKIRT"
+        "category": "SKIRT"
     },
     "8566": {
         "de": "Sport-BHs",
         "fr": "Soutiens-gorge sport",
         "gender": [
-            "female"
+            "FEMALE"
         ],
-        "mapping": ["UNDERWEAR", {"type": "SPORT"}]
+        "category": [
+            "UNDERWEAR",
+            {
+                "type": "SPORT"
+            }
+        ]
     },
     "9349": {
         "de": "Kombiteile",
         "fr": "Ensembles",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": ""
+        "category": ""
     },
     "8393": {
         "de": "Jeans",
         "fr": "Jeans",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": "JEANS"
+        "category": "JEANS"
     },
     "8411": {
         "de": "Latzhosen",
         "fr": "Salopettes",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": "PANT"
+        "category": "PANT"
     },
     "9229": {
         "de": "Brillen mit klaren Gläsern",
         "fr": "Lunettes à verres transparents",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": ""
+        "category": ""
     },
     "9311": {
         "de": "Fußball-Shirts",
         "fr": "Maillots de football",
         "gender": [
-            "male"
+            "MALE"
         ],
-        "mapping": ["SHIRT", {"type": "SPORT"}]
+        "category": [
+            "SHIRT",
+            {
+                "type": "SPORT"
+            }
+        ]
     },
     "8236": {
         "de": "Handschuhe",
         "fr": "Gants",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": ""
+        "category": ""
     },
     "8409": {
         "de": "Tuniken",
         "fr": "Tuniques",
         "gender": [
-            "female"
+            "FEMALE"
         ],
-        "mapping": "SHIRT"
+        "category": "SHIRT"
     },
     "8276": {
         "de": "Schals",
         "fr": "Écharpes",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": ""
+        "category": ""
     },
     "8470": {
         "de": "Meggings",
         "fr": "Meggings",
         "gender": [
-            "male"
+            "MALE"
         ],
-        "mapping": "PANT"
+        "category": "PANT"
     },
     "8412": {
         "de": "Jeggings",
         "fr": "Jeggings",
         "gender": [
-            "female"
+            "FEMALE"
         ],
-        "mapping": "JEANS"
+        "category": "JEANS"
     },
     "8711": {
         "de": "Bikinioberteile",
         "fr": "Tops de bikini",
         "gender": [
-            "female"
+            "FEMALE"
         ],
-        "mapping": "SWIMMWEAR"
+        "category": "SWIMMWEAR"
     },
     "8541": {
         "de": "Haarmarken",
         "fr": "Serre-têtes",
         "gender": [
-            "female"
+            "FEMALE"
         ],
-        "mapping": ""
+        "category": ""
     },
     "8390": {
         "de": "Hemden",
         "fr": "Chemises",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": "SHIRT"
+        "category": "SHIRT"
     },
     "8560": {
         "de": "Bustiers",
         "fr": "Bustiers",
         "gender": [
-            "female"
+            "FEMALE"
         ],
-        "mapping": "UNDERWEAR"
+        "category": "UNDERWEAR"
     },
     "8404": {
         "de": "Strickjacken",
         "fr": "Gilets",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": "JACKET"
+        "category": "JACKET"
     },
     "8400": {
         "de": "Blazer",
         "fr": "Blazers",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": "SUIT"
+        "category": "SUIT"
     },
     "8655": {
         "de": "Anzugjacken",
         "fr": "Vestons",
         "gender": [
-            "male"
+            "MALE"
         ],
-        "mapping": "SUIT"
+        "category": "SUIT"
     },
     "10774": {
         "de": "Slider",
         "fr": "Claquettes",
         "gender": [
-            "male"
+            "MALE"
         ],
-        "mapping": "SHOES"
+        "category": "SHOES"
     },
     "8592": {
         "de": "Ohrringe",
         "fr": "Boucles d'oreilles",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": ""
+        "category": ""
     },
     "8585": {
         "de": "Stiefel",
         "fr": "Bottes",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": "SHOES"
+        "category": "SHOES"
     },
     "9748": {
         "de": "Lingerie Bustier",
         "fr": "Brassières de la collection lingerie",
         "gender": [
-            "female"
+            "FEMALE"
         ],
-        "mapping": "UNDERWEAR"
+        "category": "UNDERWEAR"
     },
     "9291": {
         "de": "Accessoire-Sets",
         "fr": "Parures d'accessoires",
         "gender": [
-            "male"
+            "MALE"
         ],
-        "mapping": ""
+        "category": ""
     },
     "8401": {
         "de": "Jacken",
         "fr": "Vestes",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": "JACKET"
+        "category": "JACKET"
     },
     "8578": {
         "de": "Tanga",
         "fr": "Strings",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": "UNDERWEAR"
+        "category": "UNDERWEAR"
     },
     "8557": {
         "de": "Kurze, enge Badehosen",
         "fr": "Slips de bain",
         "gender": [
-            "male"
+            "MALE"
         ],
-        "mapping": "SWIMMWEAR"
+        "category": "SWIMMWEAR"
     },
     "8555": {
         "de": "Overalls",
         "fr": "Bleus de travail",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": "OVERALL"
+        "category": "OVERALL"
     },
     "8562": {
         "de": "Slips",
         "fr": "Slips",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": "UNDERWEAR"
+        "category": "UNDERWEAR"
     },
     "8245": {
         "de": "Hüte",
         "fr": "Chapeaux",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": ""
+        "category": ""
     },
     "8554": {
         "de": "Westen",
         "fr": "Gilets",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": "JACKET"
+        "category": "JACKET"
     },
     "9302": {
         "de": "Taschenketten",
         "fr": "Chaînes de poche",
         "gender": [
-            "male"
+            "MALE"
         ],
-        "mapping": "BAG"
+        "category": "BAG"
     },
     "8466": {
         "de": "Freizeitkleidung – Sets",
         "fr": "Ensembles de vêtements confort",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": ""
+        "category": ""
     },
     "8654": {
         "de": "Anzughosen",
         "fr": "Pantalons de costume",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": "SUIT"
+        "category": "SUIT"
     },
     "9303": {
         "de": "Nasenringe",
         "fr": "Anneaux de nez",
         "gender": [
-            "male"
+            "MALE"
         ],
-        "mapping": ""
+        "category": ""
     },
     "8384": {
         "de": "Jumpsuits",
         "fr": "Combinaisons",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": "OVERALL"
+        "category": "OVERALL"
     },
     "9298": {
         "de": "Lauf-Strumpfhosen",
         "fr": "Collants de course",
         "gender": [
-            "male"
+            "MALE"
         ],
-        "mapping": ["PANT", {"type": "SPORT"}]
+        "category": [
+            "PANT",
+            {
+                "type": "SPORT"
+            }
+        ]
     },
     "8605": {
         "de": "Fußkettchen",
         "fr": "Bracelets de cheville",
         "gender": [
-            "female"
+            "FEMALE"
         ],
-        "mapping": ""
+        "category": ""
     },
     "8452": {
         "de": "Strandkleider",
         "fr": "Tenues de plage",
         "gender": [
-            "female"
+            "FEMALE"
         ],
-        "mapping": "DRESS"
+        "category": "DRESS"
     },
     "9038": {
         "de": "Pyjamahose",
         "fr": "Bas de pyjama",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": "NIGHTWEAR"
+        "category": "NIGHTWEAR"
     },
     "8712": {
         "de": "Bauchketten",
         "fr": "Chaînes de ventre",
         "gender": [
-            "female"
+            "FEMALE"
         ],
-        "mapping": ""
+        "category": ""
     },
     "8736": {
         "de": "Strumpfhalter",
         "fr": "Porte-jarretelles",
         "gender": [
-            "female"
+            "FEMALE"
         ],
-        "mapping": "UNDERWEAR"
+        "category": "UNDERWEAR"
     },
     "10885": {
         "de": "Fleece-Kleidung",
         "fr": "Polaires",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": "SWEATER"
+        "category": "SWEATER"
     },
     "8410": {
         "de": "Bodys",
         "fr": "Corsage",
         "gender": [
-            "female"
+            "FEMALE"
         ],
-        "mapping": "TOP"
+        "category": "TOP"
     },
     "8431": {
         "de": "Geldbörsen",
         "fr": "Porte-monnaie",
         "gender": [
-            "female"
+            "FEMALE"
         ],
-        "mapping": "BAG"
+        "category": "BAG"
     },
     "8282": {
         "de": "Kosmetiktaschen",
         "fr": "Trousses de toilette",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": "BAG"
+        "category": "BAG"
     },
     "8271": {
         "de": "Kartenhalter",
         "fr": "Porte-cartes",
         "gender": [
-            "female"
+            "FEMALE"
         ],
-        "mapping": ""
+        "category": ""
     },
     "8468": {
         "de": "Nachtwäsche-Sets",
         "fr": "Lot de pyjamas",
         "gender": [
-            "female"
+            "FEMALE"
         ],
-        "mapping": "NIGHTWEAR"
+        "category": "NIGHTWEAR"
     },
     "8285": {
         "de": "Manschettenknöpfe",
         "fr": "Boutons de manchettes",
         "gender": [
-            "male"
+            "MALE"
         ],
-        "mapping": ""
+        "category": ""
     },
     "8377": {
         "de": "Kopftücher",
         "fr": "Bandeaux",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": ""
+        "category": ""
     },
     "8265": {
         "de": "Krawatten",
         "fr": "Cravates",
         "gender": [
-            "male"
+            "MALE"
         ],
-        "mapping": ""
+        "category": ""
     },
     "8405": {
         "de": "Sweatshirts",
         "fr": "Sweats",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": "SWEATER"
+        "category": "SWEATER"
     },
     "8284": {
         "de": "Fliegen",
         "fr": "Nœuds papillon",
         "gender": [
-            "male"
+            "MALE"
         ],
-        "mapping": ""
+        "category": ""
     },
     "8242": {
         "de": "Harnische",
         "fr": "Harnais",
         "gender": [
-            "female"
+            "FEMALE"
         ],
-        "mapping": ""
+        "category": ""
     },
     "8396": {
         "de": "Chinohosen",
         "fr": "Pantalons chino",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": "PANT"
+        "category": "PANT"
     },
     "11273": {
         "de": "Korsettoberteile",
         "fr": "Tops style corset",
         "gender": [
-            "female"
+            "FEMALE"
         ],
-        "mapping": "UNDERWEAR"
+        "category": "UNDERWEAR"
     },
     "8570": {
         "de": "Jockstraps",
         "fr": "Jock-straps",
         "gender": [
-            "male"
+            "MALE"
         ],
-        "mapping": "UNDERWEAR"
+        "category": "UNDERWEAR"
     },
     "8266": {
         "de": "Gürteltaschen",
         "fr": "Sacs banane",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": "BAG"
+        "category": "BAG"
     },
     "8700": {
         "de": "Korsetts",
         "fr": "Corsets",
         "gender": [
-            "female"
+            "FEMALE"
         ],
-        "mapping": "UNDERWEAR"
+        "category": "UNDERWEAR"
     },
     "8471": {
         "de": "Onesies",
         "fr": "Onesies",
         "gender": [
-            "male"
+            "MALE"
         ],
-        "mapping": "NIGHTWEAR"
+        "category": "NIGHTWEAR"
     },
     "8558": {
         "de": "Formende Unterwäsche",
         "fr": "Gaines et collants",
         "gender": [
-            "female"
+            "FEMALE"
         ],
-        "mapping": "UNDERWEAR"
+        "category": "UNDERWEAR"
     },
     "8556": {
         "de": "Unterwäsche-Sets",
         "fr": "Ensembles lingerie",
         "gender": [
-            "female"
+            "FEMALE"
         ],
-        "mapping": "UNDERWEAR"
+        "category": "UNDERWEAR"
     },
     "8261": {
         "de": "Armspangen",
         "fr": "Manchettes de bras",
         "gender": [
-            "female"
+            "FEMALE"
         ],
-        "mapping": ""
+        "category": ""
     },
     "9306": {
         "de": "Kompressionsoberteile",
         "fr": "Tops de compression",
         "gender": [
-            "male"
+            "MALE"
         ],
-        "mapping": ["SHIRT", {"type": "SPORT"}]
+        "category": [
+            "SHIRT",
+            {
+                "type": "SPORT"
+            }
+        ]
     },
     "8469": {
         "de": "Morgenmäntel",
         "fr": "Robes de chambre",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": "NIGHTWEAR"
+        "category": "NIGHTWEAR"
     },
     "8608": {
         "de": "Ketten",
         "fr": "Colliers",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": ""
+        "category": ""
     },
     "8568": {
         "de": "Unterwäsche-Sets",
         "fr": "Ensembles lingerie",
         "gender": [
-            "male"
+            "MALE"
         ],
-        "mapping": "NIGHTWEAR"
+        "category": "NIGHTWEAR"
     },
     "9292": {
         "de": "Sonnenbrillen-Accessoires",
         "fr": "Accessoires lunettes de soleil",
         "gender": [
-            "male"
+            "MALE"
         ],
-        "mapping": ""
+        "category": ""
     },
     "8361": {
         "de": "Kragen",
         "fr": "Cols",
         "gender": [
-            "female"
+            "FEMALE"
         ],
-        "mapping": "JACKET"
+        "category": "JACKET"
     },
     "8281": {
         "de": "Rucksäcke",
         "fr": "Sacs à dos",
         "gender": [
-            "female",
-            "male"
+            "FEMALE",
+            "MALE"
         ],
-        "mapping": "BACKPACK"
+        "category": "BACKPACK"
     }
 }
