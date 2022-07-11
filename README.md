@@ -83,7 +83,7 @@ If you are using our code or the GreenDB dataset, please reference the [preprint
 
 ## Research
 
-- [1]: Jäger, Sebastian, & Bießmann, Felix. (2022). GreenDB: A Product-by-Product Sustainability Database (0.1.0) [Data set]. Zenodo. https://doi.org/10.5281/zenodo.6078039
+- [1]: Jäger, Sebastian, Bießmann, Felix, Flick, Alexander, Sanchez Garcia, Jessica Adriana, von den Driesch, Kaspar, & Brendel, Karl. (2022). GreenDB: A Product-by-Product Sustainability Database (0.2.0) [Data set]. Zenodo. https://doi.org/10.5281/zenodo.6078038
 - [2]: Jäger, S., Greene, J., Jakob, M., Korenke, R., Santarius, T., & Biessmann, F. (2022). GreenDB: Toward a Product-by-Product Sustainability Database. [ArXiv, abs/2205.02908](https://arxiv.org/abs/2205.02908).
 - [3]: Cathérine Lehmann. (2021). Scaling sustainability advice - Options for generating large-scale green consumption recommendations. URL: https://green-consumption-assistant.de/wp-content/uploads/GCA-Working-Paper-I-Scaling-Sustainability-Advice.pdf
 
