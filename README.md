@@ -13,7 +13,7 @@ The publicly available open GreenDB is a product database. It contains classical
 
 The GreenDB enables the implementation of applications such as the prototypical Chrome Extension [*Koala - Ecosia Assistant Beta - Grün shoppen*](https://chrome.google.com/webstore/detail/koala-ecosia-assistant-be/anhndceoafjjdihnjnpojdihgboocgpa), which we built as part of the GCA project. The Koala detects when and what users would like to buy online and offers more sustainable alternatives. More information can be found in [one of our working papers [3]](https://green-consumption-assistant.de/wp-content/uploads/GCA-Working-Paper-I-Scaling-Sustainability-Advice.pdf).
 
-With the open GreenDB, we hope to contribute to the fight against climate change by enabling others to build applications that support more sustainable consumption. Further, we plan to publish datasets to support the research community.
+With the open GreenDB, we hope to contribute to the fight against climate crises by enabling others to build applications that support more sustainable consumption. Further, we plan to publish datasets to support the research community.
 
 If you would like to participate with code, data, or anything else, [reach out to use!](#contact)
 
