@@ -22,7 +22,7 @@ If you would like to participate with code, data, or anything else, [reach out t
 
 Nowadays, some online shops offer `sustainability` filters. We use scraping technologies to automatically find these sustainable products and integrate them into the GreenDB. Further, we evaluate the sustainability information and use easily accessible scores (0 - 100) for fine-grained aspects of three sustainability dimensions: `social`, `ecological`, and their `credibility`.
 
-However, manual evaluating products does not scale well. Therefore, we leverage that products can be certified with *sustainability labels*. The German website [Siegelklarheit](https://www.siegelklarheit.de) systematically evaluates sustainability labels and makes their results publicly available. We use these  to infer a products' sustainability if it is certified with a sustainability label.
+However, manual evaluating products does not scale well. Therefore, we leverage that products can be certified with *sustainability labels*. The German website [Siegelklarheit](https://www.siegelklarheit.de) systematically evaluates sustainability labels and makes their results publicly available. We use these to infer a products' sustainability if it is certified with a sustainability label.
 
 
 ## GreenDB schema
@@ -33,9 +33,9 @@ The GreenDB schema is highly inspired by [schema.org](https://schema.org). Howev
 ### Table: `green-db`
 
 | **column name**      | **id** | **gtin** | **asin** | **timestamp** | **url** | **source** | **merchant** | **country** | **category** | **name** | **description** | **brand** | **sustainability_labels** | **price** | **currency** | **image_urls** | **colors**  | **sizes**   | **gender** | **consumer_lifestage** |
-| -------------------- | ------ | -------- | -------- | ------------- | ------- |------------|--------------|-------------| ------------ | -------- | --------------- | --------- | ------------------------- | --------- | ------------ | -------------- |-------------|-------------|------------|------------------------|
+| -------------------- | ------ | -------- | -------- | ------------- | ------- | ---------- | ------------ | ----------- | ------------ | -------- | --------------- | --------- | ------------------------- | --------- | ------------ | -------------- | ----------- | ----------- | ---------- | ---------------------- |
 | **column data type** | int4   | int8     | text     | timestamp     | text    | text       | text         | text        | text         | text     | text            | text      | array[text]               | numeric   | text         | array[text]    | array[text] | array[text] | text       | text                   |
-| **column nullable**  | no     | yes      | yes      | no            | no      | no         |  no          | no          | no           | no       | no              | no        | no                        | no        | no           | no             | yes         | yes         | yes        | yes                    |
+| **column nullable**  | no     | yes      | yes      | no            | no      | no         | no           | no          | no           | no       | no              | no        | no                        | no        | no           | no             | yes         | yes         | yes        | yes                    |
 
 
 **Please note**: Currently, we use our own `category` strings, which are not documented. However, we plan to switch to the [GS1 Global Product Classification](https://www.gs1.org/standards/gpc) taxonomy to rely on a public definition of the `category` column.
@@ -44,7 +44,7 @@ The GreenDB schema is highly inspired by [schema.org](https://schema.org). Howev
 ### Table: `sustainability-labels`
 
 | **column name**      | **id** | **timestamp** | **name** | **description** | **cred_credibility** | **eco_chemicals** | **eco_lifetime** | **eco_water** | **eco_inputs** | **eco_quality** | **eco_energy** | **eco_waste_air** | **eco_environmental_management** | **social_labour_rights** | **social_business_practice** | **social_social_rights** | **social_company_responsibility** |
-| -------------------- | ------ | ------------- | -------- | --------------- | ---------------------| ------------------| -----------------|---------------|----------------|-----------------|----------------|-------------------|----------------------------------|--------------------------|------------------------------|--------------------------|-----------------------------------|
+| -------------------- | ------ | ------------- | -------- | --------------- | -------------------- | ----------------- | ---------------- | ------------- | -------------- | --------------- | -------------- | ----------------- | -------------------------------- | ------------------------ | ---------------------------- | ------------------------ | --------------------------------- |
 | **column data type** | text   | timestamp     | text     | text            | int4                 | int4              | int4             | int4          | int4           | int4            | int4           | int4              | int4                             | int4                     | int4                         | int4                     | int4                              |
 | **column nullable?** | no     | no            | no       | no              | yes                  | yes               | yes              | yes           | yes            | yes             | yes            | yes               | yes                              | yes                      | yes                          | yes                      | yes                               |
 
