@@ -20,7 +20,7 @@ If you would like to participate with code, data, or anything else, [reach out t
 
 ## Where do we get product and sustainability information?
 
-Nowadays, some online shops offer `sustainability` filters. We use scraping technologies to automatically find these sustainable products and integrate them into the GreenDB. Further, we evaluate the sustainability information and (currently) use easily accessible scores (0 - 100) for three sustainability dimensions: `social`, `ecological`, and their `credibility`.
+Nowadays, some online shops offer `sustainability` filters. We use scraping technologies to automatically find these sustainable products and integrate them into the GreenDB. Further, we evaluate the sustainability information and use easily accessible scores (0 - 100) for fine-grained aspects of three sustainability dimensions: `social`, `ecological`, and their `credibility`.
 
 However, manual evaluating products does not scale well. Therefore, we leverage that products can be certified with *sustainability labels*. The German website [Siegelklarheit](https://www.siegelklarheit.de) systematically evaluates sustainability labels and makes their results publicly available. We use these  to infer a products' sustainability if it is certified with a sustainability label.
 
