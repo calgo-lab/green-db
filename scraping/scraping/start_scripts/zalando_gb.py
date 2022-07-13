@@ -70,7 +70,10 @@ def male() -> List[dict]:
         "/mens-clothing-sports-socks/": (ProductCategory.UNDERWEAR.value, {"type": "SPORT"}),
         "/mens-sports-swimwear/": (ProductCategory.SWIMWEAR.value, {"type": "SPORT"}),
         "/mens-running-shoes/": (ProductCategory.SNEAKERS.value, {"type": "SPORT"}),
-        "/indoor-football-shoes-training-shoes-men/": (ProductCategory.SNEAKERS.value, {"type": "SPORT"}),
+        "/indoor-football-shoes-training-shoes-men/": (
+            ProductCategory.SNEAKERS.value,
+            {"type": "SPORT"},
+        ),
         "/mens-outdoor-shoes/": (ProductCategory.SNEAKERS.value, {"type": "SPORT"}),
         "/mens-football-boots/": (ProductCategory.SNEAKERS.value, {"type": "SPORT"}),
         "/mens-basketball-shoes/": (ProductCategory.SNEAKERS.value, {"type": "SPORT"}),

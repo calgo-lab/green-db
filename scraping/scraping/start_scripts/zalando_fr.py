@@ -144,7 +144,10 @@ def female() -> List[dict]:
             ProductCategory.SNEAKERS.value,
             {"type": "SPORT"},
         ),
-        "/chaussures-sport-salle-training-femme/": (ProductCategory.SNEAKERS.value, {"type": "SPORT"}),
+        "/chaussures-sport-salle-training-femme/": (
+            ProductCategory.SNEAKERS.value,
+            {"type": "SPORT"},
+        ),
         "/chaussures-plage-femme/": (ProductCategory.SNEAKERS.value, {"type": "SPORT"}),
         "/chaussures-football-femme/": (ProductCategory.SNEAKERS.value, {"type": "SPORT"}),
         "/bottes-boots-sport-femme/": (ProductCategory.SNEAKERS.value, {"type": "SPORT"}),

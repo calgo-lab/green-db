@@ -70,7 +70,10 @@ def male() -> List[dict]:
         "/sports-herren-struempfe/": (ProductCategory.UNDERWEAR.value, {"type": "SPORT"}),
         "/sports-bademode-herren/": (ProductCategory.SWIMWEAR.value, {"type": "SPORT"}),
         "/laufschuhe-herren/": (ProductCategory.SNEAKERS.value, {"type": "SPORT"}),
-        "/hallenschuhe-trainingsschuhe-herren/": (ProductCategory.SNEAKERS.value, {"type": "SPORT"}),
+        "/hallenschuhe-trainingsschuhe-herren/": (
+            ProductCategory.SNEAKERS.value,
+            {"type": "SPORT"},
+        ),
         "/sports-outdoorschuhe-herren/": (ProductCategory.SNEAKERS.value, {"type": "SPORT"}),
         "/fussballschuhe/": (ProductCategory.SNEAKERS.value, {"type": "SPORT"}),
         "/basketballschuhe/": (ProductCategory.SNEAKERS.value, {"type": "SPORT"}),
