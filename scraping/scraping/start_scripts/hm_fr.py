@@ -32,15 +32,16 @@ def combine_results(
 ) -> List[dict]:
     results = []
     categories = read_json(categories_json_path)
-    for id, info in categories.items():
+    for info in categories:
         mapping = info.get("category")
         if mapping:  # exclude categories for which we do not have a mapping yet
-            if gender in info.get("gender"):
-                category, meta_data = mapping if type(mapping) == list else (mapping, {})
+            product_filters = "&".join(f"{k}={v}" for k, v in info["filters"].items())
+            category, meta_data = (mapping, {}) if isinstance(mapping, str) else mapping
+            if gender in info["gender"]:
                 results.append(
                     {
-                        "start_urls": f"{serp_api}{gender_mapping.get(gender)}"
-                        f"{serp_filters}&productTypes={info.get('code')}",
+                        "start_urls": f"{serp_api}{gender_mapping[gender]}"
+                        f"{serp_filters}&{product_filters}",
                         "category": category,
                         "gender": gender,
                         "consumer_lifestage": consumer_lifestage,

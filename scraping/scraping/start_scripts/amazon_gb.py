@@ -1,7 +1,7 @@
 import json
 from typing import List, Optional
 
-from core.domain import ConsumerLifestageType, GenderType
+from core.domain import ConsumerLifestageType, GenderType, ProductCategory
 
 
 def combine_results(
@@ -26,19 +26,19 @@ def combine_results(
 
 def female() -> List[dict]:
     node_2_category = {
-        "1769798031": "SHOES",
-        "1731353031": "JEANS",
-        "1731468031": "SKIRT",
-        "1731504031": "PANT",
-        "1731351031": "DRESS",
-        "1769551031": "BAG",
-        "1731502031": "TOP",
-        "1731503031": "TOP",
-        "1731350031": "BLOUSE",
-        "1731455031": "NIGHTWEAR",
-        "14704067031": "SWEATER",
-        "1731363031": "UNDERWEAR",
-        "1731462031": "JACKET",
+        "1769798031": ProductCategory.SHOES.value,
+        "1731353031": ProductCategory.JEANS.value,
+        "1731468031": ProductCategory.SKIRT.value,
+        "1731504031": ProductCategory.PANTS.value,
+        "1731351031": ProductCategory.DRESS.value,
+        "1769551031": ProductCategory.BAG.value,
+        "1731502031": ProductCategory.TOP.value,
+        "1731503031": ProductCategory.TOP.value,
+        "1731350031": ProductCategory.BLOUSE.value,
+        "1731455031": ProductCategory.NIGHTWEAR.value,
+        "14704067031": ProductCategory.SWEATER.value,
+        "1731363031": ProductCategory.UNDERWEAR.value,
+        "1731462031": ProductCategory.JACKET.value,
     }
 
     return combine_results(
@@ -51,18 +51,18 @@ def female() -> List[dict]:
 
 def male() -> List[dict]:
     node_2_category = {
-        "1769738031": "SHOES",
-        "1730981031": "JEANS",
-        "1731030031": "PANT",
-        "1731028031": "TOP",
-        "1731027031": "TOP",
-        "1730998031": "SHIRT",
-        "1730987031": "NIGHTWEAR",
-        "1730983031": "SWEATER",
-        "14704068031": "SWEATER",
-        "1730985031": "SWEATER",
-        "1731031031": "UNDERWEAR",
-        "1730993031": "JACKET",
+        "1769738031": ProductCategory.SHOES.value,
+        "1730981031": ProductCategory.JEANS.value,
+        "1731030031": ProductCategory.PANTS.value,
+        "1731028031": ProductCategory.TOP.value,
+        "1731027031": ProductCategory.TOP.value,
+        "1730998031": ProductCategory.SHIRT.value,
+        "1730987031": ProductCategory.NIGHTWEAR.value,
+        "1730983031": ProductCategory.SWEATER.value,
+        "14704068031": ProductCategory.SWEATER.value,
+        "1730985031": ProductCategory.SWEATER.value,
+        "1731031031": ProductCategory.UNDERWEAR.value,
+        "1730993031": ProductCategory.JACKET.value,
     }
 
     return combine_results(
@@ -75,10 +75,10 @@ def male() -> List[dict]:
 
 def electronics() -> List[dict]:
     node_2_category = {
-        "429886031": "LAPTOP",
-        "429892031": "TABLET",
-        "4085731": "HEADPHONES",
-        "428653031": "PRINTER",
+        "429886031": ProductCategory.LAPTOP,
+        "429892031": ProductCategory.TABLET,
+        "4085731": ProductCategory.HEADPHONES,
+        "428653031": ProductCategory.PRINTER,
     }
 
     return combine_results(node_2_category, metadata={"family": "electronics"})

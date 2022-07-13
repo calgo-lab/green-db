@@ -117,3 +117,49 @@ class SustainabilityLabel(BaseModel):
     class Config:
         orm_mode = True
         use_enum_values = True
+
+
+class ProductCategory(str, Enum):
+    BACKPACK = "BACKPACK"
+    BAG = "BAG"
+    BLOUSE = "BLOUSE"
+    COOKER_HOOD = "COOKER_HOOD"
+    DISHWASHER = "DISHWASHER"
+    DRESS = "DRESS"
+    DRYER = "DRYER"
+    FREEZER = "FREEZER"
+    FRIDGE = "FRIDGE"
+    GAMECONSOLE = "GAMECONSOLE"  # Playstations and the like. No video games.
+    HEADPHONES = "HEADPHONES"  # no speakers, just headphones.
+    JACKET = "JACKET"
+    JEANS = "JEANS"
+    LAPTOP = "LAPTOP"  # no tablets. For hybrids/convertibles like the Chromebook use LAPTOP.
+    LINEN = "LINEN"  # bed sheets.
+    NIGHTWEAR = "NIGHTWEAR"
+    OVEN = "OVEN"
+    OVERALL = "OVERALL"
+    PANTS = "PANTS"
+    PRINTER = "PRINTER"  # it can be a fax but it also has to be able to print.
+    SHIRT = "SHIRT"  # as opposed to TSHIRT.
+    SHOES = "SHOES"
+    SKIRT = "SKIRT"
+    SMARTPHONE = "SMARTPHONE"
+    SMARTWATCH = "SMARTWATCH"
+    SNEAKERS = "SNEAKERS"
+    SOCKS = "SOCKS"
+    STOVE = "STOVE"
+    SUIT = "SUIT"
+    SWEATER = "SWEATER"
+    SWIMWEAR = "SWIMWEAR"
+    TABLET = "TABLET"  # see also LAPTOP.
+    TOP = "TOP"
+    TOWEL = "TOWEL"  # for drying yourself. No kitchen towels.
+    TRACKSUIT = "TRACKSUIT"
+    TSHIRT = "TSHIRT"  # as opposed to SHIRT.
+    TV = "TV"
+    UNDERWEAR = "UNDERWEAR"
+    WASHER = "WASHER"
+
+
+# for validating json files
+AllProductCategories = {category.value for category in ProductCategory}
