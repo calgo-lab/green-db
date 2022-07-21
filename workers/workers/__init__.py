@@ -10,7 +10,7 @@ from core.constants import (
     TABLE_NAME_SCRAPING_ZALANDO_FR,
     TABLE_NAME_SCRAPING_ZALANDO_GB,
 )
-from database.connection import Scraping
+from database.database.connection import Scraping
 
 log.setup_logger(__name__)
 
