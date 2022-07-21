@@ -25,12 +25,17 @@ green_db = GreenDB()
 
 st.set_page_config(page_icon="♻️", page_title="GreenDB")
 
+
 def category_stack_bars(df):
     fig = px.bar(df, x="category", y="products", color="merchant", text="products")
     return fig
 
+
 def extraction_summary_to_df(query):
-    return pd.DataFrame(query, columns=["country", "merchant", "timestamp", "products"]).sort_values(by="country")
+    return pd.DataFrame(
+        query, columns=["country", "merchant", "timestamp", "products"]
+    ).sort_values(by="country")
+
 
 def last_scraping_summary_to_df():
     pd.DataFrame(
@@ -41,6 +46,7 @@ def last_scraping_summary_to_df():
         columns=["country", "merchant", "timestamp", "products"],
     ).sort_values(by="country")
 
+
 def all_scraping_summary_to_df():
     pd.DataFrame(
         [
@@ -49,6 +55,7 @@ def all_scraping_summary_to_df():
         ],
         columns=["country", "merchant", "timestamp", "products"],
     ).sort_values(by="country")
+
 
 def all_timestamps_chart():
     timestamps = all_summ.index
@@ -61,6 +68,7 @@ def all_timestamps_chart():
     )
     return fig
 
+
 def all_timestamps_by_merchant_chart(df):
     extraction_all = extraction_summary_to_df(green_db.get_timestamps_by_merchant())
     extraction_all["type"] = "extraction"
@@ -68,10 +76,11 @@ def all_timestamps_by_merchant_chart(df):
     scraping_all["type"] = "scraping"
     all = pd.concat([extraction_all, scraping_all], ignore_index=True)
     all["date"] = pd.to_datetime(all["timestamp"]).dt.date
-    #df = px.data.gapminder().query("continent == 'Oceania'")
-    fig = px.line(df, x='date', y='products', color='merchant', markers='type')
+    # df = px.data.gapminder().query("continent == 'Oceania'")
+    fig = px.line(df, x="date", y="products", color="merchant", markers="type")
     fig.show()
     return fig
+
 
 all_pivot = all.pivot_table(
     values="products",
@@ -93,6 +102,7 @@ freq = pd.DataFrame.from_dict(
     columns=["products"],
 )
 
+
 def main():
     st.title("GreenDB")
     st.header("A Product-by-Product Sustainability Database")
@@ -103,7 +113,10 @@ def main():
 
     m1, m2, m3 = st.columns(3)
 
-    m1.metric(label="Number extracted of products", value=extraction_summary_to_df(green_db.get_last_job_summary())["products"].sum())
+    m1.metric(
+        label="Number extracted of products",
+        value=extraction_summary_to_df(green_db.get_last_job_summary())["products"].sum(),
+    )
     m2.metric(
         label="Number of categories", value=len(green_db.get_category_summary().groupby("category"))
     )
@@ -134,7 +147,7 @@ def main():
     alltimes_df.dataframe(all_summ)
     st.write("Scraping and Extraction all timestamps by merchant")
     st.dataframe(all_pivot)
-    #Add line chart
+    # Add line chart
 
     st.subheader("Sustainability labels overview")
     sus1, sus2, sus3 = st.columns(3)
@@ -143,5 +156,6 @@ def main():
     sus3.metric(label="Labels in use", value=len(freq))
     st.write("Products by sustainability labels")
     st.dataframe(freq.sort_values(by="products", ascending=False))
+
 
 main()
