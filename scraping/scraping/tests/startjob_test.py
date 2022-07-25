@@ -2,7 +2,7 @@ import json
 from enum import Enum
 from typing import Any
 
-from core.domain import ProductCategory
+from core.domain import ConsumerLifestageType, GenderType, ProductCategory
 
 from ..spiders._base import SETTINGS
 
@@ -10,13 +10,13 @@ from ..spiders._base import SETTINGS
 def enum_has_value(enum: Enum, value: Any):
     try:
         enum(value)
-    except:
+    except ValueError:
         return False
     return True
 
 
 def test_startjob() -> None:
-    for merchant, settings in SETTINGS:
+    for merchant, settings in SETTINGS.items():
         for setting in settings:
             assert "start_urls" in setting
             start_urls = setting["start_urls"]
