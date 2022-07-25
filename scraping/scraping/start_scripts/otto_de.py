@@ -89,6 +89,8 @@ def clothes_and_shoes() -> List[dict]:
                 {
                     "start_urls": f"{base_path}/{path}{filter}&zielgruppe={sex_path}",
                     "category": category,
+                    "gender": sex,
+                    "consumer_lifestage": ConsumerLifestageType.ADULT.value,
                     "meta_data": json.dumps({"sex": sex, "family": "FASHION"}),
                 }
             )
@@ -119,6 +121,26 @@ def bags() -> List[dict]:
                 "gender": sex,
                 "consumer_lifestage": ConsumerLifestageType.ADULT.value,
                 "meta_data": json.dumps({"sex": sex, "family": "FASHION"}),
+            }
+        )
+    return results
+
+
+def electronics() -> List[dict]:
+    base_path = "https://www.otto.de/technik"
+    filter = "?nachhaltigkeit=alle-nachhaltigen-artikel"
+
+    path_2_category = {
+        "smartphone": ProductCategory.SMARTPHONE.value,
+    }
+
+    results = []
+    for path, category in path_2_category.items():
+        results.append(
+            {
+                "start_urls": f"{base_path}/{path}/{filter}",
+                "category": category,
+                "meta_data": json.dumps({"family": "electronics"}),
             }
         )
     return results
