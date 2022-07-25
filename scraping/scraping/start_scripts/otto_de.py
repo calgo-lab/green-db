@@ -146,6 +146,27 @@ def electronics() -> List[dict]:
     return results
 
 
+def textiles() -> List[dict]:
+    base_path = "https://www.otto.de/heimtextilien"
+    filter = "?nachhaltigkeit=alle-nachhaltigen-artikel"
+
+    path_2_category = {
+        "handtuecher": ProductCategory.TOWEL.value,
+        "bettwaesche": ProductCategory.LINEN.value,
+    }
+
+    results = []
+    for path, category in path_2_category.items():
+        results.append(
+            {
+                "start_urls": f"{base_path}/{path}/{filter}",
+                "category": category,
+                "meta_data": json.dumps({"family": "textiles"}),
+            }
+        )
+    return results
+
+
 def household() -> List[dict]:
     base_path = "https://www.otto.de/haushalt"
     filter = "?nachhaltigkeit=alle-nachhaltigen-artikel"
