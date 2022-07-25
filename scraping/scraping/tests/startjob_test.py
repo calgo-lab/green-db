@@ -32,9 +32,9 @@ def test_startjob() -> None:
                 assert isinstance(category_meta_data, dict)
             assert enum_has_value(ProductCategory, category)
             if "gender" in setting:
-                enum_has_value(GenderType, setting["gender"])
+                assert enum_has_value(GenderType, setting["gender"])
             if "consumer_lifestage" in setting:
-                enum_has_value(ConsumerLifestageType, setting["consumer_lifestage"])
+                assert enum_has_value(ConsumerLifestageType, setting["consumer_lifestage"])
             if "meta_data" in setting:
                 meta_data = setting["meta_data"]
                 if isinstance(meta_data, str):
