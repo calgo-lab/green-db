@@ -1,13 +1,13 @@
 import json
 from enum import Enum
-from typing import Any
+from typing import Any, Type
 
 from core.domain import ConsumerLifestageType, GenderType, ProductCategory
 
 from ..spiders._base import SETTINGS
 
 
-def enum_has_value(enum: Enum, value: Any):
+def enum_has_value(enum: Type[Enum], value: Any):
     try:
         enum(value)
     except ValueError:
@@ -25,6 +25,11 @@ def test_startjob() -> None:
             else:
                 assert isinstance(start_urls, str)
             assert "category" in setting
+            category = setting["category"]
+            if isinstance(category, tuple):
+                assert len(category) == 2
+                category, category_meta_data = category
+                assert isinstance(category_meta_data, dict)
             assert enum_has_value(ProductCategory, setting["category"])
             if "gender" in setting:
                 enum_has_value(GenderType, setting["gender"])
