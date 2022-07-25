@@ -7,7 +7,7 @@ from core.domain import ConsumerLifestageType, GenderType, ProductCategory
 from ..spiders._base import SETTINGS
 
 
-def enum_has_value(enum: Type[Enum], value: Any):
+def enum_has_value(enum: Type[Enum], value: Any) -> bool:
     try:
         enum(value)
     except ValueError:
@@ -30,7 +30,7 @@ def test_startjob() -> None:
                 assert len(category) == 2
                 category, category_meta_data = category
                 assert isinstance(category_meta_data, dict)
-            assert enum_has_value(ProductCategory, setting["category"])
+            assert enum_has_value(ProductCategory, category)
             if "gender" in setting:
                 enum_has_value(GenderType, setting["gender"])
             if "consumer_lifestage" in setting:
