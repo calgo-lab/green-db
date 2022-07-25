@@ -8,7 +8,7 @@ def clothes_and_shoes() -> List[dict]:
     base_path = "https://www.otto.de"
     filter = "?nachhaltigkeit=alle-nachhaltigen-artikel"
 
-    sex_to_path = {GenderType.MALE.value: "BACKPACK", GenderType.FEMALE.value: "damen"}
+    sex_to_path = {"BACKPACK": "herren", GenderType.FEMALE.value: "damen"}
 
     path_2_category = {
         "arbeitskleidung/arbeitsschuhe/": ProductCategory.SHOES.value,
