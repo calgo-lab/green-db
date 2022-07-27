@@ -26,18 +26,26 @@ def combine_results(
 
 def female() -> List[dict]:
     node_2_category = {
-        "1769798031": ProductCategory.SHOES.value,
+        "1769849031": ProductCategory.SHOES.value,
+        "1769850031": ProductCategory.SHOES.value,
+        "1769851031": ProductCategory.SHOES.value,
+        "17516503031": ProductCategory.SNEAKERS.value,
+        "17302930031": ProductCategory.SHOES.value,
+        "1769858031": ProductCategory.SHOES.value,
+        "1769857031": ProductCategory.SHOES.value,
         "1731353031": ProductCategory.JEANS.value,
         "1731468031": ProductCategory.SKIRT.value,
         "1731504031": ProductCategory.PANTS.value,
         "1731351031": ProductCategory.DRESS.value,
-        "1769551031": ProductCategory.BAG.value,
-        "1731502031": ProductCategory.TOP.value,
-        "1731503031": ProductCategory.TOP.value,
+        "1769559031": ProductCategory.BAG.value,
+        "1731502031": ProductCategory.TSHIRT.value,
+        "1731500031": ProductCategory.SHIRT.value,
+        "1731503031": ProductCategory.SHIRT.value,
         "1731350031": ProductCategory.BLOUSE.value,
         "1731455031": ProductCategory.NIGHTWEAR.value,
-        "14704067031": ProductCategory.SWEATER.value,
+        "1731355031": ProductCategory.SWEATER.value,
         "1731363031": ProductCategory.UNDERWEAR.value,
+        "1731474031": ProductCategory.SOCKS.value,
         "1731462031": ProductCategory.JACKET.value,
     }
 
@@ -51,16 +59,24 @@ def female() -> List[dict]:
 
 def male() -> List[dict]:
     node_2_category = {
-        "1769738031": ProductCategory.SHOES.value,
+        # "1730967031": ProductCategory..value, Activewear
+        # "1731003031": ProductCategory..value, Snow & Rainwear
+        "1769554031": ProductCategory.BAG.value,
+        "1769788031": ProductCategory.SHOES.value,
+        "1769789031": ProductCategory.SHOES.value,
+        "17516504031": ProductCategory.SNEAKERS.value,
+        "1769792031": ProductCategory.SHOES.value,
+        "1769793031": ProductCategory.SHOES.value,
+        "1769795031": ProductCategory.SHOES.value,
+        "1769794031": ProductCategory.SHOES.value,
+        "1730982031": ProductCategory.SWEATER.value,
+        "1731008031": ProductCategory.SOCKS.value,
         "1730981031": ProductCategory.JEANS.value,
         "1731030031": ProductCategory.PANTS.value,
-        "1731028031": ProductCategory.TOP.value,
-        "1731027031": ProductCategory.TOP.value,
+        "1731028031": ProductCategory.TSHIRT.value,
+        "1731027031": ProductCategory.SHIRT.value,
         "1730998031": ProductCategory.SHIRT.value,
         "1730987031": ProductCategory.NIGHTWEAR.value,
-        "1730983031": ProductCategory.SWEATER.value,
-        "14704068031": ProductCategory.SWEATER.value,
-        "1730985031": ProductCategory.SWEATER.value,
         "1731031031": ProductCategory.UNDERWEAR.value,
         "1730993031": ProductCategory.JACKET.value,
     }
@@ -75,10 +91,12 @@ def male() -> List[dict]:
 
 def electronics() -> List[dict]:
     node_2_category = {
-        "429886031": ProductCategory.LAPTOP,
-        "429892031": ProductCategory.TABLET,
-        "4085731": ProductCategory.HEADPHONES,
-        "428653031": ProductCategory.PRINTER,
+        "429886031": ProductCategory.LAPTOP.value,
+        "429892031": ProductCategory.TABLET.value,
+        "4085731": ProductCategory.HEADPHONES.value,
+        "428653031": ProductCategory.PRINTER.value,
+        "356496011": ProductCategory.SMARTPHONE.value,
+        "3457450031": ProductCategory.SMARTWATCH.value,
     }
 
     return combine_results(node_2_category, metadata={"family": "electronics"})
