@@ -59,8 +59,6 @@ def female() -> List[dict]:
 
 def male() -> List[dict]:
     node_2_category = {
-        # "1730967031": ProductCategory..value, Activewear
-        # "1731003031": ProductCategory..value, Snow & Rainwear
         "1769554031": ProductCategory.BAG.value,
         "1769788031": ProductCategory.SHOES.value,
         "1769789031": ProductCategory.SHOES.value,
@@ -91,16 +89,34 @@ def male() -> List[dict]:
 
 def electronics() -> List[dict]:
     node_2_category = {
-        "429886031": ProductCategory.LAPTOP.value,
-        "429892031": ProductCategory.TABLET.value,
         "4085731": ProductCategory.HEADPHONES.value,
+        "429886031": ProductCategory.LAPTOP.value,
         "428653031": ProductCategory.PRINTER.value,
         "356496011": ProductCategory.SMARTPHONE.value,
         "3457450031": ProductCategory.SMARTWATCH.value,
+        "429892031": ProductCategory.TABLET.value,
+        "560864": ProductCategory.TV.value,
+    }
+
+    return combine_results(node_2_category, metadata={"family": "electronics"})
+
+
+def household() -> List[dict]:
+    node_2_category = {
+        "1391011031": ProductCategory.COOKER_HOOD.value,
+        "10706491": ProductCategory.DISHWASHER.value,
+        "1391019031": ProductCategory.DRYER.value,
+        "10706351": ProductCategory.FREEZER.value,
+        "13528548031": ProductCategory.FRIDGE.value,
+        "3229376031": ProductCategory.LINEN.value,
+        "1391013031": ProductCategory.OVEN.value,
+        "1391010031": ProductCategory.STOVE.value,
+        "11712721": ProductCategory.TOWEL.value,
+        "3618681": ProductCategory.WASHER.value,
     }
 
     return combine_results(node_2_category, metadata={"family": "electronics"})
 
 
 def get_settings() -> List[dict]:
-    return male() + female() + electronics()
+    return male() + female() + electronics() + household()
