@@ -91,6 +91,7 @@ If you are using our code or the GreenDB dataset, please reference the [preprint
 ## Publications that use the GreenDB
 
 1. Gossen, M., Jäger, S., Hoffmann, M.L., Biessmann, F., Korenke, R., & Santarius, T. (2022). Nudging Sustainable Consumption: A Large-Scale Data Analysis of Sustainability Labels for Fashion in German Online Retail. Frontiers in Sustainability. DOI: https://doi.org/10.3389/frsus.2022.922984 
+2. Flick, A., Jaeger, S., Garcia, J.A., Driesch, K.V., Brendel, K., & Biessmann, F. (2022). GreenDB - A Dataset and Benchmark for Extraction of Sustainability Information of Consumer Goods. [ArXiv, abs/2207.10733](https://arxiv.org/abs/2207.10733).
 
 
 ## Disclaimer!
