@@ -1,9 +1,24 @@
 import json
 import pkgutil
-from bisect import bisect_left
-from typing import List, Optional, Tuple
+
+# from bisect import bisect_left
+from typing import Any, List, Optional, Tuple
 
 from core.domain import ConsumerLifestageType, GenderType
+
+
+# use bisect.bisect_left if we ever update to 3.10
+# on python 3.9 bisect_left lacks the `key` argument
+def bisect_left(a: list, x: Any, key: Any) -> int:
+    low = 0
+    high = len(a)
+    while low < high:
+        mid = (low + high) // 2
+        if key(a[mid]) < x:
+            low = mid + 1
+        else:
+            high = mid
+    return low
 
 
 def read_json(path: str) -> list:
