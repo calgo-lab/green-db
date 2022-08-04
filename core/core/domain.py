@@ -134,6 +134,7 @@ class ProductCategory(Enum):
     PANTS = "PANTS"
     SHIRT = "SHIRT"  # as opposed to TSHIRT.
     SHOES = "SHOES"
+    SHORTS = "SHORTS"
     SKIRT = "SKIRT"
     SNEAKERS = "SNEAKERS"
     SOCKS = "SOCKS"
