@@ -103,7 +103,6 @@ def combine_results(
     for i, category in index_2_category.items():
         if category:
             if node := browse_tree_leaves[i]["id"][country_code]:
-                assert node & 1
                 results.append(
                     {
                         "start_urls": f"{base_url}/s?bbn={node}&rh=n%3A{node}%2Cp_n_cpf_eligible%3A22579881031",  # noqa
