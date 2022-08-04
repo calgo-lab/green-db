@@ -129,7 +129,7 @@ class ProductCategory(Enum):
     DRESS = "DRESS"
     JACKET = "JACKET"
     JEANS = "JEANS"
-    NIGHTWEAR = "NIGHTWEAR"
+    NIGHTWEAR = "NIGHTWEAR"  # includes bathrobes
     OVERALL = "OVERALL"
     PANTS = "PANTS"
     SHIRT = "SHIRT"  # as opposed to TSHIRT.
@@ -158,11 +158,11 @@ class ProductCategory(Enum):
     # household
     COOKER_HOOD = "COOKER_HOOD"
     DISHWASHER = "DISHWASHER"
-    DRYER = "DRYER"
-    FREEZER = "FREEZER"
-    FRIDGE = "FRIDGE"
+    DRYER = "DRYER"  # only standalone dryers. washer-dryers are in WASHER
+    FREEZER = "FREEZER"  # only standalone freezers.
+    FRIDGE = "FRIDGE"  # includes Fridge-Freezers
     LINEN = "LINEN"  # bed sheets.
     OVEN = "OVEN"
     STOVE = "STOVE"
     TOWEL = "TOWEL"  # for drying yourself. No kitchen towels.
-    WASHER = "WASHER"
+    WASHER = "WASHER"  # includes Washer-Dryers
