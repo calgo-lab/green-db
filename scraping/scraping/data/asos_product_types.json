@@ -172,7 +172,7 @@
             "MALE"
         ],
         "category": [
-            "PANTS",
+            "SHORTS",
             {
                 "type": "SPORT"
             }
@@ -523,7 +523,7 @@
             "FEMALE",
             "MALE"
         ],
-        "category": "PANTS"
+        "category": "SHORTS"
     },
     "8597": {
         "de": "Hausschuhe",
