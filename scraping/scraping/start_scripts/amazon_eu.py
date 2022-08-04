@@ -102,17 +102,17 @@ def combine_results(
     results = []
     for i, category in index_2_category.items():
         if category:
-            node = browse_tree_leaves[i]["id"][country_code]
-            assert node & 1
-            results.append(
-                {
-                    "start_urls": f"{base_url}/s?bbn={node}&rh=n%3A{node}%2Cp_n_cpf_eligible%3A22579881031",  # noqa
-                    "category": category,
-                    "gender": gender,
-                    "consumer_lifestage": consumer_lifestage,
-                    "meta_data": json.dumps(metadata),
-                }
-            )
+            if node := browse_tree_leaves[i]["id"][country_code]:
+                assert node & 1
+                results.append(
+                    {
+                        "start_urls": f"{base_url}/s?bbn={node}&rh=n%3A{node}%2Cp_n_cpf_eligible%3A22579881031",  # noqa
+                        "category": category,
+                        "gender": gender,
+                        "consumer_lifestage": consumer_lifestage,
+                        "meta_data": json.dumps(metadata),
+                    }
+                )
     return results
 
 
