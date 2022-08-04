@@ -613,7 +613,7 @@
         }
     },
     {
-        "category": "SUIT",
+        "category": "JACKET",
         "gender": [
             "FEMALE",
             "MALE"
@@ -661,7 +661,7 @@
         }
     },
     {
-        "category": "SWIMWEAR",
+        "category": "JACKET",
         "gender": [
             "FEMALE",
             "MALE"

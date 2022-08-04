@@ -51,7 +51,7 @@ def clothes_and_shoes() -> List[dict]:
         "mode/schuhe/stiefeletten/": ProductCategory.SHOES.value,
         "mode/shirts/": ProductCategory.SHIRT.value,
         "mode/shirts/t-shirts/": ProductCategory.TSHIRT.value,
-        "mode/strickjacken/": ProductCategory.SWEATER.value,
+        "mode/strickjacken/": ProductCategory.JACKET.value,
         "mode/tops/": ProductCategory.TOP.value,
         "mode/tuniken/": ProductCategory.BLOUSE.value,
         "mode/waesche/": ProductCategory.UNDERWEAR.value,

@@ -32,7 +32,7 @@ browse_tree_leaves = sorted(read_json("data/amazon_eu_browse_nodes.json"), key=s
 
 # unfortunately the json file only contains leaf nodes
 # so we have to do some extra work to map a browse node path to its leaf nodes.
-# we wouldnt need to do any of this if we had an amazon.json which contained internal nodes aswell.
+# we wouldnt need to do that if we had a list of internal nodes aswell.
 
 
 def find_leaf_nodes_by_path(path: str) -> Tuple[int, int]:
@@ -55,7 +55,7 @@ def find_leaf_nodes_by_path(path: str) -> Tuple[int, int]:
 
 def translate_paths_in_category_map(path_2_category: dict) -> dict:
     """
-    replaces each path in a category mapping with its corresponding leaf nodes.
+    replaces each path in a category mapping with the corresponding leaf nodes.
     here its more convenient to refer to a leaf node by its index.
 
     Args:
