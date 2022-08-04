@@ -30,7 +30,7 @@ jobs:
       # install dependencies
       #----------------------------------------------
       - name: Install dependencies
-        run: cd extract; poetry install --no-interaction --no-root
+        run: cd extract; poetry install --no-interaction
       #----------------------------------------------
       #              run test suite
       #----------------------------------------------
@@ -64,7 +64,7 @@ jobs:
       # install dependencies
       #----------------------------------------------
       - name: Install dependencies
-        run: cd scraping; poetry install --no-interaction --no-root
+        run: cd scraping; poetry install --no-interaction
       #----------------------------------------------
       #              run test suite
       #----------------------------------------------
