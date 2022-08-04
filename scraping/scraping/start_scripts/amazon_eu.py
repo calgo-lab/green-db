@@ -118,7 +118,7 @@ def combine_results(
 def female(country_code: str) -> List[dict]:
     path_2_category = {
         "uk-apparel/Categories/Women/Blouses & Shirts": "BLOUSE",
-        "uk-apparel/Categories/Women/Coats & Jackets": "JACKETS",
+        "uk-apparel/Categories/Women/Coats & Jackets": "JACKET",
         "uk-apparel/Categories/Women/Dresses": "DRESS",
         "uk-apparel/Categories/Women/Dungarees": "OVERALL",
         "uk-apparel/Categories/Women/Hoodies": "SWEATER",
