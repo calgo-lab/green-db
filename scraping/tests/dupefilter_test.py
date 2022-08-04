@@ -4,8 +4,7 @@ from typing import List
 from scrapy import Request
 
 from core.domain import ConsumerLifestageType, GenderType
-
-from ..dupefilter import MetaAwareDupeFilter
+from scraping.dupefilter import MetaAwareDupeFilter
 
 dupefilter = MetaAwareDupeFilter()
 
