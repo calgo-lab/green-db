@@ -95,7 +95,14 @@ def combine_results(
         "es": "https://www.amazon.es",
     }
 
+    country_code_to_filters = {
+        "fr": "p_n_cpf_eligible%3A22579881031",
+        "de": "p_n_cpf_eligible%3A22579885031",
+        "uk": "p_n_cpf_eligible%3A22579929031",
+    }
+
     base_url = country_code_to_url[country_code]
+    filters = country_code_to_filters[country_code]
 
     index_2_category = translate_paths_in_category_map(path_2_category)
 
@@ -105,7 +112,7 @@ def combine_results(
             if node := browse_tree_leaves[i]["id"][country_code]:
                 results.append(
                     {
-                        "start_urls": f"{base_url}/s?bbn={node}&rh=n%3A{node}%2Cp_n_cpf_eligible%3A22579881031",  # noqa
+                        "start_urls": f"{base_url}/s?bbn={node}&rh=n%3A{node}%2C{filters}",
                         "category": category,
                         "gender": gender,
                         "consumer_lifestage": consumer_lifestage,
@@ -146,7 +153,7 @@ def female(country_code: str) -> List[dict]:
         "uk-apparel/Categories/Women/Sportswear/Shirts & Tees": ("SHIRT", {"type": "SPORT"}),
         "uk-apparel/Categories/Women/Sportswear/Shorts": ("SHORTS", {"type": "SPORT"}),
         "uk-apparel/Categories/Women/Sportswear/Skirts": ("SKIRT", {"type": "SPORT"}),
-        "uk-apparel/Categories/Women/Sportswear/Tights & Leggings": ("SOCKS", {"type": "SPORT"}),
+        "uk-apparel/Categories/Women/Sportswear/Tights & Leggings": ("PANTS", {"type": "SPORT"}),
         "uk-apparel/Categories/Women/Sportswear/Track Jackets": ("JACKET", {"type": "SPORT"}),
         "uk-apparel/Categories/Women/Sportswear/Tracksuits": ("TRACKSUIT", {"type": "SPORT"}),
         "uk-apparel/Categories/Women/Sportswear/Trousers": ("PANTS", {"type": "SPORT"}),
