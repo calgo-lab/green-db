@@ -3,8 +3,7 @@ from enum import Enum
 from typing import Any, Type
 
 from core.domain import ConsumerLifestageType, GenderType, ProductCategory
-
-from ..spiders._base import SETTINGS
+from scraping.spiders._base import SETTINGS
 
 
 def enum_has_value(enum: Type[Enum], value: Any) -> bool:
