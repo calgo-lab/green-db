@@ -119,32 +119,40 @@ class SustainabilityLabel(BaseModel):
         use_enum_values = True
 
 
+# if you make an edge case decision, please document it here.
 class ProductCategory(Enum):
+
     # bags
     BACKPACK = "BACKPACK"
     BAG = "BAG"
 
     # fashion
-    BLOUSE = "BLOUSE"
-    DRESS = "DRESS"
-    JACKET = "JACKET"
-    JEANS = "JEANS"
-    NIGHTWEAR = "NIGHTWEAR"  # includes bathrobes
-    OVERALL = "OVERALL"
-    PANTS = "PANTS"
-    SHIRT = "SHIRT"  # as opposed to TSHIRT.
-    SHOES = "SHOES"
-    SHORTS = "SHORTS"
     SKIRT = "SKIRT"
+    SHOES = "SHOES"  # includes slippers.
     SNEAKERS = "SNEAKERS"
-    SOCKS = "SOCKS"
-    SUIT = "SUIT"
-    SWEATER = "SWEATER"
-    SWIMWEAR = "SWIMWEAR"
+    # casual or all purpose athletic shoes
+    # dont include shoes if theyre only used for one specific sport
+    # eg. football/soccer boots
+
+    SOCKS = "SOCKS"  # does not include tights/pantyhoses or leggings
+    UNDERWEAR = "UNDERWEAR"  # includes tights/pantyhoses
+    PANTS = "PANTS"  # includes leggings
+    JEANS = "JEANS"
+    SHORTS = "SHORTS"
+
     TOP = "TOP"
-    TRACKSUIT = "TRACKSUIT"
+    SHIRT = "SHIRT"  # as opposed to TSHIRT.
     TSHIRT = "TSHIRT"  # as opposed to SHIRT.
-    UNDERWEAR = "UNDERWEAR"
+    BLOUSE = "BLOUSE"
+    SWEATER = "SWEATER"
+    JACKET = "JACKET"  # includes vests
+
+    SUIT = "SUIT"  # for suit sets. no individual pants/jackets/shirts
+    TRACKSUIT = "TRACKSUIT"
+    DRESS = "DRESS"
+    OVERALL = "OVERALL"
+    NIGHTWEAR = "NIGHTWEAR"  # includes bathrobes
+    SWIMWEAR = "SWIMWEAR"
 
     # electronics
     GAMECONSOLE = "GAMECONSOLE"  # Playstations and the like. No video games.

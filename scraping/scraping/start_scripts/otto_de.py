@@ -26,6 +26,8 @@ def clothes_and_shoes() -> List[dict]:
         "mode/hemden/": ProductCategory.SHIRT.value,
         "mode/hosen/": ProductCategory.PANTS.value,
         "mode/hosen/jeans/": ProductCategory.JEANS.value,
+        # has some subcategories that should be in NIGHTWEAR
+        # same for mode/shirts/
         "mode/jacken/": ProductCategory.JACKET.value,
         "mode/kleider/": ProductCategory.DRESS.value,
         "mode/maentel/": ProductCategory.JACKET.value,

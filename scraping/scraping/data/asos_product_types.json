@@ -712,7 +712,7 @@
             "FEMALE",
             "MALE"
         ],
-        "category": "SUIT"
+        "category": "JACKET"
     },
     "8655": {
         "de": "Anzugjacken",
@@ -720,7 +720,7 @@
         "gender": [
             "MALE"
         ],
-        "category": "SUIT"
+        "category": "JACKET"
     },
     "10774": {
         "de": "Slider",
@@ -850,7 +850,7 @@
             "FEMALE",
             "MALE"
         ],
-        "category": "SUIT"
+        "category": "PANTS"
     },
     "9303": {
         "de": "Nasenringe",
