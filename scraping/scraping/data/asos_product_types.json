@@ -111,7 +111,7 @@
             "FEMALE",
             "MALE"
         ],
-        "category": "SHIRT"
+        "category": "TOP"
     },
     "8416": {
         "de": "Kleider",
@@ -137,7 +137,7 @@
         "gender": [
             "FEMALE"
         ],
-        "category": "PANTS"
+        "category": "UNDERWEAR"
     },
     "8286": {
         "de": "Enge Halsketten",
@@ -456,7 +456,7 @@
         "gender": [
             "FEMALE"
         ],
-        "category": "TOP"
+        "category": "SHIRT"
     },
     "8715": {
         "de": "Nachthemden",
@@ -636,7 +636,7 @@
         "gender": [
             "FEMALE"
         ],
-        "category": "SHIRT"
+        "category": "BLOUSE"
     },
     "8276": {
         "de": "Schals",
@@ -938,7 +938,7 @@
         "gender": [
             "FEMALE"
         ],
-        "category": "TOP"
+        "category": "OVERALL"
     },
     "8431": {
         "de": "Geldbörsen",
