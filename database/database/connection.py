@@ -2,11 +2,11 @@ from datetime import datetime
 from logging import getLogger
 from typing import Iterator, List, Type
 
-from sqlalchemy import Column
-from sqlalchemy.orm import Query, Session
-
+import pandas as pd
 from core.constants import DATABASE_NAME_GREEN_DB, DATABASE_NAME_SCRAPING
 from core.domain import Product, ScrapedPage, SustainabilityLabel
+from sqlalchemy import Column, func
+from sqlalchemy.orm import Query, Session
 
 from .tables import (
     SCRAPING_TABLE_CLASS_FOR,
@@ -121,6 +121,46 @@ class Connection:
                 .filter(self._database_class.timestamp == timestamp)
                 .first()
             )
+
+    def get_last_job_summary(self):
+        """
+        Fetch number of products in queried table with country, merchant and timestamp for the
+        last time that the "start-job" ran.
+
+        Yields:
+            List[query]: `List` of domain object representations
+        """
+        with self._session_factory() as db_session:
+            columns = (
+                self._database_class.country,
+                self._database_class.merchant,
+                self._database_class.timestamp,
+            )
+            timestamp = self.get_latest_timestamp()
+            query = (
+                db_session.query(*columns, func.count())
+                .filter(self._database_class.timestamp == timestamp)
+                .group_by(*columns)
+                .all()
+            )
+            return query
+
+    def get_all_last_job(self):
+        """
+        Fetch number of products in queried table with country, merchant and timestamp for all
+        timestamps that "start-job" ran.
+
+        Yields:
+            List[query]: `List` of domain object representations
+        """
+        with self._session_factory() as db_session:
+            columns = (
+                self._database_class.country,
+                self._database_class.merchant,
+                self._database_class.timestamp,
+            )
+            query = db_session.query(*columns, func.count()).group_by(*columns).all()
+            return query
 
 
 class Scraping(Connection):
@@ -283,3 +323,75 @@ class GreenDB(Connection):
             Iterator[Product]: `Iterator` of domain object representation
         """
         return self.get_products_for_timestamp(self.get_latest_timestamp(), batch_size=batch_size)
+
+    def last_update_sustainability_labels(self) -> datetime:
+        """
+        Fetch all `SustainabilityLabel`s.
+
+        Returns:
+            datetime: Latest timestamp available in sustainability_labels table.
+        """
+        with self._session_factory() as db_session:
+            return (
+                db_session.query(SustainabilityLabelsTable.timestamp)
+                .distinct()
+                .order_by(SustainabilityLabelsTable.timestamp.desc())
+                .first()
+                .timestamp
+            )
+
+    def get_category_summary(self):
+        """
+        Fetch number of products per category per merchant from last timestamp found.
+
+        Yields:
+            DataFrame[query]: `DataFrame` of domain object representations
+        """
+        with self._session_factory() as db_session:
+            columns = (self._database_class.category, self._database_class.merchant)
+            timestamp = self.get_latest_timestamp()
+            query = (
+                db_session.query(*columns, func.count())
+                .filter(self._database_class.timestamp == timestamp)
+                .group_by(*columns)
+                .order_by(*columns)
+                .all()
+            )
+            return pd.DataFrame(query, columns=["category", "merchant", "products"])
+
+    def products_by_label(self):
+        """
+        Fetch number of products grouped by known and unknown sustainability labels for all
+        timestamps.
+
+        Yields:
+            DataFrame[query]: `DataFrame` of domain object representations
+        """
+        with self._session_factory() as db_session:
+            columns = (
+                self._database_class.timestamp,
+                self._database_class.sustainability_labels,
+            )
+            query = db_session.query(*columns, func.count()).group_by(*columns).all()
+            unknown = []
+            known = []
+            for row in query:
+                for item in row:
+                    if type(item) is list:
+                        [
+                            unknown.append(row)
+                            if label == "certificate:UNKNOWN"
+                            else known.append(row)
+                            for label in item
+                        ]
+
+            unknown_df = pd.DataFrame(unknown, columns=["timestamp", "labels", "count"])
+            unknown_df["date"] = pd.to_datetime(unknown_df["timestamp"]).dt.date
+            unknown_cumm = unknown_df.groupby("date").sum()
+            unknown_cumm["label"] = "certificate:UNKNOWN"
+            known_df = pd.DataFrame(known, columns=["timestamp", "labels", "count"])
+            known_df["date"] = pd.to_datetime(known_df["timestamp"]).dt.date
+            known_cumm = known_df.groupby("date").sum()
+            known_cumm["label"] = "Known certificates"
+            join_df = pd.concat([unknown_cumm, known_cumm]).reset_index()
+            return join_df
