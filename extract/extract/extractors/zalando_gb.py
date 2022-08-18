@@ -14,12 +14,17 @@ logger = getLogger(__name__)
 
 _LABEL_MAPPING = {
     "": CertificateType.OTHER,
-    "bluesign®": CertificateType.OTHER,
+    "bluesign®": CertificateType.BLUESIGN_PRODUCT,
+    "bluesign® APPROVED materials": CertificateType.BLUESIGN_APPROVED,
     "Cradle to Cradle Certified ® Gold": CertificateType.CRADLE_TO_CRADLE_GOLD,
     "Cradle to Cradle Certified ® Silver": CertificateType.CRADLE_TO_CRADLE_SILVER,
     "Fairtrade Certified Cotton": CertificateType.FAIRTRADE_COTTON,
+    "Fairtrade Cotton": CertificateType.FAIRTRADE_COTTON,
     "Global Recycle Standard": CertificateType.GLOBAL_RECYCLED_STANDARD,
+    "Global Recycled Standard (GRS)": CertificateType.GLOBAL_RECYCLED_STANDARD,
     "GOTS - made with organic materials": CertificateType.GOTS_MADE_WITH_ORGANIC_MATERIALS,
+    "Global Organic Textile Standard (GOTS) - Organic": CertificateType.GOTS_ORGANIC,
+    "Global Organic Textile Standard (GOTS) - Made with Organic": CertificateType.GOTS_MADE_WITH_ORGANIC_MATERIALS,
     "GOTS - organic": CertificateType.GOTS_ORGANIC,
     "Leather Working Group": CertificateType.LEATHER_WORKING_GROUP,
     "Made with 30-50% recycled materials": CertificateType.OTHER,
@@ -38,10 +43,14 @@ _LABEL_MAPPING = {
     "Made with responsibly-sourced down": CertificateType.OTHER,
     "Made with responsibly-sourced wool": CertificateType.OTHER,
     "OCS - Organic Blended Content Standard": CertificateType.ORGANIC_CONTENT_STANDARD_BLENDED,
+    "Organic Content Standard (OCS) - Blended": CertificateType.ORGANIC_CONTENT_STANDARD_BLENDED,
     "OCS - Organic Content Standard": CertificateType.ORGANIC_CONTENT_STANDARD_100,
+    "Organic Content Standard (OCS) - 100": CertificateType.ORGANIC_CONTENT_STANDARD_100,
     "Organic": CertificateType.OTHER,
     "Responsible Down Standard": CertificateType.RESPONSIBLE_DOWN_STANDARD,
     "Responsible Wool Standard": CertificateType.RESPONSIBLE_WOOL_STANDARD,
+    "Lyocell": CertificateType.OTHER,
+    "Water-Based Polyurethane": CertificateType.OTHER,
 }
 
 
