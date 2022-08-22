@@ -1,15 +1,4 @@
 import os
-import sys
-
-import numpy as np
-import pandas as pd
-import plotly.express as px
-import plotly.graph_objects as go
-import streamlit as st
-
-# Streamlit is not aware of local modules
-sys.path.append("/Users/adrsanchez/PycharmProjects/green-db/")
-# Env variables
 os.environ["POSTGRES_SCRAPING_USER"] = "scraping"
 os.environ["POSTGRES_SCRAPING_PASSWORD"] = "scraping1992"
 os.environ["POSTGRES_SCRAPING_HOST"] = "127.0.0.1"
@@ -18,8 +7,15 @@ os.environ["POSTGRES_GREEN_DB_USER"] = "green-db"
 os.environ["POSTGRES_GREEN_DB_PASSWORD"] = "green1992"
 os.environ["POSTGRES_GREEN_DB_HOST"] = "127.0.0.1"
 os.environ["POSTGRES_GREEN_DB_PORT"] = "5432"
-from database.database.connection import GreenDB
-from workers.workers import CONNECTION_FOR_TABLE
+
+import numpy as np
+import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
+import streamlit as st
+
+from database.connection import GreenDB
+from monitoring import CONNECTION_FOR_TABLE
 
 green_db = GreenDB()
 
@@ -105,11 +101,6 @@ def labels_summary_chart():
     df = green_db.products_by_label()
     fig = px.line(df, x="date", y="count", color="label", text="count")
     return fig
-
-
-print(green_db.last_update_sustainability_labels())
-print(type)
-
 
 def main():
     st.title("GreenDB")

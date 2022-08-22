@@ -10,11 +10,10 @@ python = "^3.10"
 streamlit = "^1.11.0"
 pandas = "^1.4.3"
 plotly = "^5.9.0"
+numpy = "^1.23.1"
 core = {path = "../core", develop = true}
 database = {path = "../database", develop = true}
-psycopg2 = "^2.9.3"
-pip = "*"
-numpy = "^1.23.1"
+
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
