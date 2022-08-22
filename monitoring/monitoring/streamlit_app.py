@@ -3,9 +3,33 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
+from core import log
+from core.constants import (
+    TABLE_NAME_SCRAPING_AMAZON_DE,
+    TABLE_NAME_SCRAPING_AMAZON_FR,
+    TABLE_NAME_SCRAPING_AMAZON_GB,
+    TABLE_NAME_SCRAPING_ASOS_FR,
+    TABLE_NAME_SCRAPING_HM_FR,
+    TABLE_NAME_SCRAPING_OTTO_DE,
+    TABLE_NAME_SCRAPING_ZALANDO_DE,
+    TABLE_NAME_SCRAPING_ZALANDO_FR,
+    TABLE_NAME_SCRAPING_ZALANDO_GB,
+)
+from database.connection import GreenDB, Scraping
 
-from database.connection import GreenDB
-from monitoring import CONNECTION_FOR_TABLE
+log.setup_logger(__name__)
+
+CONNECTION_FOR_TABLE = {
+    TABLE_NAME_SCRAPING_AMAZON_DE: Scraping(TABLE_NAME_SCRAPING_AMAZON_DE),
+    TABLE_NAME_SCRAPING_AMAZON_FR: Scraping(TABLE_NAME_SCRAPING_AMAZON_FR),
+    TABLE_NAME_SCRAPING_AMAZON_GB: Scraping(TABLE_NAME_SCRAPING_AMAZON_GB),
+    TABLE_NAME_SCRAPING_ASOS_FR: Scraping(TABLE_NAME_SCRAPING_ASOS_FR),
+    TABLE_NAME_SCRAPING_OTTO_DE: Scraping(TABLE_NAME_SCRAPING_OTTO_DE),
+    TABLE_NAME_SCRAPING_ZALANDO_DE: Scraping(TABLE_NAME_SCRAPING_ZALANDO_DE),
+    TABLE_NAME_SCRAPING_ZALANDO_FR: Scraping(TABLE_NAME_SCRAPING_ZALANDO_FR),
+    TABLE_NAME_SCRAPING_ZALANDO_GB: Scraping(TABLE_NAME_SCRAPING_ZALANDO_GB),
+    TABLE_NAME_SCRAPING_HM_FR: Scraping(TABLE_NAME_SCRAPING_HM_FR),
+}
 
 green_db = GreenDB()
 
@@ -91,6 +115,7 @@ def labels_summary_chart():
     df = green_db.products_by_label()
     fig = px.line(df, x="date", y="count", color="label", text="count")
     return fig
+
 
 def main():
     st.title("GreenDB")
