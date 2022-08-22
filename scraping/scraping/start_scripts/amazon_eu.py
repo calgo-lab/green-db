@@ -117,8 +117,11 @@ def combine_results(
                         "gender": gender,
                         "consumer_lifestage": consumer_lifestage,
                         "meta_data": json.dumps(metadata),
+                        "amazon_eu_browse_node_path": sort_key(browse_tree_leaves[i])[:-1],
                     }
                 )
+            else:
+                pass  # log this later
     return results
 
 
@@ -144,6 +147,7 @@ def female(country_code: str) -> List[dict]:
         "uk-apparel/Categories/Women/Shorts": "SHORTS",
         "uk-apparel/Categories/Women/Skirts": "SKIRT",
         "uk-apparel/Categories/Women/Socks & Tights": "SOCKS",
+        "uk-apparel/Categories/Women/Socks & Tights/Tights": "UNDERWEAR",
         "uk-apparel/Categories/Women/Sportswear/Athletic Socks": ("SOCKS", {"type": "SPORT"}),
         "uk-apparel/Categories/Women/Sportswear/Base Layers": ("UNDERWEAR", {"type": "SPORT"}),
         "uk-apparel/Categories/Women/Sportswear/Dresses": ("DRESS", {"type": "SPORT"}),
@@ -157,9 +161,12 @@ def female(country_code: str) -> List[dict]:
         "uk-apparel/Categories/Women/Sportswear/Track Jackets": ("JACKET", {"type": "SPORT"}),
         "uk-apparel/Categories/Women/Sportswear/Tracksuits": ("TRACKSUIT", {"type": "SPORT"}),
         "uk-apparel/Categories/Women/Sportswear/Trousers": ("PANTS", {"type": "SPORT"}),
+        "uk-apparel/Categories/Women/Suits & Blazers": "SUIT",
         "uk-apparel/Categories/Women/Suits & Blazers/Suit Jackets & Blazers": "JACKET",
+        "uk-apparel/Categories/Women/Suits & Blazers/Waistcoats": "JACKET",
         "uk-apparel/Categories/Women/Sweatshirts": "SWEATER",
         "uk-apparel/Categories/Women/Swimwear": "SWIMWEAR",
+        "uk-apparel/Categories/Women/Tops & T-Shirts": "TOP",
         "uk-apparel/Categories/Women/Tops & T-Shirts/Polos": "SHIRT",
         "uk-apparel/Categories/Women/Tops & T-Shirts/T-Shirts": "TSHIRT",
         "uk-apparel/Categories/Women/Trousers": "PANTS",
@@ -199,14 +206,16 @@ def male(country_code: str) -> List[dict]:
         "uk-apparel/Categories/Men/Sportswear/Tracksuits": ("TRACKSUIT", {"type": "SPORT"}),
         "uk-apparel/Categories/Men/Sportswear/Trousers": ("PANTS", {"type": "SPORT"}),
         "uk-apparel/Categories/Men/Sportswear/Underwear": ("UNDERWEAR", {"type": "SPORT"}),
-        "uk-apparel/Categories/Men/Suits & Blazers/Suits": "SUIT",
+        "uk-apparel/Categories/Men/Suits & Blazers": "SUIT",
         "uk-apparel/Categories/Men/Suits & Blazers/Blazers": "JACKET",
         "uk-apparel/Categories/Men/Suits & Blazers/Suit Jackets": "JACKET",
         "uk-apparel/Categories/Men/Suits & Blazers/Suit Trousers": "PANTS",
         "uk-apparel/Categories/Men/Suits & Blazers/Tuxedo Jackets": "JACKET",
         "uk-apparel/Categories/Men/Suits & Blazers/Tuxedo Trousers": "PANTS",
+        "uk-apparel/Categories/Men/Suits & Blazers/Waistcoats": "JACKET",
         "uk-apparel/Categories/Men/Sweatshirts": "SWEATER",
         "uk-apparel/Categories/Men/Swimwear": "SWIMWEAR",
+        "uk-apparel/Categories/Men/Tops & T-Shirts": "TOP",
         "uk-apparel/Categories/Men/Tops & T-Shirts/Polos": "SHIRT",
         "uk-apparel/Categories/Men/Tops & T-Shirts/T-Shirts": "TSHIRT",
         "uk-apparel/Categories/Men/Trousers": "PANTS",
@@ -245,24 +254,16 @@ def electronics(country_code: str) -> List[dict]:
 
 def household(country_code: str) -> List[dict]:
     path_2_category = {
-        "uk-appliances/Categories/Combined Ovens & Hobs": "STOVE",
-        "uk-appliances/Categories/Dishwashers": "DISHWASHER",
-        "uk-appliances/Categories/Freezers": "FREEZER",
-        "uk-appliances/Categories/Fridge-freezers": "FRIDGE",
-        "uk-appliances/Categories/Fridges": "FRIDGE",
-        "uk-appliances/Categories/Hobs": None,
-        "uk-appliances/Categories/Installed Ovens": "OVEN",
-        "uk-appliances/Categories/Mini Freezers": None,
-        "uk-appliances/Categories/Mini Fridges": None,
-        "uk-appliances/Categories/Ovens": "OVEN",
-        "uk-appliances/Categories/Range Cookers": "STOVE",
-        "uk-appliances/Categories/Range Cooktops": None,
-        "uk-appliances/Categories/Vent Hoods": "COOKER_HOOD",
-        "uk-appliances/Categories/Washing Machines & Tumble Dryers/Dryers": "DRYER",
-        "uk-appliances/Categories/Washing Machines & Tumble Dryers/Spin Dryers": "DRYER",
-        "uk-appliances/Categories/Washing Machines & Tumble Dryers/Stacked Washers & Dryers": None,
-        "uk-appliances/Categories/Washing Machines & Tumble Dryers/Washer-Dryers": "WASHER",
-        "uk-appliances/Categories/Washing Machines & Tumble Dryers/Washing Machines": "WASHER",
+        "de-appliances/Kategorien/Geschirrspüler": "DISHWASHER",
+        "de-appliances/Kategorien/Herde": "STOVE",
+        "fr-appliances/Catégories/Congélateurs": "FREEZER",
+        "fr-appliances/Catégories/Fours avec commandes pour Tables de cuisson": "OVEN",
+        "fr-appliances/Catégories/Lave-linge et Sèche-linge": "WASHER",
+        "fr-appliances/Catégories/Lave-linge et Sèche-linge/Essoreuses": "DRYER",
+        "fr-appliances/Catégories/Lave-linge et Sèche-linge/Sèche-linges": "DRYER",
+        "fr-appliances/Catégories/Réfrigérateurs": "FRIDGE",
+        "fr-appliances/Catégories/Fours encastrables": "OVEN",
+        "fr-appliances/Catégories/Hottes aspirantes": "COOKER_HOOD",
     }
 
     return combine_results(country_code, path_2_category, metadata={"family": "electronics"})
