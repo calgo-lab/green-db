@@ -1,13 +1,3 @@
-import os
-os.environ["POSTGRES_SCRAPING_USER"] = "scraping"
-os.environ["POSTGRES_SCRAPING_PASSWORD"] = "scraping1992"
-os.environ["POSTGRES_SCRAPING_HOST"] = "127.0.0.1"
-os.environ["POSTGRES_SCRAPING_PORT"] = "5432"
-os.environ["POSTGRES_GREEN_DB_USER"] = "green-db"
-os.environ["POSTGRES_GREEN_DB_PASSWORD"] = "green1992"
-os.environ["POSTGRES_GREEN_DB_HOST"] = "127.0.0.1"
-os.environ["POSTGRES_GREEN_DB_PORT"] = "5432"
-
 import numpy as np
 import pandas as pd
 import plotly.express as px
