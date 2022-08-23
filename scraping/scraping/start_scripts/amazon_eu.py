@@ -196,7 +196,7 @@ def female(country_code: str) -> List[dict]:
             {"type": "SPORT"},
         ),
         "uk-apparel/Categories/Women/Suits & Blazers": ProductCategory.SUIT.value,
-        "uk-apparel/Categories/Women/Suits & Blazers/Suit Jackets & Blazers": ProductCategory.JACKET.value,
+        "uk-apparel/Categories/Women/Suits & Blazers/Suit Jackets & Blazers": ProductCategory.JACKET.value,  # noqa
         "uk-apparel/Categories/Women/Suits & Blazers/Waistcoats": ProductCategory.JACKET.value,
         "uk-apparel/Categories/Women/Sweatshirts": ProductCategory.SWEATER.value,
         "uk-apparel/Categories/Women/Swimwear": ProductCategory.SWIMWEAR.value,
@@ -301,12 +301,12 @@ def electronics(country_code: str) -> List[dict]:
         "uk-computers/Products/Ink & Laser Printers/Plotters": None,
         "uk-computers/Products/Laptops": ProductCategory.LAPTOP.value,
         "uk-computers/Products/Tablets": ProductCategory.TABLET.value,
-        "uk-computers/Products/Webcams & VoIP Equipment/PC Headsets": ProductCategory.HEADPHONES.value,
+        "uk-computers/Products/Webcams & VoIP Equipment/PC Headsets": ProductCategory.HEADPHONES.value,  # noqa
         "uk-electronics/Categories/Accessories/Home Audio & Video Accessories/Headphones & Earphones": ProductCategory.HEADPHONES.value,  # noqa
         "uk-electronics/Categories/Home Cinema, TV & Video/TVs": ProductCategory.TV.value,
         "uk-electronics/Categories/Mobile Phones & Communication/Big Button Mobile Phones": None,
         "uk-electronics/Categories/Mobile Phones & Communication/Mobile Phones & Smartphones": ProductCategory.SMARTPHONE.value,  # noqa
-        "uk-electronics/Categories/Mobile Phones & Communication/Smartwatches": ProductCategory.SMARTWATCH.value,
+        "uk-electronics/Categories/Mobile Phones & Communication/Smartwatches": ProductCategory.SMARTWATCH.value,  # noqa
     }
 
     return combine_results(
@@ -321,10 +321,10 @@ def household(country_code: str) -> List[dict]:
         "de-appliances/Kategorien/Geschirrspüler": ProductCategory.DISHWASHER.value,
         "de-appliances/Kategorien/Herde": ProductCategory.STOVE.value,
         "fr-appliances/Catégories/Congélateurs": ProductCategory.FREEZER.value,
-        "fr-appliances/Catégories/Fours avec commandes pour Tables de cuisson": ProductCategory.OVEN.value,
+        "fr-appliances/Catégories/Fours avec commandes pour Tables de cuisson": ProductCategory.OVEN.value,  # noqa
         "fr-appliances/Catégories/Lave-linge et Sèche-linge": ProductCategory.WASHER.value,
-        "fr-appliances/Catégories/Lave-linge et Sèche-linge/Essoreuses": ProductCategory.DRYER.value,
-        "fr-appliances/Catégories/Lave-linge et Sèche-linge/Sèche-linges": ProductCategory.DRYER.value,
+        "fr-appliances/Catégories/Lave-linge et Sèche-linge/Essoreuses": ProductCategory.DRYER.value,  # noqa
+        "fr-appliances/Catégories/Lave-linge et Sèche-linge/Sèche-linges": ProductCategory.DRYER.value,  # noqa
         "fr-appliances/Catégories/Réfrigérateurs": ProductCategory.FRIDGE.value,
         "fr-appliances/Catégories/Fours encastrables": ProductCategory.OVEN.value,
         "fr-appliances/Catégories/Hottes aspirantes": ProductCategory.COOKER_HOOD.value,
