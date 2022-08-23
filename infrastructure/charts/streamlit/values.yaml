@@ -10,37 +10,35 @@ image:
   # Overrides the image tag whose default is the chart appVersion.
   tag: latest
 
-DBEnv:
-  scraping:
-    - name: POSTGRES_SCRAPING_HOST
-      value: postgresql
-    - name: POSTGRES_SCRAPING_PORT
-      value: "5432"
-    - name: POSTGRES_SCRAPING_USER
-      valueFrom:
-        secretKeyRef:
-          name: scraping-secret
-          key: postgres-user
-    - name: POSTGRES_SCRAPING_PASSWORD
-      valueFrom:
-        secretKeyRef:
-          name: scraping-secret
-          key: postgres-password
-  greenDb:
-    - name: POSTGRES_GREEN_DB_HOST
-      value: postgresql
-    - name: POSTGRES_GREEN_DB_PORT
-      value: "5432"
-    - name: POSTGRES_GREEN_DB_USER
-      valueFrom:
-        secretKeyRef:
-          name: green-db-secret
-          key: postgres-user
-    - name: POSTGRES_GREEN_DB_PASSWORD
-      valueFrom:
-        secretKeyRef:
-          name: green-db-secret
-          key: postgres-password
+env:
+  - name: POSTGRES_SCRAPING_HOST
+    value: postgresql
+  - name: POSTGRES_SCRAPING_PORT
+    value: "5432"
+  - name: POSTGRES_SCRAPING_USER
+    valueFrom:
+      secretKeyRef:
+        name: scraping-secret
+        key: postgres-user
+  - name: POSTGRES_SCRAPING_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: scraping-secret
+        key: postgres-password
+  - name: POSTGRES_GREEN_DB_HOST
+    value: postgresql
+  - name: POSTGRES_GREEN_DB_PORT
+    value: "5432"
+  - name: POSTGRES_GREEN_DB_USER
+    valueFrom:
+      secretKeyRef:
+        name: green-db-secret
+        key: postgres-user
+  - name: POSTGRES_GREEN_DB_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: green-db-secret
+        key: postgres-password
 
 imagePullSecrets:
    - name: private-registry-auth
