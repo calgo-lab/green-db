@@ -1,10 +1,13 @@
 import json
 import pkgutil
+from logging import getLogger
 
 # from bisect import bisect_left
 from typing import Any, List, Optional, Tuple
 
-from core.domain import ConsumerLifestageType, GenderType
+from core.domain import ConsumerLifestageType, GenderType, ProductCategory
+
+logger = getLogger(__name__)
 
 
 # use bisect.bisect_left if we ever update to 3.10
@@ -91,8 +94,6 @@ def combine_results(
         "fr": "https://www.amazon.fr",
         "de": "https://www.amazon.de",
         "uk": "https://www.amazon.co.uk",
-        "it": "https://www.amazon.it",
-        "es": "https://www.amazon.es",
     }
 
     country_code_to_filters = {
@@ -117,59 +118,92 @@ def combine_results(
                         "gender": gender,
                         "consumer_lifestage": consumer_lifestage,
                         "meta_data": json.dumps(metadata),
-                        "amazon_eu_browse_node_path": sort_key(browse_tree_leaves[i])[:-1],
                     }
                 )
-            else:
-                pass  # log this later
     return results
 
 
 def female(country_code: str) -> List[dict]:
     path_2_category = {
-        "uk-apparel/Categories/Women/Blouses & Shirts": "BLOUSE",
-        "uk-apparel/Categories/Women/Coats & Jackets": "JACKET",
-        "uk-apparel/Categories/Women/Dresses": "DRESS",
-        "uk-apparel/Categories/Women/Dungarees": "OVERALL",
-        "uk-apparel/Categories/Women/Hoodies": "SWEATER",
-        "uk-apparel/Categories/Women/Jeans": "JEANS",
-        "uk-apparel/Categories/Women/Jumpsuits & Playsuits": "OVERALL",
-        "uk-apparel/Categories/Women/Knitwear/Cardigans": "JACKET",
-        "uk-apparel/Categories/Women/Knitwear/Jumpers": "SWEATER",
+        "uk-apparel/Categories/Women/Blouses & Shirts": ProductCategory.BLOUSE.value,
+        "uk-apparel/Categories/Women/Coats & Jackets": ProductCategory.JACKET.value,
+        "uk-apparel/Categories/Women/Dresses": ProductCategory.DRESS.value,
+        "uk-apparel/Categories/Women/Dungarees": ProductCategory.OVERALL.value,
+        "uk-apparel/Categories/Women/Hoodies": ProductCategory.SWEATER.value,
+        "uk-apparel/Categories/Women/Jeans": ProductCategory.JEANS.value,
+        "uk-apparel/Categories/Women/Jumpsuits & Playsuits": ProductCategory.OVERALL.value,
+        "uk-apparel/Categories/Women/Knitwear/Cardigans": ProductCategory.JACKET.value,
+        "uk-apparel/Categories/Women/Knitwear/Jumpers": ProductCategory.SWEATER.value,
         "uk-apparel/Categories/Women/Knitwear/Ponchos & Capes": None,
         "uk-apparel/Categories/Women/Knitwear/Shrugs": None,
-        "uk-apparel/Categories/Women/Knitwear/Tank Tops": "TOP",
+        "uk-apparel/Categories/Women/Knitwear/Tank Tops": ProductCategory.TOP.value,
         "uk-apparel/Categories/Women/Knitwear/Twin-Sets": None,
-        "uk-apparel/Categories/Women/Leggings": "PANTS",
-        "uk-apparel/Categories/Women/Lingerie & Underwear": "UNDERWEAR",
+        "uk-apparel/Categories/Women/Leggings": ProductCategory.PANTS.value,
+        "uk-apparel/Categories/Women/Lingerie & Underwear": ProductCategory.UNDERWEAR.value,
         "uk-apparel/Categories/Women/Lingerie & Underwear/Accessories": None,
-        "uk-apparel/Categories/Women/Nightwear": "NIGHTWEAR",
-        "uk-apparel/Categories/Women/Shorts": "SHORTS",
-        "uk-apparel/Categories/Women/Skirts": "SKIRT",
-        "uk-apparel/Categories/Women/Socks & Tights": "SOCKS",
-        "uk-apparel/Categories/Women/Socks & Tights/Tights": "UNDERWEAR",
-        "uk-apparel/Categories/Women/Sportswear/Athletic Socks": ("SOCKS", {"type": "SPORT"}),
-        "uk-apparel/Categories/Women/Sportswear/Base Layers": ("UNDERWEAR", {"type": "SPORT"}),
-        "uk-apparel/Categories/Women/Sportswear/Dresses": ("DRESS", {"type": "SPORT"}),
-        "uk-apparel/Categories/Women/Sportswear/Gilets": ("JACKET", {"type": "SPORT"}),
-        "uk-apparel/Categories/Women/Sportswear/Knickers & Bras": ("UNDERWEAR", {"type": "SPORT"}),
+        "uk-apparel/Categories/Women/Nightwear": ProductCategory.NIGHTWEAR.value,
+        "uk-apparel/Categories/Women/Shorts": ProductCategory.SHORTS.value,
+        "uk-apparel/Categories/Women/Skirts": ProductCategory.SKIRT.value,
+        "uk-apparel/Categories/Women/Socks & Tights": ProductCategory.SOCKS.value,
+        "uk-apparel/Categories/Women/Socks & Tights/Tights": ProductCategory.UNDERWEAR.value,
+        "uk-apparel/Categories/Women/Sportswear/Athletic Socks": (
+            ProductCategory.SOCKS.value,
+            {"type": "SPORT"},
+        ),
+        "uk-apparel/Categories/Women/Sportswear/Base Layers": (
+            ProductCategory.UNDERWEAR.value,
+            {"type": "SPORT"},
+        ),
+        "uk-apparel/Categories/Women/Sportswear/Dresses": (
+            ProductCategory.DRESS.value,
+            {"type": "SPORT"},
+        ),
+        "uk-apparel/Categories/Women/Sportswear/Gilets": (
+            ProductCategory.JACKET.value,
+            {"type": "SPORT"},
+        ),
+        "uk-apparel/Categories/Women/Sportswear/Knickers & Bras": (
+            ProductCategory.UNDERWEAR.value,
+            {"type": "SPORT"},
+        ),
         "uk-apparel/Categories/Women/Sportswear/Knitwear": None,
-        "uk-apparel/Categories/Women/Sportswear/Shirts & Tees": ("SHIRT", {"type": "SPORT"}),
-        "uk-apparel/Categories/Women/Sportswear/Shorts": ("SHORTS", {"type": "SPORT"}),
-        "uk-apparel/Categories/Women/Sportswear/Skirts": ("SKIRT", {"type": "SPORT"}),
-        "uk-apparel/Categories/Women/Sportswear/Tights & Leggings": ("PANTS", {"type": "SPORT"}),
-        "uk-apparel/Categories/Women/Sportswear/Track Jackets": ("JACKET", {"type": "SPORT"}),
-        "uk-apparel/Categories/Women/Sportswear/Tracksuits": ("TRACKSUIT", {"type": "SPORT"}),
-        "uk-apparel/Categories/Women/Sportswear/Trousers": ("PANTS", {"type": "SPORT"}),
-        "uk-apparel/Categories/Women/Suits & Blazers": "SUIT",
-        "uk-apparel/Categories/Women/Suits & Blazers/Suit Jackets & Blazers": "JACKET",
-        "uk-apparel/Categories/Women/Suits & Blazers/Waistcoats": "JACKET",
-        "uk-apparel/Categories/Women/Sweatshirts": "SWEATER",
-        "uk-apparel/Categories/Women/Swimwear": "SWIMWEAR",
-        "uk-apparel/Categories/Women/Tops & T-Shirts": "TOP",
-        "uk-apparel/Categories/Women/Tops & T-Shirts/Polos": "SHIRT",
-        "uk-apparel/Categories/Women/Tops & T-Shirts/T-Shirts": "TSHIRT",
-        "uk-apparel/Categories/Women/Trousers": "PANTS",
+        "uk-apparel/Categories/Women/Sportswear/Shirts & Tees": (
+            ProductCategory.SHIRT.value,
+            {"type": "SPORT"},
+        ),
+        "uk-apparel/Categories/Women/Sportswear/Shorts": (
+            ProductCategory.SHORTS.value,
+            {"type": "SPORT"},
+        ),
+        "uk-apparel/Categories/Women/Sportswear/Skirts": (
+            ProductCategory.SKIRT.value,
+            {"type": "SPORT"},
+        ),
+        "uk-apparel/Categories/Women/Sportswear/Tights & Leggings": (
+            ProductCategory.PANTS.value,
+            {"type": "SPORT"},
+        ),
+        "uk-apparel/Categories/Women/Sportswear/Track Jackets": (
+            ProductCategory.JACKET.value,
+            {"type": "SPORT"},
+        ),
+        "uk-apparel/Categories/Women/Sportswear/Tracksuits": (
+            ProductCategory.TRACKSUIT.value,
+            {"type": "SPORT"},
+        ),
+        "uk-apparel/Categories/Women/Sportswear/Trousers": (
+            ProductCategory.PANTS.value,
+            {"type": "SPORT"},
+        ),
+        "uk-apparel/Categories/Women/Suits & Blazers": ProductCategory.SUIT.value,
+        "uk-apparel/Categories/Women/Suits & Blazers/Suit Jackets & Blazers": ProductCategory.JACKET.value,
+        "uk-apparel/Categories/Women/Suits & Blazers/Waistcoats": ProductCategory.JACKET.value,
+        "uk-apparel/Categories/Women/Sweatshirts": ProductCategory.SWEATER.value,
+        "uk-apparel/Categories/Women/Swimwear": ProductCategory.SWIMWEAR.value,
+        "uk-apparel/Categories/Women/Tops & T-Shirts": ProductCategory.TOP.value,
+        "uk-apparel/Categories/Women/Tops & T-Shirts/Polos": ProductCategory.SHIRT.value,
+        "uk-apparel/Categories/Women/Tops & T-Shirts/T-Shirts": ProductCategory.TSHIRT.value,
+        "uk-apparel/Categories/Women/Trousers": ProductCategory.PANTS.value,
     }
 
     return combine_results(
@@ -183,43 +217,73 @@ def female(country_code: str) -> List[dict]:
 
 def male(country_code: str) -> List[dict]:
     path_2_category = {
-        "uk-apparel/Categories/Men/Knitwear/Cardigans": "JACKET",
-        "uk-apparel/Categories/Men/Knitwear/Gilets": "JACKET",
-        "uk-apparel/Categories/Men/Knitwear/Jumpers": "SWEATER",
-        "uk-apparel/Categories/Men/Knitwear/Tank Tops": "TOP",
-        "uk-apparel/Categories/Men/Nightwear": "NIGHTWEAR",
-        "uk-apparel/Categories/Men/Coats & Jackets": "JACKET",
-        "uk-apparel/Categories/Men/Dungarees": "OVERALL",
-        "uk-apparel/Categories/Men/Hoodies": "SWEATER",
-        "uk-apparel/Categories/Men/Jeans": "JEANS",
-        "uk-apparel/Categories/Men/Shirts": "SHIRT",
-        "uk-apparel/Categories/Men/Shorts": "SHORTS",
-        "uk-apparel/Categories/Men/Socks": "SOCKS",
-        "uk-apparel/Categories/Men/Sportswear/Athletic Socks": ("SOCKS", {"type": "SPORT"}),
-        "uk-apparel/Categories/Men/Sportswear/Base Layers": ("UNDERWEAR", {"type": "SPORT"}),
-        "uk-apparel/Categories/Men/Sportswear/Gilets": ("JACKET", {"type": "SPORT"}),
+        "uk-apparel/Categories/Men/Knitwear/Cardigans": ProductCategory.JACKET.value,
+        "uk-apparel/Categories/Men/Knitwear/Gilets": ProductCategory.JACKET.value,
+        "uk-apparel/Categories/Men/Knitwear/Jumpers": ProductCategory.SWEATER.value,
+        "uk-apparel/Categories/Men/Knitwear/Tank Tops": ProductCategory.TOP.value,
+        "uk-apparel/Categories/Men/Nightwear": ProductCategory.NIGHTWEAR.value,
+        "uk-apparel/Categories/Men/Coats & Jackets": ProductCategory.JACKET.value,
+        "uk-apparel/Categories/Men/Dungarees": ProductCategory.OVERALL.value,
+        "uk-apparel/Categories/Men/Hoodies": ProductCategory.SWEATER.value,
+        "uk-apparel/Categories/Men/Jeans": ProductCategory.JEANS.value,
+        "uk-apparel/Categories/Men/Shirts": ProductCategory.SHIRT.value,
+        "uk-apparel/Categories/Men/Shorts": ProductCategory.SHORTS.value,
+        "uk-apparel/Categories/Men/Socks": ProductCategory.SOCKS.value,
+        "uk-apparel/Categories/Men/Sportswear/Athletic Socks": (
+            ProductCategory.SOCKS.value,
+            {"type": "SPORT"},
+        ),
+        "uk-apparel/Categories/Men/Sportswear/Base Layers": (
+            ProductCategory.UNDERWEAR.value,
+            {"type": "SPORT"},
+        ),
+        "uk-apparel/Categories/Men/Sportswear/Gilets": (
+            ProductCategory.JACKET.value,
+            {"type": "SPORT"},
+        ),
         "uk-apparel/Categories/Men/Sportswear/Knitwear": None,
-        "uk-apparel/Categories/Men/Sportswear/Shirts & Tees": ("SHIRT", {"type": "SPORT"}),
-        "uk-apparel/Categories/Men/Sportswear/Shorts": ("SHORTS", {"type": "SPORT"}),
-        "uk-apparel/Categories/Men/Sportswear/Tights & Leggings": ("PANTS", {"type": "SPORT"}),
-        "uk-apparel/Categories/Men/Sportswear/Track Jackets": ("JACKET", {"type": "SPORT"}),
-        "uk-apparel/Categories/Men/Sportswear/Tracksuits": ("TRACKSUIT", {"type": "SPORT"}),
-        "uk-apparel/Categories/Men/Sportswear/Trousers": ("PANTS", {"type": "SPORT"}),
-        "uk-apparel/Categories/Men/Sportswear/Underwear": ("UNDERWEAR", {"type": "SPORT"}),
-        "uk-apparel/Categories/Men/Suits & Blazers": "SUIT",
-        "uk-apparel/Categories/Men/Suits & Blazers/Blazers": "JACKET",
-        "uk-apparel/Categories/Men/Suits & Blazers/Suit Jackets": "JACKET",
-        "uk-apparel/Categories/Men/Suits & Blazers/Suit Trousers": "PANTS",
-        "uk-apparel/Categories/Men/Suits & Blazers/Tuxedo Jackets": "JACKET",
-        "uk-apparel/Categories/Men/Suits & Blazers/Tuxedo Trousers": "PANTS",
-        "uk-apparel/Categories/Men/Suits & Blazers/Waistcoats": "JACKET",
-        "uk-apparel/Categories/Men/Sweatshirts": "SWEATER",
-        "uk-apparel/Categories/Men/Swimwear": "SWIMWEAR",
-        "uk-apparel/Categories/Men/Tops & T-Shirts": "TOP",
-        "uk-apparel/Categories/Men/Tops & T-Shirts/Polos": "SHIRT",
-        "uk-apparel/Categories/Men/Tops & T-Shirts/T-Shirts": "TSHIRT",
-        "uk-apparel/Categories/Men/Trousers": "PANTS",
-        "uk-apparel/Categories/Men/Underwear": "UNDERWEAR",
+        "uk-apparel/Categories/Men/Sportswear/Shirts & Tees": (
+            ProductCategory.SHIRT.value,
+            {"type": "SPORT"},
+        ),
+        "uk-apparel/Categories/Men/Sportswear/Shorts": (
+            ProductCategory.SHORTS.value,
+            {"type": "SPORT"},
+        ),
+        "uk-apparel/Categories/Men/Sportswear/Tights & Leggings": (
+            ProductCategory.PANTS.value,
+            {"type": "SPORT"},
+        ),
+        "uk-apparel/Categories/Men/Sportswear/Track Jackets": (
+            ProductCategory.JACKET.value,
+            {"type": "SPORT"},
+        ),
+        "uk-apparel/Categories/Men/Sportswear/Tracksuits": (
+            ProductCategory.TRACKSUIT.value,
+            {"type": "SPORT"},
+        ),
+        "uk-apparel/Categories/Men/Sportswear/Trousers": (
+            ProductCategory.PANTS.value,
+            {"type": "SPORT"},
+        ),
+        "uk-apparel/Categories/Men/Sportswear/Underwear": (
+            ProductCategory.UNDERWEAR.value,
+            {"type": "SPORT"},
+        ),
+        "uk-apparel/Categories/Men/Suits & Blazers": ProductCategory.SUIT.value,
+        "uk-apparel/Categories/Men/Suits & Blazers/Blazers": ProductCategory.JACKET.value,
+        "uk-apparel/Categories/Men/Suits & Blazers/Suit Jackets": ProductCategory.JACKET.value,
+        "uk-apparel/Categories/Men/Suits & Blazers/Suit Trousers": ProductCategory.PANTS.value,
+        "uk-apparel/Categories/Men/Suits & Blazers/Tuxedo Jackets": ProductCategory.JACKET.value,
+        "uk-apparel/Categories/Men/Suits & Blazers/Tuxedo Trousers": ProductCategory.PANTS.value,
+        "uk-apparel/Categories/Men/Suits & Blazers/Waistcoats": ProductCategory.JACKET.value,
+        "uk-apparel/Categories/Men/Sweatshirts": ProductCategory.SWEATER.value,
+        "uk-apparel/Categories/Men/Swimwear": ProductCategory.SWIMWEAR.value,
+        "uk-apparel/Categories/Men/Tops & T-Shirts": ProductCategory.TOP.value,
+        "uk-apparel/Categories/Men/Tops & T-Shirts/Polos": ProductCategory.SHIRT.value,
+        "uk-apparel/Categories/Men/Tops & T-Shirts/T-Shirts": ProductCategory.TSHIRT.value,
+        "uk-apparel/Categories/Men/Trousers": ProductCategory.PANTS.value,
+        "uk-apparel/Categories/Men/Underwear": ProductCategory.UNDERWEAR.value,
     }
 
     return combine_results(
@@ -233,16 +297,16 @@ def male(country_code: str) -> List[dict]:
 
 def electronics(country_code: str) -> List[dict]:
     path_2_category = {
-        "uk-computers/Products/Ink & Laser Printers": "PRINTER",
+        "uk-computers/Products/Ink & Laser Printers": ProductCategory.PRINTER.value,
         "uk-computers/Products/Ink & Laser Printers/Plotters": None,
-        "uk-computers/Products/Laptops": "LAPTOP",
-        "uk-computers/Products/Tablets": "TABLET",
-        "uk-computers/Products/Webcams & VoIP Equipment/PC Headsets": "HEADPHONES",
-        "uk-electronics/Categories/Accessories/Home Audio & Video Accessories/Headphones & Earphones": "HEADPHONES",  # noqa
-        "uk-electronics/Categories/Home Cinema, TV & Video/TVs": "TV",
+        "uk-computers/Products/Laptops": ProductCategory.LAPTOP.value,
+        "uk-computers/Products/Tablets": ProductCategory.TABLET.value,
+        "uk-computers/Products/Webcams & VoIP Equipment/PC Headsets": ProductCategory.HEADPHONES.value,
+        "uk-electronics/Categories/Accessories/Home Audio & Video Accessories/Headphones & Earphones": ProductCategory.HEADPHONES.value,  # noqa
+        "uk-electronics/Categories/Home Cinema, TV & Video/TVs": ProductCategory.TV.value,
         "uk-electronics/Categories/Mobile Phones & Communication/Big Button Mobile Phones": None,
-        "uk-electronics/Categories/Mobile Phones & Communication/Mobile Phones & Smartphones": "SMARTPHONE",  # noqa
-        "uk-electronics/Categories/Mobile Phones & Communication/Smartwatches": "SMARTWATCH",
+        "uk-electronics/Categories/Mobile Phones & Communication/Mobile Phones & Smartphones": ProductCategory.SMARTPHONE.value,  # noqa
+        "uk-electronics/Categories/Mobile Phones & Communication/Smartwatches": ProductCategory.SMARTWATCH.value,
     }
 
     return combine_results(
@@ -254,16 +318,16 @@ def electronics(country_code: str) -> List[dict]:
 
 def household(country_code: str) -> List[dict]:
     path_2_category = {
-        "de-appliances/Kategorien/Geschirrspüler": "DISHWASHER",
-        "de-appliances/Kategorien/Herde": "STOVE",
-        "fr-appliances/Catégories/Congélateurs": "FREEZER",
-        "fr-appliances/Catégories/Fours avec commandes pour Tables de cuisson": "OVEN",
-        "fr-appliances/Catégories/Lave-linge et Sèche-linge": "WASHER",
-        "fr-appliances/Catégories/Lave-linge et Sèche-linge/Essoreuses": "DRYER",
-        "fr-appliances/Catégories/Lave-linge et Sèche-linge/Sèche-linges": "DRYER",
-        "fr-appliances/Catégories/Réfrigérateurs": "FRIDGE",
-        "fr-appliances/Catégories/Fours encastrables": "OVEN",
-        "fr-appliances/Catégories/Hottes aspirantes": "COOKER_HOOD",
+        "de-appliances/Kategorien/Geschirrspüler": ProductCategory.DISHWASHER.value,
+        "de-appliances/Kategorien/Herde": ProductCategory.STOVE.value,
+        "fr-appliances/Catégories/Congélateurs": ProductCategory.FREEZER.value,
+        "fr-appliances/Catégories/Fours avec commandes pour Tables de cuisson": ProductCategory.OVEN.value,
+        "fr-appliances/Catégories/Lave-linge et Sèche-linge": ProductCategory.WASHER.value,
+        "fr-appliances/Catégories/Lave-linge et Sèche-linge/Essoreuses": ProductCategory.DRYER.value,
+        "fr-appliances/Catégories/Lave-linge et Sèche-linge/Sèche-linges": ProductCategory.DRYER.value,
+        "fr-appliances/Catégories/Réfrigérateurs": ProductCategory.FRIDGE.value,
+        "fr-appliances/Catégories/Fours encastrables": ProductCategory.OVEN.value,
+        "fr-appliances/Catégories/Hottes aspirantes": ProductCategory.COOKER_HOOD.value,
     }
 
     return combine_results(country_code, path_2_category, metadata={"family": "electronics"})
