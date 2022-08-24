@@ -16,7 +16,6 @@ _LABEL_MAPPING = {
     "": CertificateType.OTHER,
     "Biodégradable": CertificateType.OTHER,
     "Biologique": CertificateType.OTHER,
-    "bluesign®": CertificateType.BLUESIGN_PRODUCT,
     "bluesign® APPROVED materials": CertificateType.BLUESIGN_APPROVED,
     "Bronze Cradle to Cradle Certified®": CertificateType.CRADLE_TO_CRADLE_BRONZE,
     "Argent Cradle to Cradle Certified® ": CertificateType.CRADLE_TO_CRADLE_SILVER,
@@ -45,7 +44,6 @@ _LABEL_MAPPING = {
     "Global Organic Textile Standard (GOTS) - Made with Organic": CertificateType.GOTS_MADE_WITH_ORGANIC_MATERIALS,
     "Global Organic Textile Standard (GOTS) - Organic": CertificateType.GOTS_ORGANIC,
     "GOTS - organic": CertificateType.GOTS_ORGANIC,
-    "Leather Working Group": CertificateType.LEATHER_WORKING_GROUP,
     "Moins d’emballage": CertificateType.OTHER,
     "Naturel": CertificateType.OTHER,
     "OCS - Organic Blended Content Standard": CertificateType.ORGANIC_CONTENT_STANDARD_BLENDED,
@@ -54,7 +52,6 @@ _LABEL_MAPPING = {
     "OCS - Organic Content Standard": CertificateType.ORGANIC_CONTENT_STANDARD_100,
     "Respectueux des animaux": CertificateType.OTHER,
     "Respectueux des forêts": CertificateType.OTHER,
-    "Responsible Down Standard": CertificateType.RESPONSIBLE_DOWN_STANDARD,
     "Responsible Wool Standard": CertificateType.RESPONSIBLE_WOOL_STANDARD,
     "Lyocell": CertificateType.OTHER,
 }
