@@ -49,44 +49,48 @@ def get_product_from_JSON_LD(json_ld: List[Any], else_return: Any = {}) -> Any:
 
 def sustainability_labels_to_certificates(
     certificate_strings: list[str], certificate_mapping: dict
-) -> list[str]:
+) -> Union[list[str], None]:
     """
     Helper function that maps the extracted HTML span texts to certificates.
     1. It tries all known certificates
     2. It uses`certificate_mapping` for shop specific certificates strings
-    3. If no mapping was found the unknown sustainability labels are logged
+    3. If no mapping is found, 'CertificateType.UNKNOWN' is assigned and the unknown
+    certificate_string is logged.
 
     Args:
         certificate_strings (list[str]): Certificate strings from the HTML span tags
         certificate_mapping (dict): Mapping of certificate strings to certificates
 
     Returns:
-        list[str]: List of parsed certificates
+        Union[list[str], None]: List of parsed certificates or None if certificate_strings is empty
     """
 
-    result = []
+    # Return None if certificate_strings is empty
+    if not certificate_strings:
+        return None
 
+    result = dict.fromkeys(set(certificate_strings))
+
+    # check all known certificates
     for certificate_id, localized_certificate_infos in SUSTAINABILITY_LABELS.items():
-        for certificate_string in certificate_strings:
+        for certificate_string in result.keys():
             if any(
                 _get_certificate_for_any_language(
                     localized_certificate_infos["languages"].values(), certificate_string
                 )
             ):
-                result.append(CertificateType[certificate_id.split(":")[-1]])
-                certificate_strings.remove(certificate_string)
+                result.update({certificate_string: CertificateType[certificate_id.split(":")[-1]]})
 
-    if certificate_strings:
-        for certificate_string in certificate_strings:
+    # check custom certificate_mappings for unassigned certificate strings
+    for certificate_string, certificate in result.items():
+        if certificate is None:
             if certificate_string in certificate_mapping.keys():
-                result.append(certificate_mapping[certificate_string])
-                certificate_strings.remove(certificate_string)
+                result.update({certificate_string: certificate_mapping[certificate_string]})
+            else:  # if certificate_string can not be mapped, assign UNKNOWN and create log message
+                result.update({certificate_string: CertificateType.UNKNOWN})
+                logger.info(f'unknown sustainability label: {certificate_string}')
 
-    # if there are still certificate_strings left, which could not be mapped, create a log message.
-    if certificate_strings:
-        logger.info(f'unknown sustainability labels: {", ".join(map(repr, certificate_strings))}')
-
-    return sorted(set(result)) or [CertificateType.UNKNOWN]  # type: ignore[attr-defined]
+    return sorted(set(result.values()))  # type: ignore[attr-defined]
 
 
 def _get_certificate_for_any_language(
