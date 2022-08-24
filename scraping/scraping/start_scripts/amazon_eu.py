@@ -61,6 +61,13 @@ def translate_paths_in_category_map(path_2_category: dict) -> dict:
     replaces each path in a category mapping with the corresponding leaf nodes.
     here its more convenient to refer to a leaf node by its index.
 
+    in cases where path_2_category is ambiguous, the most specific mapping will win.
+
+    for example  translate_paths_in_category_map({"a/b/c": "PANTS", "a/b/c/d": "DISWASHER"})
+
+    will map all children of "a/b/c" to "PANTS"
+    except for children of "a/b/c/d" which will be mapped to "DISHWASHER"
+
     Args:
         path_2_category (dict): a map from paths to categories
 
