@@ -11,7 +11,8 @@ from pydantic import ValidationError
 from core.domain import CertificateType, Product
 
 from ..parse import JSON_LD, ParsedPage
-from ..utils import check_and_create_attributes_list, safely_return_first_element
+from ..utils import check_and_create_attributes_list, safely_return_first_element, \
+    sustainability_labels_to_certificates
 
 logger = getLogger(__name__)
 
@@ -82,6 +83,7 @@ def extract_zalando_de(
     and returns `Product` object or `None` if anything failed. Works for zalando.de and zalando.fr.
 
     Args:
+        label_mapping: `label_mapping` for shop specific certificates strings
         parsed_page (ParsedPage): Intermediate representation of `ScrapedPage` domain object
 
     Returns:
@@ -103,20 +105,9 @@ def extract_zalando_de(
     if price := first_offer.get("price", None):
         price = float(price)
 
-    sustainability_strings = set(get_sustainability_strings(parsed_page))
-    sustainability_labels = sorted(
-        {
-            label_mapping.get(sustainability_string, CertificateType.UNKNOWN)
-            for sustainability_string in sustainability_strings
-        }
-    )
-
-    if unknown_labels := {
-        sustainability_string
-        for sustainability_string in sustainability_strings
-        if sustainability_string not in label_mapping
-    }:
-        logger.info(f'unknown sustainability labels: {", ".join(map(repr, unknown_labels))}')
+    sustainability_strings = get_sustainability_strings(parsed_page)
+    sustainability_labels = sustainability_labels_to_certificates(sustainability_strings,
+                                                                  label_mapping)
 
     try:
         return Product(
