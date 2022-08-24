@@ -31,6 +31,7 @@ _LABEL_MAPPING = {
     "Reducing CO2": CertificateType.CARBON_TRUST_REDUCING,
     "The Nordic Swan Ecolabel": CertificateType.NORDIC_SWAN_ECOLABEL,
     "C02 compensé de ClimatePartner": CertificateType.CLIMATE_NEUTRAL_CLIMATE_PARTNER,
+    "Pre-owned Certified": CertificateType.OTHER,
 }
 
 
