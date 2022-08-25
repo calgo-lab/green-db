@@ -255,7 +255,7 @@ def male(country_code: str) -> List[dict]:
         "uk-apparel/Categories/Men/Sweatshirts": ProductCategory.SWEATER.value,
         "uk-apparel/Categories/Men/Swimwear": ProductCategory.SWIMWEAR.value,
         "uk-apparel/Categories/Men/Tops & T-Shirts": ProductCategory.SHIRT.value,
-        "uk-apparel//Categories/Men/Tops & T-Shirts/Vests": ProductCategory.TOP.value,
+        "uk-apparel/Categories/Men/Tops & T-Shirts/Vests": ProductCategory.TOP.value,
         "uk-apparel/Categories/Men/Tops & T-Shirts/T-Shirts": ProductCategory.TSHIRT.value,
         "uk-apparel/Categories/Men/Trousers": ProductCategory.PANTS.value,
         "uk-apparel/Categories/Men/Underwear": ProductCategory.UNDERWEAR.value,
