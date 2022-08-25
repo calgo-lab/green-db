@@ -38,9 +38,13 @@ def test_amazon_electronics() -> None:
         gender=None,
         consumer_lifestage=None,
         name="Lenovo ThinkPad X1 Nano - Laptop Black 16GB RAM 1TB SSD",
-        description="Lenovo ThinkPad X1 Nano Gen 1 Notebook 33 cm (13 Zoll), 2K "
-        "(Intel Core i7-1160G7, 16 GB RAM, 1 TB SSD, Intel Iris Xe Graphics, Windows 10 Pro), "
-        "Schwarz spanische QWERTY-Tastatur",
+        description="Geben Sie Ihr Modell ein, um sicherzustellen, dass dieser Artikel passt.. "
+                     "Bildschirm 13 Zoll (33 cm), 2K, 2160 x 1350 Pixel, IPS, 450nits, blendfrei. "
+                     "Prozessor Intel Core i7-1160G7 (4C / 8T, 2,1 / 4,4 GHz, 12 MB). RAM 16 GB "
+                     "Soldered LPDDR4x-4266. Speicher: 1 TB SSD M.2 2242 PCIe 3.0x4 NVMe. "
+                     "Integrierte Grafikkarte Intel Iris Xe Graphics. Lenovo ThinkPad X1 Nano Gen "
+                     "1 Notebook 33 cm (13 Zoll), 2K (Intel Core i7-1160G7, 16 GB RAM, 1 TB SSD, "
+                     "Intel Iris Xe Graphics, Windows 10 Pro), Schwarz spanische QWERTY-Tastatur",
         brand="Lenovo",
         sustainability_labels=[CertificateType.EPEAT],  # type: ignore[attr-defined]
         price=2998.0,

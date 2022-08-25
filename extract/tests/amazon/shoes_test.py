@@ -52,7 +52,10 @@ def test_amazon_basic() -> None:
         gender=gender,
         consumer_lifestage=consumer_lifestage,
         name="THINK! Herren Kong_3-000371 chromfrei gegerbte, nachhaltige Wechselfußbett Boots",
-        description="Think! ist ein traditionelles Schuhunternehmen und wahrt die Handwerkskunst. "
+        description="Obermaterial: Leder. Innenmaterial: Lederfutter. Sohle: Gummi. Verschluss: "
+                    "Schnüren. Absatzhöhe: 2 cm. Absatzform: Blockabsatz. Größenhinweis: Bequeme "
+                    "Passform. Schuhweite: Normal. Nicht wasserfest. Think! ist ein "
+                    "traditionelles Schuhunternehmen und wahrt die Handwerkskunst. "
         "Think! Schuhe sind handgefertigt und werden ausschließlich in Europa hergestellt. "
         "Die Schuhe sind dabei individuell, gesund und nachhaltig produziert. Alle Innenleder "
         "sind chromfrei gegerbt. Durch die schonende, pflanzliche Gerbung entsteht ein angenehmes "

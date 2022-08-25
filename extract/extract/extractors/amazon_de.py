@@ -307,7 +307,9 @@ def _get_brand(soup: BeautifulSoup, language: str) -> Optional[str]:
 
 def _get_description(soup: BeautifulSoup) -> str:
     """
-    Helper function that extracts the product's description.
+    Helper function that extracts the product's description. If the product has feature-bullets and
+    a productDescription both are concatenated. Otherwise either the feature-bullets or the
+    productDescription is returned.
 
     Args:
         soup (BeautifulSoup): Parsed HTML
@@ -322,15 +324,21 @@ def _get_description(soup: BeautifulSoup) -> str:
 
     def parse_description(description: BeautifulSoup) -> str:
         desc_paragraph = getattr(description, "p", None)
-        desc_list = description.find_all("li")
         if desc_paragraph:
             return desc_paragraph.get_text().strip()
+        desc_list = description.find_all("li")
         if desc_list:
             spans = [span.text.strip() for span in desc_list if span.text.strip()]
             return ". ".join(spans)
-        return ""
+        return None
 
-    return _handle_parse(targets, parse_description)
+    description = _handle_parse(targets[:1], parse_description)
+    bullets = _handle_parse(targets[1:], parse_description)
+
+    if all([description, bullets]):
+        return ". ".join([bullets, description])
+    else:
+        return description or bullets
 
 
 def _find_from_details_section(soup: BeautifulSoup, prop: str) -> Optional[str]:
