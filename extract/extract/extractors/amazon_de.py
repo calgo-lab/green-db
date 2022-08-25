@@ -44,7 +44,7 @@ class _Language(Enum):
 _LANGUAGE_LOCALES = {
     _Language.de: {
         "info": ("Besuche den ", "-Store", "Marke: "),
-        "table": ("Marke", "Hersteller"),
+        "table": ("Marke", "Hersteller", "Brand"),
     },
     _Language.fr: {
         "info": ("Visiter la boutique ", "Marque\xa0: "),
@@ -87,6 +87,12 @@ def extract_amazon_de(parsed_page: ParsedPage) -> Optional[Product]:
 
     sustainability_spans = soup.find_all("span", id=re.compile("CPF-BTF-Certificate-Name"))
     sustainability_texts = [span.text for span in sustainability_spans]
+
+    if "Energy Label" in sustainability_texts:
+        if label_with_level := get_energy_label_level(soup):
+            sustainability_texts = [label.replace("Energy Label", label_with_level) for label in
+                                    sustainability_texts]
+
     sustainability_labels = sustainability_labels_to_certificates(
         sustainability_texts, _LABEL_MAPPING
     )
@@ -141,6 +147,31 @@ def _handle_parse(targets: list, parse: Callable) -> Optional[Any]:
         return parse(result)
 
     return None
+
+
+def get_energy_label_level(soup: BeautifulSoup) -> Optional[str]:
+    """
+    Helper function that extracts the product's energy label level. The level is not listed in the
+    CPR section so we have to extract it from somewhere else.
+
+    Args:
+        soup (BeautifulSoup): Parsed HTML
+
+    Returns:
+        Optional[str]: `str` object with the energy label level. If nothing was found `None` is
+        returned.
+    """
+
+    targets = [
+        soup.find(id="energyEfficiency").find("text")
+    ]
+
+    def parse_energy_efficiency(energy_efficiency: BeautifulSoup) -> Optional[str]:
+        if energy_efficiency:
+            return "EU Energy label " + energy_efficiency.get_text().strip()
+        return None
+
+    return _handle_parse(targets, parse_energy_efficiency)
 
 
 def _get_color(soup: BeautifulSoup) -> Optional[str]:
@@ -270,6 +301,7 @@ def _get_brand(soup: BeautifulSoup, language: str) -> Optional[str]:
         _handle_parse(targets, parse_brand)
         or _find_from_details_section(soup, table_locales[0])
         or _find_from_details_section(soup, table_locales[1])
+        or _find_from_details_section(soup, table_locales[2])
     )
 
 
@@ -320,11 +352,14 @@ def _find_from_details_section(soup: BeautifulSoup, prop: str) -> Optional[str]:
         return parent.find_all("span")[1].text
 
     if product_details_table:
-        parent = product_details_table.find("th", text=re.compile(r"\s+" + prop + r"\s+"))
-        if not parent:
-            additional_section = soup.find(
-                "table", {"id": "productDetails_detailBullets_sections1"}
-            )
-            parent = additional_section.find("th", text=re.compile(f"{prop}")).parent
-            return parent.find("td").text.strip()
-        return parent.parent.find("td").text.strip().replace("\u200e", "")
+        try:
+            parent = product_details_table.find("th", text=re.compile(r"\s+" + prop + r"\s+"))
+            if not parent:
+                additional_section = soup.find(
+                    "table", {"id": "productDetails_detailBullets_sections1"}
+                )
+                parent = additional_section.find("th", text=re.compile(f"{prop}")).parent
+                return parent.find("td").text.strip()
+            return parent.parent.find("td").text.strip().replace("\u200e", "")
+        except AttributeError:
+            return None
