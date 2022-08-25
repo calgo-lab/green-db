@@ -2,7 +2,7 @@ import json
 import pkgutil
 from collections import defaultdict
 from logging import getLogger
-from typing import Any, List, Optional, Tuple
+from typing import List, Optional
 
 from core.domain import ConsumerLifestageType, GenderType, ProductCategory
 
