@@ -1,27 +1,12 @@
 import json
 import pkgutil
+from collections import defaultdict
 from logging import getLogger
-
-# from bisect import bisect_left
 from typing import Any, List, Optional, Tuple
 
 from core.domain import ConsumerLifestageType, GenderType, ProductCategory
 
 logger = getLogger(__name__)
-
-
-# use bisect.bisect_left if we ever update to 3.10
-# on python 3.9 bisect_left lacks the `key` argument
-def bisect_left(a: list, x: Any, key: Any) -> int:
-    low = 0
-    high = len(a)
-    while low < high:
-        mid = (low + high) // 2
-        if key(a[mid]) < x:
-            low = mid + 1
-        else:
-            high = mid
-    return low
 
 
 def read_json(path: str) -> list:
@@ -30,63 +15,49 @@ def read_json(path: str) -> list:
     return json.loads(data.decode("utf-8"))
 
 
-sort_key = "{root}{path}/".format_map
-browse_tree_leaves = sorted(read_json("data/amazon_eu_browse_nodes.json"), key=sort_key)
+browse_tree_leaves = read_json("data/amazon_eu_browse_nodes.json")
+path_2_leaves_builder = defaultdict(list)
 
 # unfortunately the json file only contains leaf nodes
 # so we have to do some extra work to map a browse node path to its leaf nodes.
 # we wouldnt need to do that if we had a list of internal nodes aswell.
 
+for leaf in browse_tree_leaves:
+    path = "{root}{path}".format_map(leaf)
+    split_path = path.split("/")
+    for i in range(len(split_path)):
+        subpath = "/".join(split_path[: i + 1])
+        path_2_leaves_builder[subpath].append(leaf)
 
-def find_leaf_nodes_by_path(path: str) -> Tuple[int, int]:
+path_2_leaves = dict(path_2_leaves_builder)
+
+
+def translate_category_map(path_2_category: dict, country_code: str) -> dict:
     """
-    find all leaf nodes matching a given path
-
-    Args:
-        path (str): the name of some amazon browse node
-
-    Returns:
-        Tuple[int, int]: the range of leaf nodes given as (length, offset)
-    """
-    seperator = "/"
-    assert not path.startswith(seperator) and not path.endswith(seperator)
-    one_after_seperator = chr(ord(seperator) + 1)
-    start = bisect_left(browse_tree_leaves, path + seperator, key=sort_key)
-    end = bisect_left(browse_tree_leaves, path + one_after_seperator, key=sort_key)
-    return end - start, start
-
-
-def translate_paths_in_category_map(path_2_category: dict) -> dict:
-    """
-    replaces each path in a category mapping with the corresponding leaf nodes.
-    here its more convenient to refer to a leaf node by its index.
-
+    replaces paths in a category mapping with the corresponding browse node ids.
     in cases where path_2_category is ambiguous, the most specific mapping will win.
 
     for example  translate_paths_in_category_map({"a/b/c": "PANTS", "a/b/c/d": "DISWASHER"})
 
-    will map all children of "a/b/c" to "PANTS"
-    except for children of "a/b/c/d" which will be mapped to "DISHWASHER"
+    will map all children of "a/b/c" to "PANTS" except those which are
+    also children of "a/b/c/d" which will be mapped to "DISHWASHER"
 
     Args:
         path_2_category (dict): a map from paths to categories
+        country_code (str): one of "uk", "de" or "fr"
 
     Returns:
-        dict: a map from leaf node indices to categories
+        dict: a map from browse node ids to categories
     """
 
-    ranges = sorted(
-        (*find_leaf_nodes_by_path(browse_node), category)
-        for browse_node, category in path_2_category.items()
-    )
+    id_2_category = {}
 
-    index_2_category = {}
+    for path in sorted(path_2_category, key=len):
+        category = path_2_category[path]
+        for leaf in path_2_leaves[path]:
+            id_2_category[leaf["id"][country_code]] = category
 
-    for length, offset, category in reversed(ranges):
-        for i in range(offset, offset + length):
-            index_2_category[i] = category
-
-    return index_2_category
+    return id_2_category
 
 
 def combine_results(
@@ -112,22 +83,19 @@ def combine_results(
     base_url = country_code_to_url[country_code]
     filters = country_code_to_filters[country_code]
 
-    index_2_category = translate_paths_in_category_map(path_2_category)
+    id_2_category = translate_category_map(path_2_category, country_code)
 
-    results = []
-    for i, category in index_2_category.items():
-        if category:
-            if node := browse_tree_leaves[i]["id"][country_code]:
-                results.append(
-                    {
-                        "start_urls": f"{base_url}/s?bbn={node}&rh=n%3A{node}%2C{filters}",
-                        "category": category,
-                        "gender": gender,
-                        "consumer_lifestage": consumer_lifestage,
-                        "meta_data": json.dumps(metadata),
-                    }
-                )
-    return results
+    return [
+        {
+            "start_urls": f"{base_url}/s?bbn={node}&rh=n%3A{node}%2C{filters}",
+            "category": category,
+            "gender": gender,
+            "consumer_lifestage": consumer_lifestage,
+            "meta_data": json.dumps(metadata),
+        }
+        for node, category in id_2_category.items()
+        if node and category
+    ]
 
 
 def female(country_code: str) -> List[dict]:
