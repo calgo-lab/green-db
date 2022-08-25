@@ -175,9 +175,9 @@ def female(country_code: str) -> List[dict]:
         "uk-apparel/Categories/Women/Suits & Blazers/Waistcoats": ProductCategory.JACKET.value,
         "uk-apparel/Categories/Women/Sweatshirts": ProductCategory.SWEATER.value,
         "uk-apparel/Categories/Women/Swimwear": ProductCategory.SWIMWEAR.value,
-        "uk-apparel/Categories/Women/Tops & T-Shirts": ProductCategory.TOP.value,
-        "uk-apparel/Categories/Women/Tops & T-Shirts/Polos": ProductCategory.SHIRT.value,
+        "uk-apparel/Categories/Women/Tops & T-Shirts": ProductCategory.SHIRT.value,
         "uk-apparel/Categories/Women/Tops & T-Shirts/T-Shirts": ProductCategory.TSHIRT.value,
+        "uk-apparel/Categories/Women/Tops & T-Shirts/Vest Tops": ProductCategory.TOP.value,
         "uk-apparel/Categories/Women/Trousers": ProductCategory.PANTS.value,
     }
 
@@ -254,8 +254,8 @@ def male(country_code: str) -> List[dict]:
         "uk-apparel/Categories/Men/Suits & Blazers/Waistcoats": ProductCategory.JACKET.value,
         "uk-apparel/Categories/Men/Sweatshirts": ProductCategory.SWEATER.value,
         "uk-apparel/Categories/Men/Swimwear": ProductCategory.SWIMWEAR.value,
-        "uk-apparel/Categories/Men/Tops & T-Shirts": ProductCategory.TOP.value,
-        "uk-apparel/Categories/Men/Tops & T-Shirts/Polos": ProductCategory.SHIRT.value,
+        "uk-apparel/Categories/Men/Tops & T-Shirts": ProductCategory.SHIRT.value,
+        "uk-apparel//Categories/Men/Tops & T-Shirts/Vests": ProductCategory.TOP.value,
         "uk-apparel/Categories/Men/Tops & T-Shirts/T-Shirts": ProductCategory.TSHIRT.value,
         "uk-apparel/Categories/Men/Trousers": ProductCategory.PANTS.value,
         "uk-apparel/Categories/Men/Underwear": ProductCategory.UNDERWEAR.value,
