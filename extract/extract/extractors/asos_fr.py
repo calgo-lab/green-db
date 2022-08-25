@@ -92,6 +92,8 @@ _LABEL_MAPPING = {
     "LENZING™ ECOVERO™": CertificateType.OTHER,
     "Viscose Ecovero™": CertificateType.OTHER,
     "coton bio": CertificateType.OTHER,
+    "coton durable": CertificateType.OTHER,
+    "coton 100 % durable": CertificateType.OTHER,
     "Zinc recyclé": CertificateType.OTHER,
     "polyester recyclé": CertificateType.OTHER,
     "plastique recyclé": CertificateType.OTHER,
