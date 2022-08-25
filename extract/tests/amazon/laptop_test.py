@@ -8,7 +8,7 @@ from extract import extract_product  # type: ignore
 
 
 def test_amazon_electronics() -> None:
-    timestamp = "2022-04-28 19:00:00"
+    timestamp = "2022-08-25 20:21:00"
     url = "https://www.amazon.de/Lenovo-ThinkPad-i7-1160G7-Graphics-Windows/dp/B08WC37LYB/ref=sr_1_12?qid=1651408666&refinements=p_n_cpf_eligible%3A22579885031&s=computers&sr=1https://www.amazon.de/Lenovo-ThinkPad-i7-1160G7-Graphics-Windows/dp/B08WC37LYB/ref=sr_1_12?qid=1651408666&refinements=p_n_cpf_eligible%3A22579885031&s=computers&sr=1-12&th=1-12&th=1"  # noqa
     source = "amazon"
     merchant = "amazon"

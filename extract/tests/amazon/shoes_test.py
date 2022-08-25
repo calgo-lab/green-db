@@ -15,7 +15,7 @@ from extract import extract_product  # type: ignore
 
 
 def test_amazon_basic() -> None:
-    timestamp = "2022-04-28 19:00:00"
+    timestamp = "2022-08-25 20:21:00"
     url = "https://www.amazon.de/Think-Kong_3-000371-chromfrei-nachhaltige-Wechselfu%C3%9Fbett/dp/B08FSL34LS/ref=sr_1_2?qid=1651058159&refinements=p_n_cpf_eligible%3A22579885031&s=shoes&sr=1-2"  # noqa
     source = "amazon"
     merchant = "amazon"
