@@ -293,6 +293,7 @@ def electronics(country_code: str) -> List[dict]:
 
 def household(country_code: str) -> List[dict]:
     path_2_category = {
+        # uk-appliances is somewhat low quality so i used de/fr root nodes here.
         "de-appliances/Kategorien/Geschirrspüler": ProductCategory.DISHWASHER.value,
         "de-appliances/Kategorien/Herde": ProductCategory.STOVE.value,
         "fr-appliances/Catégories/Congélateurs": ProductCategory.FREEZER.value,
