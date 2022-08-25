@@ -99,6 +99,7 @@ def extract_amazon_de(parsed_page: ParsedPage) -> Optional[Product]:
 
     brand = _get_brand(soup, language)
     description = _get_description(soup)
+
     asin = _find_from_details_section(soup, "ASIN")
 
     try:
@@ -338,7 +339,7 @@ def _get_description(soup: BeautifulSoup) -> str:
     if all([description, bullets]):
         return ". ".join([bullets, description])
     else:
-        return description or bullets
+        return description or bullets or ""
 
 
 def _find_from_details_section(soup: BeautifulSoup, prop: str) -> Optional[str]:
