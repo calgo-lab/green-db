@@ -1,15 +1,5 @@
 # type: ignore[attr-defined]
 
-import re
-from enum import Enum
-from logging import getLogger
-from typing import Any, Callable, List, Optional
-from urllib.parse import urlparse
-
-from bs4 import BeautifulSoup
-from pydantic import ValidationError
-
-from core.domain import CertificateType, Product
 
 from ..parse import ParsedPage
 from ..utils import check_and_create_attributes_list, sustainability_labels_to_certificates
