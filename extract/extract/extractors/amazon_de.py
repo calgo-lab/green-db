@@ -31,7 +31,7 @@ _LABEL_MAPPING = {
     "Reducing CO2": CertificateType.CARBON_TRUST_REDUCING,
     "The Nordic Swan Ecolabel": CertificateType.NORDIC_SWAN_ECOLABEL,
     "C02 compensé de ClimatePartner": CertificateType.CLIMATE_NEUTRAL_CLIMATE_PARTNER,
-    "Pre-owned Certified": CertificateType.OTHER,
+    "Pre-owned": CertificateType.OTHER,
 }
 
 
@@ -152,8 +152,8 @@ def _handle_parse(targets: list, parse: Callable) -> Optional[Any]:
 
 def get_energy_label_level(soup: BeautifulSoup) -> Optional[str]:
     """
-    Helper function that extracts the product's energy label level. The level is not listed in the
-    CPR section so we have to extract it from somewhere else.
+    Helper function that extracts the product's (new) EU energy label level. The level is not listed
+    in the CPR section, so we have to extract it from somewhere else.
 
     Args:
         soup (BeautifulSoup): Parsed HTML
