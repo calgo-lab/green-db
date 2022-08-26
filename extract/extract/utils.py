@@ -49,7 +49,7 @@ def get_product_from_JSON_LD(json_ld: List[Any], else_return: Any = {}) -> Any:
 
 def sustainability_labels_to_certificates(
     certificate_strings: list[str], certificate_mapping: dict
-) -> Union[list[str], None]:
+) -> Union[list[CertificateType], None]:
     """
     Helper function that maps the extracted HTML span texts to certificates.
     1. It tries all known certificates
@@ -90,7 +90,7 @@ def sustainability_labels_to_certificates(
                 result.update({certificate_string: CertificateType.UNKNOWN})  # type: ignore[attr-defined] # noqa
                 logger.info(f"unknown sustainability label: {certificate_string}")
 
-    return sorted(set(list(result.values())))  # type: ignore[attr-defined]
+    return sorted(set(result.values()))
 
 
 def _get_certificate_for_any_language(
