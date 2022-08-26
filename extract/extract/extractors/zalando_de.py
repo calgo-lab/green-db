@@ -11,8 +11,11 @@ from pydantic import ValidationError
 from core.domain import CertificateType, Product
 
 from ..parse import JSON_LD, ParsedPage
-from ..utils import check_and_create_attributes_list, safely_return_first_element, \
-    sustainability_labels_to_certificates
+from ..utils import (
+    check_and_create_attributes_list,
+    safely_return_first_element,
+    sustainability_labels_to_certificates,
+)
 
 logger = getLogger(__name__)
 
@@ -20,7 +23,7 @@ _LABEL_MAPPING = {
     "Responsible Wool Standard": CertificateType.RESPONSIBLE_WOOL_STANDARD,
     "GOTS - organic": CertificateType.GOTS_ORGANIC,
     "Global Organic Textile Standard (GOTS) - Organic": CertificateType.GOTS_ORGANIC,
-    "Global Organic Textile Standard (GOTS) - Made with Organic": CertificateType.GOTS_MADE_WITH_ORGANIC_MATERIALS,
+    "Global Organic Textile Standard (GOTS) - Made with Organic": CertificateType.GOTS_MADE_WITH_ORGANIC_MATERIALS,  # noqa
     "GOTS - made with organic materials": CertificateType.GOTS_MADE_WITH_ORGANIC_MATERIALS,
     "Hergestellt aus Wolle aus verantwortungsbewusster Landwirtschaft": CertificateType.OTHER,
     "Hergestellt aus mindestens 20% recycelter Baumwolle": CertificateType.OTHER,
@@ -103,8 +106,9 @@ def extract_zalando_de(
         price = float(price)
 
     sustainability_strings = get_sustainability_strings(parsed_page)
-    sustainability_labels = sustainability_labels_to_certificates(sustainability_strings,
-                                                                  label_mapping)
+    sustainability_labels = sustainability_labels_to_certificates(
+        sustainability_strings, label_mapping
+    )
 
     try:
         return Product(

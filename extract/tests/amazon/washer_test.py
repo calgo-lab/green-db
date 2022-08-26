@@ -40,28 +40,31 @@ def test_amazon_electronics() -> None:
         category=category,
         gender=None,
         consumer_lifestage=None,
-        name="Midea Washing Machine W 5.840 iN / 8 kg / Steam Care / Reload - Refill Function / BLDC Inverter Motor / 1400 rpm, White",
+        name="Midea Washing Machine W 5.840 iN / 8 kg / Steam Care / Reload - Refill Function / "
+             "BLDC Inverter Motor / 1400 rpm, White",
         description="Make sure this fits by entering your model number.. 8 kg capacity. Energy "
-                    "efficiency class B / BLDC inverter motor / 1400 revolutions per minute. "
-                    "Quick wash 15 inches / short wash 45 inches. Reload recall function, "
-                    "child lock, AquaStop. Steam care - While steam care helps to reduce bad "
-                    "odours and wrinkles, Allergy Care is the best solution to kill "
-                    "allergy-causing substances and mites and reduce skin irritation in sensitive "
-                    "people. Together, the two programs contribute to a more pleasant life.. "
-                    "Pre-wash - Additional wash cycle before starting the main wash to increase "
-                    "the washing performance.. Unit dimensions (H x W x D): 85 x 60 x 57 cm",
+        "efficiency class B / BLDC inverter motor / 1400 revolutions per minute. "
+        "Quick wash 15 inches / short wash 45 inches. Reload recall function, "
+        "child lock, AquaStop. Steam care - While steam care helps to reduce bad "
+        "odours and wrinkles, Allergy Care is the best solution to kill "
+        "allergy-causing substances and mites and reduce skin irritation in sensitive "
+        "people. Together, the two programs contribute to a more pleasant life.. "
+        "Pre-wash - Additional wash cycle before starting the main wash to increase "
+        "the washing performance.. Unit dimensions (H x W x D): 85 x 60 x 57 cm",
         brand="Midea",
         sustainability_labels=[CertificateType.EU_ENERGY_LABEL_B],  # type: ignore[attr-defined]
         price=379.00,
         currency=CurrencyType.EUR,
-        image_urls=['https://m.media-amazon.com/images/I/31uH6SJs+XS.jpg',
-                    'https://m.media-amazon.com/images/I/411zsS-JW8S.jpg',
-                    'https://m.media-amazon.com/images/I/310FP7ymDqS.jpg',
-                    'https://m.media-amazon.com/images/I/31qC0k3oQoS.jpg',
-                    'https://m.media-amazon.com/images/I/31FqjB7v08S.jpg',
-                    'https://m.media-amazon.com/images/I/41W-4x1X7+L.jpg',
-                    'https://m.media-amazon.com/images/I/41Ww+CQnB+S.jpg'],
-        colors=['8 kg'],
+        image_urls=[
+            "https://m.media-amazon.com/images/I/31uH6SJs+XS.jpg",
+            "https://m.media-amazon.com/images/I/411zsS-JW8S.jpg",
+            "https://m.media-amazon.com/images/I/310FP7ymDqS.jpg",
+            "https://m.media-amazon.com/images/I/31qC0k3oQoS.jpg",
+            "https://m.media-amazon.com/images/I/31FqjB7v08S.jpg",
+            "https://m.media-amazon.com/images/I/41W-4x1X7+L.jpg",
+            "https://m.media-amazon.com/images/I/41Ww+CQnB+S.jpg",
+        ],
+        colors=["8 kg"],
         sizes=None,
         gtin=None,
         asin="B092LGG221",

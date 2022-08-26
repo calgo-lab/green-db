@@ -41,7 +41,7 @@ _LABEL_MAPPING = {
     "Global Recycled Standard": CertificateType.GLOBAL_RECYCLED_STANDARD,
     "Global Recycled Standard (GRS)": CertificateType.GLOBAL_RECYCLED_STANDARD,
     "GOTS - made with organic materials": CertificateType.GOTS_MADE_WITH_ORGANIC_MATERIALS,
-    "Global Organic Textile Standard (GOTS) - Made with Organic": CertificateType.GOTS_MADE_WITH_ORGANIC_MATERIALS,
+    "Global Organic Textile Standard (GOTS) - Made with Organic": CertificateType.GOTS_MADE_WITH_ORGANIC_MATERIALS,  # noqa
     "Global Organic Textile Standard (GOTS) - Organic": CertificateType.GOTS_ORGANIC,
     "GOTS - organic": CertificateType.GOTS_ORGANIC,
     "Moins d’emballage": CertificateType.OTHER,

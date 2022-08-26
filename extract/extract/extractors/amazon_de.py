@@ -90,8 +90,9 @@ def extract_amazon_de(parsed_page: ParsedPage) -> Optional[Product]:
 
     if "Energy Label" in sustainability_texts:
         if label_with_level := get_energy_label_level(soup):
-            sustainability_texts = [label.replace("Energy Label", label_with_level) for label in
-                                    sustainability_texts]
+            sustainability_texts = [
+                label.replace("Energy Label", label_with_level) for label in sustainability_texts
+            ]
 
     sustainability_labels = sustainability_labels_to_certificates(
         sustainability_texts, _LABEL_MAPPING
@@ -163,9 +164,7 @@ def get_energy_label_level(soup: BeautifulSoup) -> Optional[str]:
         returned.
     """
 
-    targets = [
-        soup.find(id="energyEfficiency").find("text")
-    ]
+    targets = [soup.find(id="energyEfficiency").find("text")]
 
     def parse_energy_efficiency(energy_efficiency: BeautifulSoup) -> Optional[str]:
         if energy_efficiency:

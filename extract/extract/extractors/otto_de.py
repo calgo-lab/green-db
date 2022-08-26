@@ -110,7 +110,6 @@ _LABEL_MAPPING = {
     "FSC®": CertificateType.FOREST_STEWARDSHIP_COUNCIL,
     "Responsible Wool Standard": CertificateType.RESPONSIBLE_WOOL_STANDARD,
     "ENERGY STAR®": CertificateType.ENERGY_STAR,
-
     "Vegetabil gegerbtes Leder": CertificateType.OTHER,
     "[REE]CYCLED": CertificateType.OTHER,
     "Recyceltes Material": CertificateType.OTHER,

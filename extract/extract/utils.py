@@ -1,8 +1,8 @@
+from logging import getLogger
 from typing import Any, List, Union
 
 from core.domain import CertificateType
 from core.sustainability_labels import load_and_get_sustainability_labels
-from logging import getLogger
 
 SUSTAINABILITY_LABELS = load_and_get_sustainability_labels()
 logger = getLogger(__name__)
@@ -88,7 +88,7 @@ def sustainability_labels_to_certificates(
                 result.update({certificate_string: certificate_mapping[certificate_string]})
             else:  # if certificate_string can not be mapped, assign UNKNOWN and create log message
                 result.update({certificate_string: CertificateType.UNKNOWN})
-                logger.info(f'unknown sustainability label: {certificate_string}')
+                logger.info(f"unknown sustainability label: {certificate_string}")
 
     return sorted(set(result.values()))  # type: ignore[attr-defined]
 
