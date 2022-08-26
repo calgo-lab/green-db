@@ -14,5 +14,45 @@
                 "description": "Dieses 'Label' ist GreenDB intern. Es wird verwendet, wenn die Angaben des Shops von uns (noch) nicht überprüft wurden."
             }
         }
+    },
+    "certificate:INDICE_DE_REPARABILITE_0": {
+        "languages": {
+            "fr": {
+                "name": "indice de réparabilité 0",
+                "description": "workaround"
+            }
+        }
+    },
+    "certificate:INDICE_DE_REPARABILITE_1": {
+        "languages": {
+            "fr": {
+                "name": "indice de réparabilité 1",
+                "description": "workaround"
+            }
+        }
+    },
+    "certificate:INDICE_DE_REPARABILITE_2": {
+        "languages": {
+            "fr": {
+                "name": "indice de réparabilité 2",
+                "description": "workaround"
+            }
+        }
+    },
+    "certificate:INDICE_DE_REPARABILITE_3": {
+        "languages": {
+            "fr": {
+                "name": "indice de réparabilité 3",
+                "description": "workaround"
+            }
+        }
+    },
+    "certificate:INDICE_DE_REPARABILITE_4": {
+        "languages": {
+            "fr": {
+                "name": "indice de réparabilité 4",
+                "description": "workaround"
+            }
+        }
     }
 }

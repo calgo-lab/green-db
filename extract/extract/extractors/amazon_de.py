@@ -31,6 +31,14 @@ _LABEL_MAPPING = {
     "Reducing CO2": CertificateType.CARBON_TRUST_REDUCING,
     "The Nordic Swan Ecolabel": CertificateType.NORDIC_SWAN_ECOLABEL,
     "C02 compensé de ClimatePartner": CertificateType.CLIMATE_NEUTRAL_CLIMATE_PARTNER,
+    "Pre-owned Certified": CertificateType.OTHER,
+    "Pre-owned": CertificateType.OTHER,
+    "indice de réparabilité 0": CertificateType.INDICE_DE_REPARABILITE_0,
+    "indice de réparabilité 1": CertificateType.INDICE_DE_REPARABILITE_1,
+    "indice de réparabilité 2": CertificateType.INDICE_DE_REPARABILITE_2,
+    "indice de réparabilité 3": CertificateType.INDICE_DE_REPARABILITE_3,
+    "indice de réparabilité 4": CertificateType.INDICE_DE_REPARABILITE_4,
+
 }
 
 
@@ -86,6 +94,10 @@ def extract_amazon_de(parsed_page: ParsedPage) -> Optional[Product]:
 
     sustainability_spans = soup.find_all("span", id=re.compile("CPF-BTF-Certificate-Name"))
     sustainability_texts = [span.text for span in sustainability_spans]
+
+    if repairability_index := get_repairability_index(soup):
+        sustainability_texts.append(repairability_index)
+
     sustainability_labels = sustainability_labels_to_certificates(
         sustainability_texts, _LABEL_MAPPING
     )
@@ -140,6 +152,31 @@ def _handle_parse(targets: list, parse: Callable) -> Optional[Any]:
         return parse(result)
 
     return None
+
+
+def get_repairability_index(soup: BeautifulSoup) -> Optional[str]:
+    """
+    Helper function that extracts the french repairability index if available.
+
+    Args:
+        soup (BeautifulSoup): Parsed HTML
+
+    Returns:
+        Optional[str]: `str` object with the repairability index. If nothing was found `None` is
+        returned.
+    """
+
+    targets = [
+        soup.find(id="repairabilityIndex_feature_div")
+    ]
+
+    def parse_repairability_index(repairability_index: BeautifulSoup) -> Optional[str]:
+        if repairability_index and repairability_index.find("img"):
+            repairability_index = int(float(repairability_index.find("img").get("alt")) // 2)
+            return "indice de réparabilité " + str(repairability_index)
+        return None
+
+    return _handle_parse(targets, parse_repairability_index)
 
 
 def _get_color(soup: BeautifulSoup) -> Optional[str]:
