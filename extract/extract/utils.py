@@ -87,10 +87,10 @@ def sustainability_labels_to_certificates(
             if certificate_string in certificate_mapping.keys():
                 result.update({certificate_string: certificate_mapping[certificate_string]})
             else:  # if certificate_string can not be mapped, assign UNKNOWN and create log message
-                result.update({certificate_string: CertificateType.UNKNOWN})
+                result.update({certificate_string: CertificateType.UNKNOWN})  # type: ignore[attr-defined] # noqa
                 logger.info(f"unknown sustainability label: {certificate_string}")
 
-    return sorted(set(result.values()))  # type: ignore[attr-defined]
+    return sorted(set(list(result.values())))  # type: ignore[attr-defined]
 
 
 def _get_certificate_for_any_language(

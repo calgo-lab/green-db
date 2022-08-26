@@ -41,7 +41,7 @@ def test_amazon_electronics() -> None:
         gender=None,
         consumer_lifestage=None,
         name="Midea Washing Machine W 5.840 iN / 8 kg / Steam Care / Reload - Refill Function / "
-             "BLDC Inverter Motor / 1400 rpm, White",
+        "BLDC Inverter Motor / 1400 rpm, White",
         description="Make sure this fits by entering your model number.. 8 kg capacity. Energy "
         "efficiency class B / BLDC inverter motor / 1400 revolutions per minute. "
         "Quick wash 15 inches / short wash 45 inches. Reload recall function, "
