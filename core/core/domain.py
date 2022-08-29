@@ -9,23 +9,23 @@ from .sustainability_labels import create_CertificateType
 CertificateType = create_CertificateType()
 
 
-class PageType(Enum):
+class PageType(str, Enum):
     SERP = "SERP"
     PRODUCT = "PRODUCT"
 
 
-class CurrencyType(Enum):
+class CurrencyType(str, Enum):
     EUR = "EUR"
     GBP = "GBP"
 
 
-class CountryType(Enum):
+class CountryType(str, Enum):
     DE = "DE"
     GB = "GB"
     FR = "FR"
 
 
-class GenderType(Enum):
+class GenderType(str, Enum):
     FEMALE = "FEMALE"
     MALE = "MALE"
     UNISEX = "UNISEX"
@@ -33,7 +33,7 @@ class GenderType(Enum):
     UNCLASSIFIED = "UNCLASSIFIED"
 
 
-class ConsumerLifestageType(Enum):
+class ConsumerLifestageType(str, Enum):
     ADULT = "ADULT"
     ALL_AGES = "ALL AGES"
     BABY_INFANT = "BABY/INFANT"
@@ -120,7 +120,7 @@ class SustainabilityLabel(BaseModel):
 
 
 # if you make an edge case decision, please document it here.
-class ProductCategory(Enum):
+class ProductCategory(str, Enum):
 
     # bags
     BACKPACK = "BACKPACK"
