@@ -4,8 +4,8 @@ import numpy as np
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
-from database.connection import GreenDB
 
+from database.connection import GreenDB
 from monitoring import CONNECTION_FOR_TABLE
 
 green_db = GreenDB()
