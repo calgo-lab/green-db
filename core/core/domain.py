@@ -129,10 +129,11 @@ class ProductCategory(Enum):
     # fashion
     SKIRT = "SKIRT"
     SHOES = "SHOES"  # includes slippers.
-    SNEAKERS = "SNEAKERS"
+
     # casual or all purpose athletic shoes
     # dont include shoes if theyre only used for one specific sport
     # eg. football/soccer boots
+    SNEAKERS = "SNEAKERS"
 
     SOCKS = "SOCKS"  # does not include tights/pantyhoses or leggings
     UNDERWEAR = "UNDERWEAR"  # includes tights/pantyhoses
@@ -156,7 +157,8 @@ class ProductCategory(Enum):
 
     # electronics
     GAMECONSOLE = "GAMECONSOLE"  # Playstations and the like. No video games.
-    HEADPHONES = "HEADPHONES"  # no speakers, just headphones.
+    HEADPHONES = "HEADPHONES"  # no speakers, no headsets, just headphones.
+    HEADSET = "HEADSET"
     LAPTOP = "LAPTOP"  # no tablets. For hybrids/convertibles like the Chromebook use LAPTOP.
     PRINTER = "PRINTER"  # it can be a fax but it also has to be able to print.
     SMARTPHONE = "SMARTPHONE"

@@ -32,7 +32,7 @@ for leaf in browse_tree_leaves:
 path_2_leaves = dict(path_2_leaves_builder)
 
 
-def translate_category_map(path_2_category: dict, country_code: str) -> dict:
+def replace_paths_in_category_map(path_2_category: dict, country_code: str) -> dict:
     """
     replaces paths in a category mapping with the corresponding browse node ids.
     in cases where path_2_category is ambiguous, the most specific mapping will win.
@@ -83,7 +83,7 @@ def combine_results(
     base_url = country_code_to_url[country_code]
     filters = country_code_to_filters[country_code]
 
-    id_2_category = translate_category_map(path_2_category, country_code)
+    id_2_category = replace_paths_in_category_map(path_2_category, country_code)
 
     return [
         {
@@ -276,7 +276,7 @@ def electronics(country_code: str) -> List[dict]:
         "uk-computers/Products/Ink & Laser Printers/Plotters": None,
         "uk-computers/Products/Laptops": ProductCategory.LAPTOP.value,
         "uk-computers/Products/Tablets": ProductCategory.TABLET.value,
-        "uk-computers/Products/Webcams & VoIP Equipment/PC Headsets": ProductCategory.HEADPHONES.value,  # noqa
+        "uk-computers/Products/Webcams & VoIP Equipment/PC Headsets": ProductCategory.HEADSET.value,  # noqa
         "uk-electronics/Categories/Accessories/Home Audio & Video Accessories/Headphones & Earphones": ProductCategory.HEADPHONES.value,  # noqa
         "uk-electronics/Categories/Home Cinema, TV & Video/TVs": ProductCategory.TV.value,
         "uk-electronics/Categories/Mobile Phones & Communication/Big Button Mobile Phones": None,
@@ -293,7 +293,7 @@ def electronics(country_code: str) -> List[dict]:
 
 def household(country_code: str) -> List[dict]:
     path_2_category = {
-        # uk-appliances is somewhat low quality so i used de/fr root nodes here.
+        # the mappings in uk-appliances are wrong and incomplete so i used de/fr root nodes here.
         "de-appliances/Kategorien/Geschirrspüler": ProductCategory.DISHWASHER.value,
         "de-appliances/Kategorien/Herde": ProductCategory.STOVE.value,
         "fr-appliances/Catégories/Congélateurs": ProductCategory.FREEZER.value,
