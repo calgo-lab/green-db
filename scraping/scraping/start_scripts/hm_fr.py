@@ -1,5 +1,4 @@
 import json
-import pkgutil
 from logging import getLogger
 from typing import List
 
