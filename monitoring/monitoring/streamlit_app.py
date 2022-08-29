@@ -14,7 +14,7 @@ from monitoring.utils import (
 st.set_page_config(page_icon="♻️", page_title="GreenDB")
 
 
-def main():
+def main() -> None:
     """
     This function renders streamlit application, uses dataframes and charts from 'utils'.
     """
@@ -75,6 +75,6 @@ def main():
         st.table(products_by_label()[1])
     st.write("List of products with 'certificate:UNKNOWN'")
     st.dataframe(products_unknown_label())
-
+    return
 
 main()

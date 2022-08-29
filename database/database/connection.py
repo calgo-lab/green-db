@@ -2,11 +2,10 @@ from datetime import datetime
 from logging import getLogger
 from typing import Iterator, List, Type
 
-from sqlalchemy import Column, func
-from sqlalchemy.orm import Query, Session
-
 from core.constants import DATABASE_NAME_GREEN_DB, DATABASE_NAME_SCRAPING
 from core.domain import Product, ScrapedPage, SustainabilityLabel
+from sqlalchemy import Column, func
+from sqlalchemy.orm import Query, Session
 
 from .tables import (
     SCRAPING_TABLE_CLASS_FOR,
@@ -380,7 +379,7 @@ class GreenDB(Connection):
         with self._session_factory() as db_session:
             columns = (
                 self._database_class.timestamp,
-                self._database_class.sustainability_labels,
+                self._database_class.sustainability_labels,  # type: ignore
             )
             return db_session.query(*columns, func.count()).group_by(*columns).all()
 
@@ -400,9 +399,9 @@ class GreenDB(Connection):
                 self._database_class.id,
                 self._database_class.timestamp,
                 self._database_class.source,
-                self._database_class.name,
+                self._database_class.name,  # type: ignore
                 self._database_class.url,
-                self._database_class.sustainability_labels,
+                self._database_class.sustainability_labels,  # type: ignore
             )
             return (
                 db_session.query(*columns).filter(self._database_class.timestamp == timestamp).all()

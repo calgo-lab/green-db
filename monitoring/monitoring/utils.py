@@ -34,7 +34,8 @@ def all_scraping_summary() -> Any:
         existing tables in ScrapingDB
     """
     all_scraping = []
-    [all_scraping.extend(value.get_scraping_summary()) for value in CONNECTION_FOR_TABLE.values()]
+    for value in CONNECTION_FOR_TABLE.values():
+        all_scraping.extend(value.get_scraping_summary())
     return pd.DataFrame(
         all_scraping, columns=["merchant", "timestamp", "products", "country"]
     ).sort_values(by="merchant")
@@ -182,11 +183,9 @@ def products_by_label() -> tuple:
     for row in query:
         for item in row:
             if type(item) is list:
-                [
-                    unknown.append(row) if label == "certificate:UNKNOWN" else known.append(row)
-                    for label in item
-                ]
-
+                for label in item:
+                    if label == "certificate:UNKNOWN": unknown.append(row)
+                    else: known.append(row)
     unknown_df = pd.DataFrame(unknown, columns=["timestamp", "labels", "count"])
     unknown_df["date"] = pd.to_datetime(unknown_df["timestamp"]).dt.date
     unknown_cumm = unknown_df.groupby("date").sum()
@@ -220,5 +219,6 @@ def products_unknown_label() -> Any:
     for row in query:
         for item in row:
             if type(item) is list:
-                [unknown.append(row) for label in item if label == "certificate:UNKNOWN"]
+                for label in item:
+                    if label == "certificate:UNKNOWN": unknown.append(row)
     return pd.DataFrame(unknown, columns=["id", "timestamp", "merchant", "name", "url", "labels"])
