@@ -5,17 +5,11 @@ from logging import getLogger
 from typing import List, Optional
 
 from core.domain import ConsumerLifestageType, GenderType, ProductCategory
+from scraping.utils import get_json_data
 
 logger = getLogger(__name__)
 
-
-def read_json(path: str) -> list:
-    data = pkgutil.get_data("scraping", path)
-    assert data
-    return json.loads(data.decode("utf-8"))
-
-
-browse_tree_leaves = read_json("data/amazon_eu_browse_nodes.json")
+browse_tree_leaves = get_json_data("amazon_eu_browse_nodes.json")
 path_2_leaves_builder = defaultdict(list)
 
 # unfortunately the json file only contains leaf nodes
@@ -37,7 +31,7 @@ def replace_paths_in_category_map(path_2_category: dict, country_code: str) -> d
     replaces paths in a category mapping with the corresponding browse node ids.
     in cases where path_2_category is ambiguous, the most specific mapping will win.
 
-    for example  translate_paths_in_category_map({"a/b/c": "PANTS", "a/b/c/d": "DISWASHER"})
+    for example  replace_paths_in_category_map({"a/b/c": "PANTS", "a/b/c/d": "DISWASHER"})
 
     will map all children of "a/b/c" to "PANTS" except those which are
     also children of "a/b/c/d" which will be mapped to "DISHWASHER"
