@@ -77,4 +77,5 @@ def main() -> None:
     st.dataframe(products_unknown_label())
     return
 
+
 main()

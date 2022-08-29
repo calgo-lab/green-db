@@ -184,8 +184,10 @@ def products_by_label() -> tuple:
         for item in row:
             if type(item) is list:
                 for label in item:
-                    if label == "certificate:UNKNOWN": unknown.append(row)
-                    else: known.append(row)
+                    if label == "certificate:UNKNOWN":
+                        unknown.append(row)
+                    else:
+                        known.append(row)
     unknown_df = pd.DataFrame(unknown, columns=["timestamp", "labels", "count"])
     unknown_df["date"] = pd.to_datetime(unknown_df["timestamp"]).dt.date
     unknown_cumm = unknown_df.groupby("date").sum()
@@ -220,5 +222,6 @@ def products_unknown_label() -> Any:
         for item in row:
             if type(item) is list:
                 for label in item:
-                    if label == "certificate:UNKNOWN": unknown.append(row)
+                    if label == "certificate:UNKNOWN":
+                        unknown.append(row)
     return pd.DataFrame(unknown, columns=["id", "timestamp", "merchant", "name", "url", "labels"])
