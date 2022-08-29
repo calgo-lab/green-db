@@ -35,5 +35,5 @@ def write_to_scraping_database(table_name: str, scraped_page: ScrapedPage) -> No
     """
     row = CONNECTION_FOR_TABLE[table_name].write(scraped_page)
 
-    if scraped_page.page_type == PageType.PRODUCT:
+    if scraped_page.page_type == PageType.PRODUCT.value:
         message_queue.add_extract(table_name=table_name, row_id=row.id)
