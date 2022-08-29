@@ -201,7 +201,6 @@ def products_by_label() -> tuple:
         values="count", index=["date"], columns="label", aggfunc=np.sum, fill_value=0
     ).sort_values(by="date", ascending=False)
     all = pd.DataFrame(query, columns=["timestamp", "labels", "count"])
-    print(all)
     last_extraction = all[(all["timestamp"] >= green_db.get_latest_timestamp())].sort_values(
         "count", ascending=False
     )
