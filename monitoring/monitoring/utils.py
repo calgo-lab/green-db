@@ -3,7 +3,6 @@ from typing import Any
 import numpy as np
 import pandas as pd
 import plotly.express as px
-import plotly.graph_objects as go
 
 from database.connection import GreenDB
 from monitoring import CONNECTION_FOR_TABLE
@@ -131,10 +130,16 @@ def all_timestamps_merchant() -> tuple:
         .sum()
         .sort_values(by="date", ascending=False)
     )
+    df = all_timestamps.groupby(by=["date", "merchant", "type"]).sum().reset_index()
     fig_timestamps_by_merchant = px.line(
-        all_timestamps, x="date", y="products", color="merchant", symbol="type"
+        df, x="date", y="products", color="merchant", symbol="type"
     )
-    return fig_timestamps_by_merchant, df_timestamps_by_merchant, df_timestamps_by_merchant_country
+    return (
+        fig_timestamps_by_merchant,
+        df_timestamps_by_merchant,
+        df_timestamps_by_merchant_country,
+        all_timestamps,
+    )
 
 
 def all_timestamps_agg() -> tuple:
@@ -145,25 +150,11 @@ def all_timestamps_agg() -> tuple:
     Returns:
         List: [plotly chart, pandas dataframe]
     """
-    df_timestamps_agg = (
-        all_timestamps_merchant()[2]
-        .pivot_table(
-            values="products", index=["date"], columns="type", aggfunc=np.sum, fill_value=0
-        )
-        .sort_values(by="date", ascending=False)
-    )
-    timestamps = df_timestamps_agg.index
-    fig_timestamps_agg = go.Figure()
-    fig_timestamps_agg.add_trace(
-        go.Bar(
-            x=timestamps, y=df_timestamps_agg["extraction"], name="Extraction", marker_color="green"
-        )
-    )
-    fig_timestamps_agg.add_trace(
-        go.Bar(
-            x=timestamps, y=df_timestamps_agg["scraping"], name="Scraping", marker_color="goldenrod"
-        )
-    )
+    df = all_timestamps_merchant()[3].groupby(by=["date", "type"]).sum().reset_index()
+    df_timestamps_agg = df.pivot_table(
+        values="products", index=["date"], columns="type", aggfunc=np.sum, fill_value=0
+    ).sort_values(by="date", ascending=False)
+    fig_timestamps_agg = px.line(df, x="date", y="products", color="type")
     return fig_timestamps_agg, df_timestamps_agg
 
 
@@ -197,7 +188,7 @@ def products_by_label() -> tuple:
     known_cumm = known_df.groupby("date").sum()
     known_cumm["label"] = "Known certificates"
     join_df = pd.concat([unknown_cumm, known_cumm]).reset_index()
-    fig_label_unknown = px.line(join_df, x="date", y="count", color="label", text="count")
+    fig_label_unknown = px.line(join_df, x="date", y="count", color="label")
     df_label_unknown = join_df.pivot_table(
         values="count", index=["date"], columns="label", aggfunc=np.sum, fill_value=0
     ).sort_values(by="date", ascending=False)
