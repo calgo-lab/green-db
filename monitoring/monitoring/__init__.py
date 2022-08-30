@@ -1,3 +1,6 @@
+# This code is duplicated from workers/workers/__init__.py in order to avoid importing workers
+# package and its unneeded dependencies (extract, message queue and redis) to the monitoring
+# environment.
 from core import log
 from core.constants import (
     TABLE_NAME_SCRAPING_AMAZON_DE,
