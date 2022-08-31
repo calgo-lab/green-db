@@ -3,10 +3,11 @@ from logging import getLogger
 from typing import Iterator, List, Type, TypeAlias
 
 import pandas as pd
-from core.constants import DATABASE_NAME_GREEN_DB, DATABASE_NAME_SCRAPING
-from core.domain import PageType, Product, ScrapedPage, SustainabilityLabel
 from sqlalchemy import Column, and_, func
 from sqlalchemy.orm import Query, Session
+
+from core.constants import DATABASE_NAME_GREEN_DB, DATABASE_NAME_SCRAPING
+from core.domain import PageType, Product, ScrapedPage, SustainabilityLabel
 
 from .tables import (
     SCRAPING_TABLE_CLASS_FOR,
@@ -452,7 +453,8 @@ class GreenDB(Connection):
             Dataframe: Query results as `Dataframe`.
         """
         with self._session_factory() as db_session:
-            columns = (self._database_class.timestamp, self._database_class.sustainability_labels) # type: ignore
+            columns = (self._database_class.timestamp, self._database_class.sustainability_labels)
+            # type: ignore
             query = (
                 db_session.query(*columns, func.count())
                 .filter(self._database_class.timestamp == timestamp)
@@ -486,7 +488,7 @@ class GreenDB(Connection):
             )
             unknown = (
                 db_session.query(*columns, func.count())
-                .filter(self._database_class.sustainability_labels.any("certificate:UNKNOWN")) # type: ignore
+                .filter(self._database_class.sustainability_labels.any("certificate:UNKNOWN"))
                 .group_by(*columns)
                 .all()
             )
@@ -494,7 +496,7 @@ class GreenDB(Connection):
             unknown_df["label"] = "certificate:UNKNOWN"
             known = (
                 db_session.query(*columns, func.count())
-                .filter(~self._database_class.sustainability_labels.any("certificate:UNKNOWN")) # type: ignore
+                .filter(~self._database_class.sustainability_labels.any("certificate:UNKNOWN"))
                 .group_by(*columns)
                 .all()
             )
@@ -515,16 +517,17 @@ class GreenDB(Connection):
                 self._database_class.id,
                 self._database_class.timestamp,
                 self._database_class.source,
-                self._database_class.name,  # type: ignore
+                self._database_class.name,
                 self._database_class.url,
-                self._database_class.sustainability_labels,  # type: ignore
+                self._database_class.sustainability_labels,
             )
             query = (
                 db_session.query(*columns)
                 .filter(
                     and_(
                         self._database_class.timestamp == self.get_latest_timestamp(),
-                        self._database_class.sustainability_labels.any("certificate:UNKNOWN"), # type: ignore
+                        self._database_class.sustainability_labels.any("certificate:UNKNOWN"),
+                        # type: ignore
                     )
                 )
                 .all()
