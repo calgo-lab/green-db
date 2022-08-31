@@ -12,7 +12,7 @@ COPY monitoring /green-db/monitoring
 
 WORKDIR /green-db/monitoring
 RUN poetry config virtualenvs.create false && poetry install --no-dev --no-interaction --no-ansi
-COPY /monitoring/monitoring/streamlit_app.py .
+COPY /monitoring/monitoring/monitoring_app.py .
 
 ENTRYPOINT ["streamlit", "run"]
-CMD ["streamlit_app.py"]
+CMD ["monitoring_app.py"]
