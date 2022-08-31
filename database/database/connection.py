@@ -233,13 +233,11 @@ class Scraping(Connection):
                         func.count(),
                         self._database_class.country,
                     )
-                    .filter(self._database_class.page_type == PageType.PRODUCT)
+                    .filter(self._database_class.page_type == f"{PageType.PRODUCT}")
                     .group_by(*columns)
                     .all()
                 )
-            return pd.DataFrame(
-                query, columns=["merchant", "timestamp", "products", "country"]
-            ).sort_values(by="merchant")
+            return query
 
     def get_latest_scraping_summary(self) -> DataFrame:
         """
@@ -429,9 +427,9 @@ class GreenDB(Connection):
         """
         return self.get_category_summary(self.get_latest_timestamp())
 
-    def get_last_update_sustainability_labels(self) -> datetime:
+    def get_latest_timestamp_sustainability_labels(self) -> datetime:
         """
-        Helper method to fetch the latest timestamp in sustainability_labels table
+        Helper method to fetch the latest timestamp in sustainability_labels table.
 
         Returns:
             datetime: Latest available timestamp in sustainability_labels table.
@@ -445,6 +443,7 @@ class GreenDB(Connection):
                 .timestamp
             )
 
+    @typing.no_type_check
     def get_products_by_label(self, timestamp: datetime) -> DataFrame:
         """
         Fetch number of products in green_db tabler per sustainability_labels by given timestamp.
@@ -473,6 +472,7 @@ class GreenDB(Connection):
         """
         return self.get_products_by_label(self.get_latest_timestamp())
 
+    @typing.no_type_check
     def get_labels_known_vs_unknown(self) -> DataFrame:
         """
         Fetch number of products grouped by 'certificate:UNKNOWN' and all other certificates as
@@ -487,23 +487,24 @@ class GreenDB(Connection):
                 self._database_class.sustainability_labels,  # type: ignore
             )
             unknown = (
-                db_session.query(*columns, func.count())
+                db_session.query(self._database_class.timestamp, func.count())
                 .filter(self._database_class.sustainability_labels.any("certificate:UNKNOWN"))
                 .group_by(*columns)
                 .all()
             )
-            unknown_df = pd.DataFrame(unknown, columns=["timestamp", "labels", "count"])
+            unknown_df = pd.DataFrame(unknown, columns=["timestamp", "count"])
             unknown_df["label"] = "certificate:UNKNOWN"
             known = (
-                db_session.query(*columns, func.count())
+                db_session.query(self._database_class.timestamp, func.count())
                 .filter(~self._database_class.sustainability_labels.any("certificate:UNKNOWN"))
                 .group_by(*columns)
                 .all()
             )
-            known_df = pd.DataFrame(known, columns=["timestamp", "labels", "count"])
+            known_df = pd.DataFrame(known, columns=["timestamp", "count"])
             known_df["label"] = "Known certificates"
             return pd.concat([unknown_df, known_df])
 
+    @typing.no_type_check
     def get_latest_products_certificate_unknown(self) -> DataFrame:
         """
         Fetch list of products with 'certificate:UNKNOWN' for latest available timestamp,
