@@ -1,4 +1,4 @@
-from typing import Any
+from typing import TypeAlias
 
 import numpy as np
 import pandas as pd
@@ -7,6 +7,7 @@ import plotly.express as px
 from database.connection import GreenDB
 from monitoring import CONNECTION_FOR_TABLE
 
+DataFrame: TypeAlias = pd.DataFrame
 green_db = GreenDB()
 
 
@@ -16,100 +17,84 @@ def dates() -> tuple:
     format.
 
     Returns:
-        List: containing date of last extraction from green-db and date of last update from
+        Tuple: with date of last extraction from green-db and date of last update from
         sustainability-labels
     """
     last_extraction = green_db.get_latest_timestamp().date()
-    last_label_update = green_db.last_update_sustainability_labels().date()
+    last_label_update = green_db.get_last_timestamp_sustainability_labels().date()
     return last_extraction, last_label_update
 
 
-def all_scraping_summary() -> Any:
+def latest_extraction_summary() -> tuple:
     """
-    Uses 'get_scraping_summary' method to query all ScrapingDB tables.
+    Uses 'get_latest_extraction_summary' to fetch number of extracted products for latest available
+    timestamp by merchant. Counts number of merchants.
 
     Returns:
-        Dataframe: with number of products by country and merchant for all timestamps for all
-        existing tables in ScrapingDB
+        Tuple: with objects to display in the monitoring app.
+    """
+    df = green_db.get_latest_extraction_summary()
+    number_products = df["products"].sum()
+    number_merchants = len(df.groupby("merchant"))
+    return df, number_products, number_merchants
+
+
+def latest_scraping_summary() -> tuple:
+    """
+    Uses 'get_latest_scraping_summary' to fetch number of scraped products for latest available
+    timestamp by merchant, query all tables in ScrapingDB and concatenates the result in a
+    DataFrame.
+
+    Returns:
+        Tuple: with objects to display in the monitoring app.
     """
     all_scraping = []
     for value in CONNECTION_FOR_TABLE.values():
-        all_scraping.extend(value.get_scraping_summary())
-    return pd.DataFrame(
+        all_scraping.extend(value.get_latest_scraping_summary())
+    df = pd.DataFrame(
         all_scraping, columns=["merchant", "timestamp", "products", "country"]
     ).sort_values(by="merchant")
-
-
-def last_scraping_summary() -> Any:
-    """
-    Filters returned dataframe from 'all_scraping_summary' by latest timestamp found in green-db
-    table.
-
-    Returns:
-        Dataframe: with number of products by country and merchant for latest timestamp for all
-        existing tables in ScrapingDB
-    """
-    return all_scraping_summary()[
-        (all_scraping_summary()["timestamp"] >= green_db.get_latest_timestamp())
-    ]
-
-
-def all_extraction_summary() -> Any:
-    """
-    Uses 'get_extraction_summary' output and converts it in a dataframe.
-
-    Returns:
-        Dataframe: with number of products by country and merchant for all timestamps in green-db
-        table.
-    """
-    return pd.DataFrame(
-        green_db.get_extraction_summary(), columns=["merchant", "timestamp", "products", "country"]
-    ).sort_values(by="merchant")
-
-
-def last_extraction_summary() -> Any:
-    """
-    Filters returned dataframe from 'all_extraction_summary' by latest timestamp found in
-    green-db table.
-
-    Returns:
-        Dataframe: with number of products by country and merchant for latest timestamps in green-db
-        table.
-    """
-    return all_extraction_summary()[
-        (all_extraction_summary()["timestamp"] >= green_db.get_latest_timestamp())
-    ]
+    number_products = df["products"].sum()
+    return df, number_products
 
 
 def products_by_category() -> tuple:
     """
-    Gets 'get_category_summary' output, converts it in a dataframe and creates a bar chart for
-    products per category.
+    Uses 'get_latest_category_summary' output to create a bar chart for products per category
+    and a pivot table. Counts number of categories.
 
     Returns:
-        List: [plotly chart, pandas dataframe]
+        Tuple: with objects to display in the monitoring app.
     """
-    df = pd.DataFrame(green_db.get_category_summary(), columns=["category", "merchant", "products"])
+    df = green_db.get_latest_category_summary()
     df_products_by_category = df.pivot_table(
         values="products", index=["category"], columns="merchant", fill_value=0
     )
     fig_products_by_category = px.bar(
         df, x="category", y="products", color="merchant", text="products"
     )
-    return fig_products_by_category, df_products_by_category
+    number_cat = len(df.groupby("category"))
+    return fig_products_by_category, df_products_by_category, number_cat
 
 
-def all_timestamps_merchant() -> tuple:
+def all_timestamps() -> tuple:
     """
-    Concatenates 'all_extraction_summary' and 'all_scraping_summary' dataframes and creates a
-    line chart for extracted and scraped products for all timestamps found by merchant and country.
+    Concatenates 'all_extraction_summary' and 'all_scraping_summary' Dataframes to create:
+    1) Line chart and DataFrame for extracted and scraped products for all timestamps found by
+    merchant. A second DataFrame including country level.
+    2) Line chart and DataFrame for extracted and scraped products for all timestamps
 
     Returns:
-        List: [plotly chart, pandas dataframe, pandas dataframe]
+        Tuple: with objects to display in the monitoring app.
     """
-    extraction = all_extraction_summary()
+    extraction = green_db.get_extraction_summary()
     extraction["type"] = "extraction"
-    scraping = all_scraping_summary()
+    all_scraping = []
+    for value in CONNECTION_FOR_TABLE.values():
+        all_scraping.extend(value.get_scraping_summary())
+    scraping = pd.DataFrame(
+        all_scraping, columns=["merchant", "timestamp", "products", "country"]
+    ).sort_values(by="merchant")
     scraping["type"] = "scraping"
     all_timestamps = pd.concat([extraction, scraping], ignore_index=True)
     all_timestamps["date"] = pd.to_datetime(all_timestamps["timestamp"]).dt.date
@@ -128,91 +113,54 @@ def all_timestamps_merchant() -> tuple:
     df_timestamps_by_merchant_country = (
         all_timestamps.groupby(by=["date", "merchant", "country", "type"])
         .sum()
+        .pivot_table(
+            values="products",
+            index=["date", "merchant", "country"],
+            columns="type",
+            aggfunc=np.sum,
+            fill_value=0,
+        )
         .sort_values(by="date", ascending=False)
     )
     df = all_timestamps.groupby(by=["date", "merchant", "type"]).sum().reset_index()
     fig_timestamps_by_merchant = px.line(
         df, x="date", y="products", color="merchant", symbol="type"
     )
+    df_agg = all_timestamps.groupby(by=["date", "type"]).sum().reset_index()
+    df_timestamps_agg = df_agg.pivot_table(
+        values="products", index=["date"], columns="type", aggfunc=np.sum, fill_value=0
+    ).sort_values(by="date", ascending=False)
+    fig_timestamps_agg = px.line(df_agg, x="date", y="products", color="type")
     return (
         fig_timestamps_by_merchant,
         df_timestamps_by_merchant,
         df_timestamps_by_merchant_country,
-        all_timestamps,
+        fig_timestamps_agg,
+        df_timestamps_agg,
     )
 
 
-def all_timestamps_agg() -> tuple:
+def products_by_label() -> DataFrame:
     """
-    Creates an aggregated view of 'all_timestamps_merchant'. Resulting objects show total
-    number of extracted and scraped products for all timestamps found.
+    Returns:
+        DataFrame: contains products by sustainability label for latest available timestamp.
+    """
+    return green_db.get_latest_products_by_label()
+
+
+def labels_known_vs_unknown() -> tuple:
+    """
+    Gets 'get_labels_known_vs_unknown' from green-db table and creates a line chart to compare
+    number of products with 'certificate:UNKNOWN' against product with "Known certificates".
 
     Returns:
-        List: [plotly chart, pandas dataframe]
+        Tuple: with objects to display in the monitoring app.
     """
-    df = all_timestamps_merchant()[3].groupby(by=["date", "type"]).sum().reset_index()
-    df_timestamps_agg = df.pivot_table(
-        values="products", index=["date"], columns="type", aggfunc=np.sum, fill_value=0
-    ).sort_values(by="date", ascending=False)
-    fig_timestamps_agg = px.line(df, x="date", y="products", color="type")
-    return fig_timestamps_agg, df_timestamps_agg
-
-
-def products_by_label() -> tuple:
-    """
-    Gets 'products_by_sustainability_label' from green-db table, counts products with
-    "certificate:UNKNOWN" and products with any other label and creates a dataframe and a line
-    chart from it. It also filters given query to present products by sustainability label(s)
-    from last product extraction in a dataframe.
-
-    Returns:
-        List: [plotly chart, pandas dataframe, pandas dataframe]
-    """
-    query = green_db.products_by_sustainability_label()
-    unknown = []
-    known = []
-    for row in query:
-        for item in row:
-            if type(item) is list:
-                for label in item:
-                    if label == "certificate:UNKNOWN":
-                        unknown.append(row)
-                    else:
-                        known.append(row)
-    unknown_df = pd.DataFrame(unknown, columns=["timestamp", "labels", "count"])
-    unknown_df["date"] = pd.to_datetime(unknown_df["timestamp"]).dt.date
-    unknown_cumm = unknown_df.groupby("date").sum()
-    unknown_cumm["label"] = "certificate:UNKNOWN"
-    known_df = pd.DataFrame(known, columns=["timestamp", "labels", "count"])
-    known_df["date"] = pd.to_datetime(known_df["timestamp"]).dt.date
-    known_cumm = known_df.groupby("date").sum()
-    known_cumm["label"] = "Known certificates"
-    join_df = pd.concat([unknown_cumm, known_cumm]).reset_index()
-    fig_label_unknown = px.line(join_df, x="date", y="count", color="label")
-    df_label_unknown = join_df.pivot_table(
+    query = green_db.get_labels_known_vs_unknown()
+    query["date"] = pd.to_datetime(query["timestamp"]).dt.date
+    query_agg = query.groupby(["date", "label"]).sum().reset_index()
+    fig_label_unknown = px.line(query_agg, x="date", y="count", color="label")
+    df_label_unknown = query_agg.pivot_table(
         values="count", index=["date"], columns="label", aggfunc=np.sum, fill_value=0
     ).sort_values(by="date", ascending=False)
-    all = pd.DataFrame(query, columns=["timestamp", "labels", "count"])
-    last_extraction = all[(all["timestamp"] >= green_db.get_latest_timestamp())].sort_values(
-        "count", ascending=False
-    )
-    return fig_label_unknown, df_label_unknown, last_extraction[["labels", "count"]]
-
-
-def products_unknown_label() -> Any:
-    """
-    Gets 'products_by_sustainability_label_timestamp' for last timestamp found in green-db table
-    and filter products with "certificate:UNKNOWN".
-
-    Returns:
-        Dataframe: listing product id, name, merchant, url and sustainability label(s)
-    """
-    query = green_db.products_by_sustainability_label_timestamp(green_db.get_latest_timestamp())
-    unknown = []
-    for row in query:
-        for item in row:
-            if type(item) is list:
-                for label in item:
-                    if label == "certificate:UNKNOWN":
-                        unknown.append(row)
-    return pd.DataFrame(unknown, columns=["id", "timestamp", "merchant", "name", "url", "labels"])
+    return (fig_label_unknown, df_label_unknown, green_db.get_latest_products_certificate_unknown())
