@@ -40,28 +40,6 @@ class Connection:
 
         bootstrap_tables(database_name)
 
-    # TODO: calling this one multiple times returns fewer and fewer examples...
-    # TODO: Test and revise this!
-    def _batching_query(
-        self,
-        db_query: Query,
-        id_column: Column,
-        DomainClass: Type[Product] | Type[ScrapedPage],
-        batch_size: int = 1000,
-    ) -> Iterator[Product | ScrapedPage]:
-        last_id = None
-
-        while True:
-            batched_query = db_query
-            if last_id is not None:
-                batched_query = batched_query.filter(id_column > last_id)
-            chunk = batched_query.limit(batch_size).all()
-            if not chunk:
-                break
-            last_id = chunk[-1].id
-            for row in chunk:
-                yield DomainClass.from_orm(row)
-
     def write(self, domain_object: ScrapedPage | Product) -> ScrapingTable | GreenDBTable:
         """
         Writes a `domain_object` into the database and returns an updated Table object.
