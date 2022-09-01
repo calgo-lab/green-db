@@ -80,33 +80,55 @@ class Connection:
 
         return db_object
 
-    def __get_latest_timestamp(self, db_session: Session) -> datetime:
+    def __get_latest_timestamp(
+        self,
+        db_session: Session,
+        database_class: Optional[
+            Type[GreenDBTable] | Type[ScrapingTable] | Type[SustainabilityLabelsTable]
+        ] = None,
+    ) -> datetime:
         """
         Helper method to fetch the latest available timestamp.
 
         Args:
             db_session (Session): `db_session` use for the query
+            database_class (
+                Optional[Type[GreenDBTable] | Type[ScrapingTable] | Type[SustainabilityLabelsTable]]
+            ): Optional database table to query. Defaults to None.
 
         Returns:
             datetime: Latest timestamp available in database
         """
+
+        database_class = self._database_class if database_class is None else database_class
+
         return (
-            db_session.query(self._database_class.timestamp)
+            db_session.query(database_class.timestamp)
             .distinct()
-            .order_by(self._database_class.timestamp.desc())
+            .order_by(database_class.timestamp.desc())
             .first()
             .timestamp
         )
 
-    def get_latest_timestamp(self) -> datetime:
+    def get_latest_timestamp(
+        self,
+        database_class: Optional[
+            Type[GreenDBTable] | Type[ScrapingTable] | Type[SustainabilityLabelsTable]
+        ] = None,
+    ) -> datetime:
         """
         Fetch the latest available timestamp.
+
+        Args:
+            database_class (
+                Optional[Type[GreenDBTable] | Type[ScrapingTable] | Type[SustainabilityLabelsTable]]
+            ): Optional database table to query. Defaults to None.
 
         Returns:
             datetime: Latest timestamp available in database
         """
         with self._session_factory() as db_session:
-            return self.__get_latest_timestamp(db_session)
+            return self.__get_latest_timestamp(db_session, database_class=database_class)
 
     def is_timestamp_available(self, timestamp: datetime) -> bool:
         """
@@ -428,21 +450,6 @@ class GreenDB(Connection):
         """
         return self.get_category_summary(self.get_latest_timestamp())
 
-    def get_latest_timestamp_sustainability_labels(self) -> datetime:
-        """
-        Helper method to fetch the latest timestamp in sustainability_labels table.
-
-        Returns:
-            datetime: Latest available timestamp in sustainability_labels table.
-        """
-        with self._session_factory() as db_session:
-            return (
-                db_session.query(SustainabilityLabelsTable.timestamp)
-                .distinct()
-                .order_by(SustainabilityLabelsTable.timestamp.desc())
-                .first()
-                .timestamp
-            )
 
     @typing.no_type_check
     def get_products_by_label(self, timestamp: datetime) -> DataFrame:

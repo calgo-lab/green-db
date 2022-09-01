@@ -21,7 +21,7 @@ def dates() -> tuple:
         sustainability-labels
     """
     last_extraction = green_db.get_latest_timestamp().date()
-    last_label_update = green_db.get_latest_timestamp_sustainability_labels().date()
+    last_label_update = green_db.get_latest_timestamp(SustainabilityLabelsTable).date()
     return last_extraction, last_label_update
 
 
