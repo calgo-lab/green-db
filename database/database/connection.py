@@ -453,7 +453,7 @@ class GreenDB(Connection):
                 .filter(
                     self._database_class.sustainability_labels.any(CertificateType.UNKNOWN.value)  # type: ignore[attr-defined] # noqa
                 )
-                .group_by(*columns)
+                .group_by(self._database_class.timestamp)
                 .all()
             )
             unknown_df = pd.DataFrame(unknown, columns=["timestamp", "count"])
@@ -463,7 +463,7 @@ class GreenDB(Connection):
                 .filter(
                     ~self._database_class.sustainability_labels.any(CertificateType.UNKNOWN.value)  # type: ignore[attr-defined] # noqa
                 )
-                .group_by(*columns)
+                .group_by(self._database_class.timestamp)
                 .all()
             )
             known_df = pd.DataFrame(known, columns=["timestamp", "count"])

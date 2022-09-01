@@ -157,9 +157,9 @@ def labels_known_vs_unknown() -> tuple:
     """
     query = green_db.get_labels_known_vs_unknown()
     query["date"] = pd.to_datetime(query["timestamp"]).dt.date
-    query_agg = query.groupby(["date", "label"]).sum().reset_index()
-    fig_label_unknown = px.line(query_agg, x="date", y="count", color="label")
-    df_label_unknown = query_agg.pivot_table(
+    fig_label_unknown = px.line(query, x="date", y="count", color="label", symbol="label")
+    fig_label_unknown.show()
+    df_label_unknown = query.pivot_table(
         values="count", index=["date"], columns="label", aggfunc=np.sum, fill_value=0
     ).sort_values(by="date", ascending=False)
     return (fig_label_unknown, df_label_unknown, green_db.get_latest_products_certificate_unknown())
