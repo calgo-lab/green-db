@@ -444,10 +444,6 @@ class GreenDB(Connection):
             DataFrame: Query results as `Dataframe`.
         """
         with self._session_factory() as db_session:
-            columns = (
-                self._database_class.timestamp,
-                self._database_class.sustainability_labels,
-            )
             unknown = (
                 db_session.query(self._database_class.timestamp, func.count())
                 .filter(
