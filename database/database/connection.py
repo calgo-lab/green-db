@@ -427,7 +427,7 @@ class GreenDB(Connection):
 
     def get_latest_products_by_label(self) -> pd.DataFrame:
         """
-        Fetch number of products in green_db tabler per sustainability_labels by latest available
+        Fetch number of products in green_db table per sustainability_labels by latest available
         timestamp.
 
         Returns:
