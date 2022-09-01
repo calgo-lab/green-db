@@ -156,15 +156,12 @@ class Scraping(Connection):
                 db_session.query(self._database_class).filter(self._database_class.id == id).first()
             )
 
-    def get_scraped_pages_for_timestamp(
-        self, timestamp: datetime, batch_size: int = 1000
-    ) -> Iterator[ScrapedPage]:
+    def get_scraped_pages_for_timestamp(self, timestamp: datetime) -> Iterator[ScrapedPage]:
         """
         Fetch all `ScrapedPage`s for given `timestamp`.
 
         Args:
             timestamp (datetime): Defines which rows to fetch
-            batch_size (int, optional): How many rows to fetch simultaneously. Defaults to 1000.
 
         Yields:
             Iterator[ScrapedPage]: Iterator over the domain object representations
@@ -175,19 +172,14 @@ class Scraping(Connection):
             )
             return (ScrapedPage.from_orm(row) for row in query.all())
 
-    def get_latest_scraped_pages(self, batch_size: int = 1000) -> Iterator[ScrapedPage]:
+    def get_latest_scraped_pages(self) -> Iterator[ScrapedPage]:
         """
         Fetch all `ScrapedPage`s for latest available `timestamp`.
-
-        Args:
-            batch_size (int, optional): How many rows to fetch simultaneously. Defaults to 1000.
 
         Yields:
             Iterator[ScrapedPage]: Iterator over the domain object representations
         """
-        return self.get_scraped_pages_for_timestamp(
-            self.get_latest_timestamp(), batch_size=batch_size
-        )
+        return self.get_scraped_pages_for_timestamp(self.get_latest_timestamp())
 
     def get_scraping_summary(self, timestamp: Optional[datetime] = None) -> pd.DataFrame:
         """
@@ -300,15 +292,12 @@ class GreenDB(Connection):
             else:
                 return list(sustainability_labels_iterator)
 
-    def get_products_for_timestamp(
-        self, timestamp: datetime, batch_size: int = 1000
-    ) -> Iterator[Product]:
+    def get_products_for_timestamp(self, timestamp: datetime) -> Iterator[Product]:
         """
         Fetch all `Product`s for given `timestamp`.
 
         Args:
             timestamp (datetime): Defines which rows to fetch
-            batch_size (int, optional): How many rows to fetch simultaneously. Defaults to 1000.
 
         Yields:
             Iterator[Product]: `Iterator` of domain object representations
@@ -319,17 +308,14 @@ class GreenDB(Connection):
             )
             return (Product.from_orm(row) for row in query.all())
 
-    def get_latest_products(self, batch_size: int = 1000) -> Iterator[Product]:
+    def get_latest_products(self) -> Iterator[Product]:
         """
         Fetch all `Product`s for latest available `timestamp`.
-
-        Args:
-            batch_size (int, optional): How many rows to fetch simultaneously. Defaults to 1000.
 
         Yields:
             Iterator[Product]: `Iterator` of domain object representation
         """
-        return self.get_products_for_timestamp(self.get_latest_timestamp(), batch_size=batch_size)
+        return self.get_products_for_timestamp(self.get_latest_timestamp())
 
     def get_extraction_summary(self, timestamp: Optional[datetime] = None) -> pd.DataFrame:
         """
