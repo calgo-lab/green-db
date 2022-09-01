@@ -1,4 +1,3 @@
-from typing import TypeAlias
 
 import numpy as np
 import pandas as pd
@@ -7,7 +6,6 @@ import plotly.express as px
 from database.connection import GreenDB
 from monitoring import CONNECTION_FOR_TABLE
 
-DataFrame: TypeAlias = pd.DataFrame
 green_db = GreenDB()
 
 
@@ -140,7 +138,7 @@ def all_timestamps() -> tuple:
     )
 
 
-def products_by_label() -> DataFrame:
+def products_by_label() -> pd.DataFrame:
     """
     Returns:
         DataFrame: contains products by sustainability label for latest available timestamp.

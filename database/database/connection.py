@@ -1,7 +1,6 @@
-import typing
 from datetime import datetime
 from logging import getLogger
-from typing import Iterator, List, Type, TypeAlias
+from typing import Iterator, List, Optional, Type
 
 import pandas as pd
 from sqlalchemy import Column, and_, func
@@ -20,7 +19,6 @@ from .tables import (
 )
 
 logger = getLogger(__name__)
-DataFrame: TypeAlias = pd.DataFrame
 
 
 class Connection:
@@ -212,7 +210,7 @@ class Scraping(Connection):
             self.get_latest_timestamp(), batch_size=batch_size
         )
 
-    def get_scraping_summary(self, timestamp: datetime = None) -> DataFrame:
+    def get_scraping_summary(self, timestamp: datetime = None) -> pd.DataFrame:
         """
         Fetch number of products scraped in queried table by merchant and country given timestamp,
         excludes SERP page_type.
@@ -262,7 +260,7 @@ class Scraping(Connection):
                 )
             return query
 
-    def get_latest_scraping_summary(self) -> DataFrame:
+    def get_latest_scraping_summary(self) -> pd.DataFrame:
         """
         Fetch number of products scraped in queried table by merchant and country for latest
         available timestamp.
@@ -369,7 +367,7 @@ class GreenDB(Connection):
         """
         return self.get_products_for_timestamp(self.get_latest_timestamp(), batch_size=batch_size)
 
-    def get_extraction_summary(self, timestamp: datetime = None) -> DataFrame:
+    def get_extraction_summary(self, timestamp: Optional[datetime] = None) -> pd.DataFrame:
         """
         Fetch number of products extracted by merchant and country for given timestamp.
 
@@ -422,7 +420,7 @@ class GreenDB(Connection):
         """
         return self.get_extraction_summary(self.get_latest_timestamp())
 
-    def get_category_summary(self, timestamp: datetime) -> DataFrame:
+    def get_category_summary(self, timestamp: datetime) -> pd.DataFrame:
         """
         Fetch number of products in green_db table per category by merchant for given timestamp.
 
@@ -440,7 +438,7 @@ class GreenDB(Connection):
             )
             return pd.DataFrame(query, columns=["category", "merchant", "products"])
 
-    def get_latest_category_summary(self) -> DataFrame:
+    def get_latest_category_summary(self) -> pd.DataFrame:
         """
         Fetch number of products in green_db tabler per category by merchant for latest
         available timestamp.
@@ -451,8 +449,7 @@ class GreenDB(Connection):
         return self.get_category_summary(self.get_latest_timestamp())
 
 
-    @typing.no_type_check
-    def get_products_by_label(self, timestamp: datetime) -> DataFrame:
+    def get_products_by_label(self, timestamp: datetime) -> pd.DataFrame:
         """
         Fetch number of products in green_db tabler per sustainability_labels by given timestamp.
 
@@ -461,7 +458,6 @@ class GreenDB(Connection):
         """
         with self._session_factory() as db_session:
             columns = (self._database_class.timestamp, self._database_class.sustainability_labels)
-            # type: ignore
             query = (
                 db_session.query(*columns, func.count())
                 .filter(self._database_class.timestamp == timestamp)
@@ -470,7 +466,7 @@ class GreenDB(Connection):
             )
             return pd.DataFrame(query, columns=["timestamp", "labels", "count"])
 
-    def get_latest_products_by_label(self) -> DataFrame:
+    def get_latest_products_by_label(self) -> pd.DataFrame:
         """
         Fetch number of products in green_db tabler per sustainability_labels by latest available
         timestamp.
@@ -480,8 +476,7 @@ class GreenDB(Connection):
         """
         return self.get_products_by_label(self.get_latest_timestamp())
 
-    @typing.no_type_check
-    def get_labels_known_vs_unknown(self) -> DataFrame:
+    def get_labels_known_vs_unknown(self) -> pd.DataFrame:
         """
         Fetch number of products grouped by 'certificate:UNKNOWN' and all other certificates as
         'Known certificates' for all timestamps.
@@ -512,8 +507,7 @@ class GreenDB(Connection):
             known_df["label"] = "Known certificates"
             return pd.concat([unknown_df, known_df])
 
-    @typing.no_type_check
-    def get_latest_products_certificate_unknown(self) -> DataFrame:
+    def get_latest_products_certificate_unknown(self) -> pd.DataFrame:
         """
         Fetch list of products with 'certificate:UNKNOWN' for latest available timestamp,
         including: id, name, url and sustainability labels.
