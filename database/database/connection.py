@@ -381,7 +381,7 @@ class GreenDB(Connection):
 
     def get_latest_category_summary(self) -> pd.DataFrame:
         """
-        Fetch number of products in green_db tabler per category by merchant for latest
+        Fetch number of products in green_db table per category by merchant for latest
         available timestamp.
 
         Returns:
