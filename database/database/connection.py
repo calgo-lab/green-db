@@ -125,6 +125,8 @@ class Connection:
 
 
 class Scraping(Connection):
+    _database_class: Type[ScrapingTable]
+
     def __init__(self, table_name: str):
         """
         `Connection` for scraping table defined by `table_name`.
@@ -232,6 +234,8 @@ class Scraping(Connection):
 
 
 class GreenDB(Connection):
+    _database_class: Type[GreenDBTable]
+
     def __init__(self) -> None:
         """
         `Connection` for the GreenDB.
