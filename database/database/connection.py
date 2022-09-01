@@ -3,8 +3,8 @@ from logging import getLogger
 from typing import Iterator, List, Optional, Type
 
 import pandas as pd
-from sqlalchemy import Column, and_, func
-from sqlalchemy.orm import Query, Session
+from sqlalchemy import and_, func
+from sqlalchemy.orm import Session
 
 from core.constants import DATABASE_NAME_GREEN_DB, DATABASE_NAME_SCRAPING
 from core.domain import CertificateType, PageType, Product, ScrapedPage, SustainabilityLabel
@@ -75,7 +75,6 @@ class Connection:
         Returns:
             datetime: Latest timestamp available in database
         """
-
         database_class = self._database_class if database_class is None else database_class
 
         return (
@@ -192,7 +191,8 @@ class Scraping(Connection):
 
     def get_scraping_summary(self, timestamp: Optional[datetime] = None) -> pd.DataFrame:
         """
-        Fetch number of products scraped in queried table by merchant and country given timestamp or if `None` for all data.
+        Fetch number of products scraped in queried table by merchant and country given timestamp
+            or if `None` for all data.
         Excludes SERP page_type.
 
         Args:
@@ -373,7 +373,8 @@ class GreenDB(Connection):
 
     def get_category_summary(self, timestamp: Optional[datetime] = None) -> pd.DataFrame:
         """
-        Fetch number of products in green_db table per category by merchant for given timestamp or if `None` for all data.
+        Fetch number of products in green_db table per category by merchant for given timestamp
+            or if `None` for all data.
 
         Args:
             timestamp (datetime): Defines which rows to fetch. Default as none to fetch all
@@ -404,7 +405,8 @@ class GreenDB(Connection):
 
     def get_products_by_label(self, timestamp: Optional[datetime] = None) -> pd.DataFrame:
         """
-        Fetch number of products in green_db tabler per sustainability_labels by given timestamp or if `None` for all data.
+        Fetch number of products in green_db table per sustainability_labels by given timestamp
+            or if `None` for all data.
 
         Args:
             timestamp (datetime): Defines which rows to fetch. Default as none to fetch all
@@ -449,17 +451,17 @@ class GreenDB(Connection):
             unknown = (
                 db_session.query(self._database_class.timestamp, func.count())
                 .filter(
-                    self._database_class.sustainability_labels.any(CertificateType.UNKNOWN.value)
+                    self._database_class.sustainability_labels.any(CertificateType.UNKNOWN.value)  # type: ignore[attr-defined] # noqa
                 )
                 .group_by(*columns)
                 .all()
             )
             unknown_df = pd.DataFrame(unknown, columns=["timestamp", "count"])
-            unknown_df["label"] = CertificateType.UNKNOWN.value
+            unknown_df["label"] = CertificateType.UNKNOWN.value  # type: ignore[attr-defined]
             known = (
                 db_session.query(self._database_class.timestamp, func.count())
                 .filter(
-                    ~self._database_class.sustainability_labels.any(CertificateType.UNKNOWN.value)
+                    ~self._database_class.sustainability_labels.any(CertificateType.UNKNOWN.value)  # type: ignore[attr-defined] # noqa
                 )
                 .group_by(*columns)
                 .all()
@@ -491,7 +493,7 @@ class GreenDB(Connection):
                     and_(
                         self._database_class.timestamp == self.get_latest_timestamp(),
                         self._database_class.sustainability_labels.any(
-                            CertificateType.UNKNOWN.value
+                            CertificateType.UNKNOWN.value  # type: ignore[attr-defined]
                         ),
                     )
                 )
