@@ -1,14 +1,14 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "streamlit.fullname" . }}
+  name: {{ include "monitoring.fullname" . }}
   labels:
-    {{- include "streamlit.labels" . | nindent 4 }}
+    {{- include "monitoring.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "streamlit.selectorLabels" . | nindent 6 }}
+      {{- include "monitoring.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -16,7 +16,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "streamlit.selectorLabels" . | nindent 8 }}
+        {{- include "monitoring.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
