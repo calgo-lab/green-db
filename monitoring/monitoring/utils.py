@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import plotly.express as px
+
 from database.connection import GreenDB
 from database.tables import SustainabilityLabelsTable
 

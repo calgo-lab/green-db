@@ -3,10 +3,11 @@ from logging import getLogger
 from typing import Iterator, List, Optional, Type
 
 import pandas as pd
-from core.constants import DATABASE_NAME_GREEN_DB, DATABASE_NAME_SCRAPING
-from core.domain import CertificateType, PageType, Product, ScrapedPage, SustainabilityLabel
 from sqlalchemy import Column, and_, func
 from sqlalchemy.orm import Query, Session
+
+from core.constants import DATABASE_NAME_GREEN_DB, DATABASE_NAME_SCRAPING
+from core.domain import CertificateType, PageType, Product, ScrapedPage, SustainabilityLabel
 
 from .tables import (
     SCRAPING_TABLE_CLASS_FOR,
@@ -209,10 +210,10 @@ class Scraping(Connection):
             self.get_latest_timestamp(), batch_size=batch_size
         )
 
-    def get_scraping_summary(self, timestamp: datetime = None) -> pd.DataFrame:
+    def get_scraping_summary(self, timestamp: Optional[datetime] = None) -> pd.DataFrame:
         """
-        Fetch number of products scraped in queried table by merchant and country given timestamp,
-        excludes SERP page_type.
+        Fetch number of products scraped in queried table by merchant and country given timestamp or if `None` for all data.
+        Excludes SERP page_type.
 
         Args:
             timestamp (datetime): Defines which rows to fetch. Default as none to fetch all
@@ -228,35 +229,17 @@ class Scraping(Connection):
                 self._database_class.country,
                 self._database_class.page_type,
             )
+
+            query = db_session.query(
+                self._database_class.merchant,
+                self._database_class.timestamp,
+                func.count(),
+                self._database_class.country,
+            ).filter(self._database_class.page_type == PageType.PRODUCT.value)
             if timestamp is not None:
-                query = (
-                    db_session.query(
-                        self._database_class.merchant,
-                        self._database_class.timestamp,
-                        func.count(),
-                        self._database_class.country,
-                    )
-                    .filter(
-                        and_(
-                            self._database_class.page_type == PageType.PRODUCT,
-                            self._database_class.timestamp == timestamp,
-                        )
-                    )
-                    .group_by(*columns)
-                    .all()
-                )
-            else:
-                query = (
-                    db_session.query(
-                        self._database_class.merchant,
-                        self._database_class.timestamp,
-                        func.count(),
-                        self._database_class.country,
-                    )
-                    .filter(self._database_class.page_type == PageType.PRODUCT.value)
-                    .group_by(*columns)
-                    .all()
-                )
+                query = query.filter(self._database_class.timestamp == timestamp)
+
+            query = query.group_by(*columns).all()
             return query
 
     def get_latest_scraping_summary(self) -> pd.DataFrame:
@@ -398,29 +381,33 @@ class GreenDB(Connection):
 
     def get_latest_extraction_summary(self) -> pd.DataFrame:
         """
-        Fetch number of products extracted by merchant and country for latest available timestamp.
+        Fetch number of products extracted by merchant and country for latest available
+        timestamp.
 
         Returns:
             Dataframe: Query results as `Dataframe`.
         """
         return self.get_extraction_summary(self.get_latest_timestamp())
 
-    def get_category_summary(self, timestamp: datetime) -> pd.DataFrame:
+    def get_category_summary(self, timestamp: Optional[datetime] = None) -> pd.DataFrame:
         """
-        Fetch number of products in green_db table per category by merchant for given timestamp.
+        Fetch number of products in green_db table per category by merchant for given timestamp or if `None` for all data.
+
+        Args:
+            timestamp (datetime): Defines which rows to fetch. Default as none to fetch all
+            timestamps found.
 
         Returns:
             Dataframe: Query results as `Dataframe`.
         """
         with self._session_factory() as db_session:
             columns = (self._database_class.category, self._database_class.merchant)
-            query = (
-                db_session.query(*columns, func.count())
-                .filter(self._database_class.timestamp == timestamp)
-                .group_by(*columns)
-                .order_by(*columns)
-                .all()
-            )
+            query = db_session.query(*columns, func.count())
+            if timestamp is not None:
+                query = query.filter(self._database_class.timestamp == timestamp)
+
+            query = query.group_by(*columns).order_by(*columns).all()
+
             return pd.DataFrame(query, columns=["category", "merchant", "products"])
 
     def get_latest_category_summary(self) -> pd.DataFrame:
@@ -433,21 +420,25 @@ class GreenDB(Connection):
         """
         return self.get_category_summary(self.get_latest_timestamp())
 
-    def get_products_by_label(self, timestamp: datetime) -> pd.DataFrame:
+    def get_products_by_label(self, timestamp: Optional[datetime] = None) -> pd.DataFrame:
         """
-        Fetch number of products in green_db tabler per sustainability_labels by given timestamp.
+        Fetch number of products in green_db tabler per sustainability_labels by given timestamp or if `None` for all data.
+
+        Args:
+            timestamp (datetime): Defines which rows to fetch. Default as none to fetch all
+            timestamps found.
 
         Returns:
             Dataframe: Query results as `Dataframe`.
         """
         with self._session_factory() as db_session:
             columns = (self._database_class.timestamp, self._database_class.sustainability_labels)
-            query = (
-                db_session.query(*columns, func.count())
-                .filter(self._database_class.timestamp == timestamp)
-                .group_by(*columns)
-                .all()
-            )
+            query = db_session.query(*columns, func.count())
+
+            if timestamp is not None:
+                query = query.filter(self._database_class.timestamp == timestamp)
+
+            query = query.group_by(*columns).all()
             return pd.DataFrame(query, columns=["timestamp", "labels", "count"])
 
     def get_latest_products_by_label(self) -> pd.DataFrame:
