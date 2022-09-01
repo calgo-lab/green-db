@@ -368,7 +368,8 @@ class GreenDB(Connection):
 
     def get_extraction_summary(self, timestamp: Optional[datetime] = None) -> pd.DataFrame:
         """
-        Fetch number of products extracted by merchant and country for given timestamp.
+        Fetch number of products extracted by merchant and country for given timestamp,
+            or if `None` for all data.
 
         Args:
             timestamp (datetime): Defines which rows to fetch. Default as none to fetch all
@@ -383,32 +384,17 @@ class GreenDB(Connection):
                 self._database_class.timestamp,
                 self._database_class.country,
             )
+            query = db_session.query(
+                *columns,
+                func.count(),
+            )
+
             if timestamp is not None:
-                query = (
-                    db_session.query(
-                        self._database_class.merchant,
-                        self._database_class.timestamp,
-                        func.count(),
-                        self._database_class.country,
-                    )
-                    .filter(self._database_class.timestamp == timestamp)
-                    .group_by(*columns)
-                    .all()
-                )
-            else:
-                query = (
-                    db_session.query(
-                        self._database_class.merchant,
-                        self._database_class.timestamp,
-                        func.count(),
-                        self._database_class.country,
-                    )
-                    .group_by(*columns)
-                    .all()
-                )
-            return pd.DataFrame(
-                query, columns=["merchant", "timestamp", "products", "country"]
-            ).sort_values(by="timestamp", ascending=False)
+                query = query.filter(self._database_class.timestamp == timestamp)
+
+            query = query.group_by(*columns).order_by(self._database_class.timestamp.desc()).all()
+
+            return pd.DataFrame(query, columns=["merchant", "timestamp", "country", "products"])
 
     def get_latest_extraction_summary(self) -> pd.DataFrame:
         """
