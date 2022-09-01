@@ -3,11 +3,10 @@ from logging import getLogger
 from typing import Iterator, List, Optional, Type
 
 import pandas as pd
+from core.constants import DATABASE_NAME_GREEN_DB, DATABASE_NAME_SCRAPING
+from core.domain import CertificateType, PageType, Product, ScrapedPage, SustainabilityLabel
 from sqlalchemy import Column, and_, func
 from sqlalchemy.orm import Query, Session
-
-from core.constants import DATABASE_NAME_GREEN_DB, DATABASE_NAME_SCRAPING
-from core.domain import PageType, Product, ScrapedPage, SustainabilityLabel
 
 from .tables import (
     SCRAPING_TABLE_CLASS_FOR,
@@ -254,7 +253,7 @@ class Scraping(Connection):
                         func.count(),
                         self._database_class.country,
                     )
-                    .filter(self._database_class.page_type == f"{PageType.PRODUCT}")
+                    .filter(self._database_class.page_type == PageType.PRODUCT.value)
                     .group_by(*columns)
                     .all()
                 )
@@ -411,7 +410,7 @@ class GreenDB(Connection):
                 query, columns=["merchant", "timestamp", "products", "country"]
             ).sort_values(by="timestamp", ascending=False)
 
-    def get_latest_extraction_summary(self) -> DataFrame:
+    def get_latest_extraction_summary(self) -> pd.DataFrame:
         """
         Fetch number of products extracted by merchant and country for latest available timestamp.
 
@@ -447,7 +446,6 @@ class GreenDB(Connection):
             Dataframe: Query results as `Dataframe`.
         """
         return self.get_category_summary(self.get_latest_timestamp())
-
 
     def get_products_by_label(self, timestamp: datetime) -> pd.DataFrame:
         """
@@ -487,19 +485,23 @@ class GreenDB(Connection):
         with self._session_factory() as db_session:
             columns = (
                 self._database_class.timestamp,
-                self._database_class.sustainability_labels,  # type: ignore
+                self._database_class.sustainability_labels,
             )
             unknown = (
                 db_session.query(self._database_class.timestamp, func.count())
-                .filter(self._database_class.sustainability_labels.any("certificate:UNKNOWN"))
+                .filter(
+                    self._database_class.sustainability_labels.any(CertificateType.UNKNOWN.value)
+                )
                 .group_by(*columns)
                 .all()
             )
             unknown_df = pd.DataFrame(unknown, columns=["timestamp", "count"])
-            unknown_df["label"] = "certificate:UNKNOWN"
+            unknown_df["label"] = CertificateType.UNKNOWN.value
             known = (
                 db_session.query(self._database_class.timestamp, func.count())
-                .filter(~self._database_class.sustainability_labels.any("certificate:UNKNOWN"))
+                .filter(
+                    ~self._database_class.sustainability_labels.any(CertificateType.UNKNOWN.value)
+                )
                 .group_by(*columns)
                 .all()
             )
@@ -529,8 +531,9 @@ class GreenDB(Connection):
                 .filter(
                     and_(
                         self._database_class.timestamp == self.get_latest_timestamp(),
-                        self._database_class.sustainability_labels.any("certificate:UNKNOWN"),
-                        # type: ignore
+                        self._database_class.sustainability_labels.any(
+                            CertificateType.UNKNOWN.value
+                        ),
                     )
                 )
                 .all()
