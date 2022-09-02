@@ -24,6 +24,9 @@ def get_latest_scraping_objects(connection_for_table: dict) -> dict:
     available timestamp by merchant, query all tables in ScrapingDB and concatenates the result in a
     single dataframe.
 
+    Args:
+        connection_for_table (dict): Contains connection for ScrapingDB tables.
+
     Returns:
         Dict: with objects to display in the monitoring app.
     """
@@ -63,6 +66,7 @@ def get_all_timestamps_objects(extraction: pd.DataFrame, connection_for_table: d
 
     Args:
         extraction (pd.DataFrame): Data to plot.
+        connection_for_table (dict): Contains connection for ScrapingDB tables.
 
     Returns:
         Dict: with objects to display in the monitoring app.
