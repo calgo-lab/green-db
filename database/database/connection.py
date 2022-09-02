@@ -212,8 +212,9 @@ class Scraping(Connection):
                 query = query.filter(self._database_class.timestamp == timestamp)
 
             query = query.group_by(*columns).order_by(*columns).all()
-            return pd.DataFrame(query, columns=["merchant", "timestamp", "product_count",
-                                                "country"])
+            return pd.DataFrame(
+                query, columns=["merchant", "timestamp", "product_count", "country"]
+            )
 
     def get_latest_scraping_summary(self) -> pd.DataFrame:
         """
@@ -424,7 +425,7 @@ class GreenDB(Connection):
         """
         return self.get_products_by_label(self.get_latest_timestamp())
 
-    def get_labels_known_vs_unknown(self) -> pd.DataFrame:
+    def get_known_vs_unknown_certificates(self) -> pd.DataFrame:
         """
         Fetch number of products grouped by 'certificate:UNKNOWN' and all other certificates as
         'Known certificates' for all timestamps.
