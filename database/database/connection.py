@@ -345,7 +345,9 @@ class GreenDB(Connection):
 
             query = query.group_by(*columns).order_by(self._database_class.timestamp.desc()).all()
 
-            return pd.DataFrame(query, columns=["merchant", "timestamp", "country", "products"])
+            return pd.DataFrame(
+                query, columns=["merchant", "timestamp", "country", "product_count"]
+            )
 
     def get_latest_extraction_summary(self) -> pd.DataFrame:
         """
@@ -377,7 +379,7 @@ class GreenDB(Connection):
 
             query = query.group_by(*columns).order_by(*columns).all()
 
-            return pd.DataFrame(query, columns=["category", "merchant", "products"])
+            return pd.DataFrame(query, columns=["category", "merchant", "product_count"])
 
     def get_latest_category_summary(self) -> pd.DataFrame:
         """
