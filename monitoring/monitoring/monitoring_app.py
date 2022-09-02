@@ -2,6 +2,7 @@ import streamlit as st
 
 from database.connection import GreenDB
 from database.tables import SustainabilityLabelsTable
+from monitoring import CONNECTION_FOR_TABLE
 from monitoring.utils import (
     get_all_timestamps_objects,
     get_known_vs_unknown_certificates_chart,
@@ -30,7 +31,7 @@ def main() -> None:
             green_db.get_latest_extraction_summary()
         )
     if "latest_scraping" not in st.session_state:
-        st.session_state.latest_scraping = get_latest_scraping_objects()
+        st.session_state.latest_scraping = get_latest_scraping_objects(CONNECTION_FOR_TABLE)
     if "extraction_by_category" not in st.session_state:
         st.session_state.extraction_by_category = get_products_by_category_objects(
             green_db.get_latest_category_summary()
@@ -72,7 +73,7 @@ def main() -> None:
     with st.container():
         if "all_timestamps" not in st.session_state:
             st.session_state.all_timestamps = get_all_timestamps_objects(
-                green_db.get_extraction_summary()
+                green_db.get_extraction_summary(), CONNECTION_FOR_TABLE
             )
         st.subheader("All timestamps Summary")
         st.write("Scraping and Extraction all timestamps")

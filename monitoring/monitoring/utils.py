@@ -2,8 +2,6 @@ import numpy as np
 import pandas as pd
 import plotly.express as px
 
-from . import CONNECTION_FOR_TABLE
-
 
 def get_latest_extraction_objects(df: pd.DataFrame) -> dict:
     """
@@ -20,7 +18,7 @@ def get_latest_extraction_objects(df: pd.DataFrame) -> dict:
     }
 
 
-def get_latest_scraping_objects() -> dict:
+def get_latest_scraping_objects(connection_for_table: dict) -> dict:
     """
     Uses 'get_latest_scraping_summary' to fetch number of scraped products for latest
     available timestamp by merchant, query all tables in ScrapingDB and concatenates the result in a
@@ -30,7 +28,7 @@ def get_latest_scraping_objects() -> dict:
         Dict: with objects to display in the monitoring app.
     """
     all_scraping = []
-    for value in CONNECTION_FOR_TABLE.values():
+    for value in connection_for_table.values():
         all_scraping.append(value.get_latest_scraping_summary())
     df = pd.concat(all_scraping)
     return {"df": df, "total_scraped": df["product_count"].sum()}
@@ -55,7 +53,7 @@ def get_products_by_category_objects(query: pd.DataFrame) -> dict:
     }
 
 
-def get_all_timestamps_objects(extraction: pd.DataFrame) -> dict:
+def get_all_timestamps_objects(extraction: pd.DataFrame, connection_for_table: dict) -> dict:
     """
     Concatenates 'all_extraction_summary' and 'all_scraping_summary' dataframes to create:
     1) Line chart for extracted and scraped products for all timestamps found by
@@ -71,7 +69,7 @@ def get_all_timestamps_objects(extraction: pd.DataFrame) -> dict:
     """
     extraction["type"] = "extraction"
     all_scraping = []
-    for value in CONNECTION_FOR_TABLE.values():
+    for value in connection_for_table.values():
         all_scraping.append(value.get_scraping_summary())
     scraping = pd.concat(all_scraping)
     scraping["type"] = "scraping"
