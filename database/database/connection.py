@@ -212,7 +212,8 @@ class Scraping(Connection):
                 query = query.filter(self._database_class.timestamp == timestamp)
 
             query = query.group_by(*columns).order_by(*columns).all()
-            return pd.DataFrame(query, columns=["merchant", "timestamp", "products", "country"])
+            return pd.DataFrame(query, columns=["merchant", "timestamp", "product_count",
+                                                "country"])
 
     def get_latest_scraping_summary(self) -> pd.DataFrame:
         """
