@@ -84,7 +84,7 @@ def main() -> None:
         st.plotly_chart(
             st.session_state.all_timestamps["chart_by_merchant"], use_container_width=True
         )
-        if st.button("Show detailed dataframe by merchant and country for all timestamps."):
+        if st.button("Show detailed dataframe by merchant and country for all timestamps.", key=""):
             st.dataframe(st.session_state.all_timestamps["pivot_timestamps_by_merchant_country"])
         st.write("Products by category and merchant")
         st.plotly_chart(st.session_state.extraction_by_category["chart"])
@@ -96,13 +96,17 @@ def main() -> None:
         st.write("List of products with 'certificate:UNKNOWN'")
         st.caption("From latest available timestamp")
         if st.button("Show list of products"):
-            st.dataframe(green_db.get_latest_products_certificate_unknown())
+            if "products_list" not in st.session_state:
+                st.session_state.products_list = green_db.get_latest_products_certificate_unknown()
+            st.dataframe(st.session_state.products_list)
 
     # Last container to show dataframe of products by label
     with st.container():
         st.write("Products by sustainability label(s)")
         if st.button("Show list of labels"):
-            st.dataframe(green_db.get_latest_products_by_label())
+            if "products_by_label" not in st.session_state:
+                st.session_state.products_by_label = green_db.get_latest_products_by_label()
+            st.dataframe(st.session_state.products_by_label)
 
 
 main()
