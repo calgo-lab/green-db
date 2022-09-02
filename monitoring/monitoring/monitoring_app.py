@@ -69,7 +69,7 @@ def main() -> None:
     with tab2:
         st.dataframe(st.session_state.latest_scraping["df"])
 
-    # Main container, contains all the plots
+    # Main container, to show all the plots
     with st.container():
         if "all_timestamps" not in st.session_state:
             st.session_state.all_timestamps = get_all_timestamps_objects(
