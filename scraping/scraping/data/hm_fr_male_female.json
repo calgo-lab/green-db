@@ -1,641 +1,728 @@
-{
-    "accessoirespourchien": {
-        "name": "Accessoires pour chien",
-        "code": "Accessoires+pour+chien",
+[
+    {
+        "category": "",
         "gender": [
             "FEMALE",
             "MALE"
         ],
-        "category": ""
+        "filters": {
+            "productTypes": "Accessoires+pour+chien"
+        }
     },
-    "bague": {
-        "name": "Bague",
-        "code": "Bague",
+    {
+        "category": "",
         "gender": [
             "FEMALE",
             "MALE"
         ],
-        "category": ""
+        "filters": {
+            "productTypes": "Bague"
+        }
     },
-    "bandeau": {
-        "name": "Bandeau",
-        "code": "Bandeau",
+    {
+        "category": "",
         "gender": [
             "FEMALE",
             "MALE"
         ],
-        "category": ""
+        "filters": {
+            "productTypes": "Bandeau"
+        }
     },
-    "basdemaillot": {
-        "name": "Bas de maillot",
-        "code": "Bas+de+maillot",
+    {
+        "category": "",
         "gender": [
             "FEMALE"
         ],
-        "category": "SWIMMWEAR"
+        "filters": {
+            "productTypes": "Bijou+de+pied"
+        }
     },
-    "bijoudepied": {
-        "name": "Bijou de pied",
-        "code": "Bijou+de+pied",
+    {
+        "category": "",
         "gender": [
             "FEMALE"
         ],
-        "category": ""
+        "filters": {
+            "productTypes": "Body"
+        }
     },
-    "blazer": {
-        "name": "Blazer",
-        "code": "Blazer",
+    {
+        "category": "",
+        "gender": [
+            "FEMALE"
+        ],
+        "filters": {
+            "productTypes": "Bol%C3%A9ro"
+        }
+    },
+    {
+        "category": "",
         "gender": [
             "FEMALE",
             "MALE"
         ],
-        "category": "SUIT"
+        "filters": {
+            "productTypes": "Bonnet"
+        }
     },
-    "blouse": {
-        "name": "Blouse",
-        "code": "Blouse",
+    {
+        "category": "",
         "gender": [
             "FEMALE"
         ],
-        "category": "BLOUSE"
+        "filters": {
+            "productTypes": "Boucles+d%27oreilles"
+        }
     },
-    "body": {
-        "name": "Body",
-        "code": "Body",
-        "gender": [
-            "FEMALE"
-        ],
-        "category": ""
-    },
-    "boléro": {
-        "name": "Boléro",
-        "code": "Bol%C3%A9ro",
-        "gender": [
-            "FEMALE"
-        ],
-        "category": ""
-    },
-    "bonnet": {
-        "name": "Bonnet",
-        "code": "Bonnet",
+    {
+        "category": "",
         "gender": [
             "FEMALE",
             "MALE"
         ],
-        "category": ""
+        "filters": {
+            "productTypes": "Bracelet"
+        }
     },
-    "bouclesdoreilles": {
-        "name": "Boucles d'oreilles",
-        "code": "Boucles+d%27oreilles",
+    {
+        "category": "",
         "gender": [
             "FEMALE"
         ],
-        "category": ""
+        "filters": {
+            "productTypes": "B%C3%A9ret"
+        }
     },
-    "bracelet": {
-        "name": "Bracelet",
-        "code": "Bracelet",
+    {
+        "category": "",
+        "gender": [
+            "FEMALE"
+        ],
+        "filters": {
+            "productTypes": "Caftan"
+        }
+    },
+    {
+        "category": "",
         "gender": [
             "FEMALE",
             "MALE"
         ],
-        "category": ""
+        "filters": {
+            "productTypes": "Casquette"
+        }
     },
-    "béret": {
-        "name": "Béret",
-        "code": "B%C3%A9ret",
+    {
+        "category": "",
         "gender": [
             "FEMALE"
         ],
-        "category": ""
+        "filters": {
+            "productTypes": "Ceinture"
+        }
     },
-    "caftan": {
-        "name": "Caftan",
-        "code": "Caftan",
+    {
+        "category": "",
         "gender": [
             "FEMALE"
         ],
-        "category": ""
+        "filters": {
+            "productTypes": "Ceinture+%C3%A0+harnais"
+        }
     },
-    "casquette": {
-        "name": "Casquette",
-        "code": "Casquette",
+    {
+        "category": "",
         "gender": [
             "FEMALE",
             "MALE"
         ],
-        "category": ""
+        "filters": {
+            "productTypes": "Chapeau"
+        }
     },
-    "ceinture": {
-        "name": "Ceinture",
-        "code": "Ceinture",
+    {
+        "category": "",
         "gender": [
             "FEMALE"
         ],
-        "category": ""
+        "filters": {
+            "productTypes": "Chauffe-poignets"
+        }
     },
-    "ceintureàharnais": {
-        "name": "Ceinture à harnais",
-        "code": "Ceinture+%C3%A0+harnais",
+    {
+        "category": "",
         "gender": [
             "FEMALE"
         ],
-        "category": ""
+        "filters": {
+            "productTypes": "Cha%C3%AEne+pour+lunettes"
+        }
     },
-    "chapeau": {
-        "name": "Chapeau",
-        "code": "Chapeau",
+    {
+        "category": "",
+        "gender": [
+            "FEMALE"
+        ],
+        "filters": {
+            "productTypes": "Col"
+        }
+    },
+    {
+        "category": "",
+        "gender": [
+            "FEMALE"
+        ],
+        "filters": {
+            "productTypes": "Col+plastron"
+        }
+    },
+    {
+        "category": "",
+        "gender": [
+            "FEMALE"
+        ],
+        "filters": {
+            "productTypes": "Collant"
+        }
+    },
+    {
+        "category": "",
         "gender": [
             "FEMALE",
             "MALE"
         ],
-        "category": ""
+        "filters": {
+            "productTypes": "Collier"
+        }
     },
-    "chauffe-poignets": {
-        "name": "Chauffe-poignets",
-        "code": "Chauffe-poignets",
-        "gender": [
-            "FEMALE"
-        ],
-        "category": ""
-    },
-    "chaussettes": {
-        "name": "Chaussettes",
-        "code": "Chaussettes",
+    {
+        "category": "",
         "gender": [
             "FEMALE",
             "MALE"
         ],
-        "category": "SOCKS"
+        "filters": {
+            "productTypes": "Foulard"
+        }
     },
-    "chaussons": {
-        "name": "Chaussons",
-        "code": "Chaussons",
+    {
+        "category": "",
+        "gender": [
+            "FEMALE"
+        ],
+        "filters": {
+            "productTypes": "Gu%C3%AAtres"
+        }
+    },
+    {
+        "category": "",
+        "gender": [
+            "FEMALE"
+        ],
+        "filters": {
+            "productTypes": "Jambi%C3%A8re"
+        }
+    },
+    {
+        "category": "",
         "gender": [
             "FEMALE",
             "MALE"
         ],
-        "category": "SHOES"
+        "filters": {
+            "productTypes": "Lunettes+de+soleil"
+        }
     },
-    "chaussures": {
-        "name": "Chaussures",
-        "code": "Chaussures",
+    {
+        "category": "",
+        "gender": [
+            "FEMALE"
+        ],
+        "filters": {
+            "productTypes": "Maillot+de+bain"
+        }
+    },
+    {
+        "category": "",
+        "gender": [
+            "FEMALE"
+        ],
+        "filters": {
+            "productTypes": "Pince+%C3%A0+cheveux"
+        }
+    },
+    {
+        "category": "",
+        "gender": [
+            "FEMALE"
+        ],
+        "filters": {
+            "productTypes": "Serre-t%C3%AAte"
+        }
+    },
+    {
+        "category": "",
+        "gender": [
+            "FEMALE"
+        ],
+        "filters": {
+            "productTypes": "Trousse+de+toilette"
+        }
+    },
+    {
+        "category": "",
+        "gender": [
+            "FEMALE"
+        ],
+        "filters": {
+            "productTypes": "Tunique"
+        }
+    },
+    {
+        "category": "",
         "gender": [
             "FEMALE",
             "MALE"
         ],
-        "category": "SHOES"
+        "filters": {
+            "productTypes": "V%C3%AAtements+pour+chien"
+        }
     },
-    "chaînepourlunettes": {
-        "name": "Chaîne pour lunettes",
-        "code": "Cha%C3%AEne+pour+lunettes",
+    {
+        "category": "",
         "gender": [
             "FEMALE"
         ],
-        "category": ""
+        "filters": {
+            "productTypes": "%C3%89tui+%C3%A0+lingettes"
+        }
     },
-    "chemise": {
-        "name": "Chemise",
-        "code": "Chemise",
+    {
+        "category": "",
+        "gender": [
+            "MALE"
+        ],
+        "filters": {
+            "productTypes": "Cale%C3%A7on+long"
+        }
+    },
+    {
+        "category": "",
+        "gender": [
+            "MALE"
+        ],
+        "filters": {
+            "productTypes": "Cravate"
+        }
+    },
+    {
+        "category": "",
+        "gender": [
+            "MALE"
+        ],
+        "filters": {
+            "productTypes": "Gants"
+        }
+    },
+    {
+        "category": "",
+        "gender": [
+            "MALE"
+        ],
+        "filters": {
+            "productTypes": "Housse+pour+ordinateur+portable"
+        }
+    },
+    {
+        "category": "",
+        "gender": [
+            "MALE"
+        ],
+        "filters": {
+            "productTypes": "Lunettes"
+        }
+    },
+    {
+        "category": "",
+        "gender": [
+            "MALE"
+        ],
+        "filters": {
+            "productTypes": "Mouchoir"
+        }
+    },
+    {
+        "category": "",
+        "gender": [
+            "MALE"
+        ],
+        "filters": {
+            "productTypes": "Organiseur+de+sac"
+        }
+    },
+    {
+        "category": "",
+        "gender": [
+            "MALE"
+        ],
+        "filters": {
+            "productTypes": "Tour+de+cou+porte-cl%C3%A9s"
+        }
+    },
+    {
+        "category": "",
+        "gender": [
+            "MALE"
+        ],
+        "filters": {
+            "productTypes": "%C3%89charpe"
+        }
+    },
+    {
+        "category": "BAG",
         "gender": [
             "FEMALE",
             "MALE"
         ],
-        "category": "SHIRT"
+        "filters": {
+            "productTypes": "Sac"
+        }
     },
-    "chemisedenuit": {
-        "name": "Chemise de nuit",
-        "code": "Chemise+de+nuit",
+    {
+        "category": "BAG",
         "gender": [
             "FEMALE"
         ],
-        "category": "NIGHTWEAR"
+        "filters": {
+            "productTypes": "Sac+%C3%A0+linge"
+        }
     },
-    "col": {
-        "name": "Col",
-        "code": "Col",
+    {
+        "category": "BAG",
+        "gender": [
+            "MALE"
+        ],
+        "filters": {
+            "productTypes": "Portefeuille"
+        }
+    },
+    {
+        "category": "BLOUSE",
         "gender": [
             "FEMALE"
         ],
-        "category": ""
+        "filters": {
+            "productTypes": "Blouse"
+        }
     },
-    "colplastron": {
-        "name": "Col plastron",
-        "code": "Col+plastron",
+    {
+        "category": "DRESS",
         "gender": [
             "FEMALE"
         ],
-        "category": ""
+        "filters": {
+            "productTypes": "Robe"
+        }
     },
-    "collant": {
-        "name": "Collant",
-        "code": "Collant",
+    {
+        "category": "DRESS",
         "gender": [
             "FEMALE"
         ],
-        "category": ""
+        "filters": {
+            "productTypes": "Robe+de+chambre"
+        }
     },
-    "collier": {
-        "name": "Collier",
-        "code": "Collier",
+    {
+        "category": "JACKET",
         "gender": [
             "FEMALE",
             "MALE"
         ],
-        "category": ""
+        "filters": {
+            "productTypes": "Gilet"
+        }
     },
-    "combinaison": {
-        "name": "Combinaison",
-        "code": "Combinaison",
+    {
+        "category": "JACKET",
+        "gender": [
+            "FEMALE",
+            "MALE"
+        ],
+        "filters": {
+            "productTypes": "Gilet+de+costume"
+        }
+    },
+    {
+        "category": "JACKET",
+        "gender": [
+            "FEMALE",
+            "MALE"
+        ],
+        "filters": {
+            "productTypes": "Veste"
+        }
+    },
+    {
+        "category": "JACKET",
+        "gender": [
+            "FEMALE",
+            "MALE"
+        ],
+        "filters": {
+            "productTypes": "Veste+sans+manches"
+        }
+    },
+    {
+        "category": "JEANS",
+        "gender": [
+            "FEMALE",
+            "MALE"
+        ],
+        "filters": {
+            "productTypes": "Jean"
+        }
+    },
+    {
+        "category": "NIGHTWEAR",
         "gender": [
             "FEMALE"
         ],
-        "category": "OVERALL"
+        "filters": {
+            "productTypes": "Chemise+de+nuit"
+        }
     },
-    "combinaisonpompiste": {
-        "name": "Combinaison pompiste",
-        "code": "Combinaison+pompiste",
+    {
+        "category": "NIGHTWEAR",
         "gender": [
             "FEMALE",
             "MALE"
         ],
-        "category": "OVERALL"
+        "filters": {
+            "productTypes": "Pyjama"
+        }
     },
-    "culotte": {
-        "name": "Culotte",
-        "code": "Culotte",
+    {
+        "category": "OVERALL",
         "gender": [
             "FEMALE"
         ],
-        "category": "UNDERWEAR"
+        "filters": {
+            "productTypes": "Combinaison"
+        }
     },
-    "foulard": {
-        "name": "Foulard",
-        "code": "Foulard",
+    {
+        "category": "OVERALL",
         "gender": [
             "FEMALE",
             "MALE"
         ],
-        "category": ""
+        "filters": {
+            "productTypes": "Combinaison+pompiste"
+        }
     },
-    "gilet": {
-        "name": "Gilet",
-        "code": "Gilet",
+    {
+        "category": "PANTS",
         "gender": [
             "FEMALE",
             "MALE"
         ],
-        "category": "JACKET"
+        "filters": {
+            "productTypes": "Legging"
+        }
     },
-    "giletdecostume": {
-        "name": "Gilet de costume",
-        "code": "Gilet+de+costume",
+    {
+        "category": "PANTS",
         "gender": [
             "FEMALE",
             "MALE"
         ],
-        "category": "JACKET"
+        "filters": {
+            "productTypes": "Pantalon"
+        }
     },
-    "guêtres": {
-        "name": "Guêtres",
-        "code": "Gu%C3%AAtres",
+    {
+        "category": "SHORTS",
+        "gender": [
+            "FEMALE",
+            "MALE"
+        ],
+        "filters": {
+            "productTypes": "Short"
+        }
+    },
+    {
+        "category": "SHIRT",
+        "gender": [
+            "FEMALE",
+            "MALE"
+        ],
+        "filters": {
+            "productTypes": "Chemise"
+        }
+    },
+    {
+        "category": "SHOES",
+        "gender": [
+            "FEMALE",
+            "MALE"
+        ],
+        "filters": {
+            "productTypes": "Chaussons"
+        }
+    },
+    {
+        "category": "SHOES",
+        "gender": [
+            "FEMALE",
+            "MALE"
+        ],
+        "filters": {
+            "productTypes": "Chaussures"
+        }
+    },
+    {
+        "category": "SKIRT",
         "gender": [
             "FEMALE"
         ],
-        "category": ""
+        "filters": {
+            "productTypes": "Jupe"
+        }
     },
-    "hautdemaillot": {
-        "name": "Haut de maillot",
-        "code": "Haut+de+maillot",
-        "gender": [
-            "FEMALE"
-        ],
-        "category": "SWIMMWEAR"
-    },
-    "jambière": {
-        "name": "Jambière",
-        "code": "Jambi%C3%A8re",
-        "gender": [
-            "FEMALE"
-        ],
-        "category": ""
-    },
-    "jean": {
-        "name": "Jean",
-        "code": "Jean",
+    {
+        "category": "SNEAKERS",
         "gender": [
             "FEMALE",
             "MALE"
         ],
-        "category": "JEANS"
+        "filters": {
+            "productTypes": "Chaussures",
+            "footwearStyles": "Baskets%2Ftennis"
+        }
     },
-    "jupe": {
-        "name": "Jupe",
-        "code": "Jupe",
+    {
+        "category": "SOCKS",
+        "gender": [
+            "FEMALE",
+            "MALE"
+        ],
+        "filters": {
+            "productTypes": "Chaussettes"
+        }
+    },
+    {
+        "category": "JACKET",
+        "gender": [
+            "FEMALE",
+            "MALE"
+        ],
+        "filters": {
+            "productTypes": "Blazer"
+        }
+    },
+    {
+        "category": "SWEATER",
+        "gender": [
+            "FEMALE",
+            "MALE"
+        ],
+        "filters": {
+            "productTypes": "Pull"
+        }
+    },
+    {
+        "category": "SWEATER",
+        "gender": [
+            "FEMALE",
+            "MALE"
+        ],
+        "filters": {
+            "productTypes": "Sweat"
+        }
+    },
+    {
+        "category": "SWIMWEAR",
         "gender": [
             "FEMALE"
         ],
-        "category": "SKIRT"
+        "filters": {
+            "productTypes": "Bas+de+maillot"
+        }
     },
-    "legging": {
-        "name": "Legging",
-        "code": "Legging",
-        "gender": [
-            "FEMALE",
-            "MALE"
-        ],
-        "category": "PANT"
-    },
-    "lunettesdesoleil": {
-        "name": "Lunettes de soleil",
-        "code": "Lunettes+de+soleil",
-        "gender": [
-            "FEMALE",
-            "MALE"
-        ],
-        "category": ""
-    },
-    "maillotdebain": {
-        "name": "Maillot de bain",
-        "code": "Maillot+de+bain",
+    {
+        "category": "SWIMWEAR",
         "gender": [
             "FEMALE"
         ],
-        "category": ""
+        "filters": {
+            "productTypes": "Haut+de+maillot"
+        }
     },
-    "manteau": {
-        "name": "Manteau",
-        "code": "Manteau",
+    {
+        "category": "JACKET",
         "gender": [
             "FEMALE",
             "MALE"
         ],
-        "category": "SWIMMWEAR"
+        "filters": {
+            "productTypes": "Manteau"
+        }
     },
-    "pantalon": {
-        "name": "Pantalon",
-        "code": "Pantalon",
+    {
+        "category": "SWIMWEAR",
         "gender": [
-            "FEMALE",
             "MALE"
         ],
-        "category": "PANT"
+        "filters": {
+            "productTypes": "Short+de+bain"
+        }
     },
-    "pinceàcheveux": {
-        "name": "Pince à cheveux",
-        "code": "Pince+%C3%A0+cheveux",
+    {
+        "category": "TOP",
         "gender": [
             "FEMALE"
         ],
-        "category": ""
+        "filters": {
+            "productTypes": "Top"
+        }
     },
-    "pull": {
-        "name": "Pull",
-        "code": "Pull",
+    {
+        "category": "TSHIRT",
         "gender": [
             "FEMALE",
             "MALE"
         ],
-        "category": "SWEATER"
+        "filters": {
+            "productTypes": "T-shirt"
+        }
     },
-    "pyjama": {
-        "name": "Pyjama",
-        "code": "Pyjama",
-        "gender": [
-            "FEMALE",
-            "MALE"
-        ],
-        "category": "NIGHTWEAR"
-    },
-    "robe": {
-        "name": "Robe",
-        "code": "Robe",
+    {
+        "category": "UNDERWEAR",
         "gender": [
             "FEMALE"
         ],
-        "category": "DRESS"
+        "filters": {
+            "productTypes": "Culotte"
+        }
     },
-    "robedechambre": {
-        "name": "Robe de chambre",
-        "code": "Robe+de+chambre",
+    {
+        "category": "UNDERWEAR",
         "gender": [
             "FEMALE"
         ],
-        "category": "DRESS"
+        "filters": {
+            "productTypes": "Soutien-gorge"
+        }
     },
-    "sac": {
-        "name": "Sac",
-        "code": "Sac",
-        "gender": [
-            "FEMALE",
-            "MALE"
-        ],
-        "category": "BAG"
-    },
-    "sacàlinge": {
-        "name": "Sac à linge",
-        "code": "Sac+%C3%A0+linge",
-        "gender": [
-            "FEMALE"
-        ],
-        "category": "BAG"
-    },
-    "serre-tête": {
-        "name": "Serre-tête",
-        "code": "Serre-t%C3%AAte",
-        "gender": [
-            "FEMALE"
-        ],
-        "category": ""
-    },
-    "short": {
-        "name": "Short",
-        "code": "Short",
-        "gender": [
-            "FEMALE",
-            "MALE"
-        ],
-        "category": "PANT"
-    },
-    "soutien-gorge": {
-        "name": "Soutien-gorge",
-        "code": "Soutien-gorge",
-        "gender": [
-            "FEMALE"
-        ],
-        "category": "UNDERWEAR"
-    },
-    "sweat": {
-        "name": "Sweat",
-        "code": "Sweat",
-        "gender": [
-            "FEMALE",
-            "MALE"
-        ],
-        "category": "SWEATER"
-    },
-    "t-shirt": {
-        "name": "T-shirt",
-        "code": "T-shirt",
-        "gender": [
-            "FEMALE",
-            "MALE"
-        ],
-        "category": "TSHIRT"
-    },
-    "top": {
-        "name": "Top",
-        "code": "Top",
-        "gender": [
-            "FEMALE"
-        ],
-        "category": "TOP"
-    },
-    "troussedetoilette": {
-        "name": "Trousse de toilette",
-        "code": "Trousse+de+toilette",
-        "gender": [
-            "FEMALE"
-        ],
-        "category": ""
-    },
-    "tunique": {
-        "name": "Tunique",
-        "code": "Tunique",
-        "gender": [
-            "FEMALE"
-        ],
-        "category": ""
-    },
-    "veste": {
-        "name": "Veste",
-        "code": "Veste",
-        "gender": [
-            "FEMALE",
-            "MALE"
-        ],
-        "category": "JACKET"
-    },
-    "vestesansmanches": {
-        "name": "Veste sans manches",
-        "code": "Veste+sans+manches",
-        "gender": [
-            "FEMALE",
-            "MALE"
-        ],
-        "category": "JACKET"
-    },
-    "vêtementspourchien": {
-        "name": "Vêtements pour chien",
-        "code": "V%C3%AAtements+pour+chien",
-        "gender": [
-            "FEMALE",
-            "MALE"
-        ],
-        "category": ""
-    },
-    "étuiàlingettes": {
-        "name": "Étui à lingettes",
-        "code": "%C3%89tui+%C3%A0+lingettes",
-        "gender": [
-            "FEMALE"
-        ],
-        "category": ""
-    },
-    "caleçonlong": {
-        "name": "Caleçon long",
-        "code": "Cale%C3%A7on+long",
+    {
+        "category": "UNDERWEAR",
         "gender": [
             "MALE"
         ],
-        "category": ""
-    },
-    "cravate": {
-        "name": "Cravate",
-        "code": "Cravate",
-        "gender": [
-            "MALE"
-        ],
-        "category": ""
-    },
-    "gants": {
-        "name": "Gants",
-        "code": "Gants",
-        "gender": [
-            "MALE"
-        ],
-        "category": ""
-    },
-    "houssepourordinateurportable": {
-        "name": "Housse pour ordinateur portable",
-        "code": "Housse+pour+ordinateur+portable",
-        "gender": [
-            "MALE"
-        ],
-        "category": ""
-    },
-    "lunettes": {
-        "name": "Lunettes",
-        "code": "Lunettes",
-        "gender": [
-            "MALE"
-        ],
-        "category": ""
-    },
-    "mouchoir": {
-        "name": "Mouchoir",
-        "code": "Mouchoir",
-        "gender": [
-            "MALE"
-        ],
-        "category": ""
-    },
-    "organiseurdesac": {
-        "name": "Organiseur de sac",
-        "code": "Organiseur+de+sac",
-        "gender": [
-            "MALE"
-        ],
-        "category": ""
-    },
-    "portefeuille": {
-        "name": "Portefeuille",
-        "code": "Portefeuille",
-        "gender": [
-            "MALE"
-        ],
-        "category": "BAG"
-    },
-    "shortdebain": {
-        "name": "Short de bain",
-        "code": "Short+de+bain",
-        "gender": [
-            "MALE"
-        ],
-        "category": "SWIMMWEAR"
-    },
-    "slips": {
-        "name": "Slips",
-        "code": "Slips",
-        "gender": [
-            "MALE"
-        ],
-        "category": "UNDERWEAR"
-    },
-    "tourdecouporte-clés": {
-        "name": "Tour de cou porte-clés",
-        "code": "Tour+de+cou+porte-cl%C3%A9s",
-        "gender": [
-            "MALE"
-        ],
-        "category": ""
-    },
-    "écharpe": {
-        "name": "Écharpe",
-        "code": "%C3%89charpe",
-        "gender": [
-            "MALE"
-        ],
-        "category": ""
+        "filters": {
+            "productTypes": "Slips"
+        }
     }
-}
+]
