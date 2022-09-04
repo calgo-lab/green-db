@@ -1,13 +1,10 @@
 import streamlit as st
 from database.connection import GreenDB
-from database.tables import SustainabilityLabelsTable
 
-from monitoring.utils import (
-    get_all_timestamps_objects,
-    get_known_vs_unknown_certificates_chart,
-    get_latest_extraction_objects,
-    get_latest_scraping_objects,
-    get_products_by_category_objects,
+from monitoring.render_helper import (
+    render_basic_information,
+    render_extended_information,
+    render_sidebar,
 )
 
 green_db = GreenDB()
@@ -15,101 +12,24 @@ green_db = GreenDB()
 
 def main() -> None:
     """
-    This function renders streamlit application, uses methods from 'utils' to create a project
-    report. Holds connection to the database.
+    This represents the basic structure of the Monitoring App.
     """
-    # Header section with titles
     st.set_page_config(page_icon="♻️", page_title="GreenDB")
-    st.title("GreenDB")
-    st.header("A Product-by-Product Sustainability Database")
-    st.subheader("DB Summary")
-
-    # Adds first session states
-    if "latest_extraction" not in st.session_state:
-        st.session_state.latest_extraction = get_latest_extraction_objects(
-            green_db.get_latest_product_count_per_merchant_and_country()
-        )
-    if "latest_scraping" not in st.session_state:
-        st.session_state.latest_scraping = get_latest_scraping_objects()
-    if "extraction_by_category" not in st.session_state:
-        st.session_state.extraction_by_category = get_products_by_category_objects(
-            green_db.get_latest_product_count_per_category_and_merchant()
-        )
+    st.title("GreenDB - A Product-by-Product Sustainability Database")
 
     # Sidebar with general overview of the project
     with st.sidebar:
-        st.title("Overview")
-        st.write("From last data extraction on:")
-        st.write(green_db.get_latest_timestamp().date())
-        st.metric(
-            label="Number extracted products",
-            value=st.session_state.latest_extraction["total_extracted"],
-        )
-        st.metric(
-            label="Number scraped products",
-            value=st.session_state.latest_scraping["total_scraped"],
-        )
-        st.metric(
-            label="Number of categories",
-            value=st.session_state.extraction_by_category["number_categories"],
-        )
-        st.metric(
-            label="Number of merchants",
-            value=st.session_state.latest_extraction["number_merchants"],
-        )
-        st.write("Sustainability label's last update:")
-        st.write(green_db.get_latest_timestamp(SustainabilityLabelsTable).date())
+        render_sidebar(green_db)
 
-    # Tabs with latest summary of extracted and scraped products.
-    st.write("Latest data extraction overview by merchant:")
-    tab1, tab2 = st.tabs(["📀Extraction", " 🤖Scraping"])
-    with tab1:
-        st.dataframe(st.session_state.latest_extraction["df"])
-    with tab2:
-        st.dataframe(st.session_state.latest_scraping["df"])
+    basic_information_tab, extended_information_tab = st.tabs(
+        ["Basic Information", "Extended Information (as Tables)"]
+    )
 
-    # Main container, to show all the plots
-    with st.container():
-        if "all_timestamps" not in st.session_state:
-            st.session_state.all_timestamps = get_all_timestamps_objects(
-                green_db.get_product_count_per_merchant_and_country()
-            )
-        st.subheader("All timestamps Summary")
-        st.write("Scraping and Extraction all timestamps")
-        st.plotly_chart(
-            st.session_state.all_timestamps["chart_by_timestamp"], use_container_width=True
-        )
-        st.write("Scraping and Extraction all timestamps by merchant")
-        st.plotly_chart(
-            st.session_state.all_timestamps["chart_by_merchant"], use_container_width=True
-        )
-        if st.button("Show detailed dataframe by merchant and country for all timestamps.", key=""):
-            st.dataframe(st.session_state.all_timestamps["pivot_timestamps_by_merchant_country"])
-        st.write("Products by category and merchant")
-        st.plotly_chart(st.session_state.extraction_by_category["chart"])
-        st.write("Unknown vs Known certificates for all timestamps")
-        st.plotly_chart(
-            get_known_vs_unknown_certificates_chart(
-                green_db.get_product_count_per_known_and_unknown_sustainability_label()
-            ),
-            use_container_width=True,
-        )
-        st.write("List of products with 'certificate:UNKNOWN'")
-        st.caption("From latest available timestamp")
-        if st.button("Show list of products"):
-            if "products_list" not in st.session_state:
-                st.session_state.products_list = green_db.get_latest_products_certificate_unknown()
-            st.dataframe(st.session_state.products_list)
+    with basic_information_tab:
+        render_basic_information(green_db)
 
-    # Last container to show dataframe of products by label
-    with st.container():
-        st.write("Products by sustainability label(s)")
-        if st.button("Show list of labels"):
-            if "products_by_label" not in st.session_state:
-                st.session_state.products_by_label = (
-                    green_db.get_latest_product_count_per_sustainability_label()
-                )
-            st.dataframe(st.session_state.products_by_label)
+    with extended_information_tab:
+        render_extended_information(green_db)
 
 
 main()
