@@ -3,6 +3,7 @@ import pandas as pd
 import plotly.express as px
 from core.constants import ALL_SCRAPING_TABLE_NAMES
 from database.connection import Scraping
+from plotly.graph_objs import Figure
 
 
 def get_latest_extraction_objects(df: pd.DataFrame) -> dict:
@@ -39,7 +40,7 @@ def get_latest_scraping_objects() -> dict:
         for table_name in ALL_SCRAPING_TABLE_NAMES
     ]
     df = pd.concat(all_scraping)
-    return {"df": df, "total_scraped": df["scraped_pages_count"].sum()}
+    return {"df": df, "total_scraped": df["scraped_page_count"].sum()}
 
 
 def get_products_by_category_objects(query: pd.DataFrame) -> dict:
@@ -111,16 +112,17 @@ def get_all_timestamps_objects(extraction: pd.DataFrame) -> dict:
     }
 
 
-def get_known_vs_unknown_certificates_chart(query: pd.DataFrame) -> px.line:
+def create_plot_products_with_unknown_sustainability_label(
+    query: pd.DataFrame,
+) -> Figure:
     """
-    Creates a line chart to compare number of products with 'certificate:UNKNOWN' against product
-    with "Known certificates".
+    TODO
 
     Args:
         query (pd.DataFrame): Data to plot.
 
     Returns:
-        Chart: line chart to display in the monitoring app.
+        Figure: line chart to display in the monitoring app.
     """
     query["date"] = pd.to_datetime(query["timestamp"]).dt.date
-    return px.line(query, x="date", y="count", color="label", symbol="label")
+    return px.line(query, x="date", y="product_count")

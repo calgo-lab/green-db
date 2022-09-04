@@ -212,7 +212,7 @@ class Scraping(Connection):
 
             query = query.group_by(*columns).all()
             return pd.DataFrame(
-                query, columns=["timestamp", "merchant", "country", "scraped_pages_count"]
+                query, columns=["timestamp", "merchant", "country", "scraped_page_count"]
             )
 
     def get_latest_scraped_page_count_per_merchant_and_country(self) -> pd.DataFrame:
@@ -419,7 +419,7 @@ class GreenDB(Connection):
                 query = query.filter(self._database_class.timestamp == timestamp)
 
             query = query.group_by(*columns).all()
-            return pd.DataFrame(query, columns=["timestamp", "labels", "count"])
+            return pd.DataFrame(query, columns=["timestamp", "labels", "product_count"])
 
     def get_latest_product_count_per_sustainability_label(self) -> pd.DataFrame:
         """
@@ -431,36 +431,41 @@ class GreenDB(Connection):
         """
         return self.get_product_count_per_sustainability_label(self.get_latest_timestamp())
 
-    def get_product_count_per_known_and_unknown_sustainability_label(self) -> pd.DataFrame:
+    def get_product_count_with_unknown_sustainability_label(
+        self, timestamp: Optional[datetime] = None
+    ) -> pd.DataFrame:
         """
-        Fetch number of products grouped by 'certificate:UNKNOWN' and all other certificates as
-        'Known certificates' for all timestamps.
+        TODO
+
+        Args:
+            timestamp (Optional[datetime], optional): _description_. Defaults to None.
 
         Returns:
-            DataFrame: Query results as `Dataframe`.
+            pd.DataFrame: _description_
         """
         with self._session_factory() as db_session:
-            unknown = (
-                db_session.query(self._database_class.timestamp, func.count())
-                .filter(
+            query = db_session.query(self._database_class.timestamp, func.count())
+
+            if timestamp is not None:
+                query = query.filter(self._database_class.timestamp == timestamp)
+
+            query = (
+                query.filter(
                     self._database_class.sustainability_labels.any(CertificateType.UNKNOWN.value)  # type: ignore[attr-defined] # noqa
                 )
                 .group_by(self._database_class.timestamp)
                 .all()
             )
-            unknown_df = pd.DataFrame(unknown, columns=["timestamp", "count"])
-            unknown_df["label"] = CertificateType.UNKNOWN.value  # type: ignore[attr-defined]
-            known = (
-                db_session.query(self._database_class.timestamp, func.count())
-                .filter(
-                    ~self._database_class.sustainability_labels.any(CertificateType.UNKNOWN.value)  # type: ignore[attr-defined] # noqa
-                )
-                .group_by(self._database_class.timestamp)
-                .all()
-            )
-            known_df = pd.DataFrame(known, columns=["timestamp", "count"])
-            known_df["label"] = "Known certificates"
-            return pd.concat([unknown_df, known_df])
+            return pd.DataFrame(query, columns=["timestamp", "product_count"])
+
+    def get_latest_product_count_with_unknown_sustainability_label(self) -> pd.DataFrame:
+        """
+        TODO
+
+        Returns:
+            pd.DataFrame: _description_
+        """
+        return self.get_product_count_with_unknown_sustainability_label(self.get_latest_timestamp())
 
     def get_products_with_unknown_sustainability_label(
         self, timestamp: Optional[datetime] = None
