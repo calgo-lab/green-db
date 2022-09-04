@@ -1,8 +1,7 @@
 import streamlit as st
-
 from database.connection import GreenDB
 from database.tables import SustainabilityLabelsTable
-from monitoring import CONNECTION_FOR_TABLE
+
 from monitoring.utils import (
     get_all_timestamps_objects,
     get_known_vs_unknown_certificates_chart,
@@ -28,13 +27,13 @@ def main() -> None:
     # Adds first session states
     if "latest_extraction" not in st.session_state:
         st.session_state.latest_extraction = get_latest_extraction_objects(
-            green_db.get_latest_extraction_summary()
+            green_db.get_latest_product_count_per_merchant_and_country()
         )
     if "latest_scraping" not in st.session_state:
-        st.session_state.latest_scraping = get_latest_scraping_objects(CONNECTION_FOR_TABLE)
+        st.session_state.latest_scraping = get_latest_scraping_objects()
     if "extraction_by_category" not in st.session_state:
         st.session_state.extraction_by_category = get_products_by_category_objects(
-            green_db.get_latest_category_summary()
+            green_db.get_latest_product_count_per_category_and_merchant()
         )
 
     # Sidebar with general overview of the project
@@ -73,7 +72,7 @@ def main() -> None:
     with st.container():
         if "all_timestamps" not in st.session_state:
             st.session_state.all_timestamps = get_all_timestamps_objects(
-                green_db.get_extraction_summary(), CONNECTION_FOR_TABLE
+                green_db.get_product_count_per_merchant_and_country()
             )
         st.subheader("All timestamps Summary")
         st.write("Scraping and Extraction all timestamps")
@@ -90,7 +89,9 @@ def main() -> None:
         st.plotly_chart(st.session_state.extraction_by_category["chart"])
         st.write("Unknown vs Known certificates for all timestamps")
         st.plotly_chart(
-            get_known_vs_unknown_certificates_chart(green_db.get_known_vs_unknown_certificates()),
+            get_known_vs_unknown_certificates_chart(
+                green_db.get_product_count_per_known_and_unknown_sustainability_label()
+            ),
             use_container_width=True,
         )
         st.write("List of products with 'certificate:UNKNOWN'")
@@ -105,7 +106,9 @@ def main() -> None:
         st.write("Products by sustainability label(s)")
         if st.button("Show list of labels"):
             if "products_by_label" not in st.session_state:
-                st.session_state.products_by_label = green_db.get_latest_products_by_label()
+                st.session_state.products_by_label = (
+                    green_db.get_latest_product_count_per_sustainability_label()
+                )
             st.dataframe(st.session_state.products_by_label)
 
 

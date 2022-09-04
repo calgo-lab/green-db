@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
 import plotly.express as px
+from core.constants import ALL_SCRAPING_TABLE_NAMES
+from database.connection import Scraping
 
 
 def get_latest_extraction_objects(df: pd.DataFrame) -> dict:
@@ -18,8 +20,9 @@ def get_latest_extraction_objects(df: pd.DataFrame) -> dict:
     }
 
 
-def get_latest_scraping_objects(connection_for_table: dict) -> dict:
+def get_latest_scraping_objects() -> dict:
     """
+    TODO
     Uses 'get_latest_scraping_summary' to fetch number of scraped products for latest
     available timestamp by merchant, query all tables in ScrapingDB and concatenates the result in a
     single dataframe.
@@ -30,11 +33,13 @@ def get_latest_scraping_objects(connection_for_table: dict) -> dict:
     Returns:
         Dict: with objects to display in the monitoring app.
     """
-    all_scraping = []
-    for value in connection_for_table.values():
-        all_scraping.append(value.get_latest_scraping_summary())
+
+    all_scraping = [
+        Scraping(table_name).get_latest_scraped_page_count_per_merchant_and_country()
+        for table_name in ALL_SCRAPING_TABLE_NAMES
+    ]
     df = pd.concat(all_scraping)
-    return {"df": df, "total_scraped": df["product_count"].sum()}
+    return {"df": df, "total_scraped": df["scraped_pages_count"].sum()}
 
 
 def get_products_by_category_objects(query: pd.DataFrame) -> dict:
@@ -56,8 +61,9 @@ def get_products_by_category_objects(query: pd.DataFrame) -> dict:
     }
 
 
-def get_all_timestamps_objects(extraction: pd.DataFrame, connection_for_table: dict) -> dict:
+def get_all_timestamps_objects(extraction: pd.DataFrame) -> dict:
     """
+    TODO
     Concatenates 'all_extraction_summary' and 'all_scraping_summary' dataframes to create:
     1) Line chart for extracted and scraped products for all timestamps found by
     merchant.
@@ -72,9 +78,10 @@ def get_all_timestamps_objects(extraction: pd.DataFrame, connection_for_table: d
         Dict: with objects to display in the monitoring app.
     """
     extraction["type"] = "extraction"
-    all_scraping = []
-    for value in connection_for_table.values():
-        all_scraping.append(value.get_scraping_summary())
+    all_scraping = [
+        Scraping(table_name).get_latest_scraped_page_count_per_merchant_and_country()
+        for table_name in ALL_SCRAPING_TABLE_NAMES
+    ]
     scraping = pd.concat(all_scraping)
     scraping["type"] = "scraping"
     all_timestamps_concat = pd.concat([extraction, scraping], ignore_index=True)
