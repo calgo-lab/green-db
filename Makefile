@@ -1,5 +1,6 @@
 SCRAPYD_CHART=infrastructure/charts/scrapyd
 WORKERS_CHART=infrastructure/charts/workers
+MONITORING_CHART=infrastructure/charts/monitoring
 
 .PHONY: patch-core-version patch-database-version patch-extract-version patch-message-queue-version patch-scraping-version patch-workers-version patch-all patch-version
 
@@ -15,19 +16,22 @@ patch-extract-version:
 patch-message-queue-version:
 	$(MAKE) -C message-queue patch-version
 
+patch-monitoring-version:
+	$(MAKE) -C monitoring patch-version
+
 patch-scraping-version:
 	$(MAKE) -C scraping patch-version
 
 patch-workers-version:
 	$(MAKE) -C workers patch-version
 
-patch-all: patch-core-version patch-database-version patch-extract-version patch-message-queue-version patch-scraping-version patch-workers-version
+patch-all: patch-core-version patch-database-version patch-extract-version patch-message-queue-version patch-monitoring-version patch-scraping-version patch-workers-version
 
 patch-version: patch-all
 	# get version from core package.
 	$(eval VERSION=$(shell cd core; poetry version -s))
 	
-	git add core/pyproject.toml database/pyproject.toml extract/pyproject.toml message-queue/pyproject.toml scraping/pyproject.toml workers/pyproject.toml ${SCRAPYD_CHART}/Chart.yaml ${WORKERS_CHART}/Chart.yaml
+	git add core/pyproject.toml database/pyproject.toml extract/pyproject.toml message-queue/pyproject.toml monitoring/pyproject.toml scraping/pyproject.toml workers/pyproject.toml ${MONITORING_CHART}/Chart.yaml ${WORKERS_CHART}/Chart.yaml ${WORKERS_CHART}/Chart.yaml
 	git commit -m "bump version to '${VERSION}'"
 	git tag ${VERSION}
 
