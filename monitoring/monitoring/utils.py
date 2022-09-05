@@ -1,128 +1,210 @@
-import numpy as np
 import pandas as pd
 import plotly.express as px
+import streamlit as st
 from core.constants import ALL_SCRAPING_TABLE_NAMES
-from database.connection import Scraping
-from plotly.graph_objs import Figure
+from database.connection import GreenDB, Scraping
+from database.tables import SustainabilityLabelsTable
+
+from monitoring.utils_old import get_all_timestamps_objects
 
 
-def get_latest_extraction_objects(df: pd.DataFrame) -> dict:
-    """
-    Fetch number of extracted products for latest available timestamp by merchant. Counts number
-    of merchants.
-
-    Returns:
-        Dict: with objects to display in the monitoring app.
-    """
-    return {
-        "df": df,
-        "total_extracted": df["product_count"].sum(),
-        "number_merchants": len(df.groupby("merchant")),
-    }
-
-
-def get_latest_scraping_objects() -> dict:
+def fetch_and_cache_latest_product_count_per_merchant_and_country(green_db: GreenDB) -> None:
     """
     TODO
-    Uses 'get_latest_scraping_summary' to fetch number of scraped products for latest
-    available timestamp by merchant, query all tables in ScrapingDB and concatenates the result in a
-    single dataframe.
 
     Args:
-        connection_for_table (dict): Contains connection for ScrapingDB tables.
-
-    Returns:
-        Dict: with objects to display in the monitoring app.
+        green_db (GreenDB): _description_
     """
+    if "data_frame_latest_product_count_per_merchant_and_country" not in st.session_state:
 
-    all_scraping = [
-        Scraping(table_name).get_latest_scraped_page_count_per_merchant_and_country()
-        for table_name in ALL_SCRAPING_TABLE_NAMES
-    ]
-    df = pd.concat(all_scraping)
-    return {"df": df, "total_scraped": df["scraped_page_count"].sum()}
+        # Fetch and save DataFrame
+        st.session_state[
+            "data_frame_latest_product_count_per_merchant_and_country"
+        ] = green_db.get_latest_product_count_per_merchant_and_country()
 
-
-def get_products_by_category_objects(query: pd.DataFrame) -> dict:
-    """
-    Uses 'get_latest_category_summary' output to create a bar chart for products per category
-    and a pivot table. Counts number of categories.
-
-    Args:
-        query (pd.DataFrame): Data to plot.
-
-    Returns:
-        Dict: with objects to display in the monitoring app.
-    """
-    return {
-        "chart": px.bar(
-            query, x="category", y="product_count", color="merchant", text="product_count"
-        ),
-        "number_categories": len(query.groupby("category")),
-    }
-
-
-def get_all_timestamps_objects(extraction: pd.DataFrame) -> dict:
-    """
-    TODO
-    Concatenates 'all_extraction_summary' and 'all_scraping_summary' dataframes to create:
-    1) Line chart for extracted and scraped products for all timestamps found by
-    merchant.
-    2) Line chart for extracted and scraped products for all timestamps.
-    3) Join DataFrame.
-
-    Args:
-        extraction (pd.DataFrame): Data to plot.
-        connection_for_table (dict): Contains connection for ScrapingDB tables.
-
-    Returns:
-        Dict: with objects to display in the monitoring app.
-    """
-    extraction["type"] = "extraction"
-    all_scraping = [
-        Scraping(table_name).get_latest_scraped_page_count_per_merchant_and_country()
-        for table_name in ALL_SCRAPING_TABLE_NAMES
-    ]
-    scraping = pd.concat(all_scraping)
-    scraping["type"] = "scraping"
-    all_timestamps_concat = pd.concat([extraction, scraping], ignore_index=True)
-    all_timestamps_concat["date"] = pd.to_datetime(all_timestamps_concat["timestamp"]).dt.date
-    df_agg_merchant = (
-        all_timestamps_concat.groupby(by=["date", "merchant", "type"]).sum().reset_index()
-    )
-    df_agg_timestamp = all_timestamps_concat.groupby(by=["date", "type"]).sum().reset_index()
-    pivot = (
-        all_timestamps_concat.groupby(by=["date", "merchant", "country", "type"])
-        .sum()
-        .pivot_table(
-            values="product_count",
-            index=["date", "merchant", "country"],
-            columns="type",
-            aggfunc=np.sum,
-            fill_value=0,
+        # and calculate some values for convenience
+        st.session_state["latest_extraction_number_of_products"] = st.session_state[
+            "data_frame_latest_product_count_per_merchant_and_country"
+        ]["product_count"].sum()
+        st.session_state["latest_extraction_number_of_merchants"] = len(
+            st.session_state["data_frame_latest_product_count_per_merchant_and_country"].groupby(
+                "merchant"
+            )
         )
-        .sort_values(by="date", ascending=False)
-    )
-    return {
-        "chart_by_merchant": px.line(
-            df_agg_merchant, x="date", y="product_count", color="merchant", symbol="type"
-        ),
-        "chart_by_timestamp": px.line(df_agg_timestamp, x="date", y="product_count", color="type"),
-        "pivot_timestamps_by_merchant_country": pivot,
-    }
 
 
-def create_plot_products_with_unknown_sustainability_label(
-    query: pd.DataFrame,
-) -> Figure:
+def fetch_and_cache_latest_scraped_page_count_per_merchant_and_country() -> None:
+    """
+    TODO
+    """
+    if "data_frame_latest_scraped_page_count_per_merchant_and_country" not in st.session_state:
+
+        # Fetch and save DataFrame
+        st.session_state[
+            "data_frame_latest_scraped_page_count_per_merchant_and_country"
+        ] = pd.concat(
+            [
+                Scraping(table_name).get_latest_scraped_page_count_per_merchant_and_country()
+                for table_name in ALL_SCRAPING_TABLE_NAMES
+            ]
+        )
+
+        # and calculate some values for convenience
+        st.session_state["latest_scraping_number_of_scraped_pages"] = st.session_state[
+            "data_frame_latest_scraped_page_count_per_merchant_and_country"
+        ]["scraped_page_count"].sum()
+
+
+def fetch_and_cache_latest_product_count_per_category_and_merchant(green_db: GreenDB) -> None:
     """
     TODO
 
     Args:
-        query (pd.DataFrame): Data to plot.
-
-    Returns:
-        Figure: line chart to display in the monitoring app.
+        green_db (GreenDB): _description_
     """
-    query["date"] = pd.to_datetime(query["timestamp"]).dt.date
-    return px.line(query, x="date", y="product_count")
+    if "data_frame_latest_product_count_per_category_and_merchant" not in st.session_state:
+        st.session_state[
+            "data_frame_latest_product_count_per_category_and_merchant"
+        ] = green_db.get_latest_product_count_per_category_and_merchant()
+
+        st.session_state["latest_extraction_number_of_categories"] = len(
+            st.session_state["data_frame_latest_product_count_per_category_and_merchant"].groupby(
+                "category"
+            )
+        )
+
+        st.session_state["plot_latest_products_per_category_and_merchant"] = px.bar(
+            st.session_state["data_frame_latest_product_count_per_category_and_merchant"],
+            x="category",
+            y="product_count",
+            color="merchant",
+            text="product_count",
+        )
+
+
+def fetch_and_cache_product_count_with_unknown_sustainability_label(green_db: GreenDB) -> None:
+    """
+    TODO
+
+    Args:
+        green_db (GreenDB): _description_
+    """
+    if "data_frame_product_count_with_unknown_sustainability_label" not in st.session_state:
+        st.session_state[
+            "data_frame_product_count_with_unknown_sustainability_label"
+        ] = green_db.get_product_count_with_unknown_sustainability_label()
+        st.session_state["data_frame_product_count_with_unknown_sustainability_label"][
+            "date"
+        ] = st.session_state["data_frame_product_count_with_unknown_sustainability_label"][
+            "timestamp"
+        ].dt.date
+
+        st.session_state["plot_product_count_with_unknown_sustainability_label"] = px.line(
+            st.session_state["data_frame_product_count_with_unknown_sustainability_label"],
+            x="date",
+            y="product_count",
+        )
+
+
+def render_sidebar(green_db: GreenDB) -> None:
+    """
+    TODO
+
+    Args:
+        green_db (GreenDB): _description_
+    """
+    st.title("Overview")
+    st.write("From last data extraction on:")
+    st.write(green_db.get_latest_timestamp().date())
+
+    fetch_and_cache_latest_scraped_page_count_per_merchant_and_country()
+    st.metric(
+        label="Number scraped pages",
+        value=st.session_state["latest_scraping_number_of_scraped_pages"],
+    )
+
+    fetch_and_cache_latest_product_count_per_merchant_and_country(green_db)
+    st.metric(
+        label="Number extracted products",
+        value=st.session_state["latest_extraction_number_of_products"],
+    )
+
+    fetch_and_cache_latest_product_count_per_category_and_merchant(green_db)
+    st.metric(
+        label="Number of categories",
+        value=st.session_state["latest_extraction_number_of_categories"],
+    )
+
+    st.metric(
+        label="Number of merchants",
+        value=st.session_state["latest_extraction_number_of_merchants"],
+    )
+
+    st.write("Sustainability label's last update:")
+    st.write(green_db.get_latest_timestamp(SustainabilityLabelsTable).date())
+
+
+def render_basic_information(green_db: GreenDB) -> None:
+    """
+    TODO
+
+    Args:
+        green_db (GreenDB): _description_
+    """
+    if "all_timestamps" not in st.session_state:
+        st.session_state.all_timestamps = get_all_timestamps_objects(
+            green_db.get_product_count_per_merchant_and_country()
+        )
+
+    st.subheader("Scraped pages and extracted products")
+    st.plotly_chart(st.session_state.all_timestamps["chart_by_timestamp"], use_container_width=True)
+
+    st.markdown("""---""")
+
+    st.subheader("Scraped pages and extracted products by merchants")
+    st.plotly_chart(st.session_state.all_timestamps["chart_by_merchant"], use_container_width=True)
+
+    st.markdown("""---""")
+
+    st.subheader("Latest products per category and merchant")
+    st.plotly_chart(st.session_state["plot_latest_products_per_category_and_merchant"])
+
+    st.markdown("""---""")
+
+    fetch_and_cache_product_count_with_unknown_sustainability_label(green_db)
+    st.subheader("Products with UNKNOWN sustainability label")
+    st.plotly_chart(
+        st.session_state["plot_product_count_with_unknown_sustainability_label"],
+        use_container_width=True,
+    )
+
+
+def render_extended_information(green_db: GreenDB) -> None:
+    """
+    TODO
+
+    Args:
+        green_db (GreenDB): _description_
+    """
+    if st.button("Do you want to fetch this data? - Could take a while."):
+
+        st.subheader("Scraped pages vs. extracted products count as table")
+        st.dataframe(st.session_state.all_timestamps["pivot_timestamps_by_merchant_country"])
+
+        st.markdown("""---""")
+
+        st.subheader("Latest product count by sustainability label as table")
+        if "latest_product_count_per_sustainability_label" not in st.session_state:
+            st.session_state.latest_product_count_per_sustainability_label = (
+                green_db.get_latest_product_count_per_sustainability_label()
+            )
+        st.dataframe(st.session_state.latest_product_count_per_sustainability_label)
+
+        st.markdown("""---""")
+
+        st.subheader("Latest products with UNKNOWN label as table")
+        if "latest_products_with_unknown_sustainability_label" not in st.session_state:
+            st.session_state.latest_products_with_unknown_sustainability_label = (
+                green_db.get_latest_products_with_unknown_sustainability_label()
+            )
+        st.dataframe(st.session_state.latest_products_with_unknown_sustainability_label)
