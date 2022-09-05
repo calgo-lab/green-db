@@ -1,6 +1,6 @@
 from datetime import datetime
 from logging import getLogger
-from typing import Iterator, List, Type
+from typing import Iterator, List, Optional, Type
 
 from sqlalchemy import Column
 from sqlalchemy.orm import Query, Session
@@ -253,23 +253,25 @@ class GreenDB(Connection):
             else:
                 return list(sustainability_labels_iterator)
 
-    def get_products_for_timestamp(
-        self, timestamp: datetime, batch_size: int = 1000
+    def get_products(
+        self, timestamp: Optional[datetime] = None, batch_size: int = 1000
     ) -> Iterator[Product]:
         """
-        Fetch all `Product`s for given `timestamp`.
+        Fetch all `Product`s for given `timestamp`. If `timestamp` is `None` it returns all.
 
         Args:
-            timestamp (datetime): Defines which rows to fetch
-            batch_size (int, optional): How many rows to fetch simultaneously. Defaults to 1000.
+            timestamp (Optional[datetime], optional): Defines which products to fetch.
+                Defaults to None.
 
         Yields:
             Iterator[Product]: `Iterator` of domain object representations
         """
         with self._session_factory() as db_session:
-            query = db_session.query(self._database_class).filter(
-                self._database_class.timestamp == timestamp
-            )
+            query = db_session.query(self._database_class)
+
+            if timestamp is not None:
+                query = query.filter(self._database_class.timestamp == timestamp)
+
             return (Product.from_orm(row) for row in query.all())
 
     def get_latest_products(self, batch_size: int = 1000) -> Iterator[Product]:
@@ -282,4 +284,4 @@ class GreenDB(Connection):
         Yields:
             Iterator[Product]: `Iterator` of domain object representation
         """
-        return self.get_products_for_timestamp(self.get_latest_timestamp(), batch_size=batch_size)
+        return self.get_products(self.get_latest_timestamp(), batch_size=batch_size)
