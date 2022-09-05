@@ -3,7 +3,7 @@ FROM python:3.10.2
 MAINTAINER calgo-lab
 
 # Pre-installed some packages
-RUN pip install streamlit numpy pandas plotly poetry watchdog
+RUN pip install streamlit numpy pandas plotly poetry psycopg2 poetry SQLAlchemy pydantic
 EXPOSE 8501
 
 COPY core /green-db/core
