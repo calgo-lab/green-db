@@ -2,8 +2,7 @@
 
 
 **Preprint:** [![arXiv](https://img.shields.io/badge/arXiv-2205.02908-blue)](https://arxiv.org/abs/2205.02908)\
-**v0.2.0:** [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6576662.svg)](https://doi.org/10.5281/zenodo.6576662)\
-**v0.1.0:** [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6078039.svg)](https://doi.org/10.5281/zenodo.6078039)
+**Dataset:** [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7051121.svg)](https://doi.org/10.5281/zenodo.7051121)
 
 
 
