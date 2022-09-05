@@ -213,7 +213,7 @@ class Scraping(Connection):
             query = query.group_by(*columns).all()
             return pd.DataFrame(
                 query, columns=["timestamp", "merchant", "country", "scraped_page_count"]
-            )
+            ).convert_dtypes()  # use best possible dtypes
 
     def get_latest_scraped_page_count_per_merchant_and_country(self) -> pd.DataFrame:
         """
@@ -350,7 +350,7 @@ class GreenDB(Connection):
 
             return pd.DataFrame(
                 query, columns=["timestamp", "merchant", "country", "product_count"]
-            )
+            ).convert_dtypes()  # use best possible dtypes
 
     def get_latest_product_count_per_merchant_and_country(self) -> pd.DataFrame:
         """
@@ -385,7 +385,9 @@ class GreenDB(Connection):
 
             query = query.group_by(*columns).all()
 
-            return pd.DataFrame(query, columns=["category", "merchant", "product_count"])
+            return pd.DataFrame(
+                query, columns=["category", "merchant", "product_count"]
+            ).convert_dtypes()  # use best possible dtypes
 
     def get_latest_product_count_per_category_and_merchant(self) -> pd.DataFrame:
         """
@@ -419,7 +421,9 @@ class GreenDB(Connection):
                 query = query.filter(self._database_class.timestamp == timestamp)
 
             query = query.group_by(*columns).all()
-            return pd.DataFrame(query, columns=["timestamp", "labels", "product_count"])
+            return pd.DataFrame(
+                query, columns=["timestamp", "labels", "product_count"]
+            ).convert_dtypes()  # use best possible dtypes
 
     def get_latest_product_count_per_sustainability_label(self) -> pd.DataFrame:
         """
@@ -456,7 +460,9 @@ class GreenDB(Connection):
                 .group_by(self._database_class.timestamp)
                 .all()
             )
-            return pd.DataFrame(query, columns=["timestamp", "product_count"])
+            return pd.DataFrame(
+                query, columns=["timestamp", "product_count"]
+            ).convert_dtypes()  # use best possible dtypes
 
     def get_latest_product_count_with_unknown_sustainability_label(self) -> pd.DataFrame:
         """
@@ -502,7 +508,7 @@ class GreenDB(Connection):
 
             return pd.DataFrame(
                 query, columns=["id", "timestamp", "merchant", "name", "url", "labels"]
-            )
+            ).convert_dtypes()  # use best possible dtypes
 
     def get_latest_products_with_unknown_sustainability_label(self) -> pd.DataFrame:
         """
