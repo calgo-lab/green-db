@@ -14,7 +14,7 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.10"
-core = {path = "../core", develop = true}
+core = {git = "https://github.com/calgo-lab/green-db", branch = "test-database-with-new-poetry", subdirectory = "core"}
 SQLAlchemy = "^1.4.29"
 psycopg2 = "^2.9.3"
 

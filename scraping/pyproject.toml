@@ -14,8 +14,8 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.9"
-core = {path = "../core", develop = true}
-message_queue = {path = "../message-queue", develop = true}
+core = {git = "https://github.com/calgo-lab/green-db", branch = "test-database-with-new-poetry", subdirectory = "core"}
+message_queue = {git = "https://github.com/calgo-lab/green-db", branch = "test-database-with-new-poetry", subdirectory = "message-queue"}
 Scrapy = "^2.6.1"
 scrapy-splash = "^0.8.0"
 scrapy-playwright = "^0.0.17"

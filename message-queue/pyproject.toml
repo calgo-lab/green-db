@@ -14,7 +14,7 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.9"
-core = {path = "../core", develop = true}
+core = {git = "https://github.com/calgo-lab/green-db", branch = "test-database-with-new-poetry", subdirectory = "core"}
 redis = "^4.1.1"
 rq = "^1.10.1"
 
