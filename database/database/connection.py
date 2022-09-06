@@ -3,10 +3,11 @@ from logging import getLogger
 from typing import Iterator, List, Optional, Type
 
 import pandas as pd
-from core.constants import DATABASE_NAME_GREEN_DB, DATABASE_NAME_SCRAPING
-from core.domain import CertificateType, PageType, Product, ScrapedPage, SustainabilityLabel
 from sqlalchemy import func
 from sqlalchemy.orm import Session
+
+from core.constants import DATABASE_NAME_GREEN_DB, DATABASE_NAME_SCRAPING
+from core.domain import CertificateType, PageType, Product, ScrapedPage, SustainabilityLabel
 
 from .tables import (
     SCRAPING_TABLE_CLASS_FOR,
@@ -184,16 +185,14 @@ class Scraping(Connection):
         self, timestamp: Optional[datetime] = None
     ) -> pd.DataFrame:
         """
-        Fetch number of products scraped in queried table by merchant and country given timestamp
-            or if `None` for all data.
-        Excludes SERP page_type.
+        Fetch count of scraped pages (excludes SERP `page_type`) for given `timestamp` or if `None`
+            for all data.
 
         Args:
-            timestamp (datetime): Defines which rows to fetch. Default as none to fetch all
-            timestamps found.
+            timestamp (Optional[datetime], optional): Defines which rows to fetch. Defaults to None.
 
         Returns:
-            Dataframe: Query results as `Dataframe`.
+            pd.DataFrame: Query results as `pd.DataFrame`.
         """
         with self._session_factory() as db_session:
             columns = (
@@ -217,11 +216,10 @@ class Scraping(Connection):
 
     def get_latest_scraped_page_count_per_merchant_and_country(self) -> pd.DataFrame:
         """
-        Fetch number of products scraped in queried table by merchant and country for latest
-        available timestamp.
+        Fetch count of scraped pages (excludes SERP `page_type`) for latest available timestamp.
 
         Returns:
-           Dataframe: Query results as `Dataframe`.
+           pd.DataFrame: Query results as `pd.DataFrame`.
         """
         return self.get_scraped_page_count_per_merchant_and_country(self.get_latest_timestamp())
 
@@ -322,15 +320,13 @@ class GreenDB(Connection):
         self, timestamp: Optional[datetime] = None
     ) -> pd.DataFrame:
         """
-        Fetch number of products extracted by merchant and country for given timestamp,
-            or if `None` for all data.
+        Fetch product count by merchant and country for given timestamp, or if `None` for all data.
 
         Args:
-            timestamp (datetime): Defines which rows to fetch. Default as none to fetch all
-            timestamps found.
+            timestamp (Optional[datetime], optional): Defines which rows to fetch. Defaults to None.
 
         Returns:
-            Dataframe: Query results as `Dataframe`.
+            pd.DataFrame: Query results as `pd.DataFrame`.
         """
         with self._session_factory() as db_session:
             columns = (
@@ -354,11 +350,11 @@ class GreenDB(Connection):
 
     def get_latest_product_count_per_merchant_and_country(self) -> pd.DataFrame:
         """
-        Fetch number of products extracted by merchant and country for latest available
-        timestamp.
+        Fetch product count per merchant and country for given timestamp for latest available
+            timestamp.
 
         Returns:
-            Dataframe: Query results as `Dataframe`.
+            pd.DataFrame: Query results as `pd.DataFrame`.
         """
         return self.get_product_count_per_merchant_and_country(self.get_latest_timestamp())
 
@@ -366,15 +362,14 @@ class GreenDB(Connection):
         self, timestamp: Optional[datetime] = None
     ) -> pd.DataFrame:
         """
-        Fetch number of products in green_db table per category by merchant for given timestamp
-            or if `None` for all data.
+        Fetch product count per category and merchant for given timestamp, or if `None` for all
+            data.
 
         Args:
-            timestamp (datetime): Defines which rows to fetch. Default as none to fetch all
-            timestamps found.
+            timestamp (Optional[datetime], optional): Defines which rows to fetch. Defaults to None.
 
         Returns:
-            Dataframe: Query results as `Dataframe`.
+            pd.DataFrame: Query results as `pd.DataFrame`.
         """
         with self._session_factory() as db_session:
             columns = (self._database_class.category, self._database_class.merchant)
@@ -391,11 +386,10 @@ class GreenDB(Connection):
 
     def get_latest_product_count_per_category_and_merchant(self) -> pd.DataFrame:
         """
-        Fetch number of products in green_db table per category by merchant for latest
-        available timestamp.
+        Fetch product count per category and merchant for latest available timestamp.
 
         Returns:
-            Dataframe: Query results as `Dataframe`.
+            pd.DataFrame: Query results as `pd.DataFrame`.
         """
         return self.get_product_count_per_category_and_merchant(self.get_latest_timestamp())
 
@@ -403,15 +397,14 @@ class GreenDB(Connection):
         self, timestamp: Optional[datetime] = None
     ) -> pd.DataFrame:
         """
-        Fetch number of products in green_db table per sustainability_labels by given timestamp
-            or if `None` for all data.
+        Fetch product count per sustainability_label(s) by given timestamp or if `None` for all
+            data.
 
         Args:
-            timestamp (datetime): Defines which rows to fetch. Default as none to fetch all
-            timestamps found.
+            timestamp (Optional[datetime], optional): Defines which rows to fetch. Defaults to None.
 
         Returns:
-            Dataframe: Query results as `Dataframe`.
+            pd.DataFrame: Query results as `pd.DataFrame`.
         """
         with self._session_factory() as db_session:
             columns = (self._database_class.timestamp, self._database_class.sustainability_labels)
@@ -427,11 +420,10 @@ class GreenDB(Connection):
 
     def get_latest_product_count_per_sustainability_label(self) -> pd.DataFrame:
         """
-        Fetch number of products in green_db table per sustainability_labels by latest available
-        timestamp.
+        Fetch product count per sustainability_label(s) for latest available timestamp.
 
         Returns:
-            Dataframe: Query results as `Dataframe`.
+            pd.DataFrame: Query results as `pd.DataFrame`.
         """
         return self.get_product_count_per_sustainability_label(self.get_latest_timestamp())
 
@@ -439,13 +431,15 @@ class GreenDB(Connection):
         self, timestamp: Optional[datetime] = None
     ) -> pd.DataFrame:
         """
-        TODO
+        Fetch product count for products by unknown and unknown sustainability label(s) by given
+            timestamp or if `None` for all data; where unknown is `certificate:UNKNOWN` and known
+            are all other certificates.
 
         Args:
-            timestamp (Optional[datetime], optional): _description_. Defaults to None.
+            timestamp (Optional[datetime], optional): Defines which rows to fetch. Defaults to None.
 
         Returns:
-            pd.DataFrame: _description_
+            pd.DataFrame: Query results as `pd.DataFrame`.
         """
         with self._session_factory() as db_session:
             query = db_session.query(self._database_class.timestamp, func.count())
@@ -466,10 +460,11 @@ class GreenDB(Connection):
 
     def get_latest_product_count_with_unknown_sustainability_label(self) -> pd.DataFrame:
         """
-        TODO
+        Fetch product count for products by unknown and unknown sustainability label(s) by latest
+        available timestamp.
 
         Returns:
-            pd.DataFrame: _description_
+            pd.DataFrame: Query results as `pd.DataFrame`.
         """
         return self.get_product_count_with_unknown_sustainability_label(self.get_latest_timestamp())
 
@@ -477,13 +472,14 @@ class GreenDB(Connection):
         self, timestamp: Optional[datetime] = None
     ) -> pd.DataFrame:
         """
-        TODO:
+        Fetch list of products with unknown label, provides id, name, merchant and url per row by
+            given timestamp or if `None` for all data.
 
         Args:
-            timestamp (Optional[datetime], optional): _description_. Defaults to None.
+            timestamp (Optional[datetime], optional): Defines which rows to fetch. Defaults to None.
 
         Returns:
-            pd.DataFrame: _description_
+            pd.DataFrame: Query results as `pd.DataFrame`.
         """
         columns = (
             self._database_class.id,
@@ -512,9 +508,10 @@ class GreenDB(Connection):
 
     def get_latest_products_with_unknown_sustainability_label(self) -> pd.DataFrame:
         """
-        TODO
+        Fetch list of products with unknown label, provides id, name, merchant and url per row
+        for latest timestamp available.
 
         Returns:
-            pd.DataFrame: _description_
+           pd.DataFrame: Query results as `Dataframe`.
         """
         return self.get_products_with_unknown_sustainability_label(self.get_latest_timestamp())
