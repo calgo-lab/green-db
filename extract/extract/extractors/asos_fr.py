@@ -84,6 +84,7 @@ def extract_asos_fr(parsed_page: ParsedPage) -> Optional[Product]:
 _LABEL_MAPPING = {
     "Better Cotton Initiative": CertificateType.BETTER_COTTON_INITIATIVE,
     "Better Coton Initiative": CertificateType.BETTER_COTTON_INITIATIVE,
+    "Better Cotton": CertificateType.BETTER_COTTON_INITIATIVE,
     "Cotton made in Africa": CertificateType.COTTON_MADE_IN_AFRICA,
     "Modal TENCEL™": CertificateType.OTHER,
     "Lyocell Tencel™": CertificateType.OTHER,
@@ -91,6 +92,8 @@ _LABEL_MAPPING = {
     "LENZING™ ECOVERO™": CertificateType.OTHER,
     "Viscose Ecovero™": CertificateType.OTHER,
     "coton bio": CertificateType.OTHER,
+    "coton durable": CertificateType.OTHER,
+    "coton 100 % durable": CertificateType.OTHER,
     "Zinc recyclé": CertificateType.OTHER,
     "polyester recyclé": CertificateType.OTHER,
     "plastique recyclé": CertificateType.OTHER,

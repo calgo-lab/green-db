@@ -1,4 +1,5 @@
 from requests_mock import Adapter
+from tests.utils import read_test_html
 
 from core.constants import TABLE_NAME_SCRAPING_OTTO_DE
 from core.domain import (
@@ -13,13 +14,11 @@ from core.domain import (
 # TODO: This is a false positive of mypy
 from extract import extract_product  # type: ignore
 
-from ..utils import read_test_html
-
 
 def test_otto_basic(requests_mock: Adapter) -> None:
     label_html = """
         <div class='prd_sustainabilityLayer__label'>
-            <div class='prd_sustainabilityLayer__caption'> unknown label name </div>
+            <div class='prd_sustainabilityLayer__caption'> Unterstützt Cotton made in Africa </div>
             <div class='prd_sustainabilityLayer__description'> some description </div>
             <div class='prd_sustainabilityLayer__licenseNumber'> some license </div>
         </div>
@@ -66,7 +65,7 @@ def test_otto_basic(requests_mock: Adapter) -> None:
         "99€. Kontrastfarbenes Band mit HIS Schriftzug im Ausschnitt, Pflegeleichtes "
         "Material bei OTTO",
         brand="H.I.S",
-        sustainability_labels=[CertificateType.UNKNOWN],  # type: ignore[attr-defined]
+        sustainability_labels=[CertificateType.COTTON_MADE_IN_AFRICA],  # type: ignore[attr-defined]
         image_urls=[
             "https://i.otto.mock/i/otto/05cb3291-9921-5253-85d0-1e97c3dd5b37",
             "https://i.otto.mock/i/otto/77656fe2-ac3f-5242-9bb0-61b5d2f768a6",

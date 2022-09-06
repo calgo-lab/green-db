@@ -1,4 +1,5 @@
 from requests_mock import Adapter
+from tests.utils import read_test_html
 
 from core.constants import TABLE_NAME_SCRAPING_OTTO_DE
 from core.domain import CertificateType, CountryType, CurrencyType, Product
@@ -6,13 +7,11 @@ from core.domain import CertificateType, CountryType, CurrencyType, Product
 # TODO: This is a false positive of mypy
 from extract import extract_product  # type: ignore
 
-from ..utils import read_test_html
-
 
 def test_otto_basic(requests_mock: Adapter) -> None:
     label_html = """
         <div class='prd_sustainabilityLayer__label'>
-            <div class='prd_sustainabilityLayer__caption'> unknown label name </div>
+            <div class='prd_sustainabilityLayer__caption'> Energieeffizientes Gerät </div>
             <div class='prd_sustainabilityLayer__description'> some description </div>
             <div class='prd_sustainabilityLayer__licenseNumber'> some license </div>
         </div>
@@ -56,7 +55,7 @@ def test_otto_basic(requests_mock: Adapter) -> None:
         "mit 2-fach-Teleskopauszug, Pyrolyse-Selbstreinigung, 50 Monate "
         "Herstellergarantie für 333,00€ bei OTTO",
         brand="Privileg Family Edition",
-        sustainability_labels=[CertificateType.UNKNOWN],  # type: ignore[attr-defined]
+        sustainability_labels=[CertificateType.OTHER],  # type: ignore[attr-defined]
         image_urls=[
             "https://i.otto.mock/i/otto/19651738",
             "https://i.otto.mock/i/otto/19651739",

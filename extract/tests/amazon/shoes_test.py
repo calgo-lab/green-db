@@ -1,3 +1,5 @@
+from tests.utils import read_test_html
+
 from core.constants import TABLE_NAME_SCRAPING_AMAZON_DE
 from core.domain import (
     CertificateType,
@@ -11,11 +13,9 @@ from core.domain import (
 # TODO: This is a false positive of mypy
 from extract import extract_product  # type: ignore
 
-from ..utils import read_test_html
-
 
 def test_amazon_basic() -> None:
-    timestamp = "2022-04-28 19:00:00"
+    timestamp = "2022-08-25 20:21:00"
     url = "https://www.amazon.de/Think-Kong_3-000371-chromfrei-nachhaltige-Wechselfu%C3%9Fbett/dp/B08FSL34LS/ref=sr_1_2?qid=1651058159&refinements=p_n_cpf_eligible%3A22579885031&s=shoes&sr=1-2"  # noqa
     source = "amazon"
     merchant = "amazon"
@@ -52,7 +52,10 @@ def test_amazon_basic() -> None:
         gender=gender,
         consumer_lifestage=consumer_lifestage,
         name="THINK! Herren Kong_3-000371 chromfrei gegerbte, nachhaltige Wechselfußbett Boots",
-        description="Think! ist ein traditionelles Schuhunternehmen und wahrt die Handwerkskunst. "
+        description="Obermaterial: Leder. Innenmaterial: Lederfutter. Sohle: Gummi. Verschluss: "
+        "Schnüren. Absatzhöhe: 2 cm. Absatzform: Blockabsatz. Größenhinweis: Bequeme "
+        "Passform. Schuhweite: Normal. Nicht wasserfest. Think! ist ein "
+        "traditionelles Schuhunternehmen und wahrt die Handwerkskunst. "
         "Think! Schuhe sind handgefertigt und werden ausschließlich in Europa hergestellt. "
         "Die Schuhe sind dabei individuell, gesund und nachhaltig produziert. Alle Innenleder "
         "sind chromfrei gegerbt. Durch die schonende, pflanzliche Gerbung entsteht ein angenehmes "

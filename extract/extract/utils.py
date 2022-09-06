@@ -1,9 +1,11 @@
+from logging import getLogger
 from typing import Any, List, Union
 
 from core.domain import CertificateType
 from core.sustainability_labels import load_and_get_sustainability_labels
 
 SUSTAINABILITY_LABELS = load_and_get_sustainability_labels()
+logger = getLogger(__name__)
 
 
 def safely_return_first_element(list_object: List[Any], else_return: Any = {}) -> Any:
@@ -47,39 +49,52 @@ def get_product_from_JSON_LD(json_ld: List[Any], else_return: Any = {}) -> Any:
 
 def sustainability_labels_to_certificates(
     certificate_strings: list[str], certificate_mapping: dict
-) -> list[str]:
+) -> Union[list[str], None]:
     """
     Helper function that maps the extracted HTML span texts to certificates.
     1. It tries all known certificates
     2. It uses`certificate_mapping` for shop specific certificates strings
+    3. If no mapping is found, 'CertificateType.UNKNOWN' is assigned and the unknown
+    certificate_string is logged.
 
     Args:
-        certificate_strings list[str]: Certificate strings from the HTML span tags
+        certificate_strings (list[str]): Certificate strings from the HTML span tags
         certificate_mapping (dict): Mapping of certificate strings to certificates
 
     Returns:
-        list[str]: List of parsed certificates
+        Union[list[str], None]: List of parsed certificates or None if certificate_strings is empty
     """
 
-    result = [
-        CertificateType[certificate_id.split(":")[-1]]
-        for certificate_id, localized_certificate_infos in SUSTAINABILITY_LABELS.items()
-        if any(
-            _get_certificate_for_any_language(
-                localized_certificate_infos["languages"].values(), certificate_strings
-            )
-        )
-    ]
+    # Return None if certificate_strings is empty
+    if not certificate_strings:
+        return None
 
-    for certificate_string, certificate in certificate_mapping.items():
-        if certificate_string in certificate_strings:
-            result.append(certificate)
+    result = dict.fromkeys(set(certificate_strings))
 
-    return sorted(set(result)) or [CertificateType.UNKNOWN]  # type: ignore[attr-defined]
+    # check all known certificates
+    for certificate_id, localized_certificate_infos in SUSTAINABILITY_LABELS.items():
+        for certificate_string in result.keys():
+            if any(
+                _get_certificate_for_any_language(
+                    localized_certificate_infos["languages"].values(), certificate_string
+                )
+            ):
+                result.update({certificate_string: CertificateType[certificate_id.split(":")[-1]]})
+
+    # check custom certificate_mappings for unassigned certificate strings
+    for certificate_string, certificate in result.items():
+        if certificate is None:
+            if certificate_string in certificate_mapping.keys():
+                result.update({certificate_string: certificate_mapping[certificate_string]})
+            else:  # if certificate_string can not be mapped, assign UNKNOWN and create log message
+                result.update({certificate_string: CertificateType.UNKNOWN})  # type: ignore[attr-defined] # noqa
+                logger.info(f"unknown sustainability label: {certificate_string}")
+
+    return sorted(set(result.values()))  # type: ignore
 
 
 def _get_certificate_for_any_language(
-    localized_certificate_infos: list[dict], certificate_strings: list[str]
+    localized_certificate_infos: list[dict], certificate_string: str
 ) -> list[dict]:
     """
     Helper function that checks if a certificate matches in a language with a certificate name.
@@ -87,7 +102,7 @@ def _get_certificate_for_any_language(
     Args:
         localized_certificate_infos (list[dict]): List of `dict` objects with each object
             containing the certificate information in a specific language
-        certificate_strings (list[str]): Function that is processing the scan result
+        certificate_strings (str): Function that is processing the scan result
 
     Returns:
         list[dict]: `list` with `dict` objects representing the matched certificate information
@@ -96,7 +111,7 @@ def _get_certificate_for_any_language(
     return [
         localized_certificate_info
         for localized_certificate_info in localized_certificate_infos
-        if localized_certificate_info["name"].lower() in [x.lower() for x in certificate_strings]
+        if localized_certificate_info["name"].lower() == certificate_string.lower()
     ]
 
 
