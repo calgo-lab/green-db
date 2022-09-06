@@ -161,7 +161,7 @@ class Scraping(Connection):
         Fetch all `ScrapedPage`s for given `timestamp`.
 
         Args:
-            timestamp (datetime): Defines which rows to fetch
+            timestamp (datetime): Defines which rows to fetch.
 
         Yields:
             Iterator[ScrapedPage]: Iterator over the domain object representations
