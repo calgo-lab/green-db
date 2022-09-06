@@ -5,7 +5,73 @@ from core.constants import ALL_SCRAPING_TABLE_NAMES
 from database.connection import GreenDB, Scraping
 from database.tables import SustainabilityLabelsTable
 
-from monitoring.utils_old import get_all_timestamps_objects
+
+def fetch_and_cache_scraped_page_and_product_count_per_merchant_and_country(
+    green_db: GreenDB,
+) -> None:
+    """
+    TODO
+
+    Args:
+        green_db (GreenDB): _description_
+    """
+    if "data_frame_scraped_page_and_product_count_per_merchant_and_country" not in st.session_state:
+
+        # Fetch and save DataFrame
+        st.session_state[
+            "data_frame_product_count_per_merchant_and_country"
+        ] = green_db.get_product_count_per_merchant_and_country()
+        st.session_state["data_frame_product_count_per_merchant_and_country"]["type"] = "extract"
+
+        st.session_state["data_frame_scraped_page_count_per_merchant_and_country"] = pd.concat(
+            [
+                Scraping(table_name).get_scraped_page_count_per_merchant_and_country()
+                for table_name in ALL_SCRAPING_TABLE_NAMES
+            ]
+        ).rename(columns={"scraped_page_count": "product_count"})
+        st.session_state["data_frame_scraped_page_count_per_merchant_and_country"][
+            "type"
+        ] = "scraping"
+
+        st.session_state[
+            "data_frame_scraped_page_and_product_count_per_merchant_and_country"
+        ] = pd.concat(
+            [
+                st.session_state["data_frame_scraped_page_count_per_merchant_and_country"],
+                st.session_state["data_frame_product_count_per_merchant_and_country"],
+            ],
+            ignore_index=True,
+        )
+
+        # Plot and restructure the dataframe
+        st.session_state["plot_scraped_vs_extracted_over_timestamp_per_merchant"] = px.line(
+            st.session_state["data_frame_scraped_page_and_product_count_per_merchant_and_country"]
+            .groupby(by=["timestamp", "merchant", "type"])
+            .sum()
+            .reset_index(),
+            x="timestamp",
+            y="product_count",
+            color="merchant",
+            symbol="type",
+        )
+        st.session_state["plot_scraped_vs_extracted_over_timestamp"] = px.line(
+            st.session_state["data_frame_scraped_page_and_product_count_per_merchant_and_country"]
+            .groupby(by=["timestamp", "type"])
+            .sum()
+            .reset_index(),
+            x="timestamp",
+            y="product_count",
+            color="type",
+        )
+        st.session_state["pivot_scraped_vs_extracted"] = st.session_state[
+            "data_frame_scraped_page_and_product_count_per_merchant_and_country"
+        ].pivot_table(
+            values="product_count",
+            index=["timestamp", "merchant", "country"],
+            columns="type",
+            aggfunc=sum,
+            fill_value=0,
+        )
 
 
 def fetch_and_cache_latest_product_count_per_merchant_and_country(green_db: GreenDB) -> None:
@@ -93,15 +159,10 @@ def fetch_and_cache_product_count_with_unknown_sustainability_label(green_db: Gr
         st.session_state[
             "data_frame_product_count_with_unknown_sustainability_label"
         ] = green_db.get_product_count_with_unknown_sustainability_label()
-        st.session_state["data_frame_product_count_with_unknown_sustainability_label"][
-            "date"
-        ] = st.session_state["data_frame_product_count_with_unknown_sustainability_label"][
-            "timestamp"
-        ].dt.date
 
         st.session_state["plot_product_count_with_unknown_sustainability_label"] = px.line(
             st.session_state["data_frame_product_count_with_unknown_sustainability_label"],
-            x="date",
+            x="timestamp",
             y="product_count",
         )
 
@@ -151,18 +212,14 @@ def render_basic_information(green_db: GreenDB) -> None:
     Args:
         green_db (GreenDB): _description_
     """
-    if "all_timestamps" not in st.session_state:
-        st.session_state.all_timestamps = get_all_timestamps_objects(
-            green_db.get_product_count_per_merchant_and_country()
-        )
-
+    fetch_and_cache_scraped_page_and_product_count_per_merchant_and_country(green_db)
     st.subheader("Scraped pages and extracted products")
-    st.plotly_chart(st.session_state.all_timestamps["chart_by_timestamp"], use_container_width=True)
+    st.plotly_chart(st.session_state["plot_scraped_vs_extracted_over_timestamp"])
 
     st.markdown("""---""")
 
     st.subheader("Scraped pages and extracted products by merchants")
-    st.plotly_chart(st.session_state.all_timestamps["chart_by_merchant"], use_container_width=True)
+    st.plotly_chart(st.session_state["plot_scraped_vs_extracted_over_timestamp_per_merchant"])
 
     st.markdown("""---""")
 
@@ -173,10 +230,7 @@ def render_basic_information(green_db: GreenDB) -> None:
 
     fetch_and_cache_product_count_with_unknown_sustainability_label(green_db)
     st.subheader("Products with UNKNOWN sustainability label")
-    st.plotly_chart(
-        st.session_state["plot_product_count_with_unknown_sustainability_label"],
-        use_container_width=True,
-    )
+    st.plotly_chart(st.session_state["plot_product_count_with_unknown_sustainability_label"])
 
 
 def render_extended_information(green_db: GreenDB) -> None:
@@ -189,7 +243,7 @@ def render_extended_information(green_db: GreenDB) -> None:
     if st.button("Do you want to fetch this data? - Could take a while."):
 
         st.subheader("Scraped pages vs. extracted products count as table")
-        st.dataframe(st.session_state.all_timestamps["pivot_timestamps_by_merchant_country"])
+        st.dataframe(st.session_state["pivot_scraped_vs_extracted"])
 
         st.markdown("""---""")
 
