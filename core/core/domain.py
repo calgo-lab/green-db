@@ -117,3 +117,63 @@ class SustainabilityLabel(BaseModel):
     class Config:
         orm_mode = True
         use_enum_values = True
+
+
+# if you make an edge case decision, please document it here.
+class ProductCategory(str, Enum):
+
+    # bags
+    BACKPACK = "BACKPACK"
+    BAG = "BAG"
+
+    # fashion
+    SKIRT = "SKIRT"
+    SHOES = "SHOES"  # includes slippers.
+
+    # casual or all purpose athletic shoes
+    # dont include shoes if theyre only used for one specific sport
+    # eg. football/soccer boots
+    SNEAKERS = "SNEAKERS"
+
+    SOCKS = "SOCKS"  # does not include tights/pantyhoses or leggings
+    UNDERWEAR = "UNDERWEAR"  # includes tights/pantyhoses
+    PANTS = "PANTS"  # includes leggings
+    JEANS = "JEANS"
+    SHORTS = "SHORTS"
+
+    TOP = "TOP"
+    SHIRT = "SHIRT"  # as opposed to TSHIRT.
+    TSHIRT = "TSHIRT"  # as opposed to SHIRT.
+    BLOUSE = "BLOUSE"
+    SWEATER = "SWEATER"
+    JACKET = "JACKET"  # includes vests
+
+    SUIT = "SUIT"  # for suit sets. no individual pants/jackets/shirts
+    TRACKSUIT = "TRACKSUIT"
+    DRESS = "DRESS"
+    OVERALL = "OVERALL"
+    NIGHTWEAR = "NIGHTWEAR"  # includes bathrobes
+    SWIMWEAR = "SWIMWEAR"
+
+    # electronics
+    GAMECONSOLE = "GAMECONSOLE"  # Playstations and the like. No video games.
+    HEADPHONES = "HEADPHONES"  # no speakers, no headsets, just headphones.
+    HEADSET = "HEADSET"
+    LAPTOP = "LAPTOP"  # no tablets. For hybrids/convertibles like the Chromebook use LAPTOP.
+    PRINTER = "PRINTER"  # it can be a fax but it also has to be able to print.
+    SMARTPHONE = "SMARTPHONE"
+    SMARTWATCH = "SMARTWATCH"
+    TABLET = "TABLET"  # see also LAPTOP.
+    TV = "TV"
+
+    # household
+    COOKER_HOOD = "COOKER_HOOD"
+    DISHWASHER = "DISHWASHER"
+    DRYER = "DRYER"  # only standalone dryers. washer-dryers are in WASHER
+    FREEZER = "FREEZER"  # only standalone freezers.
+    FRIDGE = "FRIDGE"  # includes Fridge-Freezers
+    LINEN = "LINEN"  # bed sheets.
+    OVEN = "OVEN"
+    STOVE = "STOVE"
+    TOWEL = "TOWEL"  # for drying yourself. No kitchen towels.
+    WASHER = "WASHER"  # includes Washer-Dryers

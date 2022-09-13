@@ -2,8 +2,7 @@
 
 
 **Preprint:** [![arXiv](https://img.shields.io/badge/arXiv-2205.02908-blue)](https://arxiv.org/abs/2205.02908)\
-**v0.2.0:** [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6576662.svg)](https://doi.org/10.5281/zenodo.6576662)\
-**v0.1.0:** [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6078039.svg)](https://doi.org/10.5281/zenodo.6078039)
+**Dataset:** [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6078038.svg)](https://doi.org/10.5281/zenodo.6078038)
 
 
 
@@ -83,7 +82,7 @@ If you are using our code or the GreenDB dataset, please reference the [preprint
 
 ## Research
 
-- [1]: Jäger, Sebastian, Bießmann, Felix, Flick, Alexander, Sanchez Garcia, Jessica Adriana, von den Driesch, Kaspar, & Brendel, Karl. (2022). GreenDB: A Product-by-Product Sustainability Database (0.2.0) [Data set]. Zenodo. https://doi.org/10.5281/zenodo.6078038
+- [1]: Jäger, Sebastian, Bießmann, Felix, Flick, Alexander, Sanchez Garcia, Jessica Adriana, von den Driesch, Kaspar, & Brendel, Karl. (2022). GreenDB: A Product-by-Product Sustainability Database [Data set]. Zenodo. https://doi.org/10.5281/zenodo.6078038
 - [2]: Jäger, S., Greene, J., Jakob, M., Korenke, R., Santarius, T., & Biessmann, F. (2022). GreenDB: Toward a Product-by-Product Sustainability Database. [ArXiv, abs/2205.02908](https://arxiv.org/abs/2205.02908).
 - [3]: Cathérine Lehmann. (2021). Scaling sustainability advice - Options for generating large-scale green consumption recommendations. URL: https://green-consumption-assistant.de/wp-content/uploads/GCA-Working-Paper-I-Scaling-Sustainability-Advice.pdf
 
@@ -91,7 +90,7 @@ If you are using our code or the GreenDB dataset, please reference the [preprint
 ## Publications that use the GreenDB
 
 1. Gossen, M., Jäger, S., Hoffmann, M.L., Biessmann, F., Korenke, R., & Santarius, T. (2022). Nudging Sustainable Consumption: A Large-Scale Data Analysis of Sustainability Labels for Fashion in German Online Retail. Frontiers in Sustainability. DOI: https://doi.org/10.3389/frsus.2022.922984 
-2. Flick, A., Jaeger, S., Garcia, J.A., Driesch, K.V., Brendel, K., & Biessmann, F. (2022). GreenDB - A Dataset and Benchmark for Extraction of Sustainability Information of Consumer Goods. [ArXiv, abs/2207.10733](https://arxiv.org/abs/2207.10733).
+2. Jäger, S., Flick, A., Garcia, J.A., Driesch, K.V., Brendel, K., & Biessmann, F. (2022). GreenDB - A Dataset and Benchmark for Extraction of Sustainability Information of Consumer Goods. [ArXiv, abs/2207.10733](https://arxiv.org/abs/2207.10733). DOI: https://doi.org/10.48550/arXiv.2207.10733
 
 
 ## Disclaimer!

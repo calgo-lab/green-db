@@ -24,9 +24,7 @@ from core.constants import (
 from core.domain import ConsumerLifestageType, CountryType, GenderType, PageType, ScrapedPage
 
 from ..splash import minimal_script
-from ..start_scripts.amazon_de import get_settings as get_amazon_de_settings
-from ..start_scripts.amazon_fr import get_settings as get_amazon_fr_settings
-from ..start_scripts.amazon_gb import get_settings as get_amazon_gb_settings
+from ..start_scripts.amazon_eu import get_settings as get_amazon_eu_settings
 from ..start_scripts.asos_fr import get_settings as get_asos_fr_settings
 from ..start_scripts.hm_fr import get_settings as get_hm_fr_settings
 from ..start_scripts.otto_de import get_settings as get_otto_de_settings
@@ -43,9 +41,9 @@ SETTINGS = {
     TABLE_NAME_SCRAPING_ZALANDO_FR: get_zalando_fr_settings(),
     TABLE_NAME_SCRAPING_ZALANDO_GB: get_zalando_gb_settings(),
     TABLE_NAME_SCRAPING_HM_FR: get_hm_fr_settings(),
-    TABLE_NAME_SCRAPING_AMAZON_DE: get_amazon_de_settings(),
-    TABLE_NAME_SCRAPING_AMAZON_FR: get_amazon_fr_settings(),
-    TABLE_NAME_SCRAPING_AMAZON_GB: get_amazon_gb_settings(),
+    TABLE_NAME_SCRAPING_AMAZON_DE: get_amazon_eu_settings("de"),
+    TABLE_NAME_SCRAPING_AMAZON_FR: get_amazon_eu_settings("fr"),
+    TABLE_NAME_SCRAPING_AMAZON_GB: get_amazon_eu_settings("uk"),
 }
 
 
@@ -242,7 +240,7 @@ class BaseSpider(Spider):
             country=self.country,
             url=response.url,
             html=response.body.decode("utf-8"),
-            page_type=PageType.SERP,
+            page_type=PageType.SERP.value,
             category=response.meta.get("category"),
             gender=response.meta.get("gender"),
             consumer_lifestage=response.meta.get("consumer_lifestage"),
@@ -272,7 +270,7 @@ class BaseSpider(Spider):
             country=self.country,
             url=response.url,
             html=response.body.decode("utf-8"),
-            page_type=PageType.PRODUCT,
+            page_type=PageType.PRODUCT.value,
             category=response.meta.get("category"),
             gender=response.meta.get("gender"),
             consumer_lifestage=response.meta.get("consumer_lifestage"),
