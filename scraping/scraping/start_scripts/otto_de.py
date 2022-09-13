@@ -206,4 +206,4 @@ def household() -> List[dict]:
 
 
 def get_settings() -> List[dict]:
-    return clothes_and_shoes() + bags() + textiles() + household()
+    return clothes_and_shoes() + bags() + textiles() + household() + electronics()
