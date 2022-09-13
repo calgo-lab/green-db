@@ -31,14 +31,7 @@ _LABEL_MAPPING = {
     "Reducing CO2": CertificateType.CARBON_TRUST_REDUCING,
     "The Nordic Swan Ecolabel": CertificateType.NORDIC_SWAN_ECOLABEL,
     "C02 compensé de ClimatePartner": CertificateType.CLIMATE_NEUTRAL_CLIMATE_PARTNER,
-    "Pre-owned Certified": CertificateType.OTHER,
     "Pre-owned": CertificateType.OTHER,
-    "indice de réparabilité 0": CertificateType.INDICE_DE_REPARABILITE_0,
-    "indice de réparabilité 1": CertificateType.INDICE_DE_REPARABILITE_1,
-    "indice de réparabilité 2": CertificateType.INDICE_DE_REPARABILITE_2,
-    "indice de réparabilité 3": CertificateType.INDICE_DE_REPARABILITE_3,
-    "indice de réparabilité 4": CertificateType.INDICE_DE_REPARABILITE_4,
-
 }
 
 
@@ -162,8 +155,9 @@ def get_repairability_index(soup: BeautifulSoup) -> Optional[str]:
         soup (BeautifulSoup): Parsed HTML
 
     Returns:
-        Optional[str]: `str` object with the repairability index. If nothing was found `None` is
-        returned.
+        Optional[str]: `str` object with the repairability index. The string format complies with
+        the naming convention of the index in the 'sustainability-labels.json'.
+        If nothing was found `None` is returned.
     """
 
     targets = [
@@ -172,8 +166,12 @@ def get_repairability_index(soup: BeautifulSoup) -> Optional[str]:
 
     def parse_repairability_index(repairability_index: BeautifulSoup) -> Optional[str]:
         if repairability_index and repairability_index.find("img"):
-            repairability_index = int(float(repairability_index.find("img").get("alt")) // 2)
-            return "indice de réparabilité " + str(repairability_index)
+            repairability_index = float(repairability_index.find("img").get("alt"))
+            if repairability_index < 8:
+                repairability_index = int(repairability_index//2)*2
+                return f"FR Repair Index {repairability_index}-{repairability_index+1.9}"
+            else:
+                return "FR Repair Index 8-10"
         return None
 
     return _handle_parse(targets, parse_repairability_index)

@@ -79,7 +79,7 @@ def test_amazon_electronics() -> None:
                     "Applications pour tous les jours. Vous avez besoin de plus parce que vous "
                     "faites plus.",
         brand="HP",
-        sustainability_labels=[CertificateType.EPEAT, CertificateType.INDICE_DE_REPARABILITE_2],  # type: ignore[attr-defined] # noqa
+        sustainability_labels=[CertificateType.EPEAT, CertificateType.FR_REPAIR_INDEX_4-5.9],  # type: ignore[attr-defined] # noqa
         price=209.0,
         currency=CurrencyType.EUR,
         image_urls=['https://m.media-amazon.com/images/W/WEBPjpg',
