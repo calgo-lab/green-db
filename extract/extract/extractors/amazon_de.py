@@ -23,6 +23,7 @@ _LABEL_MAPPING = {
     "Organic Content Standard 100": CertificateType.ORGANIC_CONTENT_STANDARD_100,
     "Organic Content Standard Blended": CertificateType.ORGANIC_CONTENT_STANDARD_BLENDED,
     "Compact by Design (zertifiziert durch Amazon)": CertificateType.COMPACT_BY_DESIGN,
+    "Compact by Design (Certified by Amazon)": CertificateType.COMPACT_BY_DESIGN,
     "Natrue": CertificateType.NATRUE,
     "Cradle to Cradle Certified": CertificateType.CRADLE_TO_CRADLE,
     "Responsible Wool Standard": CertificateType.RESPONSIBLE_WOOL_STANDARD,
@@ -32,6 +33,8 @@ _LABEL_MAPPING = {
     "The Nordic Swan Ecolabel": CertificateType.NORDIC_SWAN_ECOLABEL,
     "C02 compensé de ClimatePartner": CertificateType.CLIMATE_NEUTRAL_CLIMATE_PARTNER,
     "Pre-owned": CertificateType.OTHER,
+    "Pre-owned Certified": CertificateType.OTHER,
+    "TCO Certified": CertificateType.TCO,  # TODO: There are 2 additional types for phone and laptop
 }
 
 
