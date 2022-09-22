@@ -1,6 +1,7 @@
 import pandas as pd
 import plotly.express as px
 import streamlit as st
+
 from core.constants import ALL_SCRAPING_TABLE_NAMES
 from database.connection import GreenDB, Scraping
 from database.tables import SustainabilityLabelsTable
@@ -10,10 +11,14 @@ def fetch_and_cache_scraped_page_and_product_count_per_merchant_and_country(
     green_db: GreenDB,
 ) -> None:
     """
-    TODO
+    Fetch product count and scraped pages per merchant and country for all timestamps. Save
+        objects in streamlit cache: pd.DataFrame with queried data and linear plotly
+        charts for scraped pages vs extracted product over timestamp and over timestamp per
+        merchant.
+
 
     Args:
-        green_db (GreenDB): _description_
+        green_db (GreenDB): `Connection` for the GreenDB.
     """
     if "data_frame_scraped_page_and_product_count_per_merchant_and_country" not in st.session_state:
 
@@ -76,10 +81,12 @@ def fetch_and_cache_scraped_page_and_product_count_per_merchant_and_country(
 
 def fetch_and_cache_latest_product_count_per_merchant_and_country(green_db: GreenDB) -> None:
     """
-    TODO
+    Fetch product count per merchant and country for latest timestamp available. Saves a
+        pd.DataFrame with queried data, total number of extracted products and total number of
+        unique merchants in streamlit cache.
 
     Args:
-        green_db (GreenDB): _description_
+        green_db (GreenDB): `Connection` for the GreenDB.
     """
     if "data_frame_latest_product_count_per_merchant_and_country" not in st.session_state:
 
@@ -101,7 +108,9 @@ def fetch_and_cache_latest_product_count_per_merchant_and_country(green_db: Gree
 
 def fetch_and_cache_latest_scraped_page_count_per_merchant_and_country() -> None:
     """
-    TODO
+    Fetch scraped pages per merchant and country for latest timestamp available. Saves in
+        streamlit cache a pd.DataFrame with queried data for all tables in ScrapingDB and total
+        number of scraped pages.
     """
     if "data_frame_latest_scraped_page_count_per_merchant_and_country" not in st.session_state:
 
@@ -123,10 +132,12 @@ def fetch_and_cache_latest_scraped_page_count_per_merchant_and_country() -> None
 
 def fetch_and_cache_latest_product_count_per_category_and_merchant(green_db: GreenDB) -> None:
     """
-    TODO
+    Fetch product count per category per merchant for latest timestamp available. Save objects
+        in streamlit cache: pd.DataFrame with queried data, total number of categories and bar
+        chart for fetched data.
 
     Args:
-        green_db (GreenDB): _description_
+        green_db (GreenDB): `Connection` for the GreenDB.
     """
     if "data_frame_latest_product_count_per_category_and_merchant" not in st.session_state:
         st.session_state[
@@ -150,10 +161,11 @@ def fetch_and_cache_latest_product_count_per_category_and_merchant(green_db: Gre
 
 def fetch_and_cache_product_count_with_unknown_sustainability_label(green_db: GreenDB) -> None:
     """
-    TODO
+    Fetch product count for products by unknown and unknown sustainability label(s). Saves a
+        pd.DataFrame and a line plot from queried data in streamlit cache.
 
     Args:
-        green_db (GreenDB): _description_
+        green_db (GreenDB): `Connection` for the GreenDB.
     """
     if "data_frame_product_count_with_unknown_sustainability_label" not in st.session_state:
         st.session_state[
@@ -169,10 +181,11 @@ def fetch_and_cache_product_count_with_unknown_sustainability_label(green_db: Gr
 
 def render_sidebar(green_db: GreenDB) -> None:
     """
-    TODO
+    Render streamlit sidebar from previously initialized session states. Sidebar provides a
+        quick overview of the latest data extraction.
 
     Args:
-        green_db (GreenDB): _description_
+        green_db (GreenDB): `Connection` for the GreenDB.
     """
     st.title("Overview")
     st.write("From last data extraction on:")
@@ -207,10 +220,11 @@ def render_sidebar(green_db: GreenDB) -> None:
 
 def render_basic_information(green_db: GreenDB) -> None:
     """
-    TODO
+    Render 'basic information' from previously initialized session states in streamlit. This is
+        the main tab of the report, includes all plots.
 
     Args:
-        green_db (GreenDB): _description_
+        green_db (GreenDB): `Connection` for the GreenDB.
     """
     fetch_and_cache_scraped_page_and_product_count_per_merchant_and_country(green_db)
     st.subheader("Scraped pages and extracted products")
@@ -235,10 +249,11 @@ def render_basic_information(green_db: GreenDB) -> None:
 
 def render_extended_information(green_db: GreenDB) -> None:
     """
-    TODO
+    Render dataframes from session states in streamlit just when user clicks to fetch the data.
+        Secondary tab of the report.
 
     Args:
-        green_db (GreenDB): _description_
+        green_db (GreenDB): `Connection` for the GreenDB.
     """
     if st.button("Do you want to fetch this data? - Could take a while."):
 

@@ -461,7 +461,7 @@ class GreenDB(Connection):
     def get_latest_product_count_with_unknown_sustainability_label(self) -> pd.DataFrame:
         """
         Fetch product count for products by unknown and unknown sustainability label(s) by latest
-        available timestamp.
+            available timestamp.
 
         Returns:
             pd.DataFrame: Query results as `pd.DataFrame`.
@@ -509,9 +509,9 @@ class GreenDB(Connection):
     def get_latest_products_with_unknown_sustainability_label(self) -> pd.DataFrame:
         """
         Fetch list of products with unknown label, provides id, name, merchant and url per row
-        for latest timestamp available.
+            for latest timestamp available.
 
         Returns:
-           pd.DataFrame: Query results as `Dataframe`.
+           pd.DataFrame: Query results as `pd.Dataframe`.
         """
         return self.get_products_with_unknown_sustainability_label(self.get_latest_timestamp())

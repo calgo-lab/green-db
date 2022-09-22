@@ -1,6 +1,6 @@
 import streamlit as st
-from database.connection import GreenDB
 
+from database.connection import GreenDB
 from monitoring.utils import render_basic_information, render_extended_information, render_sidebar
 
 green_db = GreenDB()
