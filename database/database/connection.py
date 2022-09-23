@@ -1,3 +1,4 @@
+from collections import Counter
 from datetime import datetime
 from logging import getLogger
 from typing import Iterator, List, Optional, Type
@@ -397,8 +398,8 @@ class GreenDB(Connection):
         self, timestamp: Optional[datetime] = None
     ) -> pd.DataFrame:
         """
-        Fetch product count per sustainability_label(s) by given timestamp or if `None` for all
-            data.
+        Fetch product count per sustainability_label by given timestamp or if `None` for all
+            data. Products could have more than one sustainable label.
 
         Args:
             timestamp (Optional[datetime], optional): Defines which rows to fetch. Defaults to None.
@@ -408,19 +409,20 @@ class GreenDB(Connection):
         """
         with self._session_factory() as db_session:
             columns = (self._database_class.timestamp, self._database_class.sustainability_labels)
-            query = db_session.query(*columns, func.count())
-
+            query = db_session.query(*columns)
             if timestamp is not None:
-                query = query.filter(self._database_class.timestamp == timestamp)
+                query = query.filter(self._database_class.timestamp == timestamp).all()
 
-            query = query.group_by(*columns).all()
-            return pd.DataFrame(
-                query, columns=["timestamp", "labels", "product_count"]
-            ).convert_dtypes()  # use best possible dtypes
+            return pd.DataFrame.from_dict(
+                (Counter([label for row in [q[1] for q in query] for label in row])),
+                orient="index",
+                columns=["product_count"],
+            )
 
     def get_latest_product_count_per_sustainability_label(self) -> pd.DataFrame:
         """
-        Fetch product count per sustainability_label(s) for latest available timestamp.
+        Fetch product count per sustainability label for latest available timestamp. Products could
+            have more than one sustainable label.
 
         Returns:
             pd.DataFrame: Query results as `pd.DataFrame`.
@@ -431,9 +433,8 @@ class GreenDB(Connection):
         self, timestamp: Optional[datetime] = None
     ) -> pd.DataFrame:
         """
-        Fetch product count for products by unknown and unknown sustainability label(s) by given
-            timestamp or if `None` for all data; where unknown is `certificate:UNKNOWN` and known
-            are all other certificates.
+        Fetch product count for products with `certificate:UNKNOWN` by given timestamp or if `None`
+            for all data.
 
         Args:
             timestamp (Optional[datetime], optional): Defines which rows to fetch. Defaults to None.
