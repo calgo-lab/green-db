@@ -108,9 +108,9 @@ def fetch_and_cache_latest_product_count_per_merchant_and_country(green_db: Gree
 
 def fetch_and_cache_latest_scraped_page_count_per_merchant_and_country() -> None:
     """
-    Fetch scraped pages per merchant and country for latest timestamp available. Saves in
-        streamlit cache a pd.DataFrame with queried data for all tables in ScrapingDB and total
-        number of scraped pages.
+    Fetch scraped pages per merchant and country for latest timestamp available. Saves a
+        pd.DataFrame with queried data for all tables in ScrapingDB and total number of scraped
+        pages in streamlit cache.
     """
     if "data_frame_latest_scraped_page_count_per_merchant_and_country" not in st.session_state:
 
@@ -134,7 +134,7 @@ def fetch_and_cache_latest_product_count_per_category_and_merchant(green_db: Gre
     """
     Fetch product count per category per merchant for latest timestamp available. Save objects
         in streamlit cache: pd.DataFrame with queried data, total number of categories and bar
-        chart for fetched data.
+        plot for fetched data.
 
     Args:
         green_db (GreenDB): `Connection` for the GreenDB.
@@ -161,8 +161,8 @@ def fetch_and_cache_latest_product_count_per_category_and_merchant(green_db: Gre
 
 def fetch_and_cache_product_count_with_unknown_sustainability_label(green_db: GreenDB) -> None:
     """
-    Fetch product count for products by unknown and unknown sustainability label(s). Saves a
-        pd.DataFrame and a line plot from queried data in streamlit cache.
+    Fetch product count for products with unknown sustainability label(s). Saves a pd.DataFrame and
+         a line plot from queried data in streamlit cache.
 
     Args:
         green_db (GreenDB): `Connection` for the GreenDB.
@@ -250,7 +250,7 @@ def render_basic_information(green_db: GreenDB) -> None:
 def render_extended_information(green_db: GreenDB) -> None:
     """
     Render dataframes from session states in streamlit just when user clicks to fetch the data.
-        Secondary tab of the report.
+        This is the secondary tab of the report.
 
     Args:
         green_db (GreenDB): `Connection` for the GreenDB.

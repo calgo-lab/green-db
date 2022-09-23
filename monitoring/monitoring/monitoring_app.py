@@ -20,10 +20,11 @@ def main() -> None:
     basic_information_tab, extended_information_tab = st.tabs(
         ["Basic Information", "Extended Information (as Tables)"]
     )
-
+    # Main tab with all plots
     with basic_information_tab:
         render_basic_information(green_db)
 
+    # Secondary tab with dataframes
     with extended_information_tab:
         render_extended_information(green_db)
 
