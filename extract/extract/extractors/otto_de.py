@@ -37,9 +37,7 @@ def extract_otto_de(parsed_page: ParsedPage) -> Optional[Product]:
 
     name = properties.get("name")
     brand = properties.get("brand")
-
     gtin = properties.get("gtin13")
-    gtin = int(gtin) if type(gtin) == str and len(gtin) > 0 else None
 
     offer = safely_return_first_element(offer := properties.get("offers", {}), offer)
     offer_properties = offer.get("properties", {})
@@ -58,11 +56,15 @@ def extract_otto_de(parsed_page: ParsedPage) -> Optional[Product]:
 
         name = assign_if_none(name, json_ld.get("name"))
         description = assign_if_none(description, json_ld.get("description"))
+        gtin = assign_if_none(gtin, json_ld.get("gtin13"))
+
         brand = assign_if_none(brand, json_ld.get("brand", {}).get("name"))
 
         offers = json_ld.get("offers", {})
         price = assign_if_none(price, offers.get("price"))
         currency = assign_if_none(currency, offers.get("priceCurrency"))
+
+    gtin = int(gtin) if type(gtin) == str and len(gtin) > 0 else None
 
     product_data = _get_product_data(parsed_page.beautiful_soup)
     parsed_url = urlparse(parsed_page.scraped_page.url)
