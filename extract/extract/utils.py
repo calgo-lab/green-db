@@ -27,6 +27,22 @@ def safely_return_first_element(list_object: List[Any], else_return: Any = {}) -
         return list_object[0]
 
 
+def assign_if_none(attribute: Any, value: Any):
+    """
+    Helper function that returns value if attribute is None, otherwise attribute is returned.
+
+    Args:
+        attribute (Any): obejct to check if it is None.
+        value (Any): object to return if attribute is None.
+
+    Returns:
+        Any: either attribute or value.
+    """
+    if attribute is None:
+        return value
+    return attribute
+
+
 def get_product_from_JSON_LD(json_ld: List[Any], else_return: Any = {}) -> Any:
     """
     Helper function to return the product element of a `JSON_LD` object if it exists.

@@ -13,7 +13,8 @@ from pydantic import ValidationError
 from core.domain import CertificateType, Product
 
 from ..parse import DUBLINCORE, JSON_LD, MICRODATA, ParsedPage
-from ..utils import safely_return_first_element, sustainability_labels_to_certificates
+from ..utils import safely_return_first_element, sustainability_labels_to_certificates, \
+    assign_if_none
 
 logger = getLogger(__name__)
 
@@ -34,26 +35,34 @@ def extract_otto_de(parsed_page: ParsedPage) -> Optional[Product]:
     microdata = safely_return_first_element(parsed_page.schema_org.get(MICRODATA, [{}]))
     properties = microdata.get("properties", {})
 
-    name = properties.get("name", None)
-    brand = properties.get("brand", None)
+    name = properties.get("name")
+    brand = properties.get("brand")
 
-    if brand is None:
-        json_ld = safely_return_first_element(parsed_page.schema_org.get(JSON_LD, [{}]))
-        brand = json_ld.get("brand", {}).get("name", None)
-
-    gtin = properties.get("gtin13", None)
+    gtin = properties.get("gtin13")
     gtin = int(gtin) if type(gtin) == str and len(gtin) > 0 else None
 
     offer = safely_return_first_element(offer := properties.get("offers", {}), offer)
     offer_properties = offer.get("properties", {})
-    currency = offer_properties.get("priceCurrency", None)
-    if price := offer_properties.get("price", None):
+    currency = offer_properties.get("priceCurrency")
+    if price := offer_properties.get("price"):
         price = safely_return_first_element(price, price)
 
     dublin_core = safely_return_first_element(parsed_page.schema_org.get(DUBLINCORE, [{}]))
 
     first_element = safely_return_first_element(dublin_core.get("elements", [{}]))
-    description = first_element.get("content", None)
+    description = first_element.get("content")
+
+    # check for attributes in json_ld if previous extraction fails
+    if not all([name, brand, price, currency, description]):
+        json_ld = safely_return_first_element(parsed_page.schema_org.get(JSON_LD, [{}]))
+
+        name = assign_if_none(name, json_ld.get("name"))
+        description = assign_if_none(description, json_ld.get("description"))
+        brand = assign_if_none(brand, json_ld.get("brand", {}).get("name"))
+
+        offers = json_ld.get("offers", {})
+        price = assign_if_none(price, offers.get("price"))
+        currency = assign_if_none(currency, offers.get("priceCurrency"))
 
     product_data = _get_product_data(parsed_page.beautiful_soup)
     parsed_url = urlparse(parsed_page.scraped_page.url)
