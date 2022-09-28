@@ -94,11 +94,12 @@ def extract_amazon_de(parsed_page: ParsedPage) -> Optional[Product]:
     if repairability_index := get_repairability_index(soup):
         sustainability_texts.append(repairability_index)
 
-    if "Energy Label" in sustainability_texts:
-        if label_with_level := get_energy_label_level(soup):
-            sustainability_texts = [
-                label.replace("Energy Label", label_with_level) for label in sustainability_texts
-            ]
+    for energy_label in ["Energielabel", "Energy Label"]:
+        if energy_label in sustainability_texts:
+            if label_with_level := get_energy_label_level(soup):
+                sustainability_texts = [
+                    label.replace(energy_label, label_with_level) for label in sustainability_texts
+                ]
 
     sustainability_labels = sustainability_labels_to_certificates(
         sustainability_texts, _LABEL_MAPPING
