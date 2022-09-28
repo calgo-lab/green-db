@@ -51,7 +51,7 @@ def extract_otto_de(parsed_page: ParsedPage) -> Optional[Product]:
     description = first_element.get("content")
 
     # check for attributes in json_ld if above extraction fails
-    if not all([name, brand, price, currency, description]):
+    if not all([name, brand, price, currency, description, gtin]):
         json_ld = safely_return_first_element(parsed_page.schema_org.get(JSON_LD, [{}]))
 
         name = check_none_or_alternative(name, json_ld.get("name"))
