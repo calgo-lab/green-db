@@ -27,20 +27,21 @@ def safely_return_first_element(list_object: List[Any], else_return: Any = {}) -
         return list_object[0]
 
 
-def assign_if_none(attribute: Any, value: Any):
+def check_none_or_alternative(check_value: Any, alternative_value: Any):
     """
-    Helper function that returns value if attribute is None, otherwise attribute is returned.
+    Helper function that returns alternative_value if check_value is None, otherwise check_value
+    is returned.
 
     Args:
-        attribute (Any): obejct to check if it is None.
-        value (Any): object to return if attribute is None.
+        check_value (Any): object to check if it is None.
+        alternative_value (Any): object to return if check_value is None.
 
     Returns:
-        Any: either attribute or value.
+        Any: either check_value or alternative_value.
     """
-    if attribute is None:
-        return value
-    return attribute
+    if check_value is None:
+        return alternative_value
+    return check_value
 
 
 def get_product_from_JSON_LD(json_ld: List[Any], else_return: Any = {}) -> Any:

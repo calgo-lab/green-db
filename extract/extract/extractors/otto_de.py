@@ -14,7 +14,7 @@ from core.domain import CertificateType, Product
 
 from ..parse import DUBLINCORE, JSON_LD, MICRODATA, ParsedPage
 from ..utils import safely_return_first_element, sustainability_labels_to_certificates, \
-    assign_if_none
+    check_none_or_alternative
 
 logger = getLogger(__name__)
 
@@ -50,19 +50,18 @@ def extract_otto_de(parsed_page: ParsedPage) -> Optional[Product]:
     first_element = safely_return_first_element(dublin_core.get("elements", [{}]))
     description = first_element.get("content")
 
-    # check for attributes in json_ld if previous extraction fails
+    # check for attributes in json_ld if above extraction fails
     if not all([name, brand, price, currency, description]):
         json_ld = safely_return_first_element(parsed_page.schema_org.get(JSON_LD, [{}]))
 
-        name = assign_if_none(name, json_ld.get("name"))
-        description = assign_if_none(description, json_ld.get("description"))
-        gtin = assign_if_none(gtin, json_ld.get("gtin13"))
-
-        brand = assign_if_none(brand, json_ld.get("brand", {}).get("name"))
+        name = check_none_or_alternative(name, json_ld.get("name"))
+        description = check_none_or_alternative(description, json_ld.get("description"))
+        gtin = check_none_or_alternative(gtin, json_ld.get("gtin13"))
+        brand = check_none_or_alternative(brand, json_ld.get("brand", {}).get("name"))
 
         offers = json_ld.get("offers", {})
-        price = assign_if_none(price, offers.get("price"))
-        currency = assign_if_none(currency, offers.get("priceCurrency"))
+        price = check_none_or_alternative(price, offers.get("price"))
+        currency = check_none_or_alternative(currency, offers.get("priceCurrency"))
 
     gtin = int(gtin) if type(gtin) == str and len(gtin) > 0 else None
 
