@@ -41,18 +41,18 @@ def test_amazon_electronics() -> None:
         gender=None,
         consumer_lifestage=None,
         name="Candy RapidÓ RO 1486DWMCE/1-S Waschmaschine / 8 kg/Smarte Bedienung mit Wi-Fi + "
-             "Bluetooth/Easy Iron - Dampffunktion, Weiß",
+        "Bluetooth/Easy Iron - Dampffunktion, Weiß",
         description="Geben Sie Ihr Modell ein, um sicherzustellen, dass dieser Artikel passt.. "
-                    "Installation type: Freistehend. Nützliches Produkt mit hoher Qualität. Candy "
-                    "RapidÓ RO 1486DWMCE/1-S Waschmaschine / 8 kg / Smarte Bedienung mit Wi-Fi + "
-                    "Bluetooth / Easy Iron - Dampffunktion Candy RapidÓ RO 1486DWMCE/1-S "
-                    "Waschmaschine / 8 kg/Smarte Bedienung mit Wi-Fi + Bluetooth/Easy Iron - "
-                    "Dampffunktion Weiß",
+        "Installation type: Freistehend. Nützliches Produkt mit hoher Qualität. Candy "
+        "RapidÓ RO 1486DWMCE/1-S Waschmaschine / 8 kg / Smarte Bedienung mit Wi-Fi + "
+        "Bluetooth / Easy Iron - Dampffunktion Candy RapidÓ RO 1486DWMCE/1-S "
+        "Waschmaschine / 8 kg/Smarte Bedienung mit Wi-Fi + Bluetooth/Easy Iron - "
+        "Dampffunktion Weiß",
         brand="Candy",
         sustainability_labels=[CertificateType.EU_ENERGY_LABEL_A],  # type: ignore[attr-defined]
         price=477.69,
         currency=CurrencyType.EUR,
-        image_urls=['https://m.media-amazon.com/images/I/31Fr9GUdkhL.jpg'],
+        image_urls=["https://m.media-amazon.com/images/I/31Fr9GUdkhL.jpg"],
         colors=["Weiß"],
         sizes=None,
         gtin=None,
