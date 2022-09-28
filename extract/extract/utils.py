@@ -27,7 +27,7 @@ def safely_return_first_element(list_object: List[Any], else_return: Any = {}) -
         return list_object[0]
 
 
-def check_none_or_alternative(check_value: Any, alternative_value: Any):
+def check_none_or_alternative(check_value: Any, alternative_value: Any) -> Any:
     """
     Helper function that returns alternative_value if check_value is None, otherwise check_value
     is returned.

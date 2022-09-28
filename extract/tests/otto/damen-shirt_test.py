@@ -69,7 +69,7 @@ def test_otto_basic(requests_mock: Adapter) -> None:
         image_urls=[
             "https://i.otto.mock/i/otto/1fa02ae8-fd31-567d-b799-373220a2628a",
             "https://i.otto.mock/i/otto/81ee310e-d75f-550e-b329-b3bc972b3943",
-            "https://i.otto.mock/i/otto/c964235a-bd84-59b7-8397-941f02254fff"
+            "https://i.otto.mock/i/otto/c964235a-bd84-59b7-8397-941f02254fff",
         ],
         price=12.99,
         currency=CurrencyType.EUR,

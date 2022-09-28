@@ -13,8 +13,11 @@ from pydantic import ValidationError
 from core.domain import CertificateType, Product
 
 from ..parse import DUBLINCORE, JSON_LD, MICRODATA, ParsedPage
-from ..utils import safely_return_first_element, sustainability_labels_to_certificates, \
-    check_none_or_alternative
+from ..utils import (
+    check_none_or_alternative,
+    safely_return_first_element,
+    sustainability_labels_to_certificates,
+)
 
 logger = getLogger(__name__)
 
