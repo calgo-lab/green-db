@@ -178,9 +178,10 @@ def get_repairability_index(soup: BeautifulSoup) -> Optional[str]:
             repairability_index = float(repairability_index.find("img").get("alt"))
             if repairability_index < 8:
                 repairability_index = int(repairability_index // 2) * 2
-                return f"FR Repair Index {repairability_index}-{repairability_index+1.9}"
+                #French Repair Index: 0 - 1.9
+                return f"French Repair Index: {repairability_index} - {repairability_index+1.9}"
             else:
-                return "FR Repair Index 8-10"
+                return "French Repair Index: 8 - 10"
         return None
 
     return _handle_parse(targets, parse_repairability_index)
