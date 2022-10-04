@@ -1,12 +1,14 @@
+from collections import Counter
 from datetime import datetime
 from logging import getLogger
 from typing import Iterator, List, Optional, Type
 
-from sqlalchemy import Column
-from sqlalchemy.orm import Query, Session
+import pandas as pd
+from sqlalchemy import func
+from sqlalchemy.orm import Session
 
 from core.constants import DATABASE_NAME_GREEN_DB, DATABASE_NAME_SCRAPING
-from core.domain import Product, ScrapedPage, SustainabilityLabel
+from core.domain import CertificateType, PageType, Product, ScrapedPage, SustainabilityLabel
 
 from .tables import (
     SCRAPING_TABLE_CLASS_FOR,
@@ -39,28 +41,6 @@ class Connection:
 
         bootstrap_tables(database_name)
 
-    # TODO: calling this one multiple times returns fewer and fewer examples...
-    # TODO: Test and revise this!
-    def _batching_query(
-        self,
-        db_query: Query,
-        id_column: Column,
-        DomainClass: Type[Product] | Type[ScrapedPage],
-        batch_size: int = 1000,
-    ) -> Iterator[Product | ScrapedPage]:
-        last_id = None
-
-        while True:
-            batched_query = db_query
-            if last_id is not None:
-                batched_query = batched_query.filter(id_column > last_id)
-            chunk = batched_query.limit(batch_size).all()
-            if not chunk:
-                break
-            last_id = chunk[-1].id
-            for row in chunk:
-                yield DomainClass.from_orm(row)
-
     def write(self, domain_object: ScrapedPage | Product) -> ScrapingTable | GreenDBTable:
         """
         Writes a `domain_object` into the database and returns an updated Table object.
@@ -77,33 +57,54 @@ class Connection:
 
         return db_object
 
-    def __get_latest_timestamp(self, db_session: Session) -> datetime:
+    def __get_latest_timestamp(
+        self,
+        db_session: Session,
+        database_class: Optional[
+            Type[GreenDBTable] | Type[ScrapingTable] | Type[SustainabilityLabelsTable]
+        ] = None,
+    ) -> datetime:
         """
         Helper method to fetch the latest available timestamp.
 
         Args:
             db_session (Session): `db_session` use for the query
+            database_class (
+                Optional[Type[GreenDBTable] | Type[ScrapingTable] | Type[SustainabilityLabelsTable]]
+            ): Optional database table to query. Defaults to None.
 
         Returns:
             datetime: Latest timestamp available in database
         """
+        database_class = self._database_class if database_class is None else database_class
+
         return (
-            db_session.query(self._database_class.timestamp)
+            db_session.query(database_class.timestamp)
             .distinct()
-            .order_by(self._database_class.timestamp.desc())
+            .order_by(database_class.timestamp.desc())
             .first()
             .timestamp
         )
 
-    def get_latest_timestamp(self) -> datetime:
+    def get_latest_timestamp(
+        self,
+        database_class: Optional[
+            Type[GreenDBTable] | Type[ScrapingTable] | Type[SustainabilityLabelsTable]
+        ] = None,
+    ) -> datetime:
         """
         Fetch the latest available timestamp.
+
+        Args:
+            database_class (
+                Optional[Type[GreenDBTable] | Type[ScrapingTable] | Type[SustainabilityLabelsTable]]
+            ): Optional database table to query. Defaults to None.
 
         Returns:
             datetime: Latest timestamp available in database
         """
         with self._session_factory() as db_session:
-            return self.__get_latest_timestamp(db_session)
+            return self.__get_latest_timestamp(db_session, database_class=database_class)
 
     def is_timestamp_available(self, timestamp: datetime) -> bool:
         """
@@ -124,6 +125,8 @@ class Connection:
 
 
 class Scraping(Connection):
+    _database_class: Type[ScrapingTable]
+
     def __init__(self, table_name: str):
         """
         `Connection` for scraping table defined by `table_name`.
@@ -154,15 +157,12 @@ class Scraping(Connection):
                 db_session.query(self._database_class).filter(self._database_class.id == id).first()
             )
 
-    def get_scraped_pages_for_timestamp(
-        self, timestamp: datetime, batch_size: int = 1000
-    ) -> Iterator[ScrapedPage]:
+    def get_scraped_pages_for_timestamp(self, timestamp: datetime) -> Iterator[ScrapedPage]:
         """
         Fetch all `ScrapedPage`s for given `timestamp`.
 
         Args:
-            timestamp (datetime): Defines which rows to fetch
-            batch_size (int, optional): How many rows to fetch simultaneously. Defaults to 1000.
+            timestamp (datetime): Defines which rows to fetch.
 
         Yields:
             Iterator[ScrapedPage]: Iterator over the domain object representations
@@ -173,22 +173,61 @@ class Scraping(Connection):
             )
             return (ScrapedPage.from_orm(row) for row in query.all())
 
-    def get_latest_scraped_pages(self, batch_size: int = 1000) -> Iterator[ScrapedPage]:
+    def get_latest_scraped_pages(self) -> Iterator[ScrapedPage]:
         """
         Fetch all `ScrapedPage`s for latest available `timestamp`.
-
-        Args:
-            batch_size (int, optional): How many rows to fetch simultaneously. Defaults to 1000.
 
         Yields:
             Iterator[ScrapedPage]: Iterator over the domain object representations
         """
-        return self.get_scraped_pages_for_timestamp(
-            self.get_latest_timestamp(), batch_size=batch_size
-        )
+        return self.get_scraped_pages_for_timestamp(self.get_latest_timestamp())
+
+    def get_scraped_page_count_per_merchant_and_country(
+        self, timestamp: Optional[datetime] = None
+    ) -> pd.DataFrame:
+        """
+        Fetch count of scraped pages (excludes SERP `page_type`) for given `timestamp` or if `None`
+            for all data.
+
+        Args:
+            timestamp (Optional[datetime], optional): Defines which rows to fetch. Defaults to None.
+
+        Returns:
+            pd.DataFrame: Query results as `pd.DataFrame`.
+        """
+        with self._session_factory() as db_session:
+            columns = (
+                self._database_class.timestamp,
+                self._database_class.merchant,
+                self._database_class.country,
+            )
+
+            query = db_session.query(
+                *columns,
+                func.count(),
+            ).filter(self._database_class.page_type == PageType.PRODUCT.value)
+
+            if timestamp is not None:
+                query = query.filter(self._database_class.timestamp == timestamp)
+
+            query = query.group_by(*columns).all()
+            return pd.DataFrame(
+                query, columns=["timestamp", "merchant", "country", "scraped_page_count"]
+            ).convert_dtypes()  # use best possible dtypes
+
+    def get_latest_scraped_page_count_per_merchant_and_country(self) -> pd.DataFrame:
+        """
+        Fetch count of scraped pages (excludes SERP `page_type`) for latest available timestamp.
+
+        Returns:
+           pd.DataFrame: Query results as `pd.DataFrame`.
+        """
+        return self.get_scraped_page_count_per_merchant_and_country(self.get_latest_timestamp())
 
 
 class GreenDB(Connection):
+    _database_class: Type[GreenDBTable]
+
     def __init__(self) -> None:
         """
         `Connection` for the GreenDB.
@@ -253,35 +292,226 @@ class GreenDB(Connection):
             else:
                 return list(sustainability_labels_iterator)
 
-    def get_products(
-        self, timestamp: Optional[datetime] = None, batch_size: int = 1000
-    ) -> Iterator[Product]:
+    def get_products_for_timestamp(self, timestamp: datetime) -> Iterator[Product]:
         """
-        Fetch all `Product`s for given `timestamp`. If `timestamp` is `None` it returns all.
+        Fetch all `Product`s for given `timestamp`.
 
         Args:
-            timestamp (Optional[datetime], optional): Defines which products to fetch.
-                Defaults to None.
+            timestamp (datetime): Defines which rows to fetch
 
         Yields:
             Iterator[Product]: `Iterator` of domain object representations
         """
         with self._session_factory() as db_session:
-            query = db_session.query(self._database_class)
-
-            if timestamp is not None:
-                query = query.filter(self._database_class.timestamp == timestamp)
-
+            query = db_session.query(self._database_class).filter(
+                self._database_class.timestamp == timestamp
+            )
             return (Product.from_orm(row) for row in query.all())
 
-    def get_latest_products(self, batch_size: int = 1000) -> Iterator[Product]:
+    def get_latest_products(self) -> Iterator[Product]:
         """
         Fetch all `Product`s for latest available `timestamp`.
-
-        Args:
-            batch_size (int, optional): How many rows to fetch simultaneously. Defaults to 1000.
 
         Yields:
             Iterator[Product]: `Iterator` of domain object representation
         """
-        return self.get_products(self.get_latest_timestamp(), batch_size=batch_size)
+        return self.get_products_for_timestamp(self.get_latest_timestamp())
+
+    def get_product_count_per_merchant_and_country(
+        self, timestamp: Optional[datetime] = None
+    ) -> pd.DataFrame:
+        """
+        Fetch product count by merchant and country for given timestamp, or if `None` for all data.
+
+        Args:
+            timestamp (Optional[datetime], optional): Defines which rows to fetch. Defaults to None.
+
+        Returns:
+            pd.DataFrame: Query results as `pd.DataFrame`.
+        """
+        with self._session_factory() as db_session:
+            columns = (
+                self._database_class.timestamp,
+                self._database_class.merchant,
+                self._database_class.country,
+            )
+            query = db_session.query(
+                *columns,
+                func.count(),
+            )
+
+            if timestamp is not None:
+                query = query.filter(self._database_class.timestamp == timestamp)
+
+            query = query.group_by(*columns).order_by(self._database_class.timestamp.desc()).all()
+
+            return pd.DataFrame(
+                query, columns=["timestamp", "merchant", "country", "product_count"]
+            ).convert_dtypes()  # use best possible dtypes
+
+    def get_latest_product_count_per_merchant_and_country(self) -> pd.DataFrame:
+        """
+        Fetch product count per merchant and country for given timestamp for latest available
+            timestamp.
+
+        Returns:
+            pd.DataFrame: Query results as `pd.DataFrame`.
+        """
+        return self.get_product_count_per_merchant_and_country(self.get_latest_timestamp())
+
+    def get_product_count_per_category_and_merchant(
+        self, timestamp: Optional[datetime] = None
+    ) -> pd.DataFrame:
+        """
+        Fetch product count per category and merchant for given timestamp, or if `None` for all
+            data.
+
+        Args:
+            timestamp (Optional[datetime], optional): Defines which rows to fetch. Defaults to None.
+
+        Returns:
+            pd.DataFrame: Query results as `pd.DataFrame`.
+        """
+        with self._session_factory() as db_session:
+            columns = (self._database_class.category, self._database_class.merchant)
+            query = db_session.query(*columns, func.count())
+
+            if timestamp is not None:
+                query = query.filter(self._database_class.timestamp == timestamp)
+
+            query = query.group_by(*columns).all()
+
+            return pd.DataFrame(
+                query, columns=["category", "merchant", "product_count"]
+            ).convert_dtypes()  # use best possible dtypes
+
+    def get_latest_product_count_per_category_and_merchant(self) -> pd.DataFrame:
+        """
+        Fetch product count per category and merchant for latest available timestamp.
+
+        Returns:
+            pd.DataFrame: Query results as `pd.DataFrame`.
+        """
+        return self.get_product_count_per_category_and_merchant(self.get_latest_timestamp())
+
+    def get_product_count_per_sustainability_label(
+        self, timestamp: Optional[datetime] = None
+    ) -> pd.DataFrame:
+        """
+        Fetch product count per sustainability_label by given timestamp or if `None` for all
+            data. Products could have more than one sustainable label.
+
+        Args:
+            timestamp (Optional[datetime], optional): Defines which rows to fetch. Defaults to None.
+
+        Returns:
+            pd.DataFrame: Query results as `pd.DataFrame`.
+        """
+        with self._session_factory() as db_session:
+            columns = (self._database_class.timestamp, self._database_class.sustainability_labels)
+            query = db_session.query(*columns)
+            if timestamp is not None:
+                query = query.filter(self._database_class.timestamp == timestamp).all()
+
+            return pd.DataFrame.from_dict(
+                (Counter([label for row in [q[1] for q in query] for label in row])),
+                orient="index",
+                columns=["product_count"],
+            )
+
+    def get_latest_product_count_per_sustainability_label(self) -> pd.DataFrame:
+        """
+        Fetch product count per sustainability label for latest available timestamp. Products could
+            have more than one sustainable label.
+
+        Returns:
+            pd.DataFrame: Query results as `pd.DataFrame`.
+        """
+        return self.get_product_count_per_sustainability_label(self.get_latest_timestamp())
+
+    def get_product_count_with_unknown_sustainability_label(
+        self, timestamp: Optional[datetime] = None
+    ) -> pd.DataFrame:
+        """
+        Fetch product count for products with `certificate:UNKNOWN` by given timestamp or if `None`
+            for all data.
+
+        Args:
+            timestamp (Optional[datetime], optional): Defines which rows to fetch. Defaults to None.
+
+        Returns:
+            pd.DataFrame: Query results as `pd.DataFrame`.
+        """
+        with self._session_factory() as db_session:
+            query = db_session.query(self._database_class.timestamp, func.count())
+
+            if timestamp is not None:
+                query = query.filter(self._database_class.timestamp == timestamp)
+
+            query = (
+                query.filter(
+                    self._database_class.sustainability_labels.any(CertificateType.UNKNOWN.value)  # type: ignore[attr-defined] # noqa
+                )
+                .group_by(self._database_class.timestamp)
+                .all()
+            )
+            return pd.DataFrame(
+                query, columns=["timestamp", "product_count"]
+            ).convert_dtypes()  # use best possible dtypes
+
+    def get_latest_product_count_with_unknown_sustainability_label(self) -> pd.DataFrame:
+        """
+        Fetch product count for products with `certificate:UNKNOWN` for latest available timestamp.
+
+        Returns:
+            pd.DataFrame: Query results as `pd.DataFrame`.
+        """
+        return self.get_product_count_with_unknown_sustainability_label(self.get_latest_timestamp())
+
+    def get_products_with_unknown_sustainability_label(
+        self, timestamp: Optional[datetime] = None
+    ) -> pd.DataFrame:
+        """
+        Fetch list of products with unknown sustainability label with: id, name, merchant and url
+            per row by given timestamp or if `None` for all data.
+
+        Args:
+            timestamp (Optional[datetime], optional): Defines which rows to fetch. Defaults to None.
+
+        Returns:
+            pd.DataFrame: Query results as `pd.DataFrame`.
+        """
+        columns = (
+            self._database_class.id,
+            self._database_class.timestamp,
+            self._database_class.source,
+            self._database_class.name,
+            self._database_class.url,
+            self._database_class.sustainability_labels,
+        )
+
+        with self._session_factory() as db_session:
+            query = db_session.query(*columns)
+
+            if timestamp is not None:
+                query = query.filter(self._database_class.timestamp == timestamp)
+
+            query = query.filter(
+                self._database_class.sustainability_labels.any(
+                    CertificateType.UNKNOWN.value  # type: ignore[attr-defined]
+                )
+            ).all()
+
+            return pd.DataFrame(
+                query, columns=["id", "timestamp", "merchant", "name", "url", "labels"]
+            ).convert_dtypes()  # use best possible dtypes
+
+    def get_latest_products_with_unknown_sustainability_label(self) -> pd.DataFrame:
+        """
+        Fetch list of products with unknown sustainability label with: id, name, merchant and url
+            per row for latest available timestamp.
+
+        Returns:
+           pd.DataFrame: Query results as `pd.Dataframe`.
+        """
+        return self.get_products_with_unknown_sustainability_label(self.get_latest_timestamp())

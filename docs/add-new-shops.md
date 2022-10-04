@@ -5,6 +5,7 @@ If you want to add another to-be-scraped-shop, there are some files that need to
 
 1. [`core.core.constants.py`](../core/core/constants.py):
    - define another `TABLE_NAME_SCRAPING_<shop-name>_<country>` constant to create the single source of truth for the actual table name.
+   - add the new table name to ALL_SCRAPING_TABLE_NAMES.
    - `<country>` needs to be in [ISO_3166-1](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements) format.
 2. [`database.database.tables.py`](../database/database/tables.py):
    - since the necessary logic is inherited from base-classes, it's enough but still necessary to create the class: `<shop-name><country>ScrapingTable`. (There are examples of existing shops)
@@ -27,9 +28,7 @@ If you want to add another to-be-scraped-shop, there are some files that need to
 5. [`extract.extract.__init__.py`](../extract/extract/__init__.py):
    - import the implemented function: `extract_<shop-name>_<country>` from the created file: `extract.extract.extractors.<shop-name>_<country>.py`
    - add the function to the mapping: `EXTRACTOR_FOR_TABLE_NAME`
-6. [`workers.workers.__init__.py`](../workers/workers/__init__.py):
-   - add connection for `TABLE_NAME_SCRAPING_<shop-name>_<country>` to the mapping `CONNECTION_FOR_TABLE`
-7. [`scraping.start_scripts.<shop-name>_<country>.py`](../scraping/scraping/start_scripts):
+6. [`scraping.start_scripts.<shop-name>_<country>.py`](../scraping/scraping/start_scripts):
    - create a new file `<shop-name>_<country>.py`. (Check out others for examples)
    - implement a function with signature: `def get_settings() -> List[dict]:`
    - each dict corresponds to one product category. They should have these entries:
@@ -39,11 +38,11 @@ If you want to add another to-be-scraped-shop, there are some files that need to
      - `'consumer_lifestage'` (Optional) product age group (eg. `'ADULT'`, `'ALL_AGES'`, ...)
      - `'meta_data'` (Optional) json string containing additional product information.
        - `family` product family (eg. `'FASHION'`)
-8. [`scraping.scraping.spiders._base.py`](../scraping/scraping/spiders/_base.py)
+7. [`scraping.scraping.spiders._base.py`](../scraping/scraping/spiders/_base.py)
    - import the implemented function `get_settings` from the created file `scraping.start_scripts.<shop-name>.py` using an alias like this:
    `from ..start_scripts.<shop-name>_<country> import get_settings as get_<shop-name>_<country>_settings`
    - add a mapping of `TABLE_NAME_SCRAPING_<shop-name>_<country>` and the defined alias to the variable `SETTINGS`
-9. [`start-job.scripts.main.py`](../start-job/scripts/main.py):
+8. [`start-job.scripts.main.py`](../start-job/scripts/main.py):
    - add `TABLE_NAME_SCRAPING_<shop-name>_<country>` to the variable `MERCHANTS`
 
 You'r done. Good job :)
