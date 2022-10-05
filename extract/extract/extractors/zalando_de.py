@@ -153,7 +153,7 @@ def get_json_data(json_file: str) -> Any:
     try:
         return json.loads(json_file)
     except json.decoder.JSONDecodeError:
-        json_file = ElementTree.fromstring(f'<root>{json_file}</root>').text
+        json_file = ElementTree.fromstring(f"<root>{json_file}</root>").text
         return json.loads(json_file)
 
 
