@@ -171,19 +171,15 @@ def get_repairability_index(soup: BeautifulSoup) -> Optional[str]:
         If nothing was found `None` is returned.
     """
 
-    targets = [soup.find(id="repairabilityIndex_feature_div")]
-
-    def parse_repairability_index(repairability_index: BeautifulSoup) -> Optional[str]:
-        if repairability_index and repairability_index.find("img"):
+    if repairability_index := soup.find(id="repairabilityIndex_feature_div"):
+        if repairability_index.find("img"):
             repairability_index = float(repairability_index.find("img").get("alt"))
             if repairability_index < 8:
                 repairability_index = int(repairability_index // 2) * 2
                 return f"French Repair Index: {repairability_index} - {repairability_index+1.9}"
             else:
                 return "French Repair Index: 8 - 10"
-        return None
-
-    return _handle_parse(targets, parse_repairability_index)
+    return None
 
 
 def get_energy_label_level(soup: BeautifulSoup) -> Optional[str]:
