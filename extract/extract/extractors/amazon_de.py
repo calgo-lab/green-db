@@ -23,6 +23,7 @@ _LABEL_MAPPING = {
     "Organic Content Standard 100": CertificateType.ORGANIC_CONTENT_STANDARD_100,
     "Organic Content Standard Blended": CertificateType.ORGANIC_CONTENT_STANDARD_BLENDED,
     "Compact by Design (zertifiziert durch Amazon)": CertificateType.COMPACT_BY_DESIGN,
+    "Compact by Design (Certified by Amazon)": CertificateType.COMPACT_BY_DESIGN,
     "Natrue": CertificateType.NATRUE,
     "Cradle to Cradle Certified": CertificateType.CRADLE_TO_CRADLE,
     "Responsible Wool Standard": CertificateType.RESPONSIBLE_WOOL_STANDARD,
@@ -32,6 +33,8 @@ _LABEL_MAPPING = {
     "The Nordic Swan Ecolabel": CertificateType.NORDIC_SWAN_ECOLABEL,
     "C02 compensé de ClimatePartner": CertificateType.CLIMATE_NEUTRAL_CLIMATE_PARTNER,
     "Pre-owned": CertificateType.OTHER,
+    "Pre-owned Certified": CertificateType.OTHER,
+    "TCO Certified": CertificateType.TCO,  # TODO: There are 2 additional types for phone and laptop
 }
 
 
@@ -88,11 +91,15 @@ def extract_amazon_de(parsed_page: ParsedPage) -> Optional[Product]:
     sustainability_spans = soup.find_all("span", id=re.compile("CPF-BTF-Certificate-Name"))
     sustainability_texts = [span.text for span in sustainability_spans]
 
-    if "Energy Label" in sustainability_texts:
-        if label_with_level := get_energy_label_level(soup):
-            sustainability_texts = [
-                label.replace("Energy Label", label_with_level) for label in sustainability_texts
-            ]
+    if repairability_index := get_repairability_index(soup):
+        sustainability_texts.append(repairability_index)
+
+    for energy_label in ["Energielabel", "Energy Label"]:
+        if energy_label in sustainability_texts:
+            if label_with_level := get_energy_label_level(soup):
+                sustainability_texts = [
+                    label.replace(energy_label, label_with_level) for label in sustainability_texts
+                ]
 
     sustainability_labels = sustainability_labels_to_certificates(
         sustainability_texts, _LABEL_MAPPING
@@ -148,6 +155,30 @@ def _handle_parse(targets: list, parse: Callable) -> Optional[Any]:
         result = [target for target in targets if target][0]
         return parse(result)
 
+    return None
+
+
+def get_repairability_index(soup: BeautifulSoup) -> Optional[str]:
+    """
+    Helper function that extracts the french repairability index if available.
+
+    Args:
+        soup (BeautifulSoup): Parsed HTML
+
+    Returns:
+        Optional[str]: `str` object with the repairability index. The string format complies with
+        the naming convention of the index in the 'sustainability-labels.json'.
+        If nothing was found `None` is returned.
+    """
+
+    if repairability_index := soup.find(id="repairabilityIndex_feature_div"):
+        if repairability_index.find("img"):
+            repairability_index = float(repairability_index.find("img").get("alt"))
+            if repairability_index < 8:
+                repairability_index = int(repairability_index // 2) * 2
+                return f"French Repair Index: {repairability_index} - {repairability_index+1.9}"
+            else:
+                return "French Repair Index: 8 - 10"
     return None
 
 

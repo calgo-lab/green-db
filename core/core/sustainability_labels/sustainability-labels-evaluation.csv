@@ -1,5 +1,5 @@
 id,name,category,cred:credibility,eco:chemicals,eco:lifetime,eco:water,eco:inputs,eco:quality,eco:energy,eco:waste_air,eco:environmental_management,social:labour_rights,social:business_practice,social:social_rights,social:company_responsibility,social:conflict_minerals
-certificate:BETTER_COTTON_INITIATIVE,Better Cotton Initiative (BCI),Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+certificate:BETTER_COTTON_INITIATIVE,Better Cotton Initiative (BCI) / Better Cotton,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 certificate:BIORE,bioRe,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 certificate:BLUE_ANGEL,Blauer Engel,Fashion,93,86,0,81,100,100,0,24,40,55,0,0,0,0
 certificate:BLUE_ANGEL_LAPTOPS,Blauer Engel - Laptops,Electronics,73,77,87,0,0,100,40,71,0,0,0,0,0,0
@@ -30,10 +30,15 @@ certificate:EU_ENERGY_LABEL_G,EU Energielabel G,Electronics,100,0,0,0,0,0,0,0,0,
 certificate:FAIR_FOR_LIFE,fair for life,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 certificate:FAIR_LABOR_ASSOCIATION,Fair Labor Association,Fashion,85,11,0,11,0,0,0,28,60,73,47,16,0,0
 certificate:FAIR_WEAR_FOUNDATION,Fair Wear Foundation,Fashion,90,0,0,0,0,0,0,0,0,96,61,0,0,0
-certificate:FAIRTRADE_COTTON,Fairtrade Cotton,Fashion,91,84,0,43,71,26,58,35,30,79,60,60,0,0
+certificate:FAIRTRADE_COTTON,Fairtrade Cotton,Fashion,91,84,0,26,0,0,58,35,30,79,60,60,0,0
 certificate:FAIRTRADE_COTTON_PROGRAMM,Fairtrade-Baumwollprogramm,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 certificate:FAIRTRADE_INTERNATIONAL,Fairtrade International,Fashion,80,64,0,21,0,0,68,73,45,92,23,0,0,0
 certificate:FAIRTRADE_TEXTILE_PRODUCTION,Fairtrade Textile Production,Fashion,93,64,0,21,0,0,68,73,45,92,23,0,0,0
+certificate:FR_REPAIR_INDEX_0-1.9,FR Repair Index 0-1.9,Electronics,100,0,0,0,0,0,0,0,0,0,0,0,0,0
+certificate:FR_REPAIR_INDEX_2-3.9,FR Repair Index 2-3.9,Electronics,100,0,0,0,0,0,0,0,0,0,0,0,0,0
+certificate:FR_REPAIR_INDEX_4-5.9,FR Repair Index 4-5.9,Electronics,100,0,0,0,0,0,0,0,0,0,0,0,0,0
+certificate:FR_REPAIR_INDEX_6-7.9,FR Repair Index 6-7.9,Electronics,100,0,70,0,0,0,0,0,0,0,0,0,0,0
+certificate:FR_REPAIR_INDEX_8-10,FR Repair Index 8-10,Electronics,100,0,90,0,0,0,0,0,0,0,0,0,0,0
 certificate:FUJITSU_GREEN_IT,Fujitsu - Green IT,Electronics,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 certificate:GLOBAL_RECYCLED_STANDARD,Global Recycled Standard,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 certificate:GOOD_CASHMERE_STANDARD,The Good Cashmere Standard®,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
@@ -41,8 +46,22 @@ certificate:GOTS_MADE_WITH_ORGANIC_MATERIALS,GOTS - label grade ‘made with org
 certificate:GOTS_ORGANIC,GOTS - label grade ‘organic’,Fashion,89,89,0,63,83,100,90,13,30,87,10,21,0,0
 certificate:GREEN_BUTTON,Grüner Knopf,Fashion,90,89,0,60,80,100,90,10,30,85,10,20,0,0
 certificate:HIGG_INDEX_MATERIALS,Higg Index Materials,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+certificate:HIGG_INDEX_MATERIALS_1,Higg Index Products_Level_1,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+certificate:HIGG_INDEX_MATERIALS_2,Higg Index Products Level 2,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+certificate:HIGG_INDEX_MATERIALS_3,Higg Index Products Level 3,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+certificate:HIGG_INDEX_MATERIALS_BASELINE_0,Higg Index Materials_Baeline_0,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 certificate:HM_CONSCIOUS,H&M Conscious,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-certificate:IFIXIT_REPARABILITY_INDEX,iFixit Score ,Electronics,100,0,100,0,0,0,0,0,0,0,0,0,0,0
+certificate:IFIXIT_REPARABILITY_INDEX,iFixit Score ,Electronics,100,0,0,0,0,0,0,0,0,0,0,0,0,0
+certificate:IFIXIT_REPARABILITY_INDEX_1,ifixit Reparierbarkeitsindex 1,Electronics,100,0,0,0,0,0,0,0,0,0,0,0,0,0
+certificate:IFIXIT_REPARABILITY_INDEX_10,ifixit Reparierbarkeitsindex 10,Electronics,100,0,100,0,0,0,0,0,0,0,0,0,0,0
+certificate:IFIXIT_REPARABILITY_INDEX_2,ifixit Reparierbarkeitsindex 2,Electronics,100,0,0,0,0,0,0,0,0,0,0,0,0,0
+certificate:IFIXIT_REPARABILITY_INDEX_3,ifixit Reparierbarkeitsindex 3,Electronics,100,0,0,0,0,0,0,0,0,0,0,0,0,0
+certificate:IFIXIT_REPARABILITY_INDEX_4,ifixit Reparierbarkeitsindex 4,Electronics,100,0,0,0,0,0,0,0,0,0,0,0,0,0
+certificate:IFIXIT_REPARABILITY_INDEX_5,ifixit Reparierbarkeitsindex 5,Electronics,100,0,0,0,0,0,0,0,0,0,0,0,0,0
+certificate:IFIXIT_REPARABILITY_INDEX_6,ifixit Reparierbarkeitsindex 6,Electronics,100,0,60,0,0,0,0,0,0,0,0,0,0,0
+certificate:IFIXIT_REPARABILITY_INDEX_7,ifixit Reparierbarkeitsindex 7,Electronics,100,0,70,0,0,0,0,0,0,0,0,0,0,0
+certificate:IFIXIT_REPARABILITY_INDEX_8,ifixit Reparierbarkeitsindex 8,Electronics,100,0,80,0,0,0,0,0,0,0,0,0,0,0
+certificate:IFIXIT_REPARABILITY_INDEX_9,ifixit Reparierbarkeitsindex 9,Electronics,100,0,90,0,0,0,0,0,0,0,0,0,0,0
 certificate:IVN_NATURLEDER,IVN Naturleder,Fashion,82,98,0,87,85,0,100,62,90,93,31,18,0,0
 certificate:IVN_NATURTEXTIL,IVN Naturtextil,Fashion,82,100,0,95,96,100,90,76,100,94,18,21,0,0
 certificate:LEATHER_WORKING_GROUP,The Leather Working Group,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
@@ -66,14 +85,12 @@ certificate:TUEV_RHEINLAND_GREEN_PRODUCT_MARK_SMARTPHONES,TÜV Rheinland Green P
 certificate:VFI_SOZIAL_FAIR,sozial-fair VFI Sozialstandard für Fertigwaren,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 certificate:WORLD_FAIR_TRADE_ORGANIZATION,World Fair Trade Organization,Fashion,54,0,0,2,0,0,38,8,30,73,49,35,0,0
 missing_1,Modal TENCEL™,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-missing_10,ifixit Reparierbarkeitsindex,Electronics,100,0,70,0,0,0,0,0,0,0,0,0,0,0
-missing_11,ifixit Reparierbarkeitsindex,Electronics,100,0,0,0,0,0,0,0,0,0,0,0,0,0
-missing_12,ifixit Reparierbarkeitsindex,Electronics,100,0,0,0,0,0,0,0,0,0,0,0,0,0
+missing_14,Higg Index,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+missing_15,SEAQUAL™,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+missing_16,Pre-owned Certified - bei Amazon,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 missing_2,Lyocell Tencel™,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 missing_3,TENCEL™ Lyocell,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 missing_4,LENZING™ ECOVERO™,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 missing_5,Viscose Ecovero™,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 missing_6,Primeblue,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 missing_7,The Nordic Swan - Electronics,Electronics,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-missing_8,ifixit Reparierbarkeitsindex,Electronics,100,0,90,0,0,0,0,0,0,0,0,0,0,0
-missing_9,ifixit Reparierbarkeitsindex,Electronics,100,0,80,0,0,0,0,0,0,0,0,0,0,0

@@ -106,6 +106,7 @@ _LABEL_MAPPING = {
     "Recycled Claim Standard 100": CertificateType.RECYCLED_CLAIM_STANDARD_100,
     "bioRe® Sustainable Textiles Standard": CertificateType.BIORE,
     "Cradle to Cradle Certified™ GOLD": CertificateType.CRADLE_TO_CRADLE_GOLD,
+    "Cradle to Cradle Certified™ SILVER": CertificateType.CRADLE_TO_CRADLE_SILVER,
     "Cradle to Cradle Certified™ BRONZE": CertificateType.CRADLE_TO_CRADLE_BRONZE,
     "FSC®": CertificateType.FOREST_STEWARDSHIP_COUNCIL,
     "Responsible Wool Standard": CertificateType.RESPONSIBLE_WOOL_STANDARD,
