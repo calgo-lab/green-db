@@ -22,17 +22,17 @@ RUN wget -i - http://ftp.de.debian.org/debian/pool/non-free/f/fonts-ubuntu/fonts
     http://ftp.de.debian.org/debian/pool/non-free/f/fonts-ubuntu/ttf-ubuntu-font-family_0.83-4_all.deb \
     http://ftp.de.debian.org/debian/pool/main/e/enchant/libenchant1c2a_1.6.0-11.1+b1_amd64.deb \
     http://security.ubuntu.com/ubuntu/pool/main/i/icu/libicu66_66.1-2ubuntu2.1_amd64.deb \
-    http://security.ubuntu.com/ubuntu/pool/main/libj/libjpeg-turbo/libjpeg-turbo8_2.0.3-0ubuntu1.20.04.1_amd64.deb \
+    http://security.ubuntu.com/ubuntu/pool/main/libj/libjpeg-turbo/libjpeg-turbo8_2.0.3-0ubuntu1.20.04.3_amd64.deb \
     && dpkg --install fonts-ubuntu_0.83-4_all.deb \
     && dpkg --install ttf-ubuntu-font-family_0.83-4_all.deb \
     && dpkg --force-all --install libenchant1c2a_1.6.0-11.1+b1_amd64.deb \
     && dpkg --install libicu66_66.1-2ubuntu2.1_amd64.deb \
-    && dpkg --install libjpeg-turbo8_2.0.3-0ubuntu1.20.04.1_amd64.deb \
+    && dpkg --install libjpeg-turbo8_2.0.3-0ubuntu1.20.04.3_amd64.deb \
     && rm fonts-ubuntu_0.83-4_all.deb \
     ttf-ubuntu-font-family_0.83-4_all.deb \
     libenchant1c2a_1.6.0-11.1+b1_amd64.deb \
     libicu66_66.1-2ubuntu2.1_amd64.deb \
-    libjpeg-turbo8_2.0.3-0ubuntu1.20.04.1_amd64.deb \
+    libjpeg-turbo8_2.0.3-0ubuntu1.20.04.3_amd64.deb \
     && apt --fix-broken -y --no-install-recommends install \
     && rm -rf /var/lib/apt/lists/* \
     && apt clean \
