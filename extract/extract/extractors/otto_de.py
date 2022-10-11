@@ -13,7 +13,11 @@ from pydantic import ValidationError
 from core.domain import CertificateType, Product
 
 from ..parse import DUBLINCORE, JSON_LD, MICRODATA, ParsedPage
-from ..utils import safely_return_first_element, sustainability_labels_to_certificates
+from ..utils import (
+    check_none_or_alternative,
+    safely_return_first_element,
+    sustainability_labels_to_certificates,
+)
 
 logger = getLogger(__name__)
 
@@ -34,26 +38,35 @@ def extract_otto_de(parsed_page: ParsedPage) -> Optional[Product]:
     microdata = safely_return_first_element(parsed_page.schema_org.get(MICRODATA, [{}]))
     properties = microdata.get("properties", {})
 
-    name = properties.get("name", None)
-    brand = properties.get("brand", None)
-
-    if brand is None:
-        json_ld = safely_return_first_element(parsed_page.schema_org.get(JSON_LD, [{}]))
-        brand = json_ld.get("brand", {}).get("name", None)
-
-    gtin = properties.get("gtin13", None)
-    gtin = int(gtin) if type(gtin) == str and len(gtin) > 0 else None
+    name = properties.get("name")
+    brand = properties.get("brand")
+    gtin = properties.get("gtin13")
 
     offer = safely_return_first_element(offer := properties.get("offers", {}), offer)
     offer_properties = offer.get("properties", {})
-    currency = offer_properties.get("priceCurrency", None)
-    if price := offer_properties.get("price", None):
+    currency = offer_properties.get("priceCurrency")
+    if price := offer_properties.get("price"):
         price = safely_return_first_element(price, price)
 
     dublin_core = safely_return_first_element(parsed_page.schema_org.get(DUBLINCORE, [{}]))
 
     first_element = safely_return_first_element(dublin_core.get("elements", [{}]))
-    description = first_element.get("content", None)
+    description = first_element.get("content")
+
+    # check for attributes in json_ld if above extraction fails
+    if not all([name, brand, price, currency, description, gtin]):
+        json_ld = safely_return_first_element(parsed_page.schema_org.get(JSON_LD, [{}]))
+
+        name = check_none_or_alternative(name, json_ld.get("name"))
+        description = check_none_or_alternative(description, json_ld.get("description"))
+        gtin = check_none_or_alternative(gtin, json_ld.get("gtin13"))
+        brand = check_none_or_alternative(brand, json_ld.get("brand", {}).get("name"))
+
+        offers = json_ld.get("offers", {})
+        price = check_none_or_alternative(price, offers.get("price"))
+        currency = check_none_or_alternative(currency, offers.get("priceCurrency"))
+
+    gtin = int(gtin) if type(gtin) == str and len(gtin) > 0 else None
 
     product_data = _get_product_data(parsed_page.beautiful_soup)
     parsed_url = urlparse(parsed_page.scraped_page.url)
