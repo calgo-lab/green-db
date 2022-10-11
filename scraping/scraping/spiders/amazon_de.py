@@ -16,6 +16,7 @@ class AmazonSpider(BaseSpider):
     name = TABLE_NAME_SCRAPING_AMAZON_DE
     source, _ = name.rsplit("_", 1)
     allowed_domains = ["amazon.de"]
+    download_delay = 30
 
     def parse_SERP(self, response: SplashJsonResponse) -> Iterator[SplashRequest]:
         """
