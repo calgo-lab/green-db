@@ -1,6 +1,5 @@
 from logging import getLogger
 from typing import Iterator, Optional
-from urllib.parse import urlparse
 
 from scrapy_splash import SplashJsonResponse, SplashRequest
 
