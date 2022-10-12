@@ -1,5 +1,5 @@
 from logging import getLogger
-from typing import Iterator
+from typing import Iterator, Optional
 from urllib.parse import urlparse
 
 from scrapy_splash import SplashJsonResponse, SplashRequest
@@ -7,6 +7,7 @@ from scrapy_splash import SplashJsonResponse, SplashRequest
 from core.constants import TABLE_NAME_SCRAPING_AMAZON_DE
 
 from ..splash import minimal_script
+from ..utils import random_user_agent, strip_url
 from ._base import BaseSpider
 
 logger = getLogger(__name__)
@@ -18,7 +19,9 @@ class AmazonSpider(BaseSpider):
     allowed_domains = ["amazon.de"]
     download_delay = 30
 
-    def parse_SERP(self, response: SplashJsonResponse) -> Iterator[SplashRequest]:
+    def parse_SERP(
+        self, response: SplashJsonResponse, user_agent: Optional[str] = None
+    ) -> Iterator[SplashRequest]:
         """
         The `Scrapy` framework executes this method.
 
@@ -27,8 +30,8 @@ class AmazonSpider(BaseSpider):
         """
         # Save HTML to database
         self._save_SERP(response)
-        parsed_url = urlparse(response.url)
-        url_domain = f"https://{parsed_url.netloc}"
+        if user_agent is None:
+            user_agent = random_user_agent()
         urls = response.css("div.a-row.a-size-base.a-color-base a::attr(href)").getall()
         prices = response.css(
             "div.a-row.a-size-base.a-color-base span.a-price-whole::text"
@@ -40,7 +43,7 @@ class AmazonSpider(BaseSpider):
         for url, price in zip(urls, prices):
             if "refinements=p_n_cpf_eligible" in url:
                 yield SplashRequest(
-                    url=f"{url_domain}{url}",
+                    url=strip_url(response.urljoin(url)),
                     callback=self.parse_PRODUCT,
                     meta={
                         "request_meta_information": {
@@ -56,19 +59,21 @@ class AmazonSpider(BaseSpider):
                         "timeout": 180,
                         "allowed_content_type": "text/html",
                     },
+                    headers={"User-Agent": random_user_agent()},
                 )
 
         # Pagination
         next_path = response.css(".s-pagination-selected+ .s-pagination-button::attr(href)").get()
         if next_path:
             page_number = response.css(".s-pagination-selected+ .s-pagination-button::text").get()
-            next_page = f"{url_domain}{next_path}"
+            next_page = response.urljoin(next_path)
 
             logger.info(f"Next page found, number {page_number} at {next_page}")
 
             yield SplashRequest(
                 url=next_page,
                 callback=self.parse_SERP,
+                cb_kwargs=dict(user_agent=user_agent),
                 meta=self.create_default_request_meta(response, original_url=next_page),
                 endpoint="execute",
                 args={  # passed to Splash HTTP API
@@ -77,6 +82,7 @@ class AmazonSpider(BaseSpider):
                     "timeout": 180,
                     "allowed_content_type": "text/html",
                 },
+                headers={"User-Agent": user_agent},
             )
         else:
             logger.info(f"No further pages found for {response.url}")
