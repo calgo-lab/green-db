@@ -6,6 +6,7 @@ from monitoring.utils import (
     render_extended_information,
     render_leaderboards,
     render_sidebar,
+    render_product_ranking,
 )
 
 green_db = GreenDB()
@@ -22,8 +23,9 @@ def main() -> None:
     with st.sidebar:
         render_sidebar(green_db)
 
-    basic_information_tab, extended_information_tab, leaderboards_tab = st.tabs(
-        ["Basic Information", "Extended Information (as Tables)", "Leaderboard"]
+    basic_information_tab, extended_information_tab, leaderboards_tab, ranking_tab = st.tabs(
+        ["Basic Information", "Extended Information (as Tables)", "Leaderboards", "Products "
+                                                                                  "ranking"]
     )
     # Main tab with all plots
     with basic_information_tab:
@@ -36,6 +38,10 @@ def main() -> None:
     # Leaderboards tab
     with leaderboards_tab:
         render_leaderboards(green_db)
+
+    # Products ranking
+    with ranking_tab:
+        render_product_ranking(green_db)
 
 
 main()
