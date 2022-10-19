@@ -1,4 +1,5 @@
 import altair as alt
+import numpy as np
 import pandas as pd
 import plotly.express as px
 import streamlit as st
@@ -6,7 +7,6 @@ import streamlit as st
 from core.constants import ALL_SCRAPING_TABLE_NAMES
 from database.connection import GreenDB, Scraping
 from database.tables import SustainabilityLabelsTable
-
 
 
 def fetch_and_cache_scraped_page_and_product_count_per_merchant_and_country(
@@ -81,7 +81,6 @@ def fetch_and_cache_scraped_page_and_product_count_per_merchant_and_country(
         )
 
 
-
 def fetch_and_cache_latest_product_count_per_merchant_and_country(green_db: GreenDB) -> None:
     """
     Fetch product count per merchant and country for latest timestamp available. Saves a
@@ -109,7 +108,6 @@ def fetch_and_cache_latest_product_count_per_merchant_and_country(green_db: Gree
         )
 
 
-
 def fetch_and_cache_latest_scraped_page_count_per_merchant_and_country() -> None:
     """
     Fetch scraped pages per merchant and country for latest timestamp available. Saves a
@@ -132,7 +130,6 @@ def fetch_and_cache_latest_scraped_page_count_per_merchant_and_country() -> None
         st.session_state["latest_scraping_number_of_scraped_pages"] = st.session_state[
             "data_frame_latest_scraped_page_count_per_merchant_and_country"
         ]["scraped_page_count"].sum()
-
 
 
 def fetch_and_cache_latest_product_count_per_category_and_merchant(green_db: GreenDB) -> None:
@@ -162,7 +159,6 @@ def fetch_and_cache_latest_product_count_per_category_and_merchant(green_db: Gre
             color="merchant",
             text="product_count",
         )
-
 
 
 def fetch_and_cache_product_count_with_unknown_sustainability_label(green_db: GreenDB) -> None:
@@ -289,7 +285,7 @@ def render_extended_information(green_db: GreenDB) -> None:
         st.dataframe(st.session_state.latest_products_with_unknown_sustainability_label)
 
 
-def fetch_and_cache_product_count_credible_vs_not_credible_sustainability_labels(green_db: GreenDB):
+def fetch_and_cache_product_count_by_sustainability_label_credibility(green_db: GreenDB):
     if "plot_normalized_product_count_w_vs_wo_credibility" not in st.session_state:
         st.session_state["plot_normalized_product_count_w_vs_wo_credibility"] = (
             alt.Chart(green_db.get_product_count_credible_vs_not_credible_sustainability_labels())
@@ -300,15 +296,14 @@ def fetch_and_cache_product_count_credible_vs_not_credible_sustainability_labels
                 color="type",
             )
         )
-    if "data_frame_product_count_w_credibility" not in st.session_state:
-        st.session_state[
-            "data_frame_product_count_w_credibility"
-        ] = green_db.get_product_count_credible_vs_not_credible_sustainability_labels()
 
     if "plot_product_count_w_credibility" not in st.session_state:
         st.session_state["plot_product_count_w_credibility"] = px.pie(
-            st.session_state["data_frame_product_count_w_credibility"][
-                st.session_state["data_frame_product_count_w_credibility"].type == "credible"
+            st.session_state["data_frame_product_count_by_sustainability_label_credibility"][
+                st.session_state[
+                    "data_frame_product_count_by_sustainability_label_credibility"
+                ].type
+                == "credible"
             ],
             values="product_count",
             names="merchant",
@@ -345,14 +340,36 @@ def fetch_and_cache_product_count_credible_sustainability_labels_by_category(gre
             color="sustainability_label",
         )
 
+
 def render_sidebar_leaderboards(green_db: GreenDB) -> None:
+    if "data_frame_product_count_by_sustainability_label_credibility" not in st.session_state:
+        st.session_state[
+            "data_frame_product_count_by_sustainability_label_credibility"
+        ] = green_db.get_product_count_credible_vs_not_credible_sustainability_labels()
+
     st.write("All unique products by merchant")
-    st.dataframe(green_db.get_product_count_credible_vs_not_credible_sustainability_labels().groupby(["merchant"]).sum())
-    st.write("All unique products", green_db.scores()[0])
-    st.write("Unique products with credibility", green_db.scores()[1])
+    st.dataframe(
+        st.session_state["data_frame_product_count_by_sustainability_label_credibility"]
+        .groupby(["merchant"])
+        .sum()
+    )
+    st.write(
+        "All unique products",
+        st.session_state["data_frame_product_count_by_sustainability_label_credibility"][
+            "product_count"
+        ].sum(),
+    )
+    st.write(
+        "Unique products with credibility",
+        st.session_state["data_frame_product_count_by_sustainability_label_credibility"][
+            st.session_state["data_frame_product_count_by_sustainability_label_credibility"].type
+            == "credible"
+        ]["product_count"].sum(),
+    )
+
 
 def render_leaderboards(green_db: GreenDB) -> None:
-    fetch_and_cache_product_count_credible_vs_not_credible_sustainability_labels(green_db)
+    fetch_and_cache_product_count_by_sustainability_label_credibility(green_db)
     st.header("GreenDB Leaderboards")
     st.subheader("Product credibility by merchant")
     st.caption(
@@ -441,41 +458,76 @@ def render_leaderboards(green_db: GreenDB) -> None:
     )
 
 
-def render_product_ranking_filters_as_sidebar() -> None:
-    product_family_filter = st.radio(
-        label="Select product family:", options=["all", "electronics", "fashion"]
+def update_categories():
+    all_categories = list(
+        st.session_state["data_frame_latest_product_count_per_category_and_merchant"][
+            "category"
+        ].unique()
     )
-    st.session_state["product_family_filter"] = product_family_filter
+    electronics_categories = [
+        "PRINTER",
+        "LAPTOP",
+        "TABLET",
+        "DISHWASHER",
+        "FRIDGE",
+        "OVEN",
+        "COOKER_HOOD",
+        "FREEZER",
+        "WASHER",
+        "DRYER",
+    ]
+    fashion_categories = [
+        category for category in all_categories if category not in electronics_categories
+    ]
+    if st.session_state.radio == "all":
+        st.session_state["categories_options"] = all_categories
+    elif st.session_state.radio == "electronics":
+        st.session_state["categories_options"] = electronics_categories
+    elif st.session_state.radio == "fashion":
+        st.session_state["categories_options"] = fashion_categories
+
+
+def render_product_ranking_filters_as_sidebar() -> None:
+    if "categories_options" not in st.session_state:
+        st.session_state["categories_options"] = list(
+            st.session_state["data_frame_latest_product_count_per_category_and_merchant"][
+                "category"
+            ].unique()
+        )
+
+    st.radio(
+        label="Select product family:",
+        options=["all", "electronics", "fashion"],
+        key="radio",
+        on_change=update_categories,
+    )
 
     number_of_products_to_fetch = st.number_input(
-        "Choose number of products to fetch (max " "10k)", 10, 10000, 50
+        "Choose number of products to fetch (max " "10k)", min_value=10, max_value=10000, step=50
     )
     st.session_state["number_of_products_to_fetch"] = number_of_products_to_fetch
 
-    merchants = list(
-        st.session_state["data_frame_scraped_page_and_product_count_per_merchant_and_country"][
-            "merchant"
-        ].unique()
+    if "merchants_options" not in st.session_state:
+        st.session_state["merchants_options"] = list(
+            st.session_state["data_frame_scraped_page_and_product_count_per_merchant_and_country"][
+                "merchant"
+            ].unique()
+        )
+    st.session_state["merchant_filter"] = st.multiselect(
+        label="Filter by merchant",
+        options=st.session_state["merchants_options"],
+        default=st.session_state["merchants_options"][:],
     )
-    merchant_filter = st.multiselect(
-        label="Filter by merchant", options=merchants, default=merchants[:]
-    )
-    st.session_state["merchant_filter"] = merchant_filter
 
 
 def render_product_ranking(green_db: GreenDB) -> None:
     st.subheader("Top sustainable products in GreenDB")
     st.caption("From all unique products in the database with credible sustainability labels.")
-    # TODO Update the category field while family product gets updated.
-    categories = list(
-        st.session_state["data_frame_latest_product_count_per_category_and_merchant"][
-            "category"
-        ].unique()
+    st.session_state["category_filter"] = st.multiselect(
+        label="Filter by category",
+        options=st.session_state["categories_options"],
+        default=st.session_state["categories_options"][:],
     )
-    category_filter = st.multiselect(
-        label="Filter by category", options=categories, default=categories[:]
-    )
-    st.session_state["category_filter"] = category_filter
 
     credibility_button, credibility_text = st.columns(2)
     credibility_text.caption("Products ranked by their mean credibility score.")
@@ -494,7 +546,6 @@ def render_product_ranking(green_db: GreenDB) -> None:
         data_frame_top_products = green_db.get_top_products_by_credibility_or_sustainability_score(
             st.session_state["merchant_filter"],
             st.session_state["category_filter"],
-            st.session_state["product_family_filter"],
             st.session_state["number_of_products_to_fetch"],
             st.session_state["rank_by"],
         )
