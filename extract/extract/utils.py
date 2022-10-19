@@ -27,6 +27,23 @@ def safely_return_first_element(list_object: List[Any], else_return: Any = {}) -
         return list_object[0]
 
 
+def check_none_or_alternative(check_value: Any, alternative_value: Any) -> Any:
+    """
+    Helper function that returns alternative_value if check_value is None, otherwise check_value
+    is returned.
+
+    Args:
+        check_value (Any): object to check if it is None.
+        alternative_value (Any): object to return if check_value is None.
+
+    Returns:
+        Any: either check_value or alternative_value.
+    """
+    if check_value is None:
+        return alternative_value
+    return check_value
+
+
 def get_product_from_JSON_LD(json_ld: List[Any], else_return: Any = {}) -> Any:
     """
     Helper function to return the product element of a `JSON_LD` object if it exists.

@@ -131,12 +131,11 @@ _LABEL_MAPPING = {
 }
 
 _LABEL_MAPPING_HIGG = {
-    # TODO: Add Higg levels when available in sustainability-labels.json
     # Checkout how we extract the energy label levels for otto, this is very similar
     "0": CertificateType.HIGG_INDEX_MATERIALS,
-    "1": CertificateType.HIGG_INDEX_MATERIALS,
-    "2": CertificateType.HIGG_INDEX_MATERIALS,
-    "3": CertificateType.HIGG_INDEX_MATERIALS,
+    "1": CertificateType.HIGG_INDEX_MATERIALS_1,
+    "2": CertificateType.HIGG_INDEX_MATERIALS_2,
+    "3": CertificateType.HIGG_INDEX_MATERIALS_3,
 }
 
 
