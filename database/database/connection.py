@@ -4,7 +4,7 @@ from logging import getLogger
 from typing import Iterator, List, Optional, Type
 
 import pandas as pd
-from sqlalchemy import and_, case, desc, func, literal_column, cast, Integer
+from sqlalchemy import Integer, and_, case, cast, desc, func, literal_column, or_
 from sqlalchemy.orm import Session
 
 from core.constants import DATABASE_NAME_GREEN_DB, DATABASE_NAME_SCRAPING
@@ -518,7 +518,7 @@ class GreenDB(Connection):
 
     ### STARTS HERE ###
     ###################
-    def get_sustainability_labels_credibility_notnull(self):
+    def get_sustainability_labels_subquery(self):
         """
         Subquery to get sustainability labels filtered by latest timestamp and not null values.
         """
@@ -526,17 +526,16 @@ class GreenDB(Connection):
             return (
                 db_session.query(SustainabilityLabelsTable)
                 .filter(
-                    SustainabilityLabelsTable.cred_credibility != None,
                     SustainabilityLabelsTable.timestamp
                     == self.get_latest_timestamp(SustainabilityLabelsTable),
                 )
                 .subquery()
             )
 
-    def get_unique_products_with_unnest_sustainability_labels(self):
+    def get_all_unique_products(self):
         """
-        Subquery to get all unique product ids with it's label, unnested in case product contains
-        >1 label.
+        Subquery to get all unique product together with merchant, category and sustainability
+        labels.
         """
         with self._session_factory() as db_session:
             return (
@@ -545,7 +544,6 @@ class GreenDB(Connection):
                     # TO DO remove this and put it inside the join
                     self._database_class.merchant,
                     self._database_class.category,
-                    self._database_class.brand,
                     func.unnest(self._database_class.sustainability_labels).label(
                         "sustainability_label"
                     ),
@@ -554,275 +552,338 @@ class GreenDB(Connection):
                 .subquery()
             )
 
-    # Functions using all unique products
-    def get_product_count_credible_vs_not_credible_sustainability_labels(self, threshold: int = 50):
-        """
 
+    def get_product_count_credible_by_sustainability_label_credibility(
+        self, credibility_threshold: int = 50
+    ) -> pd.DataFrame:
+        """
+        Function counts products by its sustainability labels credibility, >= 50 is credible,
+            < 50 is not credible.
+
+        Args:
+            credibility_threshold (int): `credibility_threshold` to evaluate if sustainability
+            label is credible or not. Default set as 50.
+
+        Returns:
+           pd.DataFrame: Query results as `pd.Dataframe`.
         """
         with self._session_factory() as db_session:
 
-            labels = self.get_sustainability_labels_credibility_notnull()
+            labels = self.get_sustainability_labels_subquery()
 
-            all_unique = self.get_unique_products_with_unnest_sustainability_labels()
+            all_unique = self.get_all_unique_products()
 
-            unique_products_null_credibility = db_session.query(all_unique.c.merchant, func.count(
-                all_unique.c.prod_id), literal_column("'credibility_null'")).filter(
-                all_unique.c.sustainability_label.not_in(db_session.query(
-                    labels.c.id).all())).group_by(all_unique.c.merchant).all()
-
-            unique_credible_products = db_session.query(all_unique.c.merchant, func.count(
-                all_unique.c.prod_id), literal_column("'credible'")).filter(
-                all_unique.c.sustainability_label.in_(db_session.query(
-                    labels.c.id).filter(labels.c.cred_credibility >= threshold).all())).group_by(
-                all_unique.c.merchant).all()
-
-            unique_not_credible_products = db_session.query(all_unique.c.merchant, func.count(
-                all_unique.c.prod_id), literal_column("'not_credible'")).filter(
-                all_unique.c.sustainability_label.in_(db_session.query(
-                    labels.c.id).filter(labels.c.cred_credibility < threshold).all())).group_by(
-                all_unique.c.merchant).all()
-
-        return pd.DataFrame(unique_products_null_credibility + unique_credible_products +
-                           unique_not_credible_products, columns=["merchant", "product_count",
-                                                                  "type"])
-
-    def get_rank_by_credibility(self, agregated_by: str, threshold: int = 50) -> pd.DataFrame:
-        with self._session_factory() as db_session:
-            # Filtering labels to make a 'lighter' join later on
-            labels = self.get_sustainability_labels_credibility_notnull()
-
-            # Query products for last timestamp
-            all_unique = self.get_unique_products_with_unnest_sustainability_labels()
-
-            # Join with labels tables to get credibility
-            unique_with_credibility_not_null = (
+            unique_products_null_credibility = (
                 db_session.query(
                     all_unique.c.merchant,
-                    all_unique.c.category,
-                    all_unique.c.brand,
-                    all_unique.c.sustainability_label,
-                    labels.c.cred_credibility,
+                    func.count(all_unique.c.prod_id),
+                    literal_column("'credibility_null'"),
                 )
-                .join(
-                    labels,
-                    all_unique.c.sustainability_label == labels.c.id,
-                    isouter=True,
+                .filter(
+                    all_unique.c.sustainability_label.not_in(
+                        db_session.query(labels.c.id)
+                        .filter(labels.c.cred_credibility != None)
+                        .all()
+                    )
+                )
+                .group_by(all_unique.c.merchant)
+                .all()
+            )
+
+            unique_credible_products = (
+                db_session.query(
+                    all_unique.c.merchant,
+                    func.count(all_unique.c.prod_id),
+                    literal_column("'credible'"),
+                )
+                .filter(
+                    all_unique.c.sustainability_label.in_(
+                        db_session.query(labels.c.id)
+                        .filter(labels.c.cred_credibility >= credibility_threshold)
+                        .all()
+                    )
+                )
+                .group_by(all_unique.c.merchant)
+                .all()
+            )
+
+            unique_not_credible_products = (
+                db_session.query(
+                    all_unique.c.merchant,
+                    func.count(all_unique.c.prod_id),
+                    literal_column("'not_credible'"),
+                )
+                .filter(
+                    all_unique.c.sustainability_label.in_(
+                        db_session.query(labels.c.id)
+                        .filter(labels.c.cred_credibility < credibility_threshold)
+                        .all()
+                    )
+                )
+                .group_by(all_unique.c.merchant)
+                .all()
+            )
+
+        return pd.DataFrame(
+            unique_products_null_credibility
+            + unique_credible_products
+            + unique_not_credible_products,
+            columns=["merchant", "product_count", "type"],
+        )
+
+    # Functions only unique products with credibility
+    def get_unique_products_with_credibility(self, credibility_threshold: int = 50):
+        """
+        Subquery to return unique product id and its sustainability label(s) when they have at
+        least one credible sustainability label.
+
+        Args:
+            credibility_threshold (int): `credibility_threshold` to evaluate if sustainability
+            label is credible or not. Default set as 50.
+
+        """
+        with self._session_factory() as db_session:
+            labels = self.get_sustainability_labels_subquery()
+            get_credible_labels = (
+                db_session.query(labels.c.id)
+                .filter(labels.c.cred_credibility >= credibility_threshold)
+                .all()
+            )
+            credible_labels = [label[0] for label in get_credible_labels]
+
+            return (
+                db_session.query(
+                    self._database_class.id.label("prod_id"),
+                    self._database_class.sustainability_labels,
+                )
+                .distinct(self._database_class.url)
+                .filter(
+                    or_(
+                        *[
+                            self._database_class.sustainability_labels.any(label)
+                            for label in credible_labels
+                        ]
+                    )
                 )
                 .subquery()
             )
-            # Filters
-            if agregated_by == "merchant":
-                aggregated_query = (
-                    db_session.query(
-                        unique_with_credibility_not_null.c.merchant,
-                        func.round(
-                            func.avg(unique_with_credibility_not_null.c.cred_credibility)
-                        ).label("mean_credibility"),
-                    )
-                    .group_by(unique_with_credibility_not_null.c.merchant)
-                    .order_by(desc("mean_credibility"))
-                    .subquery()
-                )
-                return pd.DataFrame(
-                    db_session.query(aggregated_query).all(),
-                    columns=["merchant", "mean_credibility"],
-                )
 
-            elif agregated_by == "category":
-                aggregated_query = (
-                    db_session.query(
-                        unique_with_credibility_not_null.c.category,
-                        func.round(
-                            func.avg(unique_with_credibility_not_null.c.cred_credibility)
-                        ).label("mean_credibility"),
-                    )
-                    .group_by(unique_with_credibility_not_null.c.category)
-                    .order_by(desc("mean_credibility"))
-                    .subquery()
-                )
-                return pd.DataFrame(
-                    db_session.query(aggregated_query)
-                    .filter(aggregated_query.c.mean_credibility >= threshold)
-                    .all(),
-                    columns=["category", "mean_credibility"],
-                )
-
-            elif agregated_by == "brand":
-                aggregated_query = (
-                    db_session.query(
-                        unique_with_credibility_not_null.c.brand,
-                        func.round(
-                            func.avg(unique_with_credibility_not_null.c.cred_credibility)
-                        ).label("mean_credibility"),
-                    )
-                    .group_by(unique_with_credibility_not_null.c.brand)
-                    .order_by(desc("mean_credibility"))
-                    .subquery()
-                )
-                return pd.DataFrame(
-                    db_session.query(aggregated_query)
-                    .filter(aggregated_query.c.mean_credibility >= threshold)
-                    .all(),
-                    columns=["brand", "mean_credibility"],
-                )
-
-    # Functions only unique products with credibility
-    def get_all_sustainability_scores_for_unique_products_with_credibility(
-        self, threshold: int = 50
-    ):
+    def calculate_sustainability_scores(self):
         """
-        This function uses subquery 'get_unique_products_with_unnest_sustainability_labels' and then
-            filters subquery 'self.get_sustainability_labels_credibility_notnull()' by credibility
-            above threshold to finally calculate mean credibility and sustainability score.
+        This function gets unique product with credibility ids to calculate credibility,
+        ecological, social and sustainability scores per id when products have at least one
+        credible label.
 
-            How sustainability score is computed? 1) Products with credibility below 50 are filtered;
-            2) For products that have more than one sustainability label, max value is taken from
-            each dimension; 3) Get mean of ecological(8) and social dimensions(5); 4) Calculate mean of
-            ecological and social means.
-
-            For products with more than one label, we take mean of credibility scores.
+        To calculate sustainability score:
+        1) For products that have more than one sustainability label, max value is taken from
+        eco and social each dimension and credibility is mean.
+        2) All ecological (8) and social dimensions (5) are mean to get ecological and social
+        scores
+        3) Sustainability score is the mean of ecological and social scores
 
         Returns:
-            A subquery with all unique product id's with credibility along it's mean_credibility,
-            eco_mean_score, social_mean_score and sustainability_score.
+            A subquery with credibility, ecological, social and sustainability scores for unique
+            credible products.
         """
         with self._session_factory() as db_session:
-            unique_all = self.get_unique_products_with_unnest_sustainability_labels()
-            labels = self.get_sustainability_labels_credibility_notnull()
-            credible_labels = (
-                db_session.query(labels).filter(labels.c.cred_credibility >= threshold).subquery()
+            all_unique_credible_products = self.get_unique_products_with_credibility()
+            all_labels = self.get_sustainability_labels_subquery()
+            unnested_labels = db_session.query(
+                all_unique_credible_products.c.prod_id,
+                func.unnest(all_unique_credible_products.c.sustainability_labels).label("label"),
+            ).subquery()
+
+            get_sustainability_attributes = (
+                db_session.query(unnested_labels, all_labels)
+                .join(all_labels, unnested_labels.c.label == all_labels.c.id)
+                .subquery()
             )
-            # Select max values for all ecological and social dimensions and mean credibility.
-            get_max_scores = (
+
+            get_max_sustainability_scores = (
                 db_session.query(
-                    unique_all.c.prod_id,
-                    case(
-                        [
-                            (
-                                unique_all.c.category.in_(
-                                    [
-                                        "PRINTER",
-                                        "LAPTOP",
-                                        "TABLET",
-                                        "DISHWASHER",
-                                        "FRIDGE",
-                                        "OVEN",
-                                        "COOKER_HOOD",
-                                        "FREEZER",
-                                        "WASHER",
-                                        "DRYER",
-                                    ]
-                                ),
-                                literal_column("'electronics'"),
-                            )
-                        ],
-                        else_=literal_column("'fashion'"),
-                    ).label("product_family"),
-                    func.max(credible_labels.c.eco_chemicals).label("eco_chemicals"),
-                    func.max(credible_labels.c.eco_lifetime).label("eco_lifetime"),
-                    func.max(credible_labels.c.eco_water).label("eco_water"),
-                    func.max(credible_labels.c.eco_inputs).label("eco_inputs"),
-                    func.max(credible_labels.c.eco_quality).label("eco_quality"),
-                    func.max(credible_labels.c.eco_energy).label("eco_energy"),
-                    func.max(credible_labels.c.eco_waste_air).label("eco_waste_air"),
-                    func.max(credible_labels.c.eco_environmental_management).label(
+                    get_sustainability_attributes.c.prod_id,
+                    func.max(get_sustainability_attributes.c.eco_chemicals).label("eco_chemicals"),
+                    func.max(get_sustainability_attributes.c.eco_lifetime).label("eco_lifetime"),
+                    func.max(get_sustainability_attributes.c.eco_water).label("eco_water"),
+                    func.max(get_sustainability_attributes.c.eco_inputs).label("eco_inputs"),
+                    func.max(get_sustainability_attributes.c.eco_quality).label("eco_quality"),
+                    func.max(get_sustainability_attributes.c.eco_energy).label("eco_energy"),
+                    func.max(get_sustainability_attributes.c.eco_waste_air).label("eco_waste_air"),
+                    func.max(get_sustainability_attributes.c.eco_environmental_management).label(
                         "eco_environmental_management"
                     ),
-                    func.max(credible_labels.c.social_labour_rights).label("social_labour_rights"),
-                    func.max(credible_labels.c.social_business_practice).label(
+                    func.max(get_sustainability_attributes.c.social_labour_rights).label(
+                        "social_labour_rights"
+                    ),
+                    func.max(get_sustainability_attributes.c.social_business_practice).label(
                         "social_business_practice"
                     ),
-                    func.max(credible_labels.c.social_social_rights).label("social_social_rights"),
-                    func.max(credible_labels.c.social_company_responsibility).label(
+                    func.max(get_sustainability_attributes.c.social_social_rights).label(
+                        "social_social_rights"
+                    ),
+                    func.max(get_sustainability_attributes.c.social_company_responsibility).label(
                         "social_company_responsibility"
                     ),
-                    func.max(credible_labels.c.social_conflict_minerals).label(
+                    func.max(get_sustainability_attributes.c.social_conflict_minerals).label(
                         "social_conflict_minerals"
                     ),
-                    func.round(func.avg(credible_labels.c.cred_credibility)).label(
+                    func.round(func.avg(get_sustainability_attributes.c.cred_credibility)).label(
                         "mean_credibility"
                     ),
                 )
-                .join(credible_labels, unique_all.c.sustainability_label == credible_labels.c.id)
-                .group_by(unique_all.c.prod_id, unique_all.c.category)
+                .group_by(get_sustainability_attributes.c.prod_id)
                 .subquery()
             )
 
-            get_scores = (
+            get_eco_and_social_means = (
                 db_session.query(
-                    get_max_scores.c.prod_id,
-                    get_max_scores.c.product_family,
+                    get_max_sustainability_scores.c.prod_id,
                     (
                         func.sum(
-                            get_max_scores.c.eco_chemicals
-                            + get_max_scores.c.eco_lifetime
-                            + get_max_scores.c.eco_water
-                            + get_max_scores.c.eco_inputs
-                            + get_max_scores.c.eco_quality
-                            + get_max_scores.c.eco_energy
-                            + get_max_scores.c.eco_waste_air
-                            + get_max_scores.c.eco_environmental_management
+                            get_max_sustainability_scores.c.eco_chemicals
+                            + get_max_sustainability_scores.c.eco_lifetime
+                            + get_max_sustainability_scores.c.eco_water
+                            + get_max_sustainability_scores.c.eco_inputs
+                            + get_max_sustainability_scores.c.eco_quality
+                            + get_max_sustainability_scores.c.eco_energy
+                            + get_max_sustainability_scores.c.eco_waste_air
+                            + get_max_sustainability_scores.c.eco_environmental_management
                         )
                         / 8
-                    ).label("eco_mean_score"),
+                    ).label("ecological_score"),
                     (
                         func.sum(
-                            get_max_scores.c.social_labour_rights
-                            + get_max_scores.c.social_business_practice
-                            + get_max_scores.c.social_social_rights
-                            + get_max_scores.c.social_company_responsibility
-                            + get_max_scores.c.social_conflict_minerals
+                            get_max_sustainability_scores.c.social_labour_rights
+                            + get_max_sustainability_scores.c.social_business_practice
+                            + get_max_sustainability_scores.c.social_social_rights
+                            + get_max_sustainability_scores.c.social_company_responsibility
+                            + get_max_sustainability_scores.c.social_conflict_minerals
                         )
                         / 5
-                    ).label("social_mean_score"),
-                    get_max_scores.c.mean_credibility,
+                    ).label("social_score"),
+                    get_max_sustainability_scores.c.mean_credibility,
                 )
                 .group_by(
-                    get_max_scores.c.prod_id,
-                    get_max_scores.c.product_family,
-                    get_max_scores.c.mean_credibility,
+                    get_max_sustainability_scores.c.prod_id,
+                    get_max_sustainability_scores.c.mean_credibility,
                 )
                 .subquery()
             )
-
-            get_all_scores = (
+            return (
                 db_session.query(
-                    get_scores.c.prod_id,
-                    get_scores.c.product_family,
-                    get_scores.c.mean_credibility,
-                    get_scores.c.eco_mean_score,
-                    get_scores.c.social_mean_score,
+                    get_eco_and_social_means.c.prod_id,
+                    get_eco_and_social_means.c.mean_credibility,
+                    get_eco_and_social_means.c.ecological_score,
+                    get_eco_and_social_means.c.social_score,
                     func.round(
                         (
-                            func.sum(get_scores.c.eco_mean_score + get_scores.c.social_mean_score)
+                            func.sum(
+                                get_eco_and_social_means.c.ecological_score
+                                + get_eco_and_social_means.c.social_score
+                            )
                             / 2
                         ),
                         0,
                     ).label("sustainability_score"),
                 )
                 .group_by(
-                    get_scores.c.prod_id,
-                    get_scores.c.product_family,
-                    get_scores.c.mean_credibility,
-                    get_scores.c.eco_mean_score,
-                    get_scores.c.social_mean_score,
+                    get_eco_and_social_means.c.prod_id,
+                    get_eco_and_social_means.c.mean_credibility,
+                    get_eco_and_social_means.c.ecological_score,
+                    get_eco_and_social_means.c.social_score,
                 )
                 .subquery()
             )
 
-            return get_all_scores
-
-    def get_top_products_by_credibility_or_sustainability_score(
-        self, merchants: list, categories: list, product_family_filter: str, top: int, rank_by: str
-    ):
+    def get_rank_by_credibility(self, agregated_by: str) -> pd.DataFrame:
         """
-        This function uses subquery 'get_sustainability_attributes_unique_products_with_credibility'
-        to get unique products with credibility and it's scores to join it with the greendb table.
+        This function ranks unique credible products by its aggregated credibility.
+
+        Args:
+            aggregated_by (str): Determines product attribute to aggregated data.
+
+        Returns:
+            pd.DataFrame: Query results as `pd.Dataframe`.
         """
         with self._session_factory() as db_session:
-            get_product_scores = (
-                self.get_all_sustainability_scores_for_unique_products_with_credibility()
+            unique_credible_products = self.calculate_sustainability_scores()
+
+            # TODO pass column as parameter
+            if agregated_by == "merchant":
+                aggregated_query = (
+                    db_session.query(
+                        self._database_class.merchant,
+                        func.round(func.avg(unique_credible_products.c.mean_credibility)).label(
+                            "credibility_score"
+                        ),
+                    )
+                    .join(
+                        unique_credible_products,
+                        unique_credible_products.c.prod_id == self._database_class.id,
+                    )
+                    .group_by(self._database_class.merchant)
+                    .order_by(desc("credibility_score"))
+                    .subquery()
+                )
+
+            elif agregated_by == "category":
+                aggregated_query = (
+                    db_session.query(
+                        self._database_class.category,
+                        func.round(func.avg(unique_credible_products.c.mean_credibility)).label(
+                            "credibility_score"
+                        ),
+                    )
+                    .join(
+                        unique_credible_products,
+                        unique_credible_products.c.prod_id == self._database_class.id,
+                    )
+                    .group_by(self._database_class.category)
+                    .order_by(desc("credibility_score"))
+                    .subquery()
+                )
+
+            elif agregated_by == "brand":
+                aggregated_query = (
+                    db_session.query(
+                        self._database_class.brand,
+                        func.round(func.avg(unique_credible_products.c.mean_credibility)).label(
+                            "credibility_score"
+                        ),
+                    )
+                    .join(
+                        unique_credible_products,
+                        unique_credible_products.c.prod_id == self._database_class.id,
+                    )
+                    .group_by(self._database_class.brand)
+                    .order_by(desc("credibility_score"))
+                    .subquery()
+                )
+            return pd.DataFrame(
+                db_session.query(aggregated_query).all(),
+                columns=[f"{agregated_by}", "credibility_score"],
             )
+
+    def get_top_products_by_credibility_or_sustainability_score(
+        self, merchants: list, categories: list, top: int, rank_by: str
+    ) -> pd.DataFrame:
+        """
+        This function gets unique credible products with its scores, adds products attributes:
+            merchant, category, brand, name, url and sustainability labels to rank them by
+            credibility or sustainability.
+
+        Args:
+            merchants (list) : Gets list of merchants to query.
+            categories (list) : Gets list categories ro query.
+            top (int): Gets number of products to fetch.
+            rank_by: Determines y products will be order by its credibility or sustainability
+            score.
+
+        Returns:
+           pd.DataFrame: Query results as `pd.Dataframe`.
+        """
+        with self._session_factory() as db_session:
+            get_product_scores = self.calculate_sustainability_scores()
             query = (
                 db_session.query(
                     self._database_class.id,
@@ -833,7 +894,6 @@ class GreenDB(Connection):
                     self._database_class.sustainability_labels,
                     get_product_scores.c.mean_credibility,
                     get_product_scores.c.sustainability_score,
-                    get_product_scores.c.product_family,
                     self._database_class.url,
                 )
                 .join(get_product_scores, self._database_class.id == get_product_scores.c.prod_id)
@@ -842,9 +902,6 @@ class GreenDB(Connection):
                     self._database_class.category.in_(categories),
                 )
             )
-
-            if product_family_filter != "all":
-                query = query.filter(get_product_scores.c.product_family == product_family_filter)
 
             if rank_by == "credibility":
                 ranked_products = query.order_by(desc(get_product_scores.c.mean_credibility)).limit(
@@ -866,29 +923,23 @@ class GreenDB(Connection):
                 "sustainability_labels",
                 "CS",
                 "SC",
-                "family",
                 "url",
             ],
         )
 
-    def scores(self):
+    def get_product_count_by_sustainability_label_and_category(
+        self, threshold: int = 50
+    ) -> pd.DataFrame:
+        """
+        This functions gets product count by sustainability label and category for unique credible
+        products.
+
+        Returns:
+           pd.DataFrame: Query results as `pd.Dataframe`.
+        """
         with self._session_factory() as db_session:
-            unnested = len(
-                db_session.query(self.get_unique_products_with_unnest_sustainability_labels()).all()
-            )
-
-            unique_cred = len(
-                db_session.query(
-                    self.get_all_sustainability_scores_for_unique_products_with_credibility()
-                ).all()
-            )
-
-            return unnested, unique_cred
-
-    def get_product_count_by_label_and_category(self, threshold: int = 50):
-        with self._session_factory() as db_session:
-            unique_all = self.get_unique_products_with_unnest_sustainability_labels()
-            labels = self.get_sustainability_labels_credibility_notnull()
+            unique_all = self.get_all_unique_products()
+            labels = self.get_sustainability_labels_subquery()
             credible_labels = (
                 db_session.query(labels).filter(labels.c.cred_credibility >= threshold).subquery()
             )
@@ -906,22 +957,26 @@ class GreenDB(Connection):
                 columns=["product_count", "category", "sustainability_label"],
             )
 
-    def get_scores_by_brand(self):
+    def get_credibility_and_sustainability_scores_by_brand(self) -> pd.DataFrame:
+        """
+        This function gets unique credible products ids and sustainability scores,
+        adds brand, category and sustainability labels as product attributes and aggregates data
+        at brand level.
+
+        Returns:
+           pd.DataFrame: Query results as `pd.Dataframe`.
+        """
         with self._session_factory() as db_session:
-            get_product_scores = (
-                self.get_all_sustainability_scores_for_unique_products_with_credibility()
-            )
+            get_product_scores = self.calculate_sustainability_scores()
             get_all_means = (
                 db_session.query(
                     self._database_class.id,
                     self._database_class.brand,
                     self._database_class.category,
-                    self._database_class.sustainability_labels,
-                    get_product_scores.c.eco_mean_score,
-                    get_product_scores.c.social_mean_score,
+                    get_product_scores.c.ecological_score,
+                    get_product_scores.c.social_score,
                     get_product_scores.c.mean_credibility,
                     get_product_scores.c.sustainability_score,
-                    get_product_scores.c.product_family,
                 )
                 .join(
                     get_product_scores,
@@ -931,28 +986,25 @@ class GreenDB(Connection):
             )
             return pd.DataFrame(
                 db_session.query(
-                    get_all_means.c.product_family,
                     get_all_means.c.category,
                     get_all_means.c.brand,
                     func.count(get_all_means.c.id),
-                    func.round(func.avg(get_all_means.c.eco_mean_score), 2),
-                    func.round(func.avg(get_all_means.c.social_mean_score), 2),
+                    func.round(func.avg(get_all_means.c.ecological_score), 2),
+                    func.round(func.avg(get_all_means.c.social_score), 2),
                     func.round(func.avg(get_all_means.c.sustainability_score), 2),
                     func.round(func.avg(get_all_means.c.mean_credibility), 2),
                 )
                 .group_by(
-                    get_all_means.c.product_family,
                     get_all_means.c.category,
                     get_all_means.c.brand,
                 )
                 .all(),
                 columns=[
-                    "product_family",
                     "category",
                     "brand",
                     "product_count",
-                    "eco_mean_score",
-                    "social_mean_score",
+                    "ecological_score",
+                    "social_score",
                     "sustainability_score",
                     "mean_credibility",
                 ],
