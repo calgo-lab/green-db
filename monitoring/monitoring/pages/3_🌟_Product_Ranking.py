@@ -1,7 +1,7 @@
 import streamlit as st
 
 from database.connection import GreenDB
-from monitoring.utils import render_product_ranking_filters_as_sidebar, render_product_ranking
+from monitoring.utils import render_product_ranking, render_product_ranking_filters_as_sidebar
 
 green_db = GreenDB()
 

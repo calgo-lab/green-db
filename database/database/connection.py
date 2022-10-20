@@ -552,7 +552,6 @@ class GreenDB(Connection):
                 .subquery()
             )
 
-
     def get_product_count_credible_by_sustainability_label_credibility(
         self, credibility_threshold: int = 50
     ) -> pd.DataFrame:

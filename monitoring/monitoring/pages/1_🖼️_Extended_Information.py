@@ -1,9 +1,7 @@
 import streamlit as st
 
 from database.connection import GreenDB
-from monitoring.utils import (
-    render_extended_information,
-)
+from monitoring.utils import render_extended_information
 
 green_db = GreenDB()
 
