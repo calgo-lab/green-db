@@ -1,5 +1,6 @@
+from datetime import datetime
+
 import altair as alt
-import numpy as np
 import pandas as pd
 import plotly.express as px
 import streamlit as st
@@ -285,91 +286,69 @@ def render_extended_information(green_db: GreenDB) -> None:
         st.dataframe(st.session_state.latest_products_with_unknown_sustainability_label)
 
 
+def clear_cache(green_db: GreenDB):
+    # If latest available timestamp on the db is different to the latest cached timestamp,
+    # clear cache
+    if latest_cached_timestamp(green_db) < green_db.get_latest_timestamp():
+        st.runtime.legacy_caching.clear_cache()
+
+
+@st.cache
+def latest_cached_timestamp(green_db: GreenDB):
+    return green_db.get_latest_timestamp()
+
+
+@st.cache(allow_output_mutation=True)
 def fetch_and_cache_product_count_by_sustainability_label_credibility(green_db: GreenDB):
-    if "plot_normalized_product_count_w_vs_wo_credibility" not in st.session_state:
-        st.session_state["plot_normalized_product_count_w_vs_wo_credibility"] = (
-            alt.Chart(green_db.get_product_count_credible_vs_not_credible_sustainability_labels())
-            .mark_bar()
-            .encode(
-                x=alt.X("sum(product_count)", stack="normalize"),
-                y=alt.Y("merchant", sort="-x"),
-                color="type",
-            )
+    data_frame_product_count_by_sustainability_label_credibility = (
+        green_db.get_product_count_credible_by_sustainability_label_credibility()
+    )
+
+    plot_normalized_product_count_w_vs_wo_credibility = (
+        alt.Chart(data_frame_product_count_by_sustainability_label_credibility)
+        .mark_bar()
+        .encode(
+            x=alt.X("sum(product_count)", stack="normalize"),
+            y=alt.Y("merchant", sort="-x"),
+            color="type",
         )
+    )
 
-    if "plot_product_count_w_credibility" not in st.session_state:
-        st.session_state["plot_product_count_w_credibility"] = px.pie(
-            st.session_state["data_frame_product_count_by_sustainability_label_credibility"][
-                st.session_state[
-                    "data_frame_product_count_by_sustainability_label_credibility"
-                ].type
-                == "credible"
-            ],
-            values="product_count",
-            names="merchant",
-        )
-
-
-def fetch_and_cache_product_count_credible_sustainability_labels_by_category(green_db: GreenDB):
-    if "data_frame_product_count_credible_sustainability_labels" not in st.session_state:
-        st.session_state[
-            "data_frame_product_count_credible_sustainability_labels"
-        ] = green_db.get_product_count_by_label_and_category()
-
-    if "plot_product_count_credible_sustainability_labels_fashion" not in st.session_state:
-        st.session_state["plot_product_count_credible_sustainability_labels_fashion"] = px.bar(
-            st.session_state["data_frame_product_count_credible_sustainability_labels"][
-                ~st.session_state["data_frame_product_count_credible_sustainability_labels"][
-                    "sustainability_label"
-                ].str.contains("EU Energielabel")
-            ].sort_values(by="product_count"),
-            x="product_count",
-            y="category",
-            color="sustainability_label",
-        )
-
-    if "plot_product_count_credible_sustainability_labels_electronics" not in st.session_state:
-        st.session_state["plot_product_count_credible_sustainability_labels_electronics"] = px.bar(
-            st.session_state["data_frame_product_count_credible_sustainability_labels"][
-                st.session_state["data_frame_product_count_credible_sustainability_labels"][
-                    "sustainability_label"
-                ].str.contains("EU Energielabel")
-            ],
-            x="product_count",
-            y="category",
-            color="sustainability_label",
-        )
+    plot_product_count_w_credibility = px.pie(
+        data_frame_product_count_by_sustainability_label_credibility[
+            data_frame_product_count_by_sustainability_label_credibility.type == "credible"
+        ],
+        values="product_count",
+        names="merchant",
+    )
+    return (
+        data_frame_product_count_by_sustainability_label_credibility,
+        plot_normalized_product_count_w_vs_wo_credibility,
+        plot_product_count_w_credibility,
+    )
 
 
 def render_sidebar_leaderboards(green_db: GreenDB) -> None:
-    if "data_frame_product_count_by_sustainability_label_credibility" not in st.session_state:
-        st.session_state[
-            "data_frame_product_count_by_sustainability_label_credibility"
-        ] = green_db.get_product_count_credible_vs_not_credible_sustainability_labels()
-
+    data_frame_product_count_by_sustainability_label_credibility = (
+        fetch_and_cache_product_count_by_sustainability_label_credibility(green_db)[0]
+    )
     st.write("All unique products by merchant")
     st.dataframe(
-        st.session_state["data_frame_product_count_by_sustainability_label_credibility"]
-        .groupby(["merchant"])
-        .sum()
+        data_frame_product_count_by_sustainability_label_credibility.groupby(["merchant"]).sum()
     )
     st.write(
         "All unique products",
-        st.session_state["data_frame_product_count_by_sustainability_label_credibility"][
-            "product_count"
-        ].sum(),
+        data_frame_product_count_by_sustainability_label_credibility["product_count"].sum(),
     )
     st.write(
         "Unique products with credibility",
-        st.session_state["data_frame_product_count_by_sustainability_label_credibility"][
-            st.session_state["data_frame_product_count_by_sustainability_label_credibility"].type
-            == "credible"
+        data_frame_product_count_by_sustainability_label_credibility[
+            data_frame_product_count_by_sustainability_label_credibility.type == "credible"
         ]["product_count"].sum(),
     )
 
 
-def render_leaderboards(green_db: GreenDB) -> None:
-    fetch_and_cache_product_count_by_sustainability_label_credibility(green_db)
+def render_plots_product_count_by_credibility(green_db: GreenDB) -> None:
     st.header("GreenDB Leaderboards")
     st.subheader("Product credibility by merchant")
     st.caption(
@@ -377,76 +356,149 @@ def render_leaderboards(green_db: GreenDB) -> None:
         "sustainability label credibility score >= 50 is credible and < 50 is not credible."
     )
     st.altair_chart(
-        st.session_state["plot_normalized_product_count_w_vs_wo_credibility"],
+        fetch_and_cache_product_count_by_sustainability_label_credibility(green_db)[1],
         use_container_width=True,
     )
 
     st.subheader("Product with credible sustainability labels by merchant")
     st.caption("Sustainability label credibility score >= 50 is credible and < 50 is not credible")
-    st.plotly_chart(st.session_state["plot_product_count_w_credibility"])
+    st.plotly_chart(fetch_and_cache_product_count_by_sustainability_label_credibility(green_db)[2])
 
     st.markdown("""---""")
 
+
+@st.cache(allow_output_mutation=True)
+def fetch_and_cache_leaderboards(green_db: GreenDB) -> None:
+    return (
+        green_db.get_rank_by_credibility("merchant"),
+        green_db.get_rank_by_credibility("category"),
+        green_db.get_rank_by_credibility("brand"),
+    )
+
+
+def render_leaderboards(green_db: GreenDB) -> None:
     st.subheader("Rank by credibility")
     st.caption(
-        "Based on aggregated mean credibility from ALL unique products in the database "
-        "with credibility score. Products with NULL credibility has been excluded from "
-        "calculation."
+        "Products ranked by  aggregated mean credibility from unique and credible products in the "
+        "database."
     )
     c1, c2, c3 = st.columns(3)
     c1.write("🌟 Rank per shop")
-    if "data_frame_credibility_by_merchant" not in st.session_state:
-        st.session_state.data_frame_credibility_by_merchant = green_db.get_rank_by_credibility(
-            "merchant"
-        )
-    c1.dataframe(st.session_state.data_frame_credibility_by_merchant)
-    st.session_state.all_merchants = st.session_state.data_frame_credibility_by_merchant[
-        "merchant"
-    ].unique()
+    c1.dataframe(fetch_and_cache_leaderboards(green_db)[0])
+    st.session_state.all_merchants = fetch_and_cache_leaderboards(green_db)[0]["merchant"].unique()
     c2.write("🌟 Rank per category")
-    if "data_frame_credibility_by_category" not in st.session_state:
-        st.session_state.data_frame_credibility_by_category = green_db.get_rank_by_credibility(
-            "category"
-        )
-    c2.dataframe(st.session_state.data_frame_credibility_by_category)
+    c2.dataframe(fetch_and_cache_leaderboards(green_db)[1])
     c3.write("🌟 Rank per brand")
-    if "data_frame_credibility_by_brand" not in st.session_state:
-        st.session_state["data_frame_credibility_by_brand"] = green_db.get_rank_by_credibility(
-            "brand"
-        )
-    c3.dataframe(st.session_state.data_frame_credibility_by_brand)
+    c3.dataframe(fetch_and_cache_leaderboards(green_db)[2])
 
-    st.markdown("""---""")
 
-    fetch_and_cache_product_count_credible_sustainability_labels_by_category(green_db)
+@st.cache(allow_output_mutation=True)
+def fetch_and_cache_product_count_credible_sustainability_labels_by_category(green_db: GreenDB):
+    data_frame_product_count_credible_sustainability_labels_by_category = (
+        green_db.get_product_count_by_sustainability_label_and_category()
+    )
+
+    electronic_categories = [
+        "PRINTER",
+        "LAPTOP",
+        "TABLET",
+        "DISHWASHER",
+        "FRIDGE",
+        "OVEN",
+        "COOKER_HOOD",
+        "FREEZER",
+        "WASHER",
+        "DRYER",
+    ]
+
+    plot_product_count_credible_sustainability_labels_fashion = px.bar(
+        data_frame_product_count_credible_sustainability_labels_by_category[
+            ~data_frame_product_count_credible_sustainability_labels_by_category.category.isin(
+                electronic_categories
+            )
+        ].sort_values(by="product_count"),
+        x="product_count",
+        y="category",
+        color="sustainability_label",
+    )
+
+    plot_product_count_credible_sustainability_labels_electronics = px.bar(
+        data_frame_product_count_credible_sustainability_labels_by_category[
+            data_frame_product_count_credible_sustainability_labels_by_category.category.isin(
+                electronic_categories
+            )
+        ].sort_values(by="product_count"),
+        x="product_count",
+        y="category",
+        color="sustainability_label",
+    )
+    return (
+        plot_product_count_credible_sustainability_labels_fashion,
+        plot_product_count_credible_sustainability_labels_electronics,
+        electronic_categories,
+    )
+
+
+@st.cache(allow_output_mutation=True)
+def fetch_and_cache_brand_credibility_vs_brand_sustainability(green_db: GreenDB):
+    data_frame_credibility_and_sustainability_by_brand = (
+        green_db.get_credibility_and_sustainability_scores_by_brand()
+    )
+    data_frame_credibility_and_sustainability_by_brand_fashion = (
+        data_frame_credibility_and_sustainability_by_brand[
+            ~data_frame_credibility_and_sustainability_by_brand.category.isin(
+                fetch_and_cache_product_count_credible_sustainability_labels_by_category(green_db)[
+                    2
+                ]
+            )
+        ]
+    )
+    data_frame_credibility_and_sustainability_by_brand_fashion_electronics = (
+        data_frame_credibility_and_sustainability_by_brand[
+            data_frame_credibility_and_sustainability_by_brand.category.isin(
+                fetch_and_cache_product_count_credible_sustainability_labels_by_category(green_db)[
+                    2
+                ]
+            )
+        ]
+    )
+    return (
+        data_frame_credibility_and_sustainability_by_brand,
+        data_frame_credibility_and_sustainability_by_brand_fashion,
+        data_frame_credibility_and_sustainability_by_brand_fashion_electronics,
+    )
+
+
+def render_credible_products_plots(green_db):
     st.subheader("Products with credible sustainability labels by category")
     fashion, electronics = st.tabs(["👗Fashion", "🔌Electronics"])
     fashion.plotly_chart(
-        st.session_state["plot_product_count_credible_sustainability_labels_fashion"],
+        fetch_and_cache_product_count_credible_sustainability_labels_by_category(green_db)[0],
         use_container_width=True,
     )
     electronics.plotly_chart(
-        st.session_state["plot_product_count_credible_sustainability_labels_electronics"],
+        fetch_and_cache_product_count_credible_sustainability_labels_by_category(green_db)[1],
         use_container_width=True,
     )
 
     st.subheader("Brands credibility and sustainability scores")
-    st.caption("From all unique products in the database with credible sustainability labels.")
     st.session_state["product_family_selection"] = st.radio(
         label="Select product family:", options=["all", "electronics", "fashion"], horizontal=True
     )
-    if "data_frame_credibility_and_sustainability_by_brand" not in st.session_state:
-        st.session_state[
-            "data_frame_credibility_and_sustainability_by_brand"
-        ] = green_db.get_scores_by_brand()
-    if st.session_state["product_family_selection"] != "all":
-        df_to_plot = st.session_state["data_frame_credibility_and_sustainability_by_brand"][
-            st.session_state["data_frame_credibility_and_sustainability_by_brand"].product_family
-            == st.session_state["product_family_selection"]
-        ]
-    else:
-        df_to_plot = st.session_state["data_frame_credibility_and_sustainability_by_brand"]
+    if st.session_state["product_family_selection"] == "all":
+        df_to_plot = fetch_and_cache_brand_credibility_vs_brand_sustainability(green_db)[0]
+    elif st.session_state["product_family_selection"] == "fashion":
+        df_to_plot = fetch_and_cache_brand_credibility_vs_brand_sustainability(green_db)[1]
+    elif st.session_state["product_family_selection"] == "electronics":
+        df_to_plot = fetch_and_cache_brand_credibility_vs_brand_sustainability(green_db)[2]
 
+    st.session_state["plot_brand_credibility_vs_brand_sustainability"] = px.scatter(
+        (df_to_plot.sort_values(by="brand")),
+        x="sustainability_score",
+        y="mean_credibility",
+        size="product_count",
+        color="brand",
+    )
     st.plotly_chart(
         px.scatter(
             (df_to_plot.sort_values(by="brand")),
@@ -455,6 +507,11 @@ def render_leaderboards(green_db: GreenDB) -> None:
             size="product_count",
             color="brand",
         )
+    )
+    st.caption(
+        "Figure shows aggregated credibility and sustainability scores by brand for all "
+        "unique and credible products in the database. The size of the bubble shows number of "
+        "products per brand."
     )
 
 
@@ -503,7 +560,7 @@ def render_product_ranking_filters_as_sidebar() -> None:
     )
 
     number_of_products_to_fetch = st.number_input(
-        "Choose number of products to fetch (max " "10k)", min_value=10, max_value=10000, step=50
+        "Choose number of products to fetch (max 10k)", min_value=10, max_value=10000, step=10
     )
     st.session_state["number_of_products_to_fetch"] = number_of_products_to_fetch
 
