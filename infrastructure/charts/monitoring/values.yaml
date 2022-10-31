@@ -5,10 +5,10 @@
 replicaCount: 1
 
 image:
-  repository: registry.datexis.com/s40781/cache
+  repository: ghcr.io/calgo-lab/green-db/monitoring
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: latest
+  tag:
 
 env:
   - name: POSTGRES_SCRAPING_HOST
