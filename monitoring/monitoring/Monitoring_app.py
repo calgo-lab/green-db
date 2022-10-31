@@ -85,12 +85,14 @@ def render_basic_information() -> None:
     if "merchants_options" not in st.session_state:
         st.session_state["merchants_options"] = list(
             fetch_and_cache_scraped_page_and_product_count_per_merchant_and_country(hash_greendb())[
-                "data_frame"]["merchant"].unique())
-    st.session_state["selected_merchants"] = st.multiselect(
-            "Filter by merchant:",
-            st.session_state["merchants_options"],
-            st.session_state["merchants_options"][:],
+                "data_frame"
+            ]["merchant"].unique()
         )
+    st.session_state["selected_merchants"] = st.multiselect(
+        "Filter by merchant:",
+        st.session_state["merchants_options"],
+        st.session_state["merchants_options"][:],
+    )
     st.altair_chart(
         alt.Chart(
             data_frame_scraped_page_and_product_count_per_merchant_and_country[

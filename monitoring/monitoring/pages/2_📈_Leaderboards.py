@@ -83,7 +83,7 @@ def render_leaderboards() -> None:
     c3.dataframe(fetch_and_cache_leaderboards(hash_greendb())["rank_by_brand"])
 
 
-def render_credible_products_plots():
+def render_credible_products_plots() -> None:
     """
     This method renders cached plots for all unique products with credibility in the database.
         Render a bar plot to show sustainability labels distribution by category and a scatter plot

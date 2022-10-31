@@ -2,6 +2,7 @@ import altair as alt
 import pandas as pd
 import plotly.express as px
 import streamlit as st
+from typing import Callable, Any
 
 from core.constants import ALL_SCRAPING_TABLE_NAMES
 from database.connection import GreenDB, Scraping
@@ -9,7 +10,7 @@ from database.tables import SustainabilityLabelsTable
 
 
 @st.experimental_singleton
-def hash_greendb():
+def hash_greendb() -> Callable[[], Any]:
     """
     Helper function to hash connection to the database.
 
@@ -19,10 +20,9 @@ def hash_greendb():
     return GreenDB()
 
 
-## Fetch cache Monitoring_app.py
 @st.experimental_memo(ttl=604800)
 def fetch_and_cache_scraped_page_and_product_count_per_merchant_and_country(
-    _green_db: hash_greendb,
+    _green_db: Callable[[], Any] = hash_greendb
 ) -> dict:
     """
     Fetch product count and scraped pages per merchant and country for all timestamps. Save
@@ -38,7 +38,7 @@ def fetch_and_cache_scraped_page_and_product_count_per_merchant_and_country(
     """
     # Fetch and save DataFrame
     data_frame_product_count_per_merchant_and_country = (
-        _green_db.get_product_count_per_merchant_and_country()
+        _green_db.get_product_count_per_merchant_and_country() # type: ignore[attr-defined] # noqa
     )
     data_frame_product_count_per_merchant_and_country["type"] = "extract"
 
@@ -79,14 +79,16 @@ def fetch_and_cache_scraped_page_and_product_count_per_merchant_and_country(
                 fill_value=0,
             )
         ),
-        "latest_sustainability_labels_timestamp": _green_db.get_latest_timestamp(
+        "latest_sustainability_labels_timestamp": _green_db.get_latest_timestamp( # type: ignore[attr-defined] # noqa
             SustainabilityLabelsTable
         ).date(),
     }
 
 
 @st.experimental_memo(ttl=604800)
-def fetch_and_cache_latest_product_count_per_merchant_and_country(_green_db: hash_greendb) -> dict:
+def fetch_and_cache_latest_product_count_per_merchant_and_country(
+        _green_db: Callable[[], Any] = hash_greendb
+) -> dict:
     """
     Fetch product count per merchant and country for latest timestamp available. Saves total number
         of extracted products and total number of unique merchants in streamlit cache.
@@ -99,14 +101,14 @@ def fetch_and_cache_latest_product_count_per_merchant_and_country(_green_db: has
     """
     # Fetch and save DataFrame
     data_frame_latest_product_count_per_merchant_and_country = (
-        _green_db.get_latest_product_count_per_merchant_and_country()
+        _green_db.get_latest_product_count_per_merchant_and_country() # type: ignore[attr-defined] # noqa
     )
     # and calculate some values for convenience
     return {
-        "latest_extraction_timestamp": _green_db.get_latest_timestamp().date(),
-        "latest_extraction_number_of_products": data_frame_latest_product_count_per_merchant_and_country[
-            "product_count"
-        ].sum(),
+        "latest_extraction_timestamp": _green_db.get_latest_timestamp().date(), # type: ignore[attr-defined] # noqa
+        "latest_extraction_number_of_products":
+            data_frame_latest_product_count_per_merchant_and_country[
+            "product_count"].sum(),
         "latest_extraction_number_of_merchants": len(
             data_frame_latest_product_count_per_merchant_and_country.groupby("merchant")
         ),
@@ -135,14 +137,16 @@ def fetch_and_cache_latest_scraped_page_count_per_merchant_and_country() -> dict
     )
     # and calculate some values for convenience
     return {
-        "latest_scraping_number_of_scraped_pages": data_frame_latest_scraped_page_count_per_merchant_and_country[
-            "scraped_page_count"
-        ].sum(),
+        "latest_scraping_number_of_scraped_pages":
+            data_frame_latest_scraped_page_count_per_merchant_and_country["scraped_page_count"]
+            .sum(),
     }
 
 
 @st.experimental_memo(ttl=604800)
-def fetch_and_cache_latest_product_count_per_category_and_merchant(_green_db: hash_greendb) -> dict:
+def fetch_and_cache_latest_product_count_per_category_and_merchant(
+        _green_db: Callable[[], Any] = hash_greendb,
+) -> dict:
     """
     Fetch product count per category per merchant for latest timestamp available. Save objects
         in streamlit cache: pd.DataFrame with queried data, total number of categories and bar
@@ -155,7 +159,7 @@ def fetch_and_cache_latest_product_count_per_category_and_merchant(_green_db: ha
         dict: Dictionary containing cached objects to render in streamlit.
     """
     data_frame_latest_product_count_per_category_and_merchant = (
-        _green_db.get_latest_product_count_per_category_and_merchant()
+        _green_db.get_latest_product_count_per_category_and_merchant() # type: ignore[attr-defined] # noqa
     )
     return {
         "data_frame": data_frame_latest_product_count_per_category_and_merchant,
@@ -173,7 +177,9 @@ def fetch_and_cache_latest_product_count_per_category_and_merchant(_green_db: ha
 
 
 @st.experimental_memo(ttl=604800)
-def fetch_and_cache_product_count_with_unknown_sustainability_label(_green_db: hash_greendb) -> dict:
+def fetch_and_cache_product_count_with_unknown_sustainability_label(
+    _green_db: Callable[[], Any] = hash_greendb,
+) -> dict:
     """
     Fetch product count for products with unknown sustainability label(s). Saves a pd.DataFrame and
          a line plot from queried data in streamlit cache.
@@ -185,7 +191,7 @@ def fetch_and_cache_product_count_with_unknown_sustainability_label(_green_db: h
         dict: Dictionary containing cached objects to render in streamlit.
     """
     data_frame_product_count_with_unknown_sustainability_label = (
-        _green_db.get_product_count_with_unknown_sustainability_label()
+        _green_db.get_product_count_with_unknown_sustainability_label() # type: ignore[attr-defined] # noqa
     )
     return {
         "data_frame": data_frame_product_count_with_unknown_sustainability_label,
@@ -199,7 +205,7 @@ def fetch_and_cache_product_count_with_unknown_sustainability_label(_green_db: h
 
 @st.experimental_memo(ttl=604800)
 def fetch_and_cache_product_count_by_sustainability_label_credibility_overtime(
-    _green_db: hash_greendb,
+    _green_db: Callable[[], Any] = hash_greendb,
 ) -> dict:
     """
     Fetch product count for products by sustainability label credibility grouped in: all
@@ -213,7 +219,7 @@ def fetch_and_cache_product_count_by_sustainability_label_credibility_overtime(
         dict: Dictionary containing cached objects to render in streamlit.
     """
     return (
-        alt.Chart(_green_db.get_product_count_by_sustainability_label_credibility_alltimestamps())
+        alt.Chart(_green_db.get_product_count_by_sustainability_label_credibility_all_timestamps()) # type: ignore[attr-defined] # noqa
         .mark_line()
         .encode(
             x="timestamp", y=alt.Y("product_count", stack=None), color="merchant", strokeDash="type"
@@ -221,9 +227,8 @@ def fetch_and_cache_product_count_by_sustainability_label_credibility_overtime(
     )
 
 
-## Fetch cache Extended_Information.py
 @st.experimental_memo(ttl=604800)
-def fetch_and_cache_extended_information(_green_db: hash_greendb) -> dict:
+def fetch_and_cache_extended_information(_green_db: Callable[[], Any] = hash_greendb) -> dict:
     """
     Fetch product count by sustainability label and list of products with unknown sustainability
         labels from latest timestamp available.
@@ -236,17 +241,18 @@ def fetch_and_cache_extended_information(_green_db: hash_greendb) -> dict:
     """
     return {
         "latest_product_count_per_sustainability_label": (
-            _green_db.get_latest_product_count_per_sustainability_label()
+            _green_db.get_latest_product_count_per_sustainability_label() # type: ignore[attr-defined] # noqa
         ),
         "latest_products_with_unknown_sustainability_label": (
-            _green_db.get_latest_products_with_unknown_sustainability_label()
+            _green_db.get_latest_products_with_unknown_sustainability_label() # type: ignore[attr-defined] # noqa
         ),
     }
 
 
-## Fetch cache Leaderboards.py
 @st.experimental_memo(ttl=604800)
-def fetch_and_cache_product_count_by_sustainability_label_credibility(_green_db: hash_greendb):
+def fetch_and_cache_product_count_by_sustainability_label_credibility(
+        _green_db: Callable[[], Any] = hash_greendb,
+) -> dict:
     """
     Fetch product count by sustainability label's credibility from all unique products in the
         database. Saves in cache: total number of unique products, total number of unique products
@@ -260,22 +266,19 @@ def fetch_and_cache_product_count_by_sustainability_label_credibility(_green_db:
         dict: Dictionary containing cached objects to render in streamlit.
     """
     data_frame_product_count_by_sustainability_label_credibility = (
-        _green_db.get_product_count_by_sustainability_label_credibility()
+        _green_db.get_product_count_by_sustainability_label_credibility() # type: ignore[attr-defined] # noqa
     )
     return {
         "all_unique_product_count": data_frame_product_count_by_sustainability_label_credibility[
             "product_count"
         ].sum(),
-        "unique_credible_product_count": data_frame_product_count_by_sustainability_label_credibility[
-            data_frame_product_count_by_sustainability_label_credibility.type == "credible"
-        ][
-            "product_count"
-        ].sum(),
-        "unique_credible_product_count_by_merchant": data_frame_product_count_by_sustainability_label_credibility.groupby(
-            ["merchant"]
-        )
-        .sum()
-        .sort_values(by="product_count", ascending=False),
+        "unique_credible_product_count":
+            data_frame_product_count_by_sustainability_label_credibility[
+            data_frame_product_count_by_sustainability_label_credibility.type == "credible"]
+            ["product_count"].sum(),
+        "unique_credible_product_count_by_merchant":
+            data_frame_product_count_by_sustainability_label_credibility.groupby(
+            ["merchant"]).sum().sort_values(by="product_count", ascending=False),
         "plot_normalized_product_count_w_vs_wo_credibility": (
             alt.Chart(data_frame_product_count_by_sustainability_label_credibility)
             .mark_bar()
@@ -296,7 +299,7 @@ def fetch_and_cache_product_count_by_sustainability_label_credibility(_green_db:
 
 
 @st.experimental_memo(ttl=604800)
-def fetch_and_cache_leaderboards(_green_db: hash_greendb) -> dict:
+def fetch_and_cache_leaderboards(_green_db: Callable[[], Any] = hash_greendb) -> dict:
     """
     Saves in streamlit cache ranking by sustainability at merchant, category and brand level.
 
@@ -307,14 +310,14 @@ def fetch_and_cache_leaderboards(_green_db: hash_greendb) -> dict:
         dict: Dictionary containing cached dataframes to render in streamlit.
     """
     return {
-        "rank_by_merchant": _green_db.get_rank_by_sustainability("merchant"),
-        "rank_by_category": _green_db.get_rank_by_sustainability("category"),
-        "rank_by_brand": _green_db.get_rank_by_sustainability("brand"),
+        "rank_by_merchant": _green_db.get_rank_by_sustainability("merchant"), # type: ignore[attr-defined] # noqa
+        "rank_by_category": _green_db.get_rank_by_sustainability("category"), # type: ignore[attr-defined] # noqa
+        "rank_by_brand": _green_db.get_rank_by_sustainability("brand"), # type: ignore[attr-defined] # noqa
     }
 
 
 @st.experimental_memo(ttl=604800)
-def fetch_and_cache_product_families(_green_db: hash_greendb):
+def fetch_and_cache_product_families(_green_db: Callable[[], Any] = hash_greendb) -> dict:
     """
     Fetch and saves categories grouped by family.
 
@@ -325,7 +328,7 @@ def fetch_and_cache_product_families(_green_db: hash_greendb):
         dict: Dictionary containing cached list of categories.
     """
     all_categories = list(
-        _green_db.get_product_count_by_sustainability_label_and_category()["category"].unique()
+        _green_db.get_product_count_by_sustainability_label_and_category()["category"].unique() # type: ignore[attr-defined] # noqa
     )
     electronics_categories = [
         "PRINTER",
@@ -350,7 +353,7 @@ def fetch_and_cache_product_families(_green_db: hash_greendb):
 
 @st.experimental_memo(ttl=604800)
 def fetch_and_cache_product_count_credible_sustainability_labels_by_category(
-    _green_db: hash_greendb,
+    _green_db: Callable[[], Any] = hash_greendb,
 ) -> dict:
     """
     Fetch and saves product count by sustainability label and category from all unique products
@@ -364,7 +367,7 @@ def fetch_and_cache_product_count_credible_sustainability_labels_by_category(
         dict: Dictionary containing cached objects to render in streamlit.
     """
     data_frame_product_count_credible_sustainability_labels_by_category = (
-        _green_db.get_product_count_by_sustainability_label_and_category()
+        _green_db.get_product_count_by_sustainability_label_and_category() # type: ignore[attr-defined] # noqa
     )
     return {
         "plot_product_count_credible_sustainability_labels_fashion": px.bar(
@@ -391,7 +394,8 @@ def fetch_and_cache_product_count_credible_sustainability_labels_by_category(
 
 
 @st.experimental_memo(ttl=604800)
-def fetch_and_cache_category_ecological_vs_social_score_by_category(_green_db: hash_greendb):
+def fetch_and_cache_category_ecological_vs_social_score_by_category(_green_db: Callable[[], Any]
+                                                                    = hash_greendb) -> dict:
     """
     Fetch and saves aggregated ecological and social scores by category. Saves three scatter
         plots in cache for this data per category family (all, electronics and
@@ -403,7 +407,7 @@ def fetch_and_cache_category_ecological_vs_social_score_by_category(_green_db: h
         dict: Dictionary containing cached objects to render in streamlit.
     """
     data_frame_credibility_and_sustainability_by_category = (
-        _green_db.get_credibility_and_sustainability_scores_by_category()
+        _green_db.get_credibility_and_sustainability_scores_by_category() # type: ignore[attr-defined] # noqa
     )
 
     return {

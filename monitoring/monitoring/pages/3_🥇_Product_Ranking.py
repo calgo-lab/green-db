@@ -1,4 +1,5 @@
 import streamlit as st
+from typing import Any
 
 from monitoring.utils import (
     fetch_and_cache_leaderboards,
@@ -24,8 +25,8 @@ def render_product_ranking_filters_as_sidebar() -> None:
     )
 
     st.session_state["merchants_options_with_credibility"] = list(
-            fetch_and_cache_leaderboards(hash_greendb())["rank_by_merchant"]["merchant"].unique()
-        )
+        fetch_and_cache_leaderboards(hash_greendb())["rank_by_merchant"]["merchant"].unique()
+    )
 
     st.session_state["merchant_filter"] = st.multiselect(
         label="Filter by merchant",
@@ -67,7 +68,7 @@ def render_product_ranking() -> None:
 
     if "rank_by" in st.session_state:
         green_db = hash_greendb()
-        data_frame_top_products = green_db.get_top_products_by_credibility_or_sustainability_score(
+        data_frame_top_products = green_db.get_top_products_by_credibility_or_sustainability_score( # type: ignore[attr-defined] # noqa
             st.session_state["merchant_filter"],
             st.session_state["category_filter"],
             st.session_state["number_of_products_to_fetch"],
@@ -84,10 +85,12 @@ def render_product_ranking() -> None:
         )
 
 
-def update_categories():
+def update_categories() -> Any:
     """
     Helper function to update categories depending on family selected, values are taken from
         streamlit cache to update session state.
+    Returns:
+        list : List of fetched categories.
     """
     if st.session_state.radio == "all":
         st.session_state["categories_options"] = fetch_and_cache_product_families(hash_greendb())[
