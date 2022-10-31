@@ -11,7 +11,7 @@ from database.tables import SustainabilityLabelsTable
 
 
 @st.experimental_singleton
-def hash_greendb() -> Callable[[], Any]:
+def hash_greendb() -> GreenDB:
     """
     Helper function to hash connection to the database.
 
@@ -107,7 +107,8 @@ def fetch_and_cache_latest_product_count_per_merchant_and_country(
     # and calculate some values for convenience
     return {
         "latest_extraction_timestamp": _green_db.get_latest_timestamp().date(),  # type: ignore[attr-defined] # noqa
-        "latest_extraction_number_of_products": data_frame_latest_product_count_per_merchant_and_country[
+        "latest_extraction_number_of_products":
+            data_frame_latest_product_count_per_merchant_and_country[
             "product_count"
         ].sum(),
         "latest_extraction_number_of_merchants": len(
@@ -138,9 +139,9 @@ def fetch_and_cache_latest_scraped_page_count_per_merchant_and_country() -> dict
     )
     # and calculate some values for convenience
     return {
-        "latest_scraping_number_of_scraped_pages": data_frame_latest_scraped_page_count_per_merchant_and_country[
-            "scraped_page_count"
-        ].sum(),
+        "latest_scraping_number_of_scraped_pages":
+            data_frame_latest_scraped_page_count_per_merchant_and_country["scraped_page_count"]
+            .sum(),
     }
 
 
@@ -273,12 +274,14 @@ def fetch_and_cache_product_count_by_sustainability_label_credibility(
         "all_unique_product_count": data_frame_product_count_by_sustainability_label_credibility[
             "product_count"
         ].sum(),
-        "unique_credible_product_count": data_frame_product_count_by_sustainability_label_credibility[
+        "unique_credible_product_count":
+            data_frame_product_count_by_sustainability_label_credibility[
             data_frame_product_count_by_sustainability_label_credibility.type == "credible"
         ][
             "product_count"
         ].sum(),
-        "unique_credible_product_count_by_merchant": data_frame_product_count_by_sustainability_label_credibility.groupby(
+        "unique_credible_product_count_by_merchant":
+            data_frame_product_count_by_sustainability_label_credibility.groupby(
             ["merchant"]
         )
         .sum()

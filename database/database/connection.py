@@ -545,7 +545,6 @@ class GreenDB(Connection):
             return (
                 db_session.query(
                     self._database_class.id.label("prod_id"),
-                    # TO DO remove this and put it inside the join
                     self._database_class.merchant,
                     self._database_class.category,
                     func.unnest(self._database_class.sustainability_labels).label(
@@ -699,7 +698,7 @@ class GreenDB(Connection):
                 func.count(self._database_class.id),
                 literal_column("'certificate:OTHER'"),
             )
-            .filter(self._database_class.sustainability_labels.any(CertificateType.OTHER.value))
+            .filter(self._database_class.sustainability_labels.any(CertificateType.OTHER.value)) # type: ignore[attr-defined] # noqa
             .group_by(self._database_class.merchant, self._database_class.timestamp)
             .all()
         )
@@ -888,7 +887,6 @@ class GreenDB(Connection):
         with self._session_factory() as db_session:
             unique_credible_products = self.calculate_sustainability_scores()
 
-            # TODO pass column as parameter
             if agregated_by == "merchant":
                 aggregated_query = (
                     db_session.query(
