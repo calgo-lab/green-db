@@ -698,7 +698,7 @@ class GreenDB(Connection):
                 func.count(self._database_class.id),
                 literal_column("'certificate:OTHER'"),
             )
-            .filter(self._database_class.sustainability_labels.any(CertificateType.OTHER.value)) # type: ignore[attr-defined] # noqa
+            .filter(self._database_class.sustainability_labels.any(CertificateType.OTHER.value))  # type: ignore[attr-defined] # noqa
             .group_by(self._database_class.merchant, self._database_class.timestamp)
             .all()
         )

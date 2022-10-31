@@ -101,19 +101,14 @@ def fetch_and_cache_latest_product_count_per_merchant_and_country(
         dict: Dictionary containing cached objects to render in streamlit.
     """
     # Fetch and save DataFrame
-    data_frame_latest_product_count_per_merchant_and_country = (
+    data_frame = (
         _green_db.get_latest_product_count_per_merchant_and_country()  # type: ignore[attr-defined] # noqa
     )
     # and calculate some values for convenience
     return {
         "latest_extraction_timestamp": _green_db.get_latest_timestamp().date(),  # type: ignore[attr-defined] # noqa
-        "latest_extraction_number_of_products":
-            data_frame_latest_product_count_per_merchant_and_country[
-            "product_count"
-        ].sum(),
-        "latest_extraction_number_of_merchants": len(
-            data_frame_latest_product_count_per_merchant_and_country.groupby("merchant")
-        ),
+        "latest_extraction_number_of_products": data_frame["product_count"].sum(),
+        "latest_extraction_number_of_merchants": len(data_frame.groupby("merchant")),
     }
 
 
@@ -131,7 +126,7 @@ def fetch_and_cache_latest_scraped_page_count_per_merchant_and_country() -> dict
         dict: Dictionary containing cached objects to render in streamlit.
     """
     # Fetch and save DataFrame
-    data_frame_latest_scraped_page_count_per_merchant_and_country = pd.concat(
+    data_frame = pd.concat(
         [
             Scraping(table_name).get_latest_scraped_page_count_per_merchant_and_country()
             for table_name in ALL_SCRAPING_TABLE_NAMES
@@ -139,9 +134,7 @@ def fetch_and_cache_latest_scraped_page_count_per_merchant_and_country() -> dict
     )
     # and calculate some values for convenience
     return {
-        "latest_scraping_number_of_scraped_pages":
-            data_frame_latest_scraped_page_count_per_merchant_and_country["scraped_page_count"]
-            .sum(),
+        "latest_scraping_number_of_scraped_pages": data_frame["scraped_page_count"].sum(),
     }
 
 
@@ -267,27 +260,19 @@ def fetch_and_cache_product_count_by_sustainability_label_credibility(
     Returns:
         dict: Dictionary containing cached objects to render in streamlit.
     """
-    data_frame_product_count_by_sustainability_label_credibility = (
+    data_frame = (
         _green_db.get_product_count_by_sustainability_label_credibility()  # type: ignore[attr-defined] # noqa
     )
     return {
-        "all_unique_product_count": data_frame_product_count_by_sustainability_label_credibility[
+        "all_unique_product_count": data_frame["product_count"].sum(),
+        "unique_credible_product_count": data_frame[data_frame.type == "credible"][
             "product_count"
         ].sum(),
-        "unique_credible_product_count":
-            data_frame_product_count_by_sustainability_label_credibility[
-            data_frame_product_count_by_sustainability_label_credibility.type == "credible"
-        ][
-            "product_count"
-        ].sum(),
-        "unique_credible_product_count_by_merchant":
-            data_frame_product_count_by_sustainability_label_credibility.groupby(
-            ["merchant"]
-        )
+        "unique_credible_product_count_by_merchant": data_frame.groupby(["merchant"])
         .sum()
         .sort_values(by="product_count", ascending=False),
         "plot_normalized_product_count_w_vs_wo_credibility": (
-            alt.Chart(data_frame_product_count_by_sustainability_label_credibility)
+            alt.Chart(data_frame)
             .mark_bar()
             .encode(
                 x=alt.X("sum(product_count)", stack="normalize"),
@@ -296,9 +281,7 @@ def fetch_and_cache_product_count_by_sustainability_label_credibility(
             )
         ),
         "plot_product_count_w_credibility": px.pie(
-            data_frame_product_count_by_sustainability_label_credibility[
-                data_frame_product_count_by_sustainability_label_credibility.type == "credible"
-            ],
+            data_frame[data_frame.type == "credible"],
             values="product_count",
             names="merchant",
         ),
