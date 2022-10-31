@@ -11,7 +11,7 @@ COPY database /green-db/database
 COPY monitoring /green-db/monitoring
 
 WORKDIR /green-db/monitoring
-RUN poetry config virtualenvs.create false && poetry install --no-dev --no-interaction --no-ansi
+RUN poetry config virtualenvs.create false && poetry install --only main --no-interaction --no-ansi
 COPY /monitoring/monitoring .
 
 ENTRYPOINT ["streamlit", "run"]
