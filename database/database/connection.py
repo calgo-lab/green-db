@@ -1,7 +1,7 @@
 from collections import Counter
 from datetime import datetime
 from logging import getLogger
-from typing import Iterator, List, Optional, Type, Any
+from typing import Any, Iterator, List, Optional, Type
 
 import pandas as pd
 from sqlalchemy import desc, func, literal_column, or_

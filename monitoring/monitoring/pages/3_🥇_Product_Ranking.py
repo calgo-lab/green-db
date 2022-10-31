@@ -1,5 +1,6 @@
-import streamlit as st
 from typing import Any
+
+import streamlit as st
 
 from monitoring.utils import (
     fetch_and_cache_leaderboards,
@@ -68,7 +69,7 @@ def render_product_ranking() -> None:
 
     if "rank_by" in st.session_state:
         green_db = hash_greendb()
-        data_frame_top_products = green_db.get_top_products_by_credibility_or_sustainability_score( # type: ignore[attr-defined] # noqa
+        data_frame_top_products = green_db.get_top_products_by_credibility_or_sustainability_score(  # type: ignore[attr-defined] # noqa
             st.session_state["merchant_filter"],
             st.session_state["category_filter"],
             st.session_state["number_of_products_to_fetch"],
