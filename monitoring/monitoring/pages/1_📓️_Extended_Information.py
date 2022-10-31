@@ -1,25 +1,19 @@
 import streamlit as st
 
-from database.connection import GreenDB
 from monitoring.utils import (
     fetch_and_cache_extended_information,
     fetch_and_cache_scraped_page_and_product_count_per_merchant_and_country,
+    hash_greendb,
 )
 
-green_db = GreenDB()
 
-
-def render_extended_information(green_db: GreenDB) -> None:
+def render_extended_information() -> None:
     """
-    Render dataframes from session states in streamlit just when user clicks to fetch the data.
-        This is the secondary tab of the report.
-
-    Args:
-        green_db (GreenDB): `Connection` for the GreenDB.
+    Render dataframes from cache in streamlit. This is the secondary page of the monitoring report.
     """
     st.subheader("Scraped pages vs. extracted products count as table")
     st.dataframe(
-        fetch_and_cache_scraped_page_and_product_count_per_merchant_and_country(green_db)[
+        fetch_and_cache_scraped_page_and_product_count_per_merchant_and_country(hash_greendb())[
             "pivot_scraped_vs_extracted"
         ].sort_values(by="timestamp", ascending=False)
     )
@@ -30,13 +24,13 @@ def render_extended_information(green_db: GreenDB) -> None:
     st.write(
         "Number of sustainability labels in use:",
         len(
-            fetch_and_cache_extended_information(green_db)[
+            fetch_and_cache_extended_information(hash_greendb())[
                 "latest_product_count_per_sustainability_label"
             ]
         ),
     )
     st.dataframe(
-        fetch_and_cache_extended_information(green_db)[
+        fetch_and_cache_extended_information(hash_greendb())[
             "latest_product_count_per_sustainability_label"
         ]
     )
@@ -46,12 +40,18 @@ def render_extended_information(green_db: GreenDB) -> None:
     st.subheader("Latest products with UNKNOWN label as table")
 
     st.dataframe(
-        fetch_and_cache_extended_information(green_db)[
+        fetch_and_cache_extended_information(hash_greendb())[
             "latest_products_with_unknown_sustainability_label"
         ]
     )
-    st.dataframe(green_db.get_product_count_by_sustainability_label_credibility_alltimestamps())
 
 
-st.set_page_config(page_title="Extended Information", page_icon="♻️")
-render_extended_information(green_db)
+def main() -> None:
+    """
+    This represents the basic structure of the Extended Information page.
+    """
+    st.set_page_config(page_title="Extended Information", page_icon="♻️")
+    render_extended_information()
+
+
+main()

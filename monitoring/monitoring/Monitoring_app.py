@@ -1,30 +1,29 @@
 import altair as alt
 import streamlit as st
 
-from database.connection import GreenDB
-from database.tables import SustainabilityLabelsTable
 from monitoring.utils import (
     fetch_and_cache_latest_product_count_per_category_and_merchant,
     fetch_and_cache_latest_product_count_per_merchant_and_country,
     fetch_and_cache_latest_scraped_page_count_per_merchant_and_country,
+    fetch_and_cache_product_count_by_sustainability_label_credibility_overtime,
     fetch_and_cache_product_count_with_unknown_sustainability_label,
     fetch_and_cache_scraped_page_and_product_count_per_merchant_and_country,
+    hash_greendb,
 )
 
-green_db = GreenDB()
 
-
-def render_sidebar(green_db: GreenDB) -> None:
+def render_sidebar() -> None:
     """
-    Render streamlit sidebar from previously initialized session states. Sidebar provides a
+    Render streamlit sidebar from previously initialized cache. Sidebar provides a
         quick overview of the latest data extraction.
-
-    Args:
-        green_db (GreenDB): `Connection` for the GreenDB.
     """
     st.title("Overview")
     st.write("From last data extraction on:")
-    st.write(green_db.get_latest_timestamp().date())
+    st.write(
+        fetch_and_cache_latest_product_count_per_merchant_and_country(hash_greendb())[
+            "latest_extraction_timestamp"
+        ]
+    )
 
     st.metric(
         label="Number scraped pages",
@@ -35,41 +34,42 @@ def render_sidebar(green_db: GreenDB) -> None:
 
     st.metric(
         label="Number extracted products",
-        value=fetch_and_cache_latest_product_count_per_merchant_and_country(green_db)[
+        value=fetch_and_cache_latest_product_count_per_merchant_and_country(hash_greendb())[
             "latest_extraction_number_of_products"
         ],
     )
 
     st.metric(
         label="Number of categories",
-        value=fetch_and_cache_latest_product_count_per_category_and_merchant(green_db)[
+        value=fetch_and_cache_latest_product_count_per_category_and_merchant(hash_greendb())[
             "latest_extraction_number_of_categories"
         ],
     )
 
     st.metric(
         label="Number of merchants",
-        value=fetch_and_cache_latest_product_count_per_merchant_and_country(green_db)[
+        value=fetch_and_cache_latest_product_count_per_merchant_and_country(hash_greendb())[
             "latest_extraction_number_of_merchants"
         ],
     )
 
     st.write("Sustainability label's last update:")
-    st.write(green_db.get_latest_timestamp(SustainabilityLabelsTable).date())
+    st.write(
+        fetch_and_cache_scraped_page_and_product_count_per_merchant_and_country(hash_greendb())[
+            "latest_sustainability_labels_timestamp"
+        ]
+    )
 
 
-def render_basic_information(green_db: GreenDB) -> None:
+def render_basic_information() -> None:
     """
-    Render 'basic information' from previously initialized session states in streamlit. This is
-        the main tab of the report, includes all plots.
-
-    Args:
-        green_db (GreenDB): `Connection` for the GreenDB.
+    Render 'basic information' from cache in streamlit. This is the main tab of the report,
+        includes monitoring plots.
     """
 
     st.subheader("Scraped pages and extracted products")
     st.plotly_chart(
-        fetch_and_cache_scraped_page_and_product_count_per_merchant_and_country(green_db)[
+        fetch_and_cache_scraped_page_and_product_count_per_merchant_and_country(hash_greendb())[
             "plot_scraped_vs_extracted_over_timestamp"
         ]
     )
@@ -78,20 +78,19 @@ def render_basic_information(green_db: GreenDB) -> None:
 
     st.subheader("Scraped pages and extracted products by merchants")
     data_frame_scraped_page_and_product_count_per_merchant_and_country = (
-        fetch_and_cache_scraped_page_and_product_count_per_merchant_and_country(green_db)[
+        fetch_and_cache_scraped_page_and_product_count_per_merchant_and_country(hash_greendb())[
             "data_frame"
         ]
     )
-    st.session_state["merchants_options"] = list(
-        fetch_and_cache_scraped_page_and_product_count_per_merchant_and_country(green_db)[
-            "data_frame"
-        ]["merchant"].unique()
-    )
+    if "merchants_options" not in st.session_state:
+        st.session_state["merchants_options"] = list(
+            fetch_and_cache_scraped_page_and_product_count_per_merchant_and_country(hash_greendb())[
+                "data_frame"]["merchant"].unique())
     st.session_state["selected_merchants"] = st.multiselect(
-        "Filter by merchant:",
-        st.session_state["merchants_options"],
-        st.session_state["merchants_options"][:],
-    )
+            "Filter by merchant:",
+            st.session_state["merchants_options"],
+            st.session_state["merchants_options"][:],
+        )
     st.altair_chart(
         alt.Chart(
             data_frame_scraped_page_and_product_count_per_merchant_and_country[
@@ -117,24 +116,40 @@ def render_basic_information(green_db: GreenDB) -> None:
 
     st.subheader("Latest products per category and merchant")
     st.plotly_chart(
-        fetch_and_cache_latest_product_count_per_category_and_merchant(green_db)[
+        fetch_and_cache_latest_product_count_per_category_and_merchant(hash_greendb())[
             "plot_latest_products_per_category_and_merchant"
         ]
     )
 
     st.markdown("""---""")
 
-    fetch_and_cache_product_count_with_unknown_sustainability_label(green_db)
+    fetch_and_cache_product_count_with_unknown_sustainability_label(hash_greendb())
     st.subheader("Products with UNKNOWN sustainability label")
     st.plotly_chart(
-        fetch_and_cache_product_count_with_unknown_sustainability_label(green_db)["plot"]
+        fetch_and_cache_product_count_with_unknown_sustainability_label(hash_greendb())["plot"]
+    )
+    st.subheader("Credible vs 'certificate:OTHER' sustainability labels by merchant")
+    st.caption(
+        "Products with at least one label with credibility score >= 50 is considered "
+        "credible. Products with certificate:OTHER are usually 3rd party labels not listed "
+        "in our evaluation."
+    )
+    st.altair_chart(
+        fetch_and_cache_product_count_by_sustainability_label_credibility_overtime(hash_greendb()),
+        use_container_width=True,
     )
 
 
-st.set_page_config(page_title="GreenDB", page_icon="♻️")
-st.title("GreenDB - A Product-by-Product Sustainability Database")
-# Sidebar with general overview of the project
-with st.sidebar:
-    render_sidebar(green_db)
+def main() -> None:
+    """
+    This represents the basic structure of the Monitoring App page.
+    """
+    st.set_page_config(page_title="GreenDB", page_icon="♻️")
+    st.title("GreenDB - A Product-by-Product Sustainability Database")
+    with st.sidebar:
+        render_sidebar()
 
-render_basic_information(green_db)
+    render_basic_information()
+
+
+main()
