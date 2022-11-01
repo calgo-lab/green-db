@@ -575,23 +575,6 @@ class GreenDB(Connection):
 
             all_unique = self.get_all_unique_products()
 
-            unique_products_null_credibility = (
-                db_session.query(
-                    all_unique.c.merchant,
-                    func.count(all_unique.c.prod_id),
-                    literal_column("'credibility_null'"),
-                )
-                .filter(
-                    all_unique.c.sustainability_label.not_in(
-                        db_session.query(labels.c.id)
-                        .filter(labels.c.cred_credibility is not None)
-                        .all()
-                    )
-                )
-                .group_by(all_unique.c.merchant)
-                .all()
-            )
-
             unique_credible_products = (
                 db_session.query(
                     all_unique.c.merchant,
@@ -616,9 +599,9 @@ class GreenDB(Connection):
                     literal_column("'not_credible'"),
                 )
                 .filter(
-                    all_unique.c.sustainability_label.in_(
+                    all_unique.c.sustainability_label.not_in(
                         db_session.query(labels.c.id)
-                        .filter(labels.c.cred_credibility < credibility_threshold)
+                        .filter(labels.c.cred_credibility >= credibility_threshold)
                         .all()
                     )
                 )
@@ -627,8 +610,7 @@ class GreenDB(Connection):
             )
 
         return pd.DataFrame(
-            unique_products_null_credibility
-            + unique_credible_products
+            unique_credible_products
             + unique_not_credible_products,
             columns=["merchant", "product_count", "type"],
         )

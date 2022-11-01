@@ -331,6 +331,7 @@ def fetch_and_cache_product_families(_green_db: Callable[[], Any] = hash_greendb
         "FREEZER",
         "WASHER",
         "DRYER",
+        "SMARTPHONE",
     ]
     return {
         "all_categories": all_categories,
