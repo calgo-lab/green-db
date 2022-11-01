@@ -610,8 +610,7 @@ class GreenDB(Connection):
             )
 
         return pd.DataFrame(
-            unique_credible_products
-            + unique_not_credible_products,
+            unique_credible_products + unique_not_credible_products,
             columns=["merchant", "product_count", "type"],
         )
 
