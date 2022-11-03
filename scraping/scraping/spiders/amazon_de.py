@@ -18,6 +18,7 @@ class AmazonSpider(BaseSpider):
     allowed_domains = ["amazon.de"]
     custom_settings = {
         "DOWNLOADER_MIDDLEWARES": {
+            "scraping.middlewares.RandomUserAgentMiddleware": 400,
             "scraping.middlewares.AmazonSchedulerMiddleware": 543,
             "scrapy.downloadermiddlewares.retry.RetryMiddleware": None,
         },
