@@ -13,11 +13,15 @@ user_agents = get_json_data("user_agents.json")
 
 
 class RandomUserAgentMiddleware(object):
+    """set a random user-agent on every request"""
+
     def process_request(self, request: Any, spider: Any) -> Any:
-        request.headers.setdefault("User-Agent", choice(user_agents)["useragent"])
+        request.headers["User-Agent"] = choice(user_agents)["useragent"]
 
 
 class AmazonSchedulerMiddleware(object):
+    """wait a few hours every 250 requests"""
+
     request_counter = 0
     end_of_break_time = 0.0
 
