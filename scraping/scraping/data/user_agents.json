@@ -1,4 +1,3 @@
-// https://techblog.willshouse.com/2012/01/03/most-common-user-agents/
 [{"percent":"19.1%","useragent":"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/106.0.0.0 Safari\/537.36","system":"Chrome 106.0 Win10"},
 {"percent":"8.9%","useragent":"Mozilla\/5.0 (Windows NT 10.0; Win64; x64; rv:105.0) Gecko\/20100101 Firefox\/105.0","system":"Firefox 105.0 Win10"},
 {"percent":"7.5%","useragent":"Mozilla\/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/106.0.0.0 Safari\/537.36","system":"Chrome 106.0 macOS"},
