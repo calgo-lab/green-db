@@ -1,6 +1,3 @@
-# type: ignore[attr-defined]
-
-
 import json
 from logging import getLogger
 from typing import List, Optional

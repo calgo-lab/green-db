@@ -1,5 +1,3 @@
-# type: ignore[attr-defined]
-
 from typing import Optional
 
 from core import log

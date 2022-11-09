@@ -1,5 +1,3 @@
-# type: ignore[attr-defined]
-
 import json
 import urllib
 import xml.etree.ElementTree as ElementTree

@@ -1,5 +1,3 @@
-# type: ignore[attr-defined]
-
 import json
 import re
 from logging import getLogger
