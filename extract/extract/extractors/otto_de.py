@@ -273,7 +273,7 @@ def _get_energy_labels(product_data: dict) -> List[str]:
         List[str]: `list` of found energy_labels.
     """
 
-    energy_labels = []
+    energy_labels: List[str] = []
     json_values = [product_data]
 
     for json_value in json_values:

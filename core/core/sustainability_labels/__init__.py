@@ -2,6 +2,7 @@ import csv
 import json
 from enum import Enum
 from pathlib import Path
+from typing import Any
 
 SUSTAINABILITY_LABELS_JSON_FILE_PATH = Path(__file__).parent / "sustainability-labels.json"
 SUSTAINABILITY_LABELS_EVALUATION_CSV_FILE_PATH = (
