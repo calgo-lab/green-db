@@ -82,7 +82,7 @@ class AmazonSpider(BaseSpider):
         next_path = response.css(".s-pagination-selected+ .s-pagination-button::attr(href)").get()
         if next_path:
             page_number = response.css(".s-pagination-selected+ .s-pagination-button::text").get()
-            next_page = strip_url(response.urljoin(next_path), {"k", "c", "qid", "ts_id", "ref"})
+            next_page = strip_url(response.urljoin(next_path), {"c", "qid", "ts_id", "ref"})
 
             logger.info(f"Next page found, number {page_number} at {next_page}")
 
