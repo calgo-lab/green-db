@@ -1,5 +1,3 @@
-# type: ignore[attr-defined]
-
 import re
 from enum import Enum
 from logging import getLogger
