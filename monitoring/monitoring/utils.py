@@ -201,7 +201,7 @@ def fetch_and_cache_product_count_with_unknown_sustainability_label(
 @st.experimental_memo(ttl=604800)
 def fetch_and_cache_product_count_by_sustainability_label_credibility_overtime(
     _green_db: Callable[[], Any] = hash_greendb,
-) -> dict:
+) -> pd.DataFrame:
     """
     Fetch product count for products by sustainability label credibility grouped in: all
         extracted, certificate:OTHER and credible. Saves a line plot from queried data in streamlit
@@ -211,9 +211,9 @@ def fetch_and_cache_product_count_by_sustainability_label_credibility_overtime(
         _green_db (hash_greendb): `Connection` for the GreenDB.
 
     Returns:
-        dict: Dictionary containing cached objects to render in streamlit.
+        pd.DataFrame: Cached dataframe containing data to plot in streamlit.
     """
-    return _green_db.get_product_count_by_sustainability_label_credibility_all_timestamps()
+    return _green_db.get_product_count_by_sustainability_label_credibility_all_timestamps() # type: ignore[attr-defined] # noqa
 
 
 @st.experimental_memo(ttl=604800)

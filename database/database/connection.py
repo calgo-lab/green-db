@@ -745,6 +745,8 @@ class GreenDB(Connection):
             A sqlalchemy.sql.selectable.Subquery with credibility, ecological, social and
             sustainability scores for unique credible products.
         """
+        N_ECO_DIMENSIONS = 8
+        N_SOC_DIMENSIONS = 5
         with self._session_factory() as db_session:
             all_unique_credible_products = self.get_unique_products_with_credibility()
             all_labels = self.get_sustainability_labels_subquery()
@@ -809,7 +811,7 @@ class GreenDB(Connection):
                             + get_max_sustainability_scores.c.eco_waste_air
                             + get_max_sustainability_scores.c.eco_environmental_management
                         )
-                        / 8
+                        / N_ECO_DIMENSIONS
                     ).label("ecological_score"),
                     (
                         func.sum(
@@ -819,7 +821,7 @@ class GreenDB(Connection):
                             + get_max_sustainability_scores.c.social_company_responsibility
                             + get_max_sustainability_scores.c.social_conflict_minerals
                         )
-                        / 5
+                        / N_SOC_DIMENSIONS
                     ).label("social_score"),
                     get_max_sustainability_scores.c.mean_credibility,
                 )
