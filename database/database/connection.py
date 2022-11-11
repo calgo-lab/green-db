@@ -855,9 +855,9 @@ class GreenDB(Connection):
                 .subquery()
             )
 
-    def get_rank_by_sustainability(self, agregated_by: str) -> pd.DataFrame:
+    def get_rank_by_sustainability(self, aggregated_by: str) -> pd.DataFrame:
         """
-        This function ranks unique credible products by its aggregated credibility.
+        This function ranks unique credible products by its aggregated sustainability score.
 
         Args:
             aggregated_by (str): Determines product attribute to aggregated data.
@@ -868,59 +868,27 @@ class GreenDB(Connection):
         with self._session_factory() as db_session:
             unique_credible_products = self.calculate_sustainability_scores()
 
-            if agregated_by == "merchant":
-                aggregated_query = (
-                    db_session.query(
-                        self._database_class.merchant,
-                        func.round(func.avg(unique_credible_products.c.sustainability_score)).label(
-                            "sustainability_score"
-                        ),
-                    )
-                    .join(
-                        unique_credible_products,
-                        unique_credible_products.c.prod_id == self._database_class.id,
-                    )
-                    .group_by(self._database_class.merchant)
-                    .order_by(desc("sustainability_score"))
-                    .subquery()
-                )
+            aggregation_map = {
+                "merchant": self._database_class.merchant,
+                "category": self._database_class.category,
+                "brand": self._database_class.brand,
+            }
 
-            elif agregated_by == "category":
-                aggregated_query = (
-                    db_session.query(
-                        self._database_class.category,
-                        func.round(func.avg(unique_credible_products.c.sustainability_score)).label(
-                            "sustainability_score"
-                        ),
-                    )
-                    .join(
-                        unique_credible_products,
-                        unique_credible_products.c.prod_id == self._database_class.id,
-                    )
-                    .group_by(self._database_class.category)
-                    .order_by(desc("sustainability_score"))
-                    .subquery()
-                )
-
-            elif agregated_by == "brand":
-                aggregated_query = (
-                    db_session.query(
-                        self._database_class.brand,
-                        func.round(func.avg(unique_credible_products.c.sustainability_score)).label(
-                            "sustainability_score"
-                        ),
-                    )
-                    .join(
-                        unique_credible_products,
-                        unique_credible_products.c.prod_id == self._database_class.id,
-                    )
-                    .group_by(self._database_class.brand)
-                    .order_by(desc("sustainability_score"))
-                    .subquery()
-                )
             return pd.DataFrame(
-                db_session.query(aggregated_query).all(),
-                columns=[f"{agregated_by}", "sustainability_score"],
+                db_session.query(
+                    aggregation_map[aggregated_by],
+                    func.round(func.avg(unique_credible_products.c.sustainability_score)).label(
+                        "sustainability_score"
+                    ),
+                )
+                .join(
+                    unique_credible_products,
+                    unique_credible_products.c.prod_id == self._database_class.id,
+                )
+                .group_by(aggregation_map[aggregated_by])
+                .order_by(desc("sustainability_score"))
+                .all(),
+                columns=[f"{aggregated_by}", "sustainability_score"],
             )
 
     def get_top_products_by_credibility_or_sustainability_score(
