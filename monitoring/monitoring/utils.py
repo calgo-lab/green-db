@@ -213,7 +213,7 @@ def fetch_and_cache_product_count_by_sustainability_label_credibility_overtime(
     Returns:
         pd.DataFrame: Cached dataframe containing data to plot in streamlit.
     """
-    return _green_db.get_product_count_by_sustainability_label_credibility_all_timestamps() # type: ignore[attr-defined] # noqa
+    return _green_db.get_product_count_by_sustainability_label_credibility_all_timestamps()  # type: ignore[attr-defined] # noqa
 
 
 @st.experimental_memo(ttl=604800)
