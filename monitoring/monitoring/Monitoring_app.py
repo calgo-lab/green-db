@@ -136,8 +136,36 @@ def render_basic_information() -> None:
         "credible. Products with certificate:OTHER are usually 3rd party labels not listed "
         "in our evaluation."
     )
+
+    if "merchants_overtime_options" not in st.session_state:
+        st.session_state["merchants_overtime_options"] = list(
+            fetch_and_cache_product_count_by_sustainability_label_credibility_overtime(
+                hash_greendb()
+            )["merchant"].unique()
+        )
+    st.session_state["selected_merchants_overtime"] = st.multiselect(
+        "Filter by merchant:",
+        st.session_state["merchants_overtime_options"],
+        st.session_state["merchants_overtime_options"][:],
+    )
+
+    st.session_state["plot_product_count_by_sustainability_label_credibility_all_timestamps"] = (
+        alt.Chart(
+            fetch_and_cache_product_count_by_sustainability_label_credibility_overtime(
+                hash_greendb()
+            )[
+                fetch_and_cache_product_count_by_sustainability_label_credibility_overtime(
+                    hash_greendb()
+                ).isin(st.session_state["selected_merchants_overtime"])
+            ]
+        )
+        .mark_line()
+        .encode(
+            x="timestamp", y=alt.Y("product_count", stack=None), color="merchant", strokeDash="type"
+        )
+    )
     st.altair_chart(
-        fetch_and_cache_product_count_by_sustainability_label_credibility_overtime(hash_greendb()),
+        st.session_state["plot_product_count_by_sustainability_label_credibility_all_timestamps"],
         use_container_width=True,
     )
 

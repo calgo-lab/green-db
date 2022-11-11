@@ -213,13 +213,7 @@ def fetch_and_cache_product_count_by_sustainability_label_credibility_overtime(
     Returns:
         dict: Dictionary containing cached objects to render in streamlit.
     """
-    return (
-        alt.Chart(_green_db.get_product_count_by_sustainability_label_credibility_all_timestamps())  # type: ignore[attr-defined] # noqa
-        .mark_line()
-        .encode(
-            x="timestamp", y=alt.Y("product_count", stack=None), color="merchant", strokeDash="type"
-        )
-    )
+    return _green_db.get_product_count_by_sustainability_label_credibility_all_timestamps()
 
 
 @st.experimental_memo(ttl=604800)
