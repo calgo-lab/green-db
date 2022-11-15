@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Any, Dict, Optional
 
 from core import log
 from core.constants import (
@@ -27,8 +27,9 @@ from .parse import parse_page
 
 log.setup_logger(__name__)
 
+
 # Maps a scraping table name to its extraction method
-EXTRACTOR_FOR_TABLE_NAME = {
+EXTRACTOR_FOR_TABLE_NAME: Dict[str, Any] = {
     TABLE_NAME_SCRAPING_AMAZON_DE: extract_amazon_de,
     TABLE_NAME_SCRAPING_AMAZON_FR: extract_amazon_fr,
     TABLE_NAME_SCRAPING_AMAZON_GB: extract_amazon_gb,
