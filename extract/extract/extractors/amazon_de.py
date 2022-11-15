@@ -254,7 +254,7 @@ def _get_image_urls(soup: BeautifulSoup) -> Optional[list[str]]:
     return _handle_parse(targets, parse_image_urls)
 
 
-def _get_sizes(soup: BeautifulSoup) -> List[str]:
+def _get_sizes(soup: BeautifulSoup) -> Optional[List[str]]:
     """
     Helper function that extracts the product's sizes.
 
@@ -262,7 +262,7 @@ def _get_sizes(soup: BeautifulSoup) -> List[str]:
         soup (BeautifulSoup): Parsed HTML
 
     Returns:
-        List[str]: `list` object containing all sizes.
+        Optional[List[str]]: list of sizes. If nothing was found `None`.
     """
     sizes = (
         soup.find_all("span", {"class", "a-size-base swatch-title-text-display swatch-title-text"})[
@@ -270,7 +270,7 @@ def _get_sizes(soup: BeautifulSoup) -> List[str]:
         ]
         or soup.find_all("option", id=re.compile("size_name"))[1:]
     )
-    return [size.text.strip() for size in sizes if size.text.strip()]
+    return [size.text.strip() for size in sizes if size.text.strip()] if sizes else None
 
 
 def _get_price(parsed_page: ParsedPage) -> Optional[float]:
