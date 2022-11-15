@@ -1,5 +1,5 @@
 from logging import getLogger
-from typing import Any, Iterator, List, Optional, Union
+from typing import Any, Iterable, List, Optional, Union
 
 from core.domain import CertificateType
 from core.sustainability_labels import load_and_get_sustainability_labels
@@ -65,7 +65,7 @@ def get_product_from_JSON_LD(json_ld: List[Any], else_return: Any = {}) -> Any:
 
 
 def sustainability_labels_to_certificates(
-    certificate_strings: Iterator[str], certificate_mapping: dict
+    certificate_strings: Iterable[str], certificate_mapping: dict
 ) -> Optional[list[str]]:
     """
     Helper function that maps the extracted HTML span texts to certificates.

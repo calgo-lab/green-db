@@ -291,7 +291,7 @@ def _get_energy_labels(product_data: dict) -> List[str]:
     return [f"EU Energy label {letter}" for letter in energy_labels]
 
 
-def _get_sustainability(product_data: dict, parsed_url: ParseResult) -> List[str]:
+def _get_sustainability(product_data: dict, parsed_url: ParseResult) -> Optional[List[str]]:
     """
     Helper function that extracts the product's sustainability information.
 
@@ -314,6 +314,6 @@ def _get_sustainability(product_data: dict, parsed_url: ParseResult) -> List[str
         sustainable_soup = BeautifulSoup(sustainability_information_html, "html.parser")
         labels.update(_get_sustainability_info(sustainable_soup))
 
-    return sorted(
-        sustainability_labels_to_certificates(list(labels.keys()) + energy_labels, _LABEL_MAPPING)
+    return sustainability_labels_to_certificates(
+        list(labels.keys()) + energy_labels, _LABEL_MAPPING
     )

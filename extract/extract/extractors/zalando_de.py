@@ -151,7 +151,8 @@ def get_json_data(json_file: str) -> Any:
     try:
         return json.loads(json_file)
     except json.decoder.JSONDecodeError:
-        return json.loads(ElementTree.fromstring(f"<root>{json_file}</root>").text)
+        unquoted = ElementTree.fromstring(f"<root>{json_file}</root>").text
+        return json.loads(unquoted or "")
 
 
 def get_sustainability_strings(parsed_page: ParsedPage) -> Iterator[str]:
