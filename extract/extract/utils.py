@@ -132,7 +132,9 @@ def _get_certificate_for_any_language(
     ]
 
 
-def check_and_create_attributes_list(attributes: Union[str, List[str]]) -> Optional[List[str]]:
+def check_and_create_attributes_list(
+    attributes: Union[str, List[str], None]
+) -> Optional[List[str]]:
     """
     Helper function to convert an attribute to a list. If it's already a list `None` elements are
     removed.
@@ -150,6 +152,6 @@ def check_and_create_attributes_list(attributes: Union[str, List[str]]) -> Optio
         if attributes in attributes_to_remove:
             return None
         return [attributes]
-    elif isinstance(attributes, List):
+    elif isinstance(attributes, list):
         return list(filter(lambda attr: attr not in attributes_to_remove, attributes))
     return None
