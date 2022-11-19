@@ -1,5 +1,3 @@
-# type: ignore[attr-defined]
-
 import re
 from enum import Enum
 from logging import getLogger
@@ -44,19 +42,16 @@ class _Language(Enum):
     en = "co.uk"
 
 
-_LANGUAGE_LOCALES = {
-    _Language.de: {
-        "info": ("Besuche den ", "-Store", "Marke: "),
-        "table": ("Marke", "Hersteller", "Brand"),
-    },
-    _Language.fr: {
-        "info": ("Visiter la boutique ", "Marque\xa0: "),
-        "table": ("Marque", "Fabricant"),
-    },
-    _Language.en: {
-        "info": ("Visit the ", " Store", "Brand: "),
-        "table": ("Brand", "Manufacturer"),
-    },
+_LANGUAGE_LOCALE_INFO = {
+    _Language.de: ("Besuche den ", "-Store", "Marke: "),
+    _Language.fr: ("Visiter la boutique ", "Marque\xa0: "),
+    _Language.en: ("Visit the ", " Store", "Brand: "),
+}
+
+_LANGUAGE_LOCALE_TABLE = {
+    _Language.de: ("Marke", "Hersteller", "Brand"),
+    _Language.fr: ("Marque", "Fabricant"),
+    _Language.en: ("Brand", "Manufacturer"),
 }
 
 
@@ -267,19 +262,15 @@ def _get_sizes(soup: BeautifulSoup) -> Optional[List[str]]:
         soup (BeautifulSoup): Parsed HTML
 
     Returns:
-        Optional[str]: `str` object containing all sizes. If nothing was found `None`.
+        Optional[List[str]]: list of sizes. If nothing was found `None`.
     """
-    targets = [
+    sizes = (
         soup.find_all("span", {"class", "a-size-base swatch-title-text-display swatch-title-text"})[
             1:
-        ],
-        soup.find_all("option", id=re.compile("size_name"))[1:],
-    ]
-
-    def parse_sizes(sizes: list[BeautifulSoup]) -> str:
-        return [size.text.strip() for size in sizes if size.text.strip()]
-
-    return _handle_parse(targets, parse_sizes)
+        ]
+        or soup.find_all("option", id=re.compile("size_name"))[1:]
+    )
+    return [size.text.strip() for size in sizes if size.text.strip()] if sizes else None
 
 
 def _get_price(parsed_page: ParsedPage) -> Optional[float]:
@@ -292,17 +283,14 @@ def _get_price(parsed_page: ParsedPage) -> Optional[float]:
     Returns:
         Optional[float]: `float` object if a price is given, else `None`.
     """
-    targets = [
-        parsed_page.scraped_page.meta_information.get("price", None),
-    ]
+    if meta_info := parsed_page.scraped_page.meta_information:
+        if price := meta_info.get("price", None):
+            return float(price.replace(".", "").replace(",", "."))
 
-    def parse_price(price: str) -> float:
-        return float(price.replace(".", "").replace(",", "."))
-
-    return _handle_parse(targets, parse_price)
+    return None
 
 
-def _get_brand(soup: BeautifulSoup, language: str) -> Optional[str]:
+def _get_brand(soup: BeautifulSoup, language: _Language) -> Optional[str]:
     """
     Helper function that extracts the product's brand.
 
@@ -317,7 +305,7 @@ def _get_brand(soup: BeautifulSoup, language: str) -> Optional[str]:
     ]
 
     def parse_brand(brand: str) -> Optional[str]:
-        info_locales = _LANGUAGE_LOCALES[language]["info"]
+        info_locales = _LANGUAGE_LOCALE_INFO[language]
         if brand.startswith(info_locales[0]):
             if language == _Language.de:
                 return brand[len(info_locales[0]) : -len(info_locales[1])]  # noqa
@@ -327,7 +315,7 @@ def _get_brand(soup: BeautifulSoup, language: str) -> Optional[str]:
             return brand[len(info_locales[-1]) :]  # noqa
         return None
 
-    table_locales = _LANGUAGE_LOCALES[language]["table"]
+    table_locales = _LANGUAGE_LOCALE_TABLE[language]
     return (
         _handle_parse(targets, parse_brand)
         or _find_from_details_section(soup, table_locales[0])
@@ -353,7 +341,7 @@ def _get_description(soup: BeautifulSoup) -> str:
         soup.find("div", {"id": "feature-bullets"}),
     ]
 
-    def parse_description(description: BeautifulSoup) -> str:
+    def parse_description(description: BeautifulSoup) -> Optional[str]:
         desc_paragraph = getattr(description, "p", None)
         if desc_paragraph:
             return desc_paragraph.get_text().strip()
@@ -366,10 +354,9 @@ def _get_description(soup: BeautifulSoup) -> str:
     description = _handle_parse(targets[:1], parse_description)
     bullets = _handle_parse(targets[1:], parse_description)
 
-    if all([description, bullets]):
-        return ". ".join([bullets, description])
-    else:
-        return description or bullets or ""
+    if description and bullets:
+        return f"{bullets}. {description}"
+    return description or bullets or ""
 
 
 def _find_from_details_section(soup: BeautifulSoup, prop: str) -> Optional[str]:
@@ -402,3 +389,4 @@ def _find_from_details_section(soup: BeautifulSoup, prop: str) -> Optional[str]:
             return parent.parent.find("td").text.strip().replace("\u200e", "")
         except AttributeError:
             return None
+    return None

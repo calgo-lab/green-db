@@ -1,5 +1,5 @@
 from logging import getLogger
-from typing import Any, List, Union
+from typing import Any, Iterable, List, Optional, Union
 
 from core.domain import CertificateType
 from core.sustainability_labels import load_and_get_sustainability_labels
@@ -65,8 +65,8 @@ def get_product_from_JSON_LD(json_ld: List[Any], else_return: Any = {}) -> Any:
 
 
 def sustainability_labels_to_certificates(
-    certificate_strings: list[str], certificate_mapping: dict
-) -> Union[list[str], None]:
+    certificate_strings: Iterable[str], certificate_mapping: dict
+) -> Optional[list[str]]:
     """
     Helper function that maps the extracted HTML span texts to certificates.
     1. It tries all known certificates
@@ -79,7 +79,7 @@ def sustainability_labels_to_certificates(
         certificate_mapping (dict): Mapping of certificate strings to certificates
 
     Returns:
-        Union[list[str], None]: List of parsed certificates or None if certificate_strings is empty
+        Optional[list[str]]: List of parsed certificates or None if certificate_strings is empty
     """
 
     # Return None if certificate_strings is empty
@@ -132,7 +132,9 @@ def _get_certificate_for_any_language(
     ]
 
 
-def check_and_create_attributes_list(attributes: Union[str, List[str]]) -> Union[List[str], None]:
+def check_and_create_attributes_list(
+    attributes: Union[str, List[str], None]
+) -> Optional[List[str]]:
     """
     Helper function to convert an attribute to a list. If it's already a list `None` elements are
     removed.
@@ -150,6 +152,6 @@ def check_and_create_attributes_list(attributes: Union[str, List[str]]) -> Union
         if attributes in attributes_to_remove:
             return None
         return [attributes]
-    elif isinstance(attributes, List):
+    elif isinstance(attributes, list):
         return list(filter(lambda attr: attr not in attributes_to_remove, attributes))
     return None
