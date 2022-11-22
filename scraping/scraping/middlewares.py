@@ -38,6 +38,7 @@ class AmazonSchedulerMiddleware(object):
             d: Deferred = Deferred()
             delay = self.end_of_break_time - current_time
             reactor.callLater(delay, d.callback, None)  # type: ignore[attr-defined]
+
             logger.info(f"Delaying {request} by {delay} seconds")
             return d
 
