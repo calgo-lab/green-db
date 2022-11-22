@@ -730,7 +730,7 @@ class GreenDB(Connection):
 
     def calculate_sustainability_scores(self) -> Any:
         """
-        This function gets unique product with credibility ids to calculate credibility,
+        This function gets unique product with credibility ids to calculate mean credibility,
         ecological, social and sustainability scores per id when products have at least one
         credible label.
 
