@@ -16,7 +16,6 @@ def strip_url(url: str, strip_keys: Optional[Set[str]] = None) -> str:
     scheme, netloc, path, params, query, fragment = urlparse(url)
     if strip_keys:
         query = urlencode([(key, val) for key, val in parse_qsl(query) if key not in strip_keys])
-
     else:
         query = ""
 
