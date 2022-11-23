@@ -12,13 +12,13 @@ logger = getLogger(__name__)
 user_agents = get_json_data("user_agents.json")
 
 AMAZON_MAX_REQUESTS_BEFORE_BREAK = 250
-AMAZON_MINIMUM_BREAK_TIME = 60**2 * 8  # 8 hours
-AMAZON_MAXIMUM_BREAK_TIME = 60**2 * 16
+AMAZON_MINIMUM_BREAK_LENGTH = 60**2 * 8  # 8 hours
+AMAZON_MAXIMUM_BREAK_LENGTH = 60**2 * 16
 
 
 class AmazonSchedulerMiddleware(object):
     """
-    Stop scraping pages for `AMAZON_MINIMUM_BREAK_TIME` to `AMAZON_MAXIMUM_BREAK_TIME` seconds
+    Stop scraping pages for `AMAZON_MINIMUM_BREAK_LENGTH` to `AMAZON_MAXIMUM_BREAK_LENGTH` seconds
     once every `AMAZON_MAX_REQUESTS_BEFORE_BREAK` requests.
     """
 
@@ -31,7 +31,7 @@ class AmazonSchedulerMiddleware(object):
 
         if self.request_counter >= AMAZON_MAX_REQUESTS_BEFORE_BREAK:
             # trigger break and reset counter
-            break_length = uniform(AMAZON_MINIMUM_BREAK_TIME, AMAZON_MAXIMUM_BREAK_TIME)
+            break_length = uniform(AMAZON_MINIMUM_BREAK_LENGTH, AMAZON_MAXIMUM_BREAK_LENGTH)
             self.end_of_break_time = current_time + break_length
             self.request_counter = 0
 
