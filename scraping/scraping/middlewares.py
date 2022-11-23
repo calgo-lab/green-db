@@ -31,7 +31,8 @@ class AmazonSchedulerMiddleware(object):
 
         if self.request_counter >= AMAZON_MAX_REQUESTS_BEFORE_BREAK:
             # trigger break and reset counter
-            self.end_of_break_time = current_time + uniform(AMAZON_MINIMUM_BREAK_TIME, AMAZON_MAXIMUM_BREAK_TIME)
+            break_length = uniform(AMAZON_MINIMUM_BREAK_TIME, AMAZON_MAXIMUM_BREAK_TIME)
+            self.end_of_break_time = current_time + break_length
             self.request_counter = 0
 
         if current_time < self.end_of_break_time:
