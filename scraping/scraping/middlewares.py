@@ -17,8 +17,8 @@ AMAZON_MINIMUM_BREAK_TIME = 60**2 * 8  # 8 hours
 
 class AmazonSchedulerMiddleware(object):
     """
-    stop scraping pages for  AMAZON_MINIMUM_BREAK_TIME to 2*AMAZON_MINIMUM_BREAK_TIME  seconds
-    once every  AMAZON_MAX_REQUESTS_BEFORE_BREAK  requests.
+    Stop scraping pages for `AMAZON_MINIMUM_BREAK_TIME` to `2*AMAZON_MINIMUM_BREAK_TIME` seconds
+    once every `AMAZON_MAX_REQUESTS_BEFORE_BREAK` requests.
     """
 
     request_counter = 0
@@ -46,7 +46,9 @@ class AmazonSchedulerMiddleware(object):
 
 
 class RandomUserAgentMiddleware(object):
-    """set a random user-agent on every request"""
+    """
+    Set a random user-agent on every request.
+    """
 
     def process_request(self, request: Any, spider: Any) -> None:
         request.headers["User-Agent"] = choice(user_agents)["useragent"]
