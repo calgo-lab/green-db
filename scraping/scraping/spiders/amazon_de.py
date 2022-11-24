@@ -1,12 +1,12 @@
 from logging import getLogger
 from typing import Iterator
-from urllib.parse import urlparse
 
 from scrapy_splash import SplashJsonResponse, SplashRequest
 
 from core.constants import TABLE_NAME_SCRAPING_AMAZON_DE
 
 from ..splash import minimal_script
+from ..utils import strip_url
 from ._base import BaseSpider
 
 logger = getLogger(__name__)
@@ -16,7 +16,28 @@ class AmazonSpider(BaseSpider):
     name = TABLE_NAME_SCRAPING_AMAZON_DE
     source, _ = name.rsplit("_", 1)
     allowed_domains = ["amazon.de"]
-    download_delay = 30
+    custom_settings = {
+        "DOWNLOADER_MIDDLEWARES": {
+            "scraping.middlewares.RandomUserAgentMiddleware": 400,
+            "scraping.middlewares.AmazonSchedulerMiddleware": 543,
+            "scrapy.downloadermiddlewares.retry.RetryMiddleware": None,
+        },
+        "DEFAULT_REQUEST_HEADERS": {
+            "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",  # noqa
+            "accept-encoding": "deflate",
+            "accept-language": "de-DE,de;q=0.9",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "sec-ch-ua": '" Not A;Brand";v="99", "Chromium";v="99", "Google Chrome";v="99"',
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": '"Windows"',
+            "sec-fetch-dest": "document",
+            "sec-fetch-mode": "navigate",
+            "sec-fetch-site": "none",
+            "sec-fetch-user": "?1",
+            "upgrade-insecure-requests": "1",
+        },
+    }
 
     def parse_SERP(self, response: SplashJsonResponse) -> Iterator[SplashRequest]:
         """
@@ -27,8 +48,6 @@ class AmazonSpider(BaseSpider):
         """
         # Save HTML to database
         self._save_SERP(response)
-        parsed_url = urlparse(response.url)
-        url_domain = f"https://{parsed_url.netloc}"
         urls = response.css("div.a-row.a-size-base.a-color-base a::attr(href)").getall()
         prices = response.css(
             "div.a-row.a-size-base.a-color-base span.a-price-whole::text"
@@ -40,12 +59,13 @@ class AmazonSpider(BaseSpider):
         for url, price in zip(urls, prices):
             if "refinements=p_n_cpf_eligible" in url:
                 yield SplashRequest(
-                    url=f"{url_domain}{url}",
+                    url=strip_url(response.urljoin(url)),
                     callback=self.parse_PRODUCT,
                     meta={
                         "request_meta_information": {
                             "price": price.encode("ascii", "ignore").decode()
-                        }
+                        },
+                        "dont_merge_cookies": True,
                     }
                     | self.create_default_request_meta(response),
                     endpoint="execute",
@@ -62,14 +82,15 @@ class AmazonSpider(BaseSpider):
         next_path = response.css(".s-pagination-selected+ .s-pagination-button::attr(href)").get()
         if next_path:
             page_number = response.css(".s-pagination-selected+ .s-pagination-button::text").get()
-            next_page = f"{url_domain}{next_path}"
+            next_page = strip_url(response.urljoin(next_path), {"c", "qid", "ts_id", "ref"})
 
             logger.info(f"Next page found, number {page_number} at {next_page}")
 
             yield SplashRequest(
                 url=next_page,
                 callback=self.parse_SERP,
-                meta=self.create_default_request_meta(response, original_url=next_page),
+                meta=self.create_default_request_meta(response, original_url=next_page)
+                | {"dont_merge_cookies": True},
                 endpoint="execute",
                 args={  # passed to Splash HTTP API
                     "wait": self.request_timeout,
