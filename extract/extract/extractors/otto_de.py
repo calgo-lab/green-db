@@ -68,7 +68,9 @@ def extract_otto_de(parsed_page: ParsedPage) -> Optional[Product]:
     product_data = _get_product_data(parsed_page.beautiful_soup)
     parsed_url = urlparse(parsed_page.scraped_page.url)
 
-    sustainability_labels = _get_sustainability(product_data, parsed_url, parsed_page.scraped_page.category)
+    sustainability_labels = _get_sustainability(
+        product_data, parsed_url, parsed_page.scraped_page.category
+    )
     image_urls = _get_image_urls(product_data, parsed_url)[:NUM_IMAGE_URLS]
 
     try:
@@ -291,7 +293,9 @@ def _get_energy_labels(product_data: dict) -> List[str]:
     return [f"EU Energy label {letter}" for letter in energy_labels]
 
 
-def _get_sustainability(product_data: dict, parsed_url: ParseResult, product_category: str) -> Optional[List[str]]:
+def _get_sustainability(
+    product_data: dict, parsed_url: ParseResult, product_category: str
+) -> Optional[List[str]]:
     """
     Helper function that extracts the product's sustainability information.
 

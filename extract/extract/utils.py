@@ -10,7 +10,7 @@ logger = getLogger(__name__)
 
 _certificate_category_names = {
     "LAPTOP": ["LAPTOPS", "NOTEBOOKS"],
-    "SMARTPHONE": ["SMARTPHONES", "MOBILE_PHONES"]
+    "SMARTPHONE": ["SMARTPHONES", "MOBILE_PHONES"],
 }
 
 
@@ -71,7 +71,9 @@ def get_product_from_JSON_LD(json_ld: List[Any], else_return: Any = {}) -> Any:
 
 
 def sustainability_labels_to_certificates(
-    certificate_strings: Iterable[str], certificate_mapping: dict, product_category=None,
+    certificate_strings: Iterable[str],
+    certificate_mapping: dict,
+    product_category: str = "",
 ) -> Optional[list[str]]:
     """
     Helper function that maps the extracted HTML span texts to certificates.
@@ -119,8 +121,8 @@ def sustainability_labels_to_certificates(
     if product_category in _certificate_category_names.keys():
         for certificate_string, certificate in result.items():
             for label in SUSTAINABILITY_LABELS.keys():
-                for category_alt_name in _certificate_category_names.get(product_category):
-                    if x := re.search(f"^{certificate.value}.*{category_alt_name}$", label):
+                for category_alt_name in _certificate_category_names.get(product_category, []):
+                    if re.search(f"^{certificate.value}.*{category_alt_name}$", label):
                         result.update({certificate_string: label})
 
     return sorted(set(result.values()))  # type: ignore
