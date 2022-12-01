@@ -1,3 +1,4 @@
+import re
 from logging import getLogger
 from typing import Any, Iterable, List, Optional, Union
 
@@ -6,6 +7,11 @@ from core.sustainability_labels import load_and_get_sustainability_labels
 
 SUSTAINABILITY_LABELS = load_and_get_sustainability_labels()
 logger = getLogger(__name__)
+
+_certificate_category_names = {
+    "LAPTOP": ["LAPTOPS", "NOTEBOOKS"],
+    "SMARTPHONE": ["SMARTPHONES", "MOBILE_PHONES"]
+}
 
 
 def safely_return_first_element(list_object: List[Any], else_return: Any = {}) -> Any:
@@ -65,18 +71,20 @@ def get_product_from_JSON_LD(json_ld: List[Any], else_return: Any = {}) -> Any:
 
 
 def sustainability_labels_to_certificates(
-    certificate_strings: Iterable[str], certificate_mapping: dict
+    certificate_strings: Iterable[str], certificate_mapping: dict, product_category=None,
 ) -> Optional[list[str]]:
     """
     Helper function that maps the extracted HTML span texts to certificates.
     1. It tries all known certificates
     2. It uses`certificate_mapping` for shop specific certificates strings
-    3. If no mapping is found, 'CertificateType.UNKNOWN' is assigned and the unknown
+    3. It replaces certificates with category-specific version if possible
+    4. If no mapping is found, 'CertificateType.UNKNOWN' is assigned and the unknown
     certificate_string is logged.
 
     Args:
         certificate_strings (list[str]): Certificate strings from the HTML span tags
         certificate_mapping (dict): Mapping of certificate strings to certificates
+        product_category (str): Category of the product, to infer category-specific labels
 
     Returns:
         Optional[list[str]]: List of parsed certificates or None if certificate_strings is empty
@@ -106,6 +114,14 @@ def sustainability_labels_to_certificates(
             else:  # if certificate_string can not be mapped, assign UNKNOWN and create log message
                 result.update({certificate_string: CertificateType.UNKNOWN})  # type: ignore[attr-defined] # noqa
                 logger.info(f"unknown sustainability label: {certificate_string}")
+
+    # check extracted certificates for category-specific version
+    if product_category in _certificate_category_names.keys():
+        for certificate_string, certificate in result.items():
+            for label in SUSTAINABILITY_LABELS.keys():
+                for category_alt_name in _certificate_category_names.get(product_category):
+                    if x := re.search(f"^{certificate.value}.*{category_alt_name}$", label):
+                        result.update({certificate_string: label})
 
     return sorted(set(result.values()))  # type: ignore
 
