@@ -124,7 +124,7 @@ def sustainability_labels_to_certificates(
             for label in SUSTAINABILITY_LABELS.keys():
                 for category_alt_name in _certificate_category_names.get(product_category, []):
                     # check for a product category-specific label
-                    if re.search(f"^{certificate.value}.*{category_alt_name}$", label): # type: ignore # noqa
+                    if re.search(f"^{certificate.value}.*{category_alt_name}$", label):  # type: ignore # noqa
                         result.update({certificate_string: label})
 
     return sorted(set(result.values()))  # type: ignore
