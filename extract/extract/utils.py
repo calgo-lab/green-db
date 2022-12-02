@@ -117,12 +117,14 @@ def sustainability_labels_to_certificates(
                 result.update({certificate_string: CertificateType.UNKNOWN})  # type: ignore[attr-defined] # noqa
                 logger.info(f"unknown sustainability label: {certificate_string}")
 
-    # check extracted certificates for category-specific version
+    # assign (general) extracted certificates to a product category-specific version, if possible
     if product_category in _certificate_category_names.keys():
+        # loop over all extracted and stored labels and potential category synonyms
         for certificate_string, certificate in result.items():
             for label in SUSTAINABILITY_LABELS.keys():
                 for category_alt_name in _certificate_category_names.get(product_category, []):
-                    if re.search(f"^{certificate.value}.*{category_alt_name}$", label):
+                    # check for a product category-specific label
+                    if re.search(f"^{certificate.value}.*{category_alt_name}$", label): # type: ignore # noqa
                         result.update({certificate_string: label})
 
     return sorted(set(result.values()))  # type: ignore
