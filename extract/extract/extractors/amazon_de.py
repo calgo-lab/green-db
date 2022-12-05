@@ -237,13 +237,14 @@ def _get_image_urls(soup: BeautifulSoup) -> Optional[list[str]]:
             If nothing was found `None` or empty list is returned.
     """
     targets = [
-        soup.find("div", {"id": "altImages"}).find_all("img"),
+        soup.find_all("div", {"id": "altImages"}),
+        soup.find("div", {"class": "unrolledScrollBox"})
     ]
 
     def parse_image_urls(images: list[BeautifulSoup]) -> list[str]:
         image_urls = [
             str(image["src"])
-            for image in images
+            for image in images.find_all("img")
             if not image["src"].endswith(".gif")
             and "play-button-overlay" not in image["src"]
             and "play-icon-overlay" not in image["src"]
