@@ -237,7 +237,7 @@ def _get_image_urls(soup: BeautifulSoup) -> Optional[list[str]]:
             If nothing was found `None` or empty list is returned.
     """
     targets = [
-        soup.find_all("div", {"id": "altImages"}),
+        soup.find("div", {"id": "altImages"}),
         soup.find("div", {"class": "unrolledScrollBox"})
     ]
 
