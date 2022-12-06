@@ -48,6 +48,15 @@ class AmazonSpider(BaseSpider):
         """
         # Save HTML to database
         self._save_SERP(response)
+
+        # Abort scraping if SERP does not correspond to Climate Pledge Friendly products
+        # check if amazon redirects to non CPF alternative products
+        if "&page=" not in response.url and "Cp_n_cpf_eligible" not in response.url:
+            return None
+        # check if non-CPF results are returned without redirecting
+        if response.css("div.widgetId\=correction-messages-aps-redirect").extract():
+            return None
+
         urls = response.css("div.a-row.a-size-base.a-color-base a::attr(href)").getall()
         prices = response.css(
             "div.a-row.a-size-base.a-color-base span.a-price-whole::text"
