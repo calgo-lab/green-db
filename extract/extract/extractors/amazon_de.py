@@ -193,7 +193,7 @@ def get_energy_label_level(soup: BeautifulSoup) -> Optional[str]:
     targets = [soup.find(id="energyEfficiency")]
 
     def parse_energy_efficiency(energy_efficiency: BeautifulSoup) -> Optional[str]:
-        if energy_efficiency:
+        if energy_efficiency and energy_efficiency.find("text"):
             return "EU Energy label " + energy_efficiency.find("text").get_text().strip()
         return None
 
