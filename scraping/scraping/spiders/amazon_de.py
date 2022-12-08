@@ -22,21 +22,18 @@ class AmazonSpider(BaseSpider):
             "scraping.middlewares.AmazonSchedulerMiddleware": 543,
             "scrapy.downloadermiddlewares.retry.RetryMiddleware": None,
         },
-        "DEFAULT_REQUEST_HEADERS": {
-            "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",  # noqa
-            "accept-encoding": "deflate",
-            "accept-language": "de-DE,de;q=0.9",
-            "cache-control": "no-cache",
-            "pragma": "no-cache",
-            "sec-ch-ua": '" Not A;Brand";v="99", "Chromium";v="99", "Google Chrome";v="99"',
-            "sec-ch-ua-mobile": "?0",
-            "sec-ch-ua-platform": '"Windows"',
-            "sec-fetch-dest": "document",
-            "sec-fetch-mode": "navigate",
-            "sec-fetch-site": "none",
-            "sec-fetch-user": "?1",
-            "upgrade-insecure-requests": "1",
-        },
+        "DEFAULT_REQUEST_HEADERS": {'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',  # noqa
+                                    'Accept-Language': 'de,en-US;q=0.7,en;q=0.3',
+                                    'Accept-Encoding': 'gzip, deflate, br',
+                                    'DNT': '1',
+                                    'Connection': 'keep-alive',
+                                    'Upgrade-Insecure-Requests': '1',
+                                    'Sec-Fetch-Dest': 'document',
+                                    'Sec-Fetch-Mode': 'navigate',
+                                    'Sec-Fetch-Site': 'none',
+                                    'Sec-Fetch-User': '?1',
+                                    'Pragma': 'no-cache',
+                                    'Cache-Control': 'no-cache'},
     }
 
     def parse_SERP(self, response: SplashJsonResponse) -> Iterator[SplashRequest]:
@@ -72,12 +69,12 @@ class AmazonSpider(BaseSpider):
                     url=strip_url(response.urljoin(url)),
                     callback=self.parse_PRODUCT,
                     meta={
-                        "request_meta_information": {
-                            "price": price.encode("ascii", "ignore").decode()
-                        },
-                        "dont_merge_cookies": True,
-                    }
-                    | self.create_default_request_meta(response),
+                             "request_meta_information": {
+                                 "price": price.encode("ascii", "ignore").decode()
+                             },
+                             "dont_merge_cookies": True,
+                         }
+                         | self.create_default_request_meta(response),
                     endpoint="execute",
                     priority=1,  # higher priority than SERP
                     args={  # passed to Splash HTTP API
@@ -100,7 +97,7 @@ class AmazonSpider(BaseSpider):
                 url=next_page,
                 callback=self.parse_SERP,
                 meta=self.create_default_request_meta(response, original_url=next_page)
-                | {"dont_merge_cookies": True},
+                     | {"dont_merge_cookies": True},
                 endpoint="execute",
                 args={  # passed to Splash HTTP API
                     "wait": self.request_timeout,
