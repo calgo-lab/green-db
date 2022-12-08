@@ -12,8 +12,8 @@ logger = getLogger(__name__)
 user_agents = get_json_data("user_agents.json")
 
 AMAZON_MAX_REQUESTS_BEFORE_BREAK = 250
-AMAZON_MINIMUM_BREAK_LENGTH = 60**2 * 8  # 8 hours
-AMAZON_MAXIMUM_BREAK_LENGTH = 60**2 * 16
+AMAZON_MINIMUM_BREAK_LENGTH = 60**2 * 4  # 4 hours
+AMAZON_MAXIMUM_BREAK_LENGTH = 60**2 * 8
 
 
 class AmazonSchedulerMiddleware(object):
