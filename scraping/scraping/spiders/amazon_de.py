@@ -22,18 +22,20 @@ class AmazonSpider(BaseSpider):
             "scraping.middlewares.AmazonSchedulerMiddleware": 543,
             "scrapy.downloadermiddlewares.retry.RetryMiddleware": None,
         },
-        "DEFAULT_REQUEST_HEADERS": {'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',  # noqa
-                                    'Accept-Language': 'de,en-US;q=0.7,en;q=0.3',
-                                    'Accept-Encoding': 'gzip, deflate, br',
-                                    'DNT': '1',
-                                    'Connection': 'keep-alive',
-                                    'Upgrade-Insecure-Requests': '1',
-                                    'Sec-Fetch-Dest': 'document',
-                                    'Sec-Fetch-Mode': 'navigate',
-                                    'Sec-Fetch-Site': 'none',
-                                    'Sec-Fetch-User': '?1',
-                                    'Pragma': 'no-cache',
-                                    'Cache-Control': 'no-cache'},
+        "DEFAULT_REQUEST_HEADERS": {
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",  # noqa
+            "Accept-Language": "de,en-US;q=0.7,en;q=0.3",
+            "Accept-Encoding": "gzip, deflate, br",
+            "DNT": "1",
+            "Connection": "keep-alive",
+            "Upgrade-Insecure-Requests": "1",
+            "Sec-Fetch-Dest": "document",
+            "Sec-Fetch-Mode": "navigate",
+            "Sec-Fetch-Site": "none",
+            "Sec-Fetch-User": "?1",
+            "Pragma": "no-cache",
+            "Cache-Control": "no-cache",
+        },
     }
 
     def parse_SERP(self, response: SplashJsonResponse) -> Iterator[SplashRequest]:
@@ -48,14 +50,17 @@ class AmazonSpider(BaseSpider):
 
         # Abort scraping if SERP does not correspond to Climate Pledge Friendly (CPF) products
         # abort if amazon redirects to non-CPF SERP
-        if redirect_URLs := response.request.meta.get('redirect_urls'):
-            if ("p_n_cpf_eligible" in redirect_URLs[0] and "p_n_cpf_eligible" not in response.url):
-                logger.info(f"Abort Scraping of {response.url} as Amazon redirected to a non Climate Pledge Friendly alternative.")
+        if redirect_URLs := response.request.meta.get("redirect_urls"):
+            if "p_n_cpf_eligible" in redirect_URLs[0] and "p_n_cpf_eligible" not in response.url:
+                logger.info(
+                    f"Abort Scraping of {response.url} as Amazon redirected to a non Climate Pledge Friendly alternative."
+                )
                 return None
         # abort if non-CPF results are returned anyway
         if bool(response.css("div.widgetId\=correction-messages-aps-redirect").extract()):
             logger.info(
-                f"Abort Scraping of {response.url} as Amazon does not list Climate Pledge Friendly products.")
+                f"Abort Scraping of {response.url} as Amazon does not list Climate Pledge Friendly products."
+            )
             return None
 
         urls = response.css("div.a-row.a-size-base.a-color-base a::attr(href)").getall()
@@ -72,12 +77,12 @@ class AmazonSpider(BaseSpider):
                     url=strip_url(response.urljoin(url)),
                     callback=self.parse_PRODUCT,
                     meta={
-                             "request_meta_information": {
-                                 "price": price.encode("ascii", "ignore").decode()
-                             },
-                             "dont_merge_cookies": True,
-                         }
-                         | self.create_default_request_meta(response),
+                        "request_meta_information": {
+                            "price": price.encode("ascii", "ignore").decode()
+                        },
+                        "dont_merge_cookies": True,
+                    }
+                    | self.create_default_request_meta(response),
                     endpoint="execute",
                     priority=1,  # higher priority than SERP
                     args={  # passed to Splash HTTP API
@@ -100,7 +105,7 @@ class AmazonSpider(BaseSpider):
                 url=next_page,
                 callback=self.parse_SERP,
                 meta=self.create_default_request_meta(response, original_url=next_page)
-                     | {"dont_merge_cookies": True},
+                | {"dont_merge_cookies": True},
                 endpoint="execute",
                 args={  # passed to Splash HTTP API
                     "wait": self.request_timeout,
