@@ -1,0 +1,257 @@
+
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GreenDB</title>
+<script type="module">
+document.documentElement.classList.remove('no-js');
+document.documentElement.classList.add('js');
+</script>
+<style>
+
+* { box-sizing: border-box }
+
+body {
+	font-family: 'Muli', 'Helvetica', 'Arial', 'sans-serif';
+	line-height: 1.42;
+	font-size: 14px;
+	margin:0;
+}
+
+a {
+	text-decoration: none;
+}
+
+p {
+	font-size: 1.2em;
+	line-height: 2rem;
+}
+
+li {
+	font-size: 1.1em;
+	line-height: 1.7rem;
+}
+
+h1 {
+	font-size: 2.25em;
+}
+
+section {
+	padding: 30px 0;
+}
+
+footer {
+	padding: 40px 0px;
+	text-align: center;
+	background: #282525;
+	color: white;
+}
+
+.container {
+	margin-right: auto;
+	margin-left: auto;
+}
+
+.row::before,
+.row::after {
+	display: table;
+	content: "";
+}
+
+.row::after {
+	clear: both;
+}
+
+.col1,
+.col2,
+.col3,
+.col4 {
+	padding: 0 25px;
+}
+
+@media (min-width:768px) {
+	.container { width:750px }
+}
+
+@media (min-width:992px) {
+	.container { width:970px }
+	.col2,
+	.col3 { float: left }
+	.col2 { width: 62% }
+	.col3 { width: 38% }
+}
+
+@media (min-width:1200px) {
+	.container { width:1170px }
+}
+
+.citation {
+	color: #422639
+}
+
+.citation:hover {
+	color: #474e58
+}
+
+.btn {
+	margin: 7px;
+	border-radius: 4.3px;
+	padding: 15px;
+	
+	font-size: 1.25em;
+	font-weight: 400;
+	font-family: sans-serif;
+	vertical-align: middle;
+	text-align: center;
+	
+	letter-spacing: 2px;
+	display: inline-block;
+	color: white;
+	background: #f15f6f;
+	box-shadow: 0px 5px 5px 0px #ffc1c4;
+	
+	-ms-touch-action: manipulation;
+	touch-action: manipulation;
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	background-image: none;
+	user-select: none;
+}
+
+.btn:hover {
+	background: #db5b71;
+	box-shadow: 0px 5px 5px 0px #f2c1c4;
+}
+
+.btn:active {
+	background: #f15f6f;
+	box-shadow: inset 0px 5px 5px 0px #fd4654;
+}
+
+table {
+	width: 100%;
+	max-width: 100%;
+	line-height: 1.2;
+	margin-bottom: 20px;
+	background-color: transparent;
+	border-spacing: 0;
+	border-collapse: collapse;
+}
+
+th { text-align:left }
+th,
+td { padding: 8px }
+
+</style>
+<meta name="description" content="A Product-by-Product Sustainability Database">
+<meta property="og:title" content="GreenDB">
+<meta property="og:description" content="A Product-by-Product Sustainability Database">
+<meta property="og:image" content="https://calgo-lab.github.io/greendb/greendb.jpg">
+<meta property="og:image:alt" content="GreenDB">
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="og:url" content="https://calgo-lab.github.io/greendb">
+<link rel="canonical" href="https://calgo-lab.github.io/greendb">
+<link rel="icon" href="/favicon.ico">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css?family=Lato:400,600" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Muli:400,600" rel="stylesheet">
+</head>
+<body>
+<section id="header"><div class="container"><div class="row"><h1>GreenDB: A Product-by-Product Sustainability Database</h1>
+<p>Sebastian Jäger; Felix Bießmann; Alexander Flick; Jessica Adriana Sanchez Garcia; Karl Brendel</p>
+</div></div></section><section><div class="container"><div class="row"><div class="col2">
+<p>The production, shipping, usage, and disposal of consumer goods have a substantial impact on greenhouse gas emissions and the depletion of resources. Machine Learning (ML) can help to foster sustainable consumption patterns by accounting for sustainability aspects in product search or recommendations of modern retail platforms. However, the lack of large high quality publicly available product data with trustworthy sustainability information impedes the development of ML technology that can help to reach our sustainability goals.</p>
+<p>Here we present GreenDB, a database that collects products from European online shops on a weekly basis. As proxy for the products’ sustainability, it relies on sustainability labels, which are evaluated by experts. The GreenDB schema extends the well-known schema.org Product definition and can be readily integrated into existing product catalogs. We present initial results demonstrating that ML models trained with our data can reliably predict the sustainability label of products. These contributions can help to complement existing e-commerce experiences and ultimately encourage users to more sustainable consumption patterns.</p>
+</div>
+<div class="col3">
+<table>
+<thead>
+<tr>
+<th>index</th>
+<th>name</th>
+<th>idk</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>BETTER_COTTON_INITIATIVE</td>
+<td>24</td>
+</tr>
+<tr>
+<td>1</td>
+<td>BIORE</td>
+<td>5</td>
+</tr>
+<tr>
+<td>2</td>
+<td>BLUESIGN_APPROVED</td>
+<td>17</td>
+</tr>
+<tr>
+<td>3</td>
+<td>BLUESIGN_PRODUCT</td>
+<td>16</td>
+</tr>
+<tr>
+<td>4</td>
+<td>COTTON_MADE_IN_AFRICA</td>
+<td>21</td>
+</tr>
+<tr>
+<td>5</td>
+<td>CRADLE_TO_CRADLE_BRONZE</td>
+<td>23</td>
+</tr>
+<tr>
+<td>6</td>
+<td>CRADLE_TO_CRADLE_GOLD</td>
+<td>21</td>
+</tr>
+<tr>
+<td>7</td>
+<td>CRADLE_TO_CRADLE_SILVER</td>
+<td>23</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div></div></section><section><div class="container"><div class="row"><div class="col3">
+<p><a href="https://arxiv.org/abs/2205.02908" class="btn">Read the Paper</a><a href="/demo" class="btn">Demos</a><a href="https://zenodo.org/record/6576662" class="btn">Zenodo</a><a href="https://github.com/calgo-lab/green-db/" class="btn">Github</a></p>
+</div>
+<div class="col2">
+<p>Modern retail platforms rely heavily on
+Machine Learning (ML) for their search and recommender systems.
+Thus, ML can potentially support efforts towards more sustainable
+consumption patterns, for example, by accounting for sustainability
+aspects in product search or recommendations. However, leveraging
+ML potential for reaching sustainability goals requires data on sustainability. Unfortunately, no open and publicly available database
+integrates sustainability information on a product-by-product basis.
+In this work, we present the GreenDB, which fills this gap. Based on
+search logs of millions of users, we prioritize which products users
+care about most. The GreenDB schema extends the well-known
+schema.org Product definition and can be readily integrated into
+existing product catalogs to improve sustainability information
+available for search and recommendation experiences. We present
+our proof of concept implementation of a scraping system that
+creates the GreenDB dataset.</p>
+</div>
+</div></div></section><section><div class="container"><div class="row"><div class="col1">
+<h3>Publications</h3>
+<ul>
+<li><a href="https://arxiv.org/abs/2205.02908" class="citation">Jäger, S., Greene, J., Jakob, M., Korenke, R., Santarius, T., and Bießmann, F. (2022). GreenDB: Toward a Product-by-Product Sustainability Database. ArXiv, abs/2205.02908.</a></li>
+<li><a href="https://arxiv.org/abs/2207.10733" class="citation">Jäger, S., Flick, A., Sanchez Garcia, J. A., von den Driesch, K., Brendel, K., and Bießmann, F. (2022). GreenDB: A Dataset and Benchmark for Extraction of Sustainability Information of Consumer Goods., ArXiv, abs/2207.10733.</a></li>
+</ul>
+</div>
+</div></div></section><footer><div class="container"><div class="row"><div class="col4">
+<p>.</p>
+</div>
+</div></div></footer>
+</body>
+</html>
