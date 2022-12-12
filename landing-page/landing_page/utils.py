@@ -31,19 +31,15 @@ def render_tag(tag:str, id:Optional[str], cls:List[str], contents:str):
 
 class Element:
 	def __init__(self, parent:Any, level:int, html_tag:str, css_id:Optional[str], css_class:List[str]):
-		self.css_id = css_id
-		self.css_class = []
+		self.html_tag, self.css_id, self.css_class = html_tag, css_id, []
 		attrs = get_type_hints(type(self))
 		for cls in css_class:
 			if '=' in cls:
-				index = cls.index('=')
-				value = cls[index+1:]
-				name = cls[:index]
+				name, value = cls.split('=', 1)
 				if name in attrs:
 					setattr(self, name, attrs[name](value))
 					continue
 			self.css_class.append(cls)
-		self.html_tag = html_tag
 		self.children = []
 		self.level = level
 		self.parent = parent.add_child(self)
@@ -75,12 +71,12 @@ class Element:
 
 
 class Document(Element):
+	html_tag = 'body'
 	css_id = None
 	css_class = []
-	html_tag = 'body'
 	children = []
-	level = 0
 	parent = None
+	level = 0
 	def __init__(self, metadata:str):
 		self.metadata = metadata
 

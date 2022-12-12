@@ -1,7 +1,7 @@
 from random import random
 from typing import Any, List
 from utils import Element, render_page, render_markdown
-
+from minify_html import minify
 
 def to_linear(srgb: float) -> float:
 	if srgb < 0: return 0
@@ -118,16 +118,12 @@ def rebuild_landing_page(content_map=None,
 	with open("landing-page.md", "r", encoding="utf-8") as file:
 		body = render_page(file.read(), element_map)
 	
-	return f'''<!DOCTYPE html>
+	return minify(f'''<!DOCTYPE html>
 <html lang="en" class="no-js">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{page_title}</title>
-<script type="module">
-document.documentElement.classList.remove('no-js');
-document.documentElement.classList.add('js');
-</script>
 <style>
 
 .row::before,
@@ -279,7 +275,7 @@ td {{ padding: 8px }}
 <link href="https://fonts.googleapis.com/css?family=Muli:400,600" rel="stylesheet">
 </head>
 {body}
-</html>'''
+</html>''', minify_js=True, minify_css=True)
 
 if __name__ == '__main__':
 	content = rebuild_landing_page()
