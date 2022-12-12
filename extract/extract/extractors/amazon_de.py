@@ -241,7 +241,7 @@ def _get_image_urls(soup: BeautifulSoup) -> Optional[list[str]]:
         soup.find("div", {"class": "unrolledScrollBox"}),
     ]
 
-    def parse_image_urls(images: list[BeautifulSoup]) -> list[str]:
+    def parse_image_urls(images: BeautifulSoup) -> list[str]:
         image_urls = [
             str(image["src"])
             for image in images.find_all("img")
