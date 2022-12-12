@@ -50,9 +50,12 @@ class AmazonSpider(BaseSpider):
         # abort if amazon redirects to non-CPF SERP
         if redirect_URLs := response.request.meta.get('redirect_urls'):
             if ("p_n_cpf_eligible" in redirect_URLs[0] and "p_n_cpf_eligible" not in response.url):
+                logger.info(f"Abort Scraping of {response.url} as Amazon redirected to a non Climate Pledge Friendly alternative.")
                 return None
         # abort if non-CPF results are returned anyway
         if bool(response.css("div.widgetId\=correction-messages-aps-redirect").extract()):
+            logger.info(
+                f"Abort Scraping of {response.url} as Amazon does not list Climate Pledge Friendly products.")
             return None
 
         urls = response.css("div.a-row.a-size-base.a-color-base a::attr(href)").getall()
