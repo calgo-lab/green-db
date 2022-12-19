@@ -1,7 +1,13 @@
 from random import random
-from typing import Any, List
+from typing import Any, Dict, List
 from utils import Element, render_page, render_markdown
 from minify_html import minify
+from core.constants import ALL_SCRAPING_TABLE_NAMES
+from database.connection import GreenDB, Scraping
+import plotly.express as px
+from plotly.io import to_html
+from plotly.offline import get_plotlyjs
+
 
 def to_linear(srgb: float) -> float:
 	if srgb < 0: return 0
@@ -37,6 +43,11 @@ def webcolor(color: List[float]) -> str:
 	return '#' + "".join(f'{int(to_srgb(c)*255):02x}' for c in color)
 
 
+def render_plotly_figure(fig, width="100%", height="100%", div_id=None):
+	return to_html(fig, include_plotlyjs=False, full_html=False
+	, default_width=width, default_height=height, div_id=div_id)
+
+
 regenerate_color_scheme = False
 
 if regenerate_color_scheme:
@@ -58,23 +69,28 @@ foot = [blend(a, .02, .92) for a in tint_hover]
 white = [1, 1, 1]
 
 
-def test_content_map():
+def build_test_content():
 	certs = 'BETTER_COTTON_INITIATIVE BIORE BLUESIGN_APPROVED BLUESIGN_PRODUCT COTTON_MADE_IN_AFRICA CRADLE_TO_CRADLE_BRONZE CRADLE_TO_CRADLE_GOLD CRADLE_TO_CRADLE_SILVER'.split()
 	table = '\n'.join(f'|{i}|{cert}|{len(cert)}' for i,cert in enumerate(certs))
 	table = render_markdown(f'|index|name|idk\n|-|-|-\n{table}')
-	return {'table1': table}
+	
+	df = GreenDB().get_product_count_by_sustainability_label_credibility()
+	pie = px.pie(data_frame[data_frame.type == "credible"]
+	, values="product_count", names="merchant")
+	
+	return {'table1': table, 'graph1': render_plotly_figure(pie)}
 
 
-def rebuild_landing_page(content_map=None,
+def rebuild_landing_page(content_map:Dict[str,str]=None,
 	page_title='GreenDB',
 	page_description='A Product-by-Product Sustainability Database',
 	page_url='https://calgo-lab.github.io/greendb',
 	image_url='https://calgo-lab.github.io/greendb/greendb.jpg',
 	image_alt_text='GreenDB',
-):
+) -> str:
 	"""builds the"""
 	if content_map is None:
-		content_map = test_content_map()
+		content_map = build_test_content()
 	
 	class Content(Element):
 		name:str
@@ -259,6 +275,7 @@ th,
 td {{ padding: 8px }}
 
 </style>
+<script type="text/javascript">window.PlotlyConfig={{MathJaxConfig:'local'}};{get_plotlyjs()}</script>
 <meta name="description" content="{page_description}">
 <meta property="og:title" content="{page_title}">
 <meta property="og:description" content="{page_description}">

@@ -8,9 +8,14 @@ authors = ["en-GB <67548055+en-GB@users.noreply.github.com>"]
 python = "^3.10"
 markdown-it-py = {extras = ["plugins"], version = "^2.1.0"}
 minify-html = "^0.10.3"
+plotly = "^5.11.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
+flake8 = "^6.0.0"
+mypy = "^0.991"
+isort = "^5.11.2"
+black = "^22.12.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

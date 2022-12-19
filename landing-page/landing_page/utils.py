@@ -3,14 +3,14 @@ from html import escape
 from ast import literal_eval 
 from markdown_it import MarkdownIt
 from mdit_py_plugins.attrs import attrs_plugin
-from typing import Any, List, Optional, get_type_hints
+from typing import Any, List, Optional, get_type_hints, Iterable, Tuple
 
 md = MarkdownIt().enable('table').use(attrs_plugin)
 container_pattern = re.compile(r':([:]+)(.*)$', flags=re.MULTILINE)
 seperator_pattern = re.compile(r'([#.])')
 
 
-def render_markdown(txt:str):
+def render_markdown(txt:str) -> str:
 	return md.render(txt)
 
 
@@ -22,7 +22,7 @@ def render_elements(elements:list, **kwargs) -> str:
 	return ''.join(render_element(element, **kwargs) for element in elements)
 
 
-def render_tag(tag:str, id:Optional[str], cls:List[str], contents:str):
+def render_tag(tag:str, id:Optional[str], cls:List[str], contents:str) -> str:
 	params = [escape(tag, False)]
 	if id: params.append(f'id="{escape(id)}"')
 	if cls: params.append(f'class="{" ".join(map(escape, cls))}"')
@@ -44,28 +44,28 @@ class Element:
 		self.level = level
 		self.parent = parent.add_child(self)
 	
-	def on_close_parent(self):
+	def on_close_parent(self) -> None:
 		"""gets called before the parent of `self` closes"""
 	
-	def on_add_to_parent(self, parent:Any):
+	def on_add_to_parent(self, parent:Any) -> None:
 		"""gets called before `self` is added to `parent`"""
 	
-	def open(self):
+	def open(self) -> Any:
 		return self
 	
-	def add_child(self, child:Any):
+	def add_child(self, child:Any) -> Any:
 		if hasattr(child, 'on_add_to_parent'):
 			child.on_add_to_parent(self)
 		self.children.append(child)
 		return self
 	
-	def close(self):
+	def close(self) -> Any:
 		for child in self.children:
 			if hasattr(child, 'on_close_parent'):
 				child.on_close_parent()
 		return self.parent
 	
-	def render(self, **kwargs):
+	def render(self, **kwargs) -> str:
 		contents = render_elements(self.children, **kwargs)
 		return render_tag(self.html_tag, self.css_id, self.css_class, contents)
 
@@ -87,7 +87,7 @@ def close(parent:Any, level=0) -> Any:
 	return parent
 
 
-def parse_rules(rules:str):
+def parse_rules(rules:str) -> Iterable[Tuple[str, str, List[str]]]:
 	for rule in rules.split():
 		segments = re.split(seperator_pattern, rule)
 		html_tag = segments[0] or 'div'
@@ -98,7 +98,7 @@ def parse_rules(rules:str):
 		yield html_tag, css_ids[-1] if css_ids else None, css_class
 
 
-def parse_page(txt, element_map={}):
+def parse_page(txt, element_map={}) -> Document:
 	segments = re.split(container_pattern, txt)
 	metadata = segments[0]
 	colons = segments[1::3]
@@ -118,6 +118,6 @@ def parse_page(txt, element_map={}):
 	return result
 
 
-def render_page(txt, element_map={}):
+def render_page(txt, element_map={}) -> str:
 	return parse_page(txt, element_map).render()
 
