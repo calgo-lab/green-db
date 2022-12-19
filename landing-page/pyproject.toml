@@ -9,6 +9,9 @@ python = "^3.10"
 markdown-it-py = {extras = ["plugins"], version = "^2.1.0"}
 minify-html = "^0.10.3"
 plotly = "^5.11.0"
+pandas = "^1.5.2"
+core = {path = "../core"}
+database = {path = "../database"}
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

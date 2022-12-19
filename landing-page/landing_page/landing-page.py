@@ -75,7 +75,7 @@ def build_test_content():
 	table = render_markdown(f'|index|name|idk\n|-|-|-\n{table}')
 	
 	df = GreenDB().get_product_count_by_sustainability_label_credibility()
-	pie = px.pie(data_frame[data_frame.type == "credible"]
+	pie = px.pie(df[df.type == "credible"]
 	, values="product_count", names="merchant")
 	
 	return {'table1': table, 'graph1': render_plotly_figure(pie)}
