@@ -18,7 +18,7 @@ Here we present GreenDB, a database that collects products from European online 
 :: section div.container div.row
 
 ::: column.weight=3
-TODO: that one diagram
+TODO: ecir diagram
 
 ::: column.weight=5
 
@@ -31,10 +31,16 @@ The GreenDB enables the implementation of applications such as the prototypical 
 :: section div.container div.row
 
 ::: column.weight=5
+
+Figure 1. Fashion products with credible sustainability labels
 :::: content.name=plot_credible_fashion
+
+Figure 2. Consumer electronics and Appliances with credible sustainability labels
 :::: content.name=plot_credible_electronics
 
-::: column.weight=3 content.name=rank_by_brand_top_25
+::: column.weight=3
+Table 1. Brands ranked by aggregated mean sustainability score.
+:::: content.name=rank_by_brand_top_25
 
 :: section#publications div.container div.row column
 
