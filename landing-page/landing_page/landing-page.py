@@ -356,7 +356,6 @@ footer {{
 }}
 
 .product-link .table-cell {{
-    font-weight: 1000;
     padding: 12px;
 }}
 
