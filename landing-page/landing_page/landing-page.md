@@ -34,7 +34,7 @@ The GreenDB enables the implementation of applications such as the prototypical 
 :::: content.name=plot_credible_fashion
 :::: content.name=plot_credible_electronics
 
-::: column.weight=3 content.name=rank_by_category
+::: column.weight=3 content.name=rank_by_brand_top_25
 
 :: section#publications div.container div.row column
 
