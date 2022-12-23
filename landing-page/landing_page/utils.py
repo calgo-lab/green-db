@@ -22,8 +22,10 @@ def render_elements(elements: list, **kwargs: Any) -> str:
     return "".join(render_element(element, **kwargs) for element in elements)
 
 
-def render_tag(tag: str, id: Optional[str], cls: List[str], contents: str) -> str:
-    params = [escape(tag, False)]
+def render_tag(
+    tag: str, id: Optional[str], cls: List[str], contents: str, attr: List[str] = []
+) -> str:
+    params = [escape(tag, False), *attr]
     if id:
         params.append(f'id="{escape(id)}"')
     if cls:
