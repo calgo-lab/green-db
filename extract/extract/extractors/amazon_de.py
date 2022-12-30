@@ -35,6 +35,8 @@ _LABEL_MAPPING = {
     "TCO Certified": CertificateType.TCO,  # TODO: There are 2 additional types for phone and laptop
 }
 
+_ENERGY_LABELS = {"Energielabel", "Energy Label"}
+
 
 class _Language(Enum):
     de = "de"
@@ -84,17 +86,15 @@ def extract_amazon_de(parsed_page: ParsedPage) -> Optional[Product]:
     currency = "GBP" if language == _Language.en else "EUR"
 
     sustainability_spans = soup.find_all("span", id=re.compile("CPF-BTF-Certificate-Name"))
-    sustainability_texts = [span.text for span in sustainability_spans]
+    sustainability_texts = {span.text for span in sustainability_spans}
 
     if repairability_index := get_repairability_index(soup):
-        sustainability_texts.append(repairability_index)
+        sustainability_texts.add(repairability_index)
 
-    for energy_label in ["Energielabel", "Energy Label"]:
-        if energy_label in sustainability_texts:
-            if label_with_level := get_energy_label_level(soup):
-                sustainability_texts = [
-                    label.replace(energy_label, label_with_level) for label in sustainability_texts
-                ]
+    if label_with_level := get_energy_label_level(soup):
+        # check and remove Energy label strings that are extracted from CPF section
+        sustainability_texts = sustainability_texts.difference(_ENERGY_LABELS)
+        sustainability_texts.add(label_with_level)  # add Energy label with level
 
     sustainability_labels = sustainability_labels_to_certificates(
         sustainability_texts, _LABEL_MAPPING, parsed_page.scraped_page.category
@@ -190,14 +190,10 @@ def get_energy_label_level(soup: BeautifulSoup) -> Optional[str]:
         returned.
     """
 
-    targets = [soup.find(id="energyEfficiency").find("text")]
-
-    def parse_energy_efficiency(energy_efficiency: BeautifulSoup) -> Optional[str]:
-        if energy_efficiency:
-            return "EU Energy label " + energy_efficiency.get_text().strip()
-        return None
-
-    return _handle_parse(targets, parse_energy_efficiency)
+    if energy_efficiency := soup.find(id="energyEfficiency"):
+        if energy_efficiency.find("text"):
+            return "EU Energy label " + energy_efficiency.find("text").get_text().strip()
+    return None
 
 
 def _get_color(soup: BeautifulSoup) -> Optional[str]:
@@ -236,14 +232,11 @@ def _get_image_urls(soup: BeautifulSoup) -> Optional[list[str]]:
         Optional[list[str]]: `list` object containing `str` objects representing the image urls.
             If nothing was found `None` or empty list is returned.
     """
-    targets = [
-        soup.find("div", {"id": "altImages"}).find_all("img"),
-    ]
 
-    def parse_image_urls(images: list[BeautifulSoup]) -> list[str]:
+    def parse_image_urls(images: BeautifulSoup) -> list[str]:
         image_urls = [
             str(image["src"])
-            for image in images
+            for image in images.find_all("img")
             if not image["src"].endswith(".gif")
             and "play-button-overlay" not in image["src"]
             and "play-icon-overlay" not in image["src"]
@@ -251,7 +244,12 @@ def _get_image_urls(soup: BeautifulSoup) -> Optional[list[str]]:
         ]
         return [re.sub("_[^>]+_.", "", image) for image in image_urls]
 
-    return _handle_parse(targets, parse_image_urls)
+    images = soup.find("div", {"id": "altImages"}) or soup.find(
+        "div", {"class": "unrolledScrollBox"}
+    )
+    if images:
+        return parse_image_urls(images)
+    return None
 
 
 def _get_sizes(soup: BeautifulSoup) -> Optional[List[str]]:

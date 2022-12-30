@@ -23,19 +23,18 @@ class AmazonSpider(BaseSpider):
             "scrapy.downloadermiddlewares.retry.RetryMiddleware": None,
         },
         "DEFAULT_REQUEST_HEADERS": {
-            "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",  # noqa
-            "accept-encoding": "deflate",
-            "accept-language": "de-DE,de;q=0.9",
-            "cache-control": "no-cache",
-            "pragma": "no-cache",
-            "sec-ch-ua": '" Not A;Brand";v="99", "Chromium";v="99", "Google Chrome";v="99"',
-            "sec-ch-ua-mobile": "?0",
-            "sec-ch-ua-platform": '"Windows"',
-            "sec-fetch-dest": "document",
-            "sec-fetch-mode": "navigate",
-            "sec-fetch-site": "none",
-            "sec-fetch-user": "?1",
-            "upgrade-insecure-requests": "1",
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",  # noqa
+            "Accept-Language": "de,en-US;q=0.7,en;q=0.3",
+            "Accept-Encoding": "gzip, deflate, br",
+            "DNT": "1",
+            "Connection": "keep-alive",
+            "Upgrade-Insecure-Requests": "1",
+            "Sec-Fetch-Dest": "document",
+            "Sec-Fetch-Mode": "navigate",
+            "Sec-Fetch-Site": "none",
+            "Sec-Fetch-User": "?1",
+            "Pragma": "no-cache",
+            "Cache-Control": "no-cache",
         },
     }
 
@@ -48,6 +47,24 @@ class AmazonSpider(BaseSpider):
         """
         # Save HTML to database
         self._save_SERP(response)
+
+        # Abort scraping if SERP does not correspond to Climate Pledge Friendly (CPF) products
+        # abort if amazon redirects to non-CPF SERP
+        if redirect_URLs := response.request.meta.get("redirect_urls"):
+            if "p_n_cpf_eligible" in redirect_URLs[0] and "p_n_cpf_eligible" not in response.url:
+                logger.info(
+                    f"Abort Scraping of {response.url} as Amazon redirected to a non Climate "
+                    f"Pledge Friendly alternative."
+                )
+                return None
+        # abort if non-CPF results are returned anyway
+        if bool(response.css(r"div.widgetId\=correction-messages-aps-redirect").extract()):  # noqa
+            logger.info(
+                f"Abort Scraping of {response.url} as Amazon does not list Climate Pledge "
+                f"Friendly products."
+            )
+            return None
+
         urls = response.css("div.a-row.a-size-base.a-color-base a::attr(href)").getall()
         prices = response.css(
             "div.a-row.a-size-base.a-color-base span.a-price-whole::text"
