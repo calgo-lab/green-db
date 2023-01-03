@@ -1,7 +1,7 @@
 
 :: section#header div.container div.row
 
-# GreenDB: A Product-by-Product Sustainability Database
+# GreenDB: Sustainability Data for Consumer Products
 
 Sebastian Jäger; Felix Bießmann; Alexander Flick; Jessica Adriana Sanchez Garcia; Karl Brendel
 
@@ -11,13 +11,87 @@ Sebastian Jäger; Felix Bießmann; Alexander Flick; Jessica Adriana Sanchez Garc
 Here we present GreenDB, a database that collects products from European online shops on a weekly basis. As proxy for the products’ sustainability, it relies on sustainability labels, which are evaluated by experts. The GreenDB schema extends the well-known schema.org Product definition and can be readily integrated into existing product catalogs to improve sustainability information available for search and recommendation experiences.
 
 ::: column.weight=3
-[Read the Paper](https://arxiv.org/abs/2205.02908){.btn}[Demos](/demo){.btn}[Zenodo](https://zenodo.org/record/6576662){.btn}[Github](https://github.com/calgo-lab/green-db/){.btn}
+[Data](https://zenodo.org/record/6576662){.btn}[Publications](#publications){.btn}[Demos](/demo){.btn}[Github](https://github.com/calgo-lab/green-db/){.btn}
 
-:: section#excerpt div.container div.row column content.name=excerpt
+:: section#excerpt div.container
+## Sample
+::: div.row column content.name=excerpt
+
+
+:: section#schema div.container div.row
+
+## Schema
+
+::: column
+
+### Products
+
+| **name** | **data type** | **nullable** |
+| - | -: | -
+| timestamp | `timestamp` | no
+| url | `text` | no
+| source | `text` | no
+| merchant | `text` | no
+| country | `text` | no
+| category | `text` | no
+| name | `text` | no
+| description | `text` | no
+| brand | `text` | no
+| sustainability_labels | `array[text]` | no
+| price | `numeric` | no
+| currency | `text` | no
+| image_urls | `array[text]` | no
+| gender | `text` | yes
+| consumer_lifestage | `text` | yes
+| colors | `array[text]` | yes
+| sizes | `array[text]` | yes
+| gtin | `int` | yes
+| asin | `text` | yes
+
+
+::: column
+
+### Sustainability labels
+
+| **name** | **data type** | **nullable**
+| - | -: | -
+| id | `text` | no
+| timestamp | `timestamp` | no
+| name | `text` | no
+| description | `text` | no
+| cred_credibility | `int4` | yes
+| eco_chemicals | `int4` | yes
+| eco_lifetime | `int4` | yes
+| eco_water | `int4` | yes
+| eco_inputs | `int4` | yes
+| eco_quality | `int4` | yes
+| eco_energy | `int4` | yes
+| eco_waste_air | `int4` | yes
+| eco_environmental_management | `int4` | yes
+| social_labour_rights | `int4` | yes
+| social_business_practice | `int4` | yes
+| social_social_rights | `int4` | yes
+| social_company_responsibility | `int4` | yes
+| social_conflict_minerals | `int4` | yes
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 :: section div.container div.row
 
-::: column.weight=3
+::: column.weight
 
 Figure 1. Scraping system architecture
 
@@ -25,11 +99,9 @@ Figure 1. Scraping system architecture
 <img src="../../docs/figures/architecture.jpg" alt="architecture" width="100%"/>
 </a>
 
-::: column.weight=5
+::: column.weight
 
 TODO: how was it built and ecosia
-
-The GreenDB enables the implementation of applications such as the prototypical Chrome Extension [*Koala - Ecosia Assistant Beta - Grün shoppen*](https://chrome.google.com/webstore/detail/koala-ecosia-assistant-be/anhndceoafjjdihnjnpojdihgboocgpa), which we built as part of the GCA project. The Koala detects when and what users would like to buy online and offers more sustainable alternatives. More information can be found in [one of our working papers](https://green-consumption-assistant.de/wp-content/uploads/GCA-Working-Paper-I-Scaling-Sustainability-Advice.pdf).
 
 :: section div.container div.row
 

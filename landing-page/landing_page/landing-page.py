@@ -431,7 +431,7 @@ table {{
 }}
 
 .table-header,
-th {{ text-align:left }}
+th {{ text-align:left; font-size: 1.1em; }}
 
 .table-header,
 .table-cell,
