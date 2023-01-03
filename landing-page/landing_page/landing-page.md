@@ -18,24 +18,27 @@ Here we present GreenDB, a database that collects products from European online 
 :: section div.container div.row
 
 ::: column.weight=3
-TODO: ecir diagram
+
+Figure 1. Scraping system architecture
+
+<a href="../../docs/figures/architecture.jpg">
+<img src="../../docs/figures/architecture.jpg" alt="architecture" width="100%"/>
+</a>
 
 ::: column.weight=5
 
-TODO: how was it built
+TODO: how was it built and ecosia
 
 The GreenDB enables the implementation of applications such as the prototypical Chrome Extension [*Koala - Ecosia Assistant Beta - Grün shoppen*](https://chrome.google.com/webstore/detail/koala-ecosia-assistant-be/anhndceoafjjdihnjnpojdihgboocgpa), which we built as part of the GCA project. The Koala detects when and what users would like to buy online and offers more sustainable alternatives. More information can be found in [one of our working papers](https://green-consumption-assistant.de/wp-content/uploads/GCA-Working-Paper-I-Scaling-Sustainability-Advice.pdf).
-
-
 
 :: section div.container div.row
 
 ::: column.weight=5
 
-Figure 1. Fashion products with credible sustainability labels
+Figure 2. Fashion products with credible sustainability labels
 :::: content.name=plot_credible_fashion
 
-Figure 2. Consumer electronics and Appliances with credible sustainability labels
+Figure 3. Consumer electronics and Appliances with credible sustainability labels
 :::: content.name=plot_credible_electronics
 
 ::: column.weight=3
