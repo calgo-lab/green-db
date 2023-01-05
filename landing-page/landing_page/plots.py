@@ -288,6 +288,7 @@ def fetch_product_families(_green_db: GreenDB) -> dict:
         "WASHER",
         "DRYER",
         "SMARTPHONE",
+        "TV",
     ]
     return {
         "all_categories": all_categories,
@@ -314,6 +315,16 @@ def fetch_product_count_credible_sustainability_labels_by_category(_green_db: Gr
         _green_db.get_product_count_by_sustainability_label_and_category()
     )
     return {
+        "plot_product_count_credible_sustainability_labels": px.bar(
+            data_frame_product_count_credible_sustainability_labels_by_category[
+                data_frame_product_count_credible_sustainability_labels_by_category.category.isin(
+                    fetch_product_families(_green_db)["all_categories"]
+                )
+            ].sort_values(by="product_count"),
+            x="product_count",
+            y="category",
+            color="sustainability_label",
+        ),
         "plot_product_count_credible_sustainability_labels_fashion": px.bar(
             data_frame_product_count_credible_sustainability_labels_by_category[
                 data_frame_product_count_credible_sustainability_labels_by_category.category.isin(

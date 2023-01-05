@@ -8,7 +8,9 @@ Sebastian Jäger; Felix Bießmann; Alexander Flick; Jessica Adriana Sanchez Garc
 :: section div.container div.row
 ::: column.weight=5
 
-Here we present GreenDB, a database that collects products from European online shops on a weekly basis. As proxy for the products’ sustainability, it relies on sustainability labels, which are evaluated by experts. The GreenDB schema extends the well-known schema.org Product definition and can be readily integrated into existing product catalogs to improve sustainability information available for search and recommendation experiences.
+GreenDB is a publicly available database of sustainable products, scraped from European online shops on a weekly basis. As proxy for the products’ sustainability, it relies on sustainability labels, which are evaluated by experts.
+
+The GreenDB schema extends the well-known schema.org Product definition and can be readily integrated into existing product catalogs to improve sustainability information available for search and recommendation experiences.
 
 ::: column.weight=3
 [Data](https://zenodo.org/record/6576662){.btn}[Publications](#publications){.btn}[Demos](/demo){.btn}[Github](https://github.com/calgo-lab/green-db/){.btn}
@@ -16,7 +18,6 @@ Here we present GreenDB, a database that collects products from European online 
 :: section#excerpt div.container
 ## Sample
 ::: div.row column content.name=excerpt
-
 
 :: section#schema div.container div.row
 
@@ -74,44 +75,11 @@ Here we present GreenDB, a database that collects products from European online 
 | social_company_responsibility | `int4` | yes
 | social_conflict_minerals | `int4` | yes
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-:: section div.container div.row
-
-::: column.weight
-
-Figure 1. Scraping system architecture
-
-<a href="../../docs/figures/architecture.jpg">
-<img src="../../docs/figures/architecture.jpg" alt="architecture" width="100%"/>
-</a>
-
-::: column.weight
-
-TODO: how was it built and ecosia
-
 :: section div.container div.row
 
 ::: column.weight=5
-
-Figure 2. Fashion products with credible sustainability labels
-:::: content.name=plot_credible_fashion
-
-Figure 3. Consumer electronics and Appliances with credible sustainability labels
-:::: content.name=plot_credible_electronics
+Figure 1. Products with credible sustainability labels
+:::: content.name=plot_credible_products
 
 ::: column.weight=3
 Table 1. Brands ranked by aggregated mean sustainability score.
