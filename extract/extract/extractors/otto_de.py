@@ -333,9 +333,9 @@ def _get_sustainability(
         sustainable_soup = BeautifulSoup(sustainability_information_html, "html.parser")
         labels.update(_get_sustainability_info(sustainable_soup))
 
-    # Due to the `filter` being empty (= ""), we expect that in `sustainability_information_htmls`
-    # there wouldn't be anything found for the non-sustainable products, so we set a default label
-    # called UNAVAILABLE, so the non-sustainable products can be distinguished from the other products.
+    # Due to the `filter` being empty, we expect that in `sustainability_information_htmls` there
+    # wouldn't be anything found for the non-sustainable products, so we set a default label
+    # UNAVAILABLE, so the non-sustainable products can be distinguished from the other products.
     if not labels:
         labels = {
             UNAVAILABLE: ""
