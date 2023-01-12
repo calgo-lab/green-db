@@ -10,7 +10,7 @@ In order to create a new version one should use one fo the `make` commands as fo
 
 2. `make patch-version-push` To create, commit and **push** the new version to Github.
 
-    _Note, this will push the versio to Github directly and if there's some issue with the version it will have to be deleted by an admin and then deleted locally and created again._
+    _NOTE, this will push the versio to Github directly and if there's some issue with the version it will have to be deleted by an admin and then deleted locally and created again._
 
 Then to restart the jobs with the new changes, one should run:
 
