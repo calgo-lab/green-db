@@ -19,6 +19,8 @@ from ..utils import (
 logger = getLogger(__name__)
 
 NUM_IMAGE_URLS = 3
+IMAGE_ID_INDEX = 5
+UNAVAILABLE = "UNAVAILABLE"
 
 
 def extract_otto_de(parsed_page: ParsedPage) -> Optional[Product]:
@@ -51,6 +53,7 @@ def extract_otto_de(parsed_page: ParsedPage) -> Optional[Product]:
     description = first_element.get("content")
 
     # check for attributes in json_ld if above extraction fails
+    json_ld = {}
     if not all([name, brand, price, currency, description, gtin]):
         json_ld = safely_return_first_element(parsed_page.schema_org.get(JSON_LD, [{}]))
 
@@ -72,6 +75,9 @@ def extract_otto_de(parsed_page: ParsedPage) -> Optional[Product]:
         product_data, parsed_url, parsed_page.scraped_page.category
     )
     image_urls = _get_image_urls(product_data, parsed_url)[:NUM_IMAGE_URLS]
+
+    if not image_urls:
+        image_urls = _get_image_urls(json_ld, parsed_url, is_json_ld=True)
 
     try:
         return Product(
@@ -144,6 +150,7 @@ _LABEL_MAPPING = {
     "[REE]GROW": CertificateType.OTHER,
     "SEAQUAL™": CertificateType.OTHER,
     "": CertificateType.OTHER,
+    UNAVAILABLE: CertificateType.UNAVAILABLE,
 }
 
 
@@ -166,23 +173,29 @@ def _get_product_data(beautiful_soup: BeautifulSoup) -> dict:
     return json.loads(product_data.string.strip())
 
 
-def _get_image_urls(product_data: dict, parsed_url: ParseResult) -> List[str]:
+def _get_image_urls(product_data: dict, parsed_url: ParseResult, is_json_ld=False) -> List[str]:
     """
     Helper function to extract the image URLs.
 
     Args:
-        product_data (dict): Representation of the product data JSON
+        product_data (dict): Representation of the product data JSON, or a JSON_LD
         parsed_url (ParseResult): Parsed URL
+        is_json_ld (bool): Whether the `product_data` is in JSON_LD format, default=False
 
     Returns:
         List[str]: `list` of image URLs
     """
-    image_ids = [
-        image["id"]
-        for variation in product_data.get("variations", {}).values()
-        for image in variation.get("images", [])
-        if "id" in image
-    ]
+
+    if is_json_ld:
+        image_urls_long = product_data.get("image", [])[:NUM_IMAGE_URLS]
+        image_ids = [img.split("/")[IMAGE_ID_INDEX] for img in image_urls_long]
+    else:
+        image_ids = [
+            image["id"]
+            for variation in product_data.get("variations", {}).values()
+            for image in variation.get("images", [])
+            if "id" in image
+        ]
 
     image_urls = [
         parsed_url._replace(
@@ -243,7 +256,7 @@ def _get_sustainability_info(beautiful_soup: BeautifulSoup) -> dict:
     return_value = dict()
 
     for label_html in beautiful_soup.find_all(
-        "div", attrs={"class": "prd_sustainabilityLayer__label"}
+            "div", attrs={"class": "prd_sustainabilityLayer__label"}
     ):
         name = label_html.find("div", attrs={"class": "prd_sustainabilityLayer__caption"})
         description = label_html.find(
@@ -294,7 +307,7 @@ def _get_energy_labels(product_data: dict) -> List[str]:
 
 
 def _get_sustainability(
-    product_data: dict, parsed_url: ParseResult, product_category: str
+        product_data: dict, parsed_url: ParseResult, product_category: str
 ) -> Optional[List[str]]:
     """
     Helper function that extracts the product's sustainability information.
@@ -318,6 +331,14 @@ def _get_sustainability(
     for sustainability_information_html in sustainability_information_htmls:
         sustainable_soup = BeautifulSoup(sustainability_information_html, "html.parser")
         labels.update(_get_sustainability_info(sustainable_soup))
+
+    # Due to the `filter` being empty (= ""), we expect that in `sustainability_information_htmls`
+    # there wouldn't be anything found for the non-sustainable products, so we set a default label called UNAVAILABLE,
+    # so the non-sustainable products can be distinguished from the other products with "certificate.UNAVAILABLE".
+    if not labels:
+        labels = {
+            UNAVAILABLE: ""
+        }
 
     return sustainability_labels_to_certificates(
         list(labels.keys()) + energy_labels, _LABEL_MAPPING, product_category

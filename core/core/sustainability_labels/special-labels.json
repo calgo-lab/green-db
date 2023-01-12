@@ -14,5 +14,13 @@
                 "description": "Dieses 'Label' ist GreenDB intern. Es wird verwendet, wenn die Angaben des Shops von uns (noch) nicht überprüft wurden."
             }
         }
+    },
+    "certificate:UNAVAILABLE": {
+        "languages": {
+            "de": {
+                "name": "UNAVAILABLE",
+                "description": "Dieses Label wird für Produkte verwendet, die kein Nachhaltigkeits-Label haben, aber ein anderes, aus einem ML-Modell abgeleitetes Label tragen."
+            }
+        }
     }
 }

@@ -139,10 +139,16 @@ def bags() -> List[dict]:
 
 def electronics() -> List[dict]:
     base_path = "https://www.otto.de/technik"
-    filter = "?nachhaltigkeit=alle-nachhaltigen-artikel"
+    # For the need of more products and externally matched labels (EM),
+    # we're not filtering for sustainable products only, thus the filter is empty.
+    filter = ""
 
     path_2_category = {
         "smartphone": ProductCategory.SMARTPHONE.value,
+        "laptop": ProductCategory.LAPTOP.value,
+        "tablet": ProductCategory.TABLET.value,
+        "audio/kopfhoerer": ProductCategory.HEADPHONES.value,
+        "fernseher": ProductCategory.TV.value,
     }
 
     results = []
