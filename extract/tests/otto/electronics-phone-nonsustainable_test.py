@@ -43,8 +43,10 @@ def test_otto_basic(requests_mock: Adapter) -> None:
         category=category,
         gender=None,
         consumer_lifestage=None,
-        name="Sony Xperia 1 III 5G, 256GB Smartphone (16,51 cm/6,5 Zoll, 256 GB Speicherplatz, 12 MP Kamera)",
-        description="Tolle Angebote und Top Qualität entdecken - CO2 neutraler Versand ✔ Kauf auf Rechnung und Raten ✔ Erfülle dir deine Wünsche bei OTTO!",
+        name="Sony Xperia 1 III 5G, 256GB Smartphone (16,51 cm/6,5 Zoll, 256 GB Speicherplatz, "
+             "12 MP Kamera)",
+        description="Tolle Angebote und Top Qualität entdecken - CO2 neutraler Versand ✔ "
+                    "Kauf auf Rechnung und Raten ✔ Erfülle dir deine Wünsche bei OTTO!",
         brand="Sony",
         sustainability_labels=[CertificateType.UNAVAILABLE],  # type: ignore[attr-defined] # noqa
         image_urls=[

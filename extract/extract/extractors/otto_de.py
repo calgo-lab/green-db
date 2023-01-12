@@ -173,7 +173,8 @@ def _get_product_data(beautiful_soup: BeautifulSoup) -> dict:
     return json.loads(product_data.string.strip())
 
 
-def _get_image_urls(product_data: dict, parsed_url: ParseResult, is_json_ld=False) -> List[str]:
+def _get_image_urls(product_data: dict, parsed_url: ParseResult,
+                    is_json_ld: bool = False) -> List[str]:
     """
     Helper function to extract the image URLs.
 
@@ -333,8 +334,8 @@ def _get_sustainability(
         labels.update(_get_sustainability_info(sustainable_soup))
 
     # Due to the `filter` being empty (= ""), we expect that in `sustainability_information_htmls`
-    # there wouldn't be anything found for the non-sustainable products, so we set a default label called UNAVAILABLE,
-    # so the non-sustainable products can be distinguished from the other products with "certificate.UNAVAILABLE".
+    # there wouldn't be anything found for the non-sustainable products, so we set a default label
+    # called UNAVAILABLE, so the non-sustainable products can be distinguished from the other products.
     if not labels:
         labels = {
             UNAVAILABLE: ""
