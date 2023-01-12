@@ -173,8 +173,9 @@ def _get_product_data(beautiful_soup: BeautifulSoup) -> dict:
     return json.loads(product_data.string.strip())
 
 
-def _get_image_urls(product_data: dict, parsed_url: ParseResult,
-                    is_json_ld: bool = False) -> List[str]:
+def _get_image_urls(
+    product_data: dict, parsed_url: ParseResult, is_json_ld: bool = False
+) -> List[str]:
     """
     Helper function to extract the image URLs.
 
@@ -257,7 +258,7 @@ def _get_sustainability_info(beautiful_soup: BeautifulSoup) -> dict:
     return_value = dict()
 
     for label_html in beautiful_soup.find_all(
-            "div", attrs={"class": "prd_sustainabilityLayer__label"}
+        "div", attrs={"class": "prd_sustainabilityLayer__label"}
     ):
         name = label_html.find("div", attrs={"class": "prd_sustainabilityLayer__caption"})
         description = label_html.find(
@@ -308,7 +309,7 @@ def _get_energy_labels(product_data: dict) -> List[str]:
 
 
 def _get_sustainability(
-        product_data: dict, parsed_url: ParseResult, product_category: str
+    product_data: dict, parsed_url: ParseResult, product_category: str
 ) -> Optional[List[str]]:
     """
     Helper function that extracts the product's sustainability information.
@@ -337,9 +338,7 @@ def _get_sustainability(
     # wouldn't be anything found for the non-sustainable products, so we set a default label
     # UNAVAILABLE, so the non-sustainable products can be distinguished from the other products.
     if not labels:
-        labels = {
-            UNAVAILABLE: ""
-        }
+        labels = {UNAVAILABLE: ""}
 
     return sustainability_labels_to_certificates(
         list(labels.keys()) + energy_labels, _LABEL_MAPPING, product_category

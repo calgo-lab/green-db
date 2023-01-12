@@ -44,15 +44,15 @@ def test_otto_basic(requests_mock: Adapter) -> None:
         gender=None,
         consumer_lifestage=None,
         name="Sony Xperia 1 III 5G, 256GB Smartphone (16,51 cm/6,5 Zoll, 256 GB Speicherplatz, "
-             "12 MP Kamera)",
+        "12 MP Kamera)",
         description="Tolle Angebote und Top Qualität entdecken - CO2 neutraler Versand ✔ "
-                    "Kauf auf Rechnung und Raten ✔ Erfülle dir deine Wünsche bei OTTO!",
+        "Kauf auf Rechnung und Raten ✔ Erfülle dir deine Wünsche bei OTTO!",
         brand="Sony",
         sustainability_labels=[CertificateType.UNAVAILABLE],  # type: ignore[attr-defined] # noqa
         image_urls=[
             "https://i.otto.mock/i/otto/eb2cc281-4f81-5c21-89ac-21235628df4a",
             "https://i.otto.mock/i/otto/f301b567-267d-5547-a4f1-27864f9cd864",
-            "https://i.otto.mock/i/otto/a922e336-b5bf-5411-97b9-be0f9c458e44"
+            "https://i.otto.mock/i/otto/a922e336-b5bf-5411-97b9-be0f9c458e44",
         ],
         price=799.99,
         currency=CurrencyType.EUR,
