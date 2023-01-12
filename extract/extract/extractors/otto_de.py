@@ -20,7 +20,6 @@ logger = getLogger(__name__)
 
 NUM_IMAGE_URLS = 3
 IMAGE_ID_INDEX = 5
-UNAVAILABLE = "UNAVAILABLE"
 
 
 def extract_otto_de(parsed_page: ParsedPage) -> Optional[Product]:
@@ -150,7 +149,6 @@ _LABEL_MAPPING = {
     "[REE]GROW": CertificateType.OTHER,
     "SEAQUAL™": CertificateType.OTHER,
     "": CertificateType.OTHER,
-    UNAVAILABLE: CertificateType.UNAVAILABLE,
 }
 
 
