@@ -303,9 +303,11 @@ class GreenDB(Connection):
             Iterator[Product]: `Iterator` of domain object representations
         """
         with self._session_factory() as db_session:
-            query = db_session.query(self._database_class).filter(
-                self._database_class.timestamp == timestamp
-            )
+            query = db_session.query(self._database_class)
+
+            if timestamp is not None:
+                query = query.filter(self._database_class.timestamp == timestamp)
+
             return (Product.from_orm(row) for row in query.all())
 
     def get_latest_products(self) -> Iterator[Product]:
