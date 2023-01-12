@@ -338,7 +338,7 @@ def _get_sustainability(
     # wouldn't be anything found for the non-sustainable products, so we set a default label
     # UNAVAILABLE, so the non-sustainable products can be distinguished from the other products.
     if not labels:
-        labels = {UNAVAILABLE: ""}
+        return [_LABEL_MAPPING[UNAVAILABLE]]
 
     return sustainability_labels_to_certificates(
         list(labels.keys()) + energy_labels, _LABEL_MAPPING, product_category
