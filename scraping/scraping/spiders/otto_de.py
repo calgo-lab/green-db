@@ -3,13 +3,12 @@ from logging import getLogger
 from typing import Iterator
 from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 
+from core.constants import TABLE_NAME_SCRAPING_OTTO_DE
 from scrapy_splash import SplashJsonResponse, SplashRequest
 
-from core.constants import TABLE_NAME_SCRAPING_OTTO_DE
-
 from ..splash import minimal_script
-from ._base import BaseSpider
 from ..start_scripts.otto_de import SUSTAINABILITY_FILTER
+from ._base import BaseSpider
 
 logger = getLogger(__name__)
 
