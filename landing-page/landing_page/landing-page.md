@@ -3,32 +3,27 @@
 
 # GreenDB: Sustainability Data for Consumer Products
 
-Sebastian Jäger; Felix Bießmann; Alexander Flick; Jessica Adriana Sanchez Garcia; Karl Brendel
-
 :: section div.container div.row
 ::: column.weight=5
 
-GreenDB is a publicly available database of sustainable products, scraped from European online shops on a weekly basis. As proxy for the products’ sustainability, it relies on sustainability labels, which are evaluated by experts.
-
-The GreenDB schema extends the well-known schema.org Product definition and can be readily integrated into existing product catalogs to improve sustainability information available for search and recommendation experiences.
+GreenDB is a publicly available database of sustainable products, scraped from European online shops on a weekly basis. As proxy for the products’ sustainability, it relies on sustainability labels, which are evaluated by experts. The GreenDB schema extends the well-known schema.org Product definition and can be readily integrated into existing product catalogs to improve sustainability information available for search and recommendation experiences.
 
 ::: column.weight=3
 [Data](https://zenodo.org/record/6576662){.btn}[Publications](#publications){.btn}[Demos](/demo){.btn}[Github](https://github.com/calgo-lab/green-db/){.btn}
 
-:: section#excerpt div.container
+:: section div.container div.row
 ## Sample
-::: div.row column content.name=excerpt
+::: column excerpt
 
-:: section#schema div.container div.row
-
+:: section div.container div.row
 ## Schema
 
 ::: column
-
 ### Products
 
-| **name** | **data type** | **nullable** |
-| - | -: | -
+:::: div.table-wrapper
+| **column name** | **data type** | **nullable** |
+| :- | -: | :-
 | timestamp | `timestamp` | no
 | url | `text` | no
 | source | `text` | no
@@ -51,11 +46,11 @@ The GreenDB schema extends the well-known schema.org Product definition and can 
 
 
 ::: column
-
 ### Sustainability labels
 
-| **name** | **data type** | **nullable**
-| - | -: | -
+:::: div.table-wrapper
+| **column name** | **data type** | **nullable**
+| :- | -: | :-
 | id | `text` | no
 | timestamp | `timestamp` | no
 | name | `text` | no
@@ -77,13 +72,36 @@ The GreenDB schema extends the well-known schema.org Product definition and can 
 
 :: section div.container div.row
 
-::: column.weight=5
+::: column.weight=2 content.name=plot_credible_products
 Figure 1. Products with credible sustainability labels
-:::: content.name=plot_credible_products
-
-::: column.weight=3
+::: column.weight=1
 Table 1. Brands ranked by aggregated mean sustainability score.
-:::: content.name=rank_by_brand_top_25
+:::: div.table-wrapper content.name=rank_by_brand_top_25
+
+:: section div.container div.row
+### Stuff
+::: column content.name=plot_eco_vs_soc_everything
+Figure 4. Brands ranked by aggregated mean sustainability score.
+
+:: section div.container div.row
+## Schema but sideways
+
+### Products
+
+::: div.table-wrapper
+| **column name** | timestamp | url | source | merchant | country | category | name | description | brand | sustainability_labels | price | currency | image_urls | gender | consumer_lifestage | colors | sizes | gtin | asin
+| -: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-:
+| **data type** | `timestamp` | `text` | `text` | `text` | `text` | `text` | `text` | `text` | `text` | `array[text]` | `numeric` | `text` | `array[text]` | `text` | `text` | `array[text]` | `array[text]` | `int` | `text`
+| **nullable** | no | no | no | no | no | no | no | no | no | no | no | no | no | yes | yes | yes | yes | yes | yes
+:::
+
+### Sustainability labels
+
+::: div.table-wrapper
+| **column name** | id | timestamp | name | description | cred_credibility | eco_chemicals | eco_lifetime | eco_water | eco_inputs | eco_quality | eco_energy | eco_waste_air | eco_environmental_management | social_labour_rights | social_business_practice | social_social_rights | social_company_responsibility | social_conflict_minerals
+| -: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-:
+| **data type** | `text` | `timestamp` | `text` | `text` | `int4` | `int4` | `int4` | `int4` | `int4` | `int4` | `int4` | `int4` | `int4` | `int4` | `int4` | `int4` | `int4` | `int4`
+| **nullable** | no | no | no | no | yes | yes | yes | yes | yes | yes | yes | yes | yes | yes | yes | yes | yes | yes
 
 :: section#publications div.container div.row column
 

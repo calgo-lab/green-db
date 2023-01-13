@@ -1,6 +1,8 @@
+import altair as alt
 import pandas as pd
 import plotly.express as px
 
+from core.domain import ProductCategory
 from core.constants import ALL_SCRAPING_TABLE_NAMES
 from database.connection import GreenDB, Scraping
 from database.tables import SustainabilityLabelsTable
@@ -228,16 +230,15 @@ def fetch_product_count_by_sustainability_label_credibility(_green_db: GreenDB) 
         "unique_credible_product_count_by_merchant": data_frame.groupby(["merchant"])
         .sum()
         .sort_values(by="product_count", ascending=False),
-        # TODO: altair
-        # "plot_normalized_product_count_w_vs_wo_credibility": (
-        #     alt.Chart(data_frame)
-        #     .mark_bar()
-        #     .encode(
-        #         x=alt.X("sum(product_count)", stack="normalize"),
-        #         y=alt.Y("merchant", sort="-x"),
-        #         color="type",
-        #     )
-        # ),
+        "plot_normalized_product_count_w_vs_wo_credibility": (
+            alt.Chart(data_frame)
+            .mark_bar()
+            .encode(
+                x=alt.X("sum(product_count)", stack="normalize"),
+                y=alt.Y("merchant", sort="-x"),
+                color="type",
+            )
+        ),
         "plot_product_count_w_credibility": px.pie(
             data_frame[data_frame.type == "credible"],
             values="product_count",
@@ -273,9 +274,7 @@ def fetch_product_families(_green_db: GreenDB) -> dict:
     Returns:
         dict: Dictionary containing cached list of categories.
     """
-    all_categories = list(
-        _green_db.get_product_count_by_sustainability_label_and_category()["category"].unique()
-    )
+    all_categories = [category.value for category in ProductCategory]
     electronics_categories = [
         "PRINTER",
         "LAPTOP",

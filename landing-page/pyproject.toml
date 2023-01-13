@@ -12,6 +12,7 @@ plotly = "^5.11.0"
 pandas = "^1.5.2"
 core = {path = "../core"}
 database = {path = "../database"}
+altair = "^4.2.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
