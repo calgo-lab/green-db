@@ -2,8 +2,8 @@ import altair as alt
 import pandas as pd
 import plotly.express as px
 
-from core.domain import ProductCategory
 from core.constants import ALL_SCRAPING_TABLE_NAMES
+from core.domain import ProductCategory
 from database.connection import GreenDB, Scraping
 from database.tables import SustainabilityLabelsTable
 

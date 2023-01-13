@@ -79,6 +79,12 @@ Table 1. Brands ranked by aggregated mean sustainability score.
 :::: div.table-wrapper content.name=rank_by_brand_top_25
 
 :: section div.container div.row
+### more Stuff
+::: content.name=plot_merchant_cred
+::: content.name=plot_top25_brands_eco_vs_soc
+::: content.name=plot_category_eco_vs_soc
+::: content.name=plot_category_cred
+:: section div.container div.row
 ### Stuff
 ::: column content.name=plot_eco_vs_soc_everything
 Figure 4. Brands ranked by aggregated mean sustainability score.
