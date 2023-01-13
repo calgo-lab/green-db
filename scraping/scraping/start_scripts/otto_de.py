@@ -3,10 +3,12 @@ from typing import List
 
 from core.domain import ConsumerLifestageType, GenderType, ProductCategory
 
+SUSTAINABILITY_FILTER = "?nachhaltigkeit=alle-nachhaltigen-artikel"
+
 
 def clothes_and_shoes() -> List[dict]:
     base_path = "https://www.otto.de"
-    filter = "?nachhaltigkeit=alle-nachhaltigen-artikel"
+    filter = SUSTAINABILITY_FILTER
 
     sex_to_path = {GenderType.MALE.value: "herren", GenderType.FEMALE.value: "damen"}
 
@@ -110,7 +112,7 @@ def clothes_and_shoes() -> List[dict]:
 
 def bags() -> List[dict]:
     base_path = "https://www.otto.de"
-    filter = "?nachhaltigkeit=alle-nachhaltigen-artikel"
+    filter = SUSTAINABILITY_FILTER
 
     sex_to_path = {GenderType.MALE.value: "herren", GenderType.FEMALE.value: "damen"}
 
@@ -165,7 +167,7 @@ def electronics() -> List[dict]:
 
 def textiles() -> List[dict]:
     base_path = "https://www.otto.de/heimtextilien"
-    filter = "?nachhaltigkeit=alle-nachhaltigen-artikel"
+    filter = SUSTAINABILITY_FILTER
 
     path_2_category = {
         "handtuecher": ProductCategory.TOWEL.value,
@@ -186,7 +188,7 @@ def textiles() -> List[dict]:
 
 def household() -> List[dict]:
     base_path = "https://www.otto.de/haushalt"
-    filter = "?nachhaltigkeit=alle-nachhaltigen-artikel"
+    filter = SUSTAINABILITY_FILTER
 
     path_2_category = {
         "backoefen": ProductCategory.OVEN.value,
