@@ -61,21 +61,18 @@ def test_otto_basic(requests_mock: Adapter) -> None:
         gender=gender,
         consumer_lifestage=consumer_lifestage,
         name="Casual Looks Rundhalsshirt »Shirt« (1-tlg)",
-        description="Casual Looks Rundhalsshirt »Shirt« (1-tlg) ab 12,99€. reine Baumwolle, gerade "
-        "Schnittführung, figurfreundliche Schnittführung, angenehmer Tragekomfort bei"
-        " OTTO",
+        description="Shirt mit Rundhals-Ausschnitt – ein echtes Basic für Ihre Garderobe! 100% Baumwolle. Maschinenwäsche.",
         brand="Casual Looks",
         sustainability_labels=[CertificateType.COTTON_MADE_IN_AFRICA],  # type: ignore[attr-defined]
         image_urls=[
-            "https://i.otto.mock/i/otto/1fa02ae8-fd31-567d-b799-373220a2628a",
-            "https://i.otto.mock/i/otto/81ee310e-d75f-550e-b329-b3bc972b3943",
-            "https://i.otto.mock/i/otto/c964235a-bd84-59b7-8397-941f02254fff",
+            "https://i.otto.mock/i/otto/4c506363-076b-56e8-9521-ca9467f81d6c",
+            "https://i.otto.mock/i/otto/df4d1d25-0e9f-5f68-9a7b-8596e65dab30"
         ],
         price=12.99,
         currency=CurrencyType.EUR,
         colors=None,
         sizes=None,
-        gtin=5205012107722,
+        gtin=5205012107630,
         asin=None,
     )
     for attribute in expected.__dict__.keys():
