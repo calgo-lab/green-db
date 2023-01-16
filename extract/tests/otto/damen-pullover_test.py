@@ -2,7 +2,14 @@ from requests_mock import Adapter
 from tests.utils import read_test_html
 
 from core.constants import TABLE_NAME_SCRAPING_OTTO_DE
-from core.domain import CertificateType, CountryType, CurrencyType, Product
+from core.domain import (
+    CertificateType,
+    ConsumerLifestageType,
+    CountryType,
+    CurrencyType,
+    GenderType,
+    Product,
+)
 
 # TODO: This is a false positive of mypy
 from extract import extract_product  # type: ignore
@@ -11,22 +18,28 @@ from extract import extract_product  # type: ignore
 def test_otto_basic(requests_mock: Adapter) -> None:
     label_html = """
         <div class='prd_sustainabilityLayer__label'>
-            <div class='prd_sustainabilityLayer__caption'> Energieeffizientes Gerät </div>
+            <div class='prd_sustainabilityLayer__caption'> bioRe® Sustainable Textiles Standard </div>
             <div class='prd_sustainabilityLayer__description'> some description </div>
             <div class='prd_sustainabilityLayer__licenseNumber'> some license </div>
         </div>
-    """
+        <div class='prd_sustainabilityLayer__label'>
+            <div class='prd_sustainabilityLayer__caption'> Fairtrade Cotton </div>
+            <div class='prd_sustainabilityLayer__description'> some description </div>
+            <div class='prd_sustainabilityLayer__licenseNumber'> some license </div>
+        </div>
+    """  # noqa
     requests_mock.register_uri("GET", "/product/sustainability/layerContent", text=label_html)
 
-    # original url: https://www.otto.de/p/privileg-family-edition-pyrolyse-backofen-pbwr6-op8v2-in-mit-2-fach-teleskopauszug-pyrolyse-selbstreinigung-50-monate-herstellergarantie-682285688/#variationId=682285928 # noqa
     url = "https://www.otto.mock/"
-    timestamp = "2022-05-31 10:45:00"
+    timestamp = "2022-02-17 12:49:00"
     source = "otto"
     merchant = "otto"
     country = CountryType.DE
-    file_name = "electronics-oven-old-energy-label.html"
-    category = "FRIDGE"
-    meta_information = {"family": "electronics"}
+    file_name = "damen-pullover.html"
+    category = "SWEATER"
+    gender = GenderType.FEMALE
+    consumer_lifestage = ConsumerLifestageType.ADULT
+    meta_information = {"family": "FASHION"}
 
     scraped_page = read_test_html(
         timestamp=timestamp,
@@ -35,6 +48,8 @@ def test_otto_basic(requests_mock: Adapter) -> None:
         country=country,
         file_name=file_name,
         category=category,
+        gender=gender,
+        consumer_lifestage=consumer_lifestage,
         meta_information=meta_information,
         url=url,
     )
@@ -47,24 +62,22 @@ def test_otto_basic(requests_mock: Adapter) -> None:
         merchant=merchant,
         country=country,
         category=category,
-        gender=None,
-        consumer_lifestage=None,
-        name="Privileg Family Edition Pyrolyse Backofen »PBWR6 OP8V2 IN«, "
-        "mit 2-fach-Teleskopauszug, Pyrolyse-Selbstreinigung, 50 Monate Herstellergarantie",
-        description="Tolle Angebote und Top Qualität entdecken - CO2 neutraler Versand ✔ Kauf auf "
-                    "Rechnung und Raten ✔ Erfülle dir deine Wünsche bei OTTO!",
-        brand="Privileg Family Edition",
-        sustainability_labels=[CertificateType.OTHER],  # type: ignore[attr-defined]
+        gender=gender,
+        consumer_lifestage=consumer_lifestage,
+        name="s.Oliver Strickpullover »Pullover langarm«",
+        description="Strickpulli mit Stehkragen",
+        brand="s.Oliver",
+        sustainability_labels=[CertificateType.UNAVAILABLE],  # type: ignore[attr-defined] # noqa
         image_urls=[
-            "https://i.otto.mock/i/otto/19651738",
-            "https://i.otto.mock/i/otto/19651739",
-            "https://i.otto.mock/i/otto/19651740",
+            "https://i.otto.mock/i/otto/81ee0cf2-df64-51a9-b91c-20d08b430704",
+            "https://i.otto.mock/i/otto/b7e00734-7941-53d0-b1e6-5e7d599e8874",
+            "https://i.otto.mock/i/otto/a24626eb-6f73-5b37-a708-cbadb612bcf3",
         ],
-        price=499.00,
+        price=32.19,
         currency=CurrencyType.EUR,
         colors=None,
         sizes=None,
-        gtin=8003437938573,
+        gtin=4065208630462,
         asin=None,
     )
     for attribute in expected.__dict__.keys():
