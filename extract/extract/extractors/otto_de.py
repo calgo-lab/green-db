@@ -214,7 +214,7 @@ def _get_sustainability_info(beautiful_soup: BeautifulSoup) -> List[str]:
     Helper function that extracts the sustainability information from the parsed HTML.
 
     Args:
-        beautiful_soup (BeautifulSoup): Parsed HTML of sustainability information
+        beautiful_soup (BeautifulSoup): Parsed HTML of Product Website.
 
     Returns:
         list: includes found sustainability strings.
@@ -236,7 +236,7 @@ def _get_energy_labels(product_data: dict, beautiful_soup: BeautifulSoup) -> Lis
 
     Args:
         product_data (dict): Representation of the product data JSON
-
+        beautiful_soup (BeautifulSoup): Parsed HTML of Product Website.
     Returns:
         List[str]: `list` of found energy_labels.
     """
@@ -256,7 +256,7 @@ def _get_energy_labels(product_data: dict, beautiful_soup: BeautifulSoup) -> Lis
 
     if not energy_labels:
         if energy_label := beautiful_soup.find("div",
-                                               attrs={"class": ["pdp_energy-efficiency__label", "p_energyLabelScala"]}):
+                                               attrs={"class": "p_energyLabelScala200"}):
             energy_labels.append(energy_label.text)
 
     # Adding the prefix "EU Energy label" to allow automated mapping,
@@ -272,9 +272,8 @@ def _get_sustainability(
 
     Args:
         product_data (dict): Representation of the product data JSON
-        parsed_url (ParseResult): Parsed URL #TODO Alex
+        beautiful_soup (BeautifulSoup): Parsed HTML of Product Website.
         product_category (str): Product Category
-
     Returns:
         List[str]: Sorted `list` of found sustainability labels
     """
