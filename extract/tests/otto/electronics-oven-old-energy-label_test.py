@@ -1,4 +1,3 @@
-from requests_mock import Adapter
 from tests.utils import read_test_html
 
 from core.constants import TABLE_NAME_SCRAPING_OTTO_DE
@@ -8,16 +7,7 @@ from core.domain import CertificateType, CountryType, CurrencyType, Product
 from extract import extract_product  # type: ignore
 
 
-def test_otto_basic(requests_mock: Adapter) -> None:
-    label_html = """
-        <div class='prd_sustainabilityLayer__label'>
-            <div class='prd_sustainabilityLayer__caption'> Energieeffizientes Gerät </div>
-            <div class='prd_sustainabilityLayer__description'> some description </div>
-            <div class='prd_sustainabilityLayer__licenseNumber'> some license </div>
-        </div>
-    """
-    requests_mock.register_uri("GET", "/product/sustainability/layerContent", text=label_html)
-
+def test_otto_basic() -> None:
     # original url: https://www.otto.de/p/privileg-family-edition-pyrolyse-backofen-pbwr6-op8v2-in-mit-2-fach-teleskopauszug-pyrolyse-selbstreinigung-50-monate-herstellergarantie-682285688/#variationId=682285928 # noqa
     url = "https://www.otto.mock/"
     timestamp = "2022-05-31 10:45:00"

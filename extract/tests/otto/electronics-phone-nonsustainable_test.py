@@ -1,4 +1,3 @@
-from requests_mock import Adapter
 from tests.utils import read_test_html
 
 from core.constants import TABLE_NAME_SCRAPING_OTTO_DE
@@ -8,10 +7,7 @@ from core.domain import CertificateType, CountryType, CurrencyType, Product
 from extract import extract_product  # type: ignore
 
 
-def test_otto_basic(requests_mock: Adapter) -> None:
-    label_html = ""
-    requests_mock.register_uri("GET", "/product/sustainability/layerContent", text=label_html)
-
+def test_otto_basic() -> None:
     # original url: https://www.otto.de/p/sony-xperia-1-iii-5g-256gb-smartphone-16-51-cm-6-5-zoll-256-gb-speicherplatz-12-mp-kamera-C1397609879/#variationId=1397609888 # noqa
     url = "https://www.otto.mock/"
     timestamp = "2022-05-31 10:45:00"

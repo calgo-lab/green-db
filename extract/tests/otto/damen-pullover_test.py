@@ -1,4 +1,3 @@
-from requests_mock import Adapter
 from tests.utils import read_test_html
 
 from core.constants import TABLE_NAME_SCRAPING_OTTO_DE
@@ -15,21 +14,7 @@ from core.domain import (
 from extract import extract_product  # type: ignore
 
 
-def test_otto_basic(requests_mock: Adapter) -> None:
-    label_html = """
-        <div class='prd_sustainabilityLayer__label'>
-            <div class='prd_sustainabilityLayer__caption'> bioRe® Sustainable Textiles Standard </div>
-            <div class='prd_sustainabilityLayer__description'> some description </div>
-            <div class='prd_sustainabilityLayer__licenseNumber'> some license </div>
-        </div>
-        <div class='prd_sustainabilityLayer__label'>
-            <div class='prd_sustainabilityLayer__caption'> Fairtrade Cotton </div>
-            <div class='prd_sustainabilityLayer__description'> some description </div>
-            <div class='prd_sustainabilityLayer__licenseNumber'> some license </div>
-        </div>
-    """  # noqa
-    requests_mock.register_uri("GET", "/product/sustainability/layerContent", text=label_html)
-
+def test_otto_basic() -> None:
     url = "https://www.otto.mock/"
     timestamp = "2022-02-17 12:49:00"
     source = "otto"
