@@ -477,7 +477,7 @@ def rebuild_landing_page(
                     table.appendChild(stuff.childNodes[k]);
                 }}
                 event.target.disabled = stuff.childNodes.length == 0;
-            }}, 1000);
+            }}, 400);
             """
 
             return f'<div class="excerpt"><div class="table-wrapper">{render_products(products[:33])}</div><button class="btn" onclick="{escape(script)}">more</button></div>'  # noqa
@@ -505,6 +505,7 @@ def rebuild_landing_page(
 
         def on_close_parent(self) -> Any:
             self.html_tag = "div"
+            self.css_class.append("ff")
             self.css_class.append("col")
             if self.row is not None:
                 total_weight = sum(col.weight for col in self.row)
@@ -579,7 +580,7 @@ def rebuild_landing_page(
     clear: both;
 }}
 
-.col {{
+.ff {{
     padding: 0 25px;
 }}
 
