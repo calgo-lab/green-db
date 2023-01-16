@@ -332,12 +332,14 @@ def _get_sustainability(
         sustainable_soup = BeautifulSoup(sustainability_information_html, "html.parser")
         labels.update(_get_sustainability_info(sustainable_soup))
 
+    certificate_strings = list(labels.keys()) + energy_labels
+
     # Due to the `filter` being empty, we expect that in `sustainability_information_htmls` there
     # wouldn't be anything found for the non-sustainable products, so we set a default label
     # UNAVAILABLE, so the non-sustainable products can be distinguished from the other products.
-    if not labels:
+    if not certificate_strings:
         return [CertificateType.UNAVAILABLE]
 
     return sustainability_labels_to_certificates(
-        list(labels.keys()) + energy_labels, _LABEL_MAPPING, product_category
+        certificate_strings, _LABEL_MAPPING, product_category
     )
