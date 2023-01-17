@@ -52,15 +52,15 @@ def test_otto_basic() -> None:
         consumer_lifestage=consumer_lifestage,
         name="H.I.S Rundhalsshirt (Packung, 3-tlg., 3er-Pack) mit Druck",
         description="Hier kommt dein neues Lieblingsshirt Schau dir das Rundhalsshirt von H.I.S "
-                    "mal genauer an. Durch den Aufdruck wirkt es sowohl locker als auch frisch. "
-                    "Dieses Shirt ist schmal geschnitten, sodass dein Oberkörper dezent zur "
-                    "Geltung gebracht wird. Der Single Jerseystoff aus Baumwolle ist angenehm "
-                    "weich auf der Haut und sorgt für hohen Tragekomfort. Starkes "
-                    "Kombinationstalent Eine trendige Freizeitkombination hast du mit Jeans und "
-                    "bunten Sneakern. Unter einem Sakko getragen, wird der Look schick - und sehr "
-                    "stylisch, wenn die Farben beider Teile aufeinander abgestimmt sind. Das "
-                    "Shirt ist im 3er-Pack erhältlich. Dein neues Shirt von H.I.S ist die "
-                    "Grundlage für einen trendigen Look.",
+        "mal genauer an. Durch den Aufdruck wirkt es sowohl locker als auch frisch. "
+        "Dieses Shirt ist schmal geschnitten, sodass dein Oberkörper dezent zur "
+        "Geltung gebracht wird. Der Single Jerseystoff aus Baumwolle ist angenehm "
+        "weich auf der Haut und sorgt für hohen Tragekomfort. Starkes "
+        "Kombinationstalent Eine trendige Freizeitkombination hast du mit Jeans und "
+        "bunten Sneakern. Unter einem Sakko getragen, wird der Look schick - und sehr "
+        "stylisch, wenn die Farben beider Teile aufeinander abgestimmt sind. Das "
+        "Shirt ist im 3er-Pack erhältlich. Dein neues Shirt von H.I.S ist die "
+        "Grundlage für einen trendigen Look.",
         brand="H.I.S",
         sustainability_labels=[CertificateType.COTTON_MADE_IN_AFRICA],  # type: ignore[attr-defined]
         image_urls=[

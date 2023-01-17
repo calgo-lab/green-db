@@ -56,7 +56,7 @@ def test_otto_basic() -> None:
         sustainability_labels=[CertificateType.COTTON_MADE_IN_AFRICA],  # type: ignore[attr-defined]
         image_urls=[
             "https://i.otto.mock/i/otto/4c506363-076b-56e8-9521-ca9467f81d6c",
-            "https://i.otto.mock/i/otto/df4d1d25-0e9f-5f68-9a7b-8596e65dab30"
+            "https://i.otto.mock/i/otto/df4d1d25-0e9f-5f68-9a7b-8596e65dab30",
         ],
         price=12.99,
         currency=CurrencyType.EUR,
