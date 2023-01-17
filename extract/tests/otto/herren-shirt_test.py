@@ -1,4 +1,3 @@
-from requests_mock import Adapter
 from tests.utils import read_test_html
 
 from core.constants import TABLE_NAME_SCRAPING_OTTO_DE
@@ -15,16 +14,7 @@ from core.domain import (
 from extract import extract_product  # type: ignore
 
 
-def test_otto_basic(requests_mock: Adapter) -> None:
-    label_html = """
-        <div class='prd_sustainabilityLayer__label'>
-            <div class='prd_sustainabilityLayer__caption'> Unterstützt Cotton made in Africa </div>
-            <div class='prd_sustainabilityLayer__description'> some description </div>
-            <div class='prd_sustainabilityLayer__licenseNumber'> some license </div>
-        </div>
-    """
-    requests_mock.register_uri("GET", "/product/sustainability/layerContent", text=label_html)
-
+def test_otto_basic() -> None:
     # original_url: https://www.otto.de/p/h-i-s-rundhalsshirt-packung-3-tlg-3er-pack-mit-druck-1379261103/#variationId=1379261260 # noqa
     url = "https://www.otto.mock/"
     timestamp = "2022-04-19 12:49:00"
@@ -61,9 +51,16 @@ def test_otto_basic(requests_mock: Adapter) -> None:
         gender=gender,
         consumer_lifestage=consumer_lifestage,
         name="H.I.S Rundhalsshirt (Packung, 3-tlg., 3er-Pack) mit Druck",
-        description="H.I.S Rundhalsshirt (Packung, 3-tlg., 3er-Pack) mit Druck für 29,"
-        "99€. Kontrastfarbenes Band mit HIS Schriftzug im Ausschnitt, Pflegeleichtes "
-        "Material bei OTTO",
+        description="Hier kommt dein neues Lieblingsshirt Schau dir das Rundhalsshirt von H.I.S "
+        "mal genauer an. Durch den Aufdruck wirkt es sowohl locker als auch frisch. "
+        "Dieses Shirt ist schmal geschnitten, sodass dein Oberkörper dezent zur "
+        "Geltung gebracht wird. Der Single Jerseystoff aus Baumwolle ist angenehm "
+        "weich auf der Haut und sorgt für hohen Tragekomfort. Starkes "
+        "Kombinationstalent Eine trendige Freizeitkombination hast du mit Jeans und "
+        "bunten Sneakern. Unter einem Sakko getragen, wird der Look schick - und sehr "
+        "stylisch, wenn die Farben beider Teile aufeinander abgestimmt sind. Das "
+        "Shirt ist im 3er-Pack erhältlich. Dein neues Shirt von H.I.S ist die "
+        "Grundlage für einen trendigen Look.",
         brand="H.I.S",
         sustainability_labels=[CertificateType.COTTON_MADE_IN_AFRICA],  # type: ignore[attr-defined]
         image_urls=[
@@ -75,7 +72,7 @@ def test_otto_basic(requests_mock: Adapter) -> None:
         currency=CurrencyType.EUR,
         colors=None,
         sizes=None,
-        gtin=8907890476439,
+        gtin=8907890476446,
         asin=None,
     )
     for attribute in expected.__dict__.keys():
