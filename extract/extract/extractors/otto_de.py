@@ -65,7 +65,8 @@ def extract_otto_de(parsed_page: ParsedPage) -> Optional[Product]:
     currency = check_none_or_alternative(currency, offers.get("priceCurrency"))
 
     # format description, because it sometimes includes html tags
-    description = BeautifulSoup(description, "lxml").text.replace("  ", " ").strip()
+    if description is not None:
+        description = BeautifulSoup(description, "lxml").text.replace("  ", " ").strip()
     gtin = int(gtin) if type(gtin) == str and len(gtin) > 0 else None
 
     product_data = _get_product_data(parsed_page.beautiful_soup)
@@ -149,6 +150,8 @@ _LABEL_MAPPING = {
     "Bio-Siegel": CertificateType.OTHER,
     "[REE]GROW": CertificateType.OTHER,
     "SEAQUAL™": CertificateType.OTHER,
+    "adidas: mit recycelten Materialien": CertificateType.OTHER,
+    "adidas: mit Parley Ocean Plastic": CertificateType.OTHER,
     "": CertificateType.OTHER,
 }
 
