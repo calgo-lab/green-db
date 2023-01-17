@@ -3,7 +3,6 @@ from logging import getLogger
 from typing import List, Optional
 from urllib.parse import ParseResult, urlparse
 
-import requests
 from bs4 import BeautifulSoup
 from pydantic import ValidationError
 
