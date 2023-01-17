@@ -52,7 +52,7 @@ def test_otto_basic() -> None:
         consumer_lifestage=consumer_lifestage,
         name="Casual Looks Rundhalsshirt »Shirt« (1-tlg)",
         description="Shirt mit Rundhals-Ausschnitt – ein echtes Basic für Ihre Garderobe! 100% "
-                    "Baumwolle. Maschinenwäsche.",
+        "Baumwolle. Maschinenwäsche.",
         brand="Casual Looks",
         sustainability_labels=[CertificateType.COTTON_MADE_IN_AFRICA],  # type: ignore[attr-defined]
         image_urls=[
