@@ -257,8 +257,7 @@ def _get_energy_labels(product_data: dict, beautiful_soup: BeautifulSoup) -> Lis
                 json_values += json_array
 
     if not energy_labels:
-        if energy_label := beautiful_soup.find("div",
-                                               attrs={"class": "p_energyLabelScala200"}):
+        if energy_label := beautiful_soup.find("div", attrs={"class": "p_energyLabelScala200"}):
             energy_labels.append(energy_label.text)
 
     # Adding the prefix "EU Energy label" to allow automated mapping,

@@ -42,7 +42,7 @@ def test_otto_basic() -> None:
         name="Privileg Family Edition Pyrolyse Backofen »PBWR6 OP8V2 IN«, "
         "mit 2-fach-Teleskopauszug, Pyrolyse-Selbstreinigung, 50 Monate Herstellergarantie",
         description="Tolle Angebote und Top Qualität entdecken - CO2 neutraler Versand ✔ Kauf auf "
-                    "Rechnung und Raten ✔ Erfülle dir deine Wünsche bei OTTO!",
+        "Rechnung und Raten ✔ Erfülle dir deine Wünsche bei OTTO!",
         brand="Privileg Family Edition",
         sustainability_labels=[CertificateType.OTHER],  # type: ignore[attr-defined]
         image_urls=[

@@ -41,20 +41,20 @@ def test_otto_basic() -> None:
         consumer_lifestage=None,
         name="Samsung Side-by-Side RS6GA884CSL, 178 cm hoch, 91,2 cm breit",
         description="Der »RS6GA884CSL« ist ein freistehender Side-by-Side Kühlschrank von Samsung "
-                    "und überzeugt mit hoher Funktionalität sowie der "
-                    "Energieeffizienz-Klassifizierung C (Skala Energieeffizienz-Klassifizierung "
-                    "Einheitsskala (A bis G)). Die Maße des Side-by-Side Kühlschranks kommen auf "
-                    "91,2 x 178 x 73,5 cm (B/H/T). Die Bildung von Eiskristallen wird durch die "
-                    "No Frost-Funktion verhindert – so muss das Gerät nie wieder abgetaut werden. "
-                    "Es sind zwei Gefrierschubladen und vier Gemüseschubladen zum Verstauen des "
-                    "Einkaufs integriert. Das innen installierte Display zeigt die genaue "
-                    "Temperatur im Gerät an. Die fünf Ablageflächen bieten viel Platz für "
-                    "Lebensmittel. Schnell griffbereit sind Lebensmittel in den fünf Türablagen. "
-                    "Bei offen stehender Tür meldet dies der Side-by-Side Kühlschrank mit einem "
-                    "Warnsignal. Dank der LED-Innenbeleuchtung findet man ganz problemlos, "
-                    "was man sucht. Der »RS6GA884CSL« von Samsung ist ein Side-by-Side "
-                    "Kühlschrank, der mit seinen Features überzeugt und ausreichend Platz für "
-                    "Lebensmittel aller Art bietet.",
+        "und überzeugt mit hoher Funktionalität sowie der "
+        "Energieeffizienz-Klassifizierung C (Skala Energieeffizienz-Klassifizierung "
+        "Einheitsskala (A bis G)). Die Maße des Side-by-Side Kühlschranks kommen auf "
+        "91,2 x 178 x 73,5 cm (B/H/T). Die Bildung von Eiskristallen wird durch die "
+        "No Frost-Funktion verhindert – so muss das Gerät nie wieder abgetaut werden. "
+        "Es sind zwei Gefrierschubladen und vier Gemüseschubladen zum Verstauen des "
+        "Einkaufs integriert. Das innen installierte Display zeigt die genaue "
+        "Temperatur im Gerät an. Die fünf Ablageflächen bieten viel Platz für "
+        "Lebensmittel. Schnell griffbereit sind Lebensmittel in den fünf Türablagen. "
+        "Bei offen stehender Tür meldet dies der Side-by-Side Kühlschrank mit einem "
+        "Warnsignal. Dank der LED-Innenbeleuchtung findet man ganz problemlos, "
+        "was man sucht. Der »RS6GA884CSL« von Samsung ist ein Side-by-Side "
+        "Kühlschrank, der mit seinen Features überzeugt und ausreichend Platz für "
+        "Lebensmittel aller Art bietet.",
         brand="Samsung",
         sustainability_labels=[CertificateType.EU_ENERGY_LABEL_C, CertificateType.OTHER],  # type: ignore[attr-defined] # noqa
         image_urls=[
