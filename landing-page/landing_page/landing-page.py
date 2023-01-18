@@ -61,7 +61,7 @@ def map(func: Any, *iterables: Any, **kwargs: Any) -> Any:
 
 
 def webcolor(color: List[float]) -> str:
-    return "#" + "".join(f"{int(to_srgb(c)*255):02x}" for c in color)
+    return "#" + "".join(f"{int(to_srgb(c)*256):02x}" for c in color)
 
 
 def linspace(start: float, end: float, n: int) -> List[float]:
@@ -319,69 +319,6 @@ def build_default_content(use_cached: bool = True) -> Dict[str, str]:
         "credible"
     )
 
-    plot_merchant_cred = go.Figure(
-        data=[
-            go.Bar(
-                name="credible",
-                x=merchant_cred_ratio.index,
-                y=merchant_cred_ratio["credible"],
-                offsetgroup=1,
-                base=merchant_cred_ratio["not_credible"],
-            ),
-            go.Bar(
-                name="not credible",
-                x=merchant_cred_ratio.index,
-                y=merchant_cred_ratio["not_credible"],
-                offsetgroup=1,
-            ),
-        ],
-        layout=go.Layout(
-            yaxis_title="credibility",
-        ),
-    )
-
-    plot_top25_brands_eco_vs_soc = go.Figure(
-        data=[
-            go.Bar(
-                name="ecological_score",
-                x=brand_eco_vs_soc["brand"],
-                y=brand_eco_vs_soc["ecological_score"][:25],
-                offsetgroup=1,
-            ),
-            go.Bar(
-                name="social_score",
-                x=brand_eco_vs_soc["brand"],
-                y=brand_eco_vs_soc["social_score"][:25],
-                offsetgroup=1,
-                base=brand_eco_vs_soc["ecological_score"],
-            ),
-        ],
-        layout=go.Layout(
-            yaxis_title="score",
-        ),
-    )
-
-    plot_category_eco_vs_soc = go.Figure(
-        data=[
-            go.Bar(
-                name="ecological_score",
-                x=category_eco_vs_soc["category"],
-                y=category_eco_vs_soc["ecological_score"],
-                offsetgroup=1,
-            ),
-            go.Bar(
-                name="social_score",
-                x=category_eco_vs_soc["category"],
-                y=category_eco_vs_soc["social_score"],
-                offsetgroup=1,
-                base=category_eco_vs_soc["ecological_score"],
-            ),
-        ],
-        layout=go.Layout(
-            yaxis_title="score",
-        ),
-    )
-
     plot_category_cred = go.Figure(
         data=[
             go.Bar(
@@ -520,8 +457,8 @@ def rebuild_landing_page(
         tint = [0.1485823416814057, 0.23921176685507542, 0.9116386929265479]
         tint_hover = [blend(a, random(), 0.1) for a in tint]
         tint_hover = [0.15729714510147194, 0.22121801304040017, 0.783397636799458]
-        link = [medium(random(), 50) for a in range(3)]
-        link_hover = [blend(medium(random(), 12), a, 0.25) for a in link]
+        link = [.3, .3, 1]
+        link_hover = [blend(medium(random(), 5), a, 0.25) for a in link]
         excerpt = [medium(random(), 12) for i in range(3)]
         excerpt = [0.31466414566023393, 0.08078376977121758, 0.11568391626721704]
         excerpt_hover = [blend(a, medium(random(), 2), 0.2) for a in excerpt]
@@ -554,13 +491,16 @@ def rebuild_landing_page(
         link_hover = [0.06442466199851024, 0.07665787069375272, 0.09772708211693171]
     excerpt = [0.13704307356519763, 0.15924943484172588, 0.5812938149278745]
     excerpt_hover = [0.14373655108035288, 0.12412299681563652, 0.39106001494835]
+    link = [0.3, 0.3, 1]
+    link_hover = [0.19027607418965353, 0.32350485353551683, 0.7116513755412007]
 
     # more = [0.31466414566023393, 0.08078376977121758, 0.11568391626721704]
     # more_hover = [0.2520087655235149, 0.10649861604954225, 0.09894624196499495]
 
     foot = [blend(a, 0.005, 0.92) for a in tint_hover]
     white = [1, 1, 1]
-
+    dark = [.01, .01, .015]
+    
     return minify(
         f"""<!DOCTYPE html>
 <html lang="en">
@@ -587,6 +527,38 @@ def rebuild_landing_page(
 .container {{
     margin-right: auto;
     margin-left: auto;
+}}
+
+@media (prefers-color-scheme: dark) {{
+    body {{
+        color: white;
+        background: #131315;
+    }}
+    
+    .container {{
+        padding: 15px;
+        background: {webcolor(dark)};
+    }}
+    
+    .btn {{ box-shadow: 0px 5px 5px 0px {webcolor(map(shadow, dark, tint))}; }}
+    .btn:hover {{ box-shadow: 0px 5px 5px 0px {webcolor(map(shadow, dark, tint_hover))}; }}
+    .btn:active {{ box-shadow: inset 0px 5px 5px 0px {webcolor(map(shadow, tint, dark))}; }}
+    .excerpt .btn {{ box-shadow: 0px 5px 5px 0px {webcolor(map(shadow, dark, more))}; }}
+    .excerpt .btn:hover {{ box-shadow: 0px 5px 5px 0px {webcolor(map(shadow, dark, more_hover))}; }}
+    .excerpt .btn:active {{ box-shadow: inset 0px 5px 5px 0px {webcolor(map(shadow, more, dark))}; }}
+    .excerpt .btn:disabled {{ box-shadow: 0px 5px 5px 0px {webcolor(map(shadow, dark, more))}; }}
+    
+    .link {{
+        color: {webcolor(link)}
+    }}
+
+    .link:hover {{
+        color: {webcolor(link_hover)}
+    }}
+    
+    footer {{
+        background: none;
+    }}
 }}
 
 /*
@@ -652,7 +624,11 @@ h1 {{
 }}
 
 section {{
-    padding: 30px 0;
+    padding: 20px 0;
+}}
+
+.container {{
+    padding: 10px;
 }}
 
 footer {{
@@ -710,16 +686,6 @@ footer {{
     animation-duration: .3s;
     opacity: 0;
 }}
-
-/*
-.link {{
-    color: {webcolor(link)}
-}}
-
-.link:hover {{
-    color: {webcolor(link_hover)}
-}}
-*/
 
 .product-link .table-cell {{
     padding: 12px;
