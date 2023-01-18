@@ -1,7 +1,8 @@
 import csv
 import json
-from enum import Enum, EnumMeta
+from enum import Enum
 from pathlib import Path
+from typing import Any
 
 SUSTAINABILITY_LABELS_JSON_FILE_PATH = Path(__file__).parent / "sustainability-labels.json"
 SUSTAINABILITY_LABELS_EVALUATION_CSV_FILE_PATH = (
@@ -62,12 +63,12 @@ def load_and_get_sustainability_labels() -> dict:
     return certificates
 
 
-def create_CertificateType() -> EnumMeta:
+def create_CertificateType() -> Any:
     """
     Factory function to construct the `Enum` that contains the sustainable certificates
 
     Returns:
-        EnumMeta: `CertificateType` `Enum` use for the domain.
+        Any: `CertificateType` `Enum` use for the domain.
     """
 
     certificates = load_and_get_sustainability_labels()

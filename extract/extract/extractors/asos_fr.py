@@ -1,5 +1,3 @@
-# type: ignore[attr-defined]
-
 import json
 import re
 from logging import getLogger
@@ -135,7 +133,7 @@ def _get_url(localized_data: List[Dict[str, str]], lang: str) -> str:
     return ""
 
 
-def format_description(html: str):
+def format_description(html: str) -> str:
     """
     Helper function to convert description including html tags to a string.
 

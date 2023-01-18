@@ -74,7 +74,7 @@ class ZalandoSpider(BaseSpider):
             )
 
         # Pagination: Parse next SERP 'recursively'
-        pagination = response.css('[class="DJxzzA PgtkyN"]::attr(href)').getall()
+        pagination = response.css('[class="DJxzzA OldB32"]::attr(href)').getall()
 
         if (is_first_page and pagination) or len(pagination) == 2:
             next_page = response.urljoin(pagination[-1])

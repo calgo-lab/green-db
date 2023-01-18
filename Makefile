@@ -35,6 +35,14 @@ patch-version: patch-all
 	git commit -m "bump version to '${VERSION}'"
 	git tag ${VERSION}
 
+patch-version-push: patch-all
+	# get version from core package.
+	$(eval VERSION=$(shell cd core; poetry version -s))
+
+	git add core/pyproject.toml database/pyproject.toml extract/pyproject.toml message-queue/pyproject.toml monitoring/pyproject.toml scraping/pyproject.toml workers/pyproject.toml ${MONITORING_CHART}/Chart.yaml ${WORKERS_CHART}/Chart.yaml ${WORKERS_CHART}/Chart.yaml
+	git commit -m "bump version to '${VERSION}'"
+	git tag ${VERSION}
+
 	# push everything
 	git push
 	git push origin ${VERSION}

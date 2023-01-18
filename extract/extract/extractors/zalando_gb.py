@@ -1,6 +1,3 @@
-# type: ignore[attr-defined]
-
-
 from logging import getLogger
 from typing import Dict, Optional
 

@@ -304,8 +304,8 @@ def household(country_code: str) -> List[dict]:
 
 def get_settings(country_code: str) -> List[dict]:
     return (
-        male(country_code)
+        electronics(country_code)
+        + male(country_code)
         + female(country_code)
-        + electronics(country_code)
         + household(country_code)
     )

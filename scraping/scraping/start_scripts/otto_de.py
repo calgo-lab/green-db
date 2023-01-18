@@ -3,10 +3,12 @@ from typing import List
 
 from core.domain import ConsumerLifestageType, GenderType, ProductCategory
 
+SUSTAINABILITY_FILTER = "?nachhaltigkeit=alle-nachhaltigen-artikel"
+
 
 def clothes_and_shoes() -> List[dict]:
     base_path = "https://www.otto.de"
-    filter = "?nachhaltigkeit=alle-nachhaltigen-artikel"
+    filter = SUSTAINABILITY_FILTER
 
     sex_to_path = {GenderType.MALE.value: "herren", GenderType.FEMALE.value: "damen"}
 
@@ -110,7 +112,7 @@ def clothes_and_shoes() -> List[dict]:
 
 def bags() -> List[dict]:
     base_path = "https://www.otto.de"
-    filter = "?nachhaltigkeit=alle-nachhaltigen-artikel"
+    filter = SUSTAINABILITY_FILTER
 
     sex_to_path = {GenderType.MALE.value: "herren", GenderType.FEMALE.value: "damen"}
 
@@ -139,10 +141,16 @@ def bags() -> List[dict]:
 
 def electronics() -> List[dict]:
     base_path = "https://www.otto.de/technik"
-    filter = "?nachhaltigkeit=alle-nachhaltigen-artikel"
+    # For the need of more products and externally matched labels (EM),
+    # we're not filtering for sustainable products only, thus the filter is empty.
+    filter = ""
 
     path_2_category = {
         "smartphone": ProductCategory.SMARTPHONE.value,
+        "laptop": ProductCategory.LAPTOP.value,
+        "tablet": ProductCategory.TABLET.value,
+        "audio/kopfhoerer": ProductCategory.HEADPHONES.value,
+        "fernseher": ProductCategory.TV.value,
     }
 
     results = []
@@ -159,7 +167,7 @@ def electronics() -> List[dict]:
 
 def textiles() -> List[dict]:
     base_path = "https://www.otto.de/heimtextilien"
-    filter = "?nachhaltigkeit=alle-nachhaltigen-artikel"
+    filter = SUSTAINABILITY_FILTER
 
     path_2_category = {
         "handtuecher": ProductCategory.TOWEL.value,
@@ -180,7 +188,7 @@ def textiles() -> List[dict]:
 
 def household() -> List[dict]:
     base_path = "https://www.otto.de/haushalt"
-    filter = "?nachhaltigkeit=alle-nachhaltigen-artikel"
+    filter = SUSTAINABILITY_FILTER
 
     path_2_category = {
         "backoefen": ProductCategory.OVEN.value,
