@@ -6,7 +6,6 @@ from random import random
 from typing import Any, Dict, List, Optional, Tuple
 
 import pandas as pd
-import plots
 from minify_html import minify
 from plotly import graph_objects as go
 from plotly.io import to_html
@@ -296,26 +295,11 @@ def build_default_content(use_cached: bool = True) -> Dict[str, str]:
         }
 
     db = GreenDB()
-    eco_vs_soc = plots.fetch_category_ecological_vs_social_score_by_category(db)
-    leaderboards = plots.fetch_leaderboards(db)
-    category_label_cred = plots.fetch_product_count_credible_sustainability_labels_by_category(db)
-
-    brand_eco_vs_soc = get_eco_soc_rank_by_sustainability(db, "brand")
-    category_eco_vs_soc = get_eco_soc_rank_by_sustainability(db, "category")
-    merchant_cred = db.get_product_count_by_sustainability_label_credibility()
     category_cred = get_cred_by_category(db)
-
     category_cred_ratio = category_cred.pivot_table(
         "product_count", "category", "type", fill_value=0
     )
     category_cred_ratio = category_cred_ratio.div(category_cred_ratio.sum(1), 0).sort_values(
-        "credible"
-    )
-
-    merchant_cred_ratio = merchant_cred.pivot_table(
-        "product_count", "merchant", "type", fill_value=0
-    )
-    merchant_cred_ratio = merchant_cred_ratio.div(merchant_cred_ratio.sum(1), 0).sort_values(
         "credible"
     )
 
@@ -341,31 +325,6 @@ def build_default_content(use_cached: bool = True) -> Dict[str, str]:
     )
 
     return dict(
-        rank_by_merchant=render_dataframe(leaderboards["rank_by_merchant"]),
-        rank_by_category=render_dataframe(leaderboards["rank_by_category"]),
-        rank_by_brand=render_dataframe(leaderboards["rank_by_brand"]),
-        rank_by_brand_top_25=render_dataframe(leaderboards["rank_by_brand"][:25]),
-        plot_eco_vs_soc_fashion=render_plotly_figure(
-            eco_vs_soc["plot_ecological_vs_social_score_fashion_categories"]
-        ),
-        plot_eco_vs_soc_electronics=render_plotly_figure(
-            eco_vs_soc["plot_ecological_vs_social_score_electronics_categories"]
-        ),
-        plot_eco_vs_soc_everything=render_plotly_figure(
-            eco_vs_soc["plot_ecological_vs_social_score_all_categories"]
-        ),
-        plot_credible_products=render_plotly_figure(
-            category_label_cred["plot_product_count_credible_sustainability_labels"], height=800
-        ),
-        plot_credible_fashion=render_plotly_figure(
-            category_label_cred["plot_product_count_credible_sustainability_labels_fashion"]
-        ),
-        plot_credible_electronics=render_plotly_figure(
-            category_label_cred["plot_product_count_credible_sustainability_labels_electronics"]
-        ),
-        plot_merchant_cred=render_plotly_figure(plot_merchant_cred),
-        plot_top25_brands_eco_vs_soc=render_plotly_figure(plot_top25_brands_eco_vs_soc),
-        plot_category_eco_vs_soc=render_plotly_figure(plot_category_eco_vs_soc),
         plot_category_cred=render_plotly_figure(plot_category_cred),
     )
 
@@ -457,7 +416,7 @@ def rebuild_landing_page(
         tint = [0.1485823416814057, 0.23921176685507542, 0.9116386929265479]
         tint_hover = [blend(a, random(), 0.1) for a in tint]
         tint_hover = [0.15729714510147194, 0.22121801304040017, 0.783397636799458]
-        link = [.3, .3, 1]
+        link = [0.3, 0.3, 1]
         link_hover = [blend(medium(random(), 5), a, 0.25) for a in link]
         excerpt = [medium(random(), 12) for i in range(3)]
         excerpt = [0.31466414566023393, 0.08078376977121758, 0.11568391626721704]
@@ -499,8 +458,8 @@ def rebuild_landing_page(
 
     foot = [blend(a, 0.005, 0.92) for a in tint_hover]
     white = [1, 1, 1]
-    dark = [.01, .01, .015]
-    
+    dark = [0.01, 0.01, 0.015]
+
     return minify(
         f"""<!DOCTYPE html>
 <html lang="en">
@@ -534,28 +493,23 @@ def rebuild_landing_page(
         color: white;
         background: #131315;
     }}
-    
     .container {{
         padding: 15px;
         background: {webcolor(dark)};
     }}
-    
-    .btn {{ box-shadow: 0px 5px 5px 0px {webcolor(map(shadow, dark, tint))}; }}
-    .btn:hover {{ box-shadow: 0px 5px 5px 0px {webcolor(map(shadow, dark, tint_hover))}; }}
-    .btn:active {{ box-shadow: inset 0px 5px 5px 0px {webcolor(map(shadow, tint, dark))}; }}
-    .excerpt .btn {{ box-shadow: 0px 5px 5px 0px {webcolor(map(shadow, dark, more))}; }}
-    .excerpt .btn:hover {{ box-shadow: 0px 5px 5px 0px {webcolor(map(shadow, dark, more_hover))}; }}
-    .excerpt .btn:active {{ box-shadow: inset 0px 5px 5px 0px {webcolor(map(shadow, more, dark))}; }}
-    .excerpt .btn:disabled {{ box-shadow: 0px 5px 5px 0px {webcolor(map(shadow, dark, more))}; }}
-    
+    .btn {{ box-shadow: 0px 5px 5px 0px {webcolor(map(shadow, dark, tint))} }}
+    .btn:hover {{ box-shadow: 0px 5px 5px 0px {webcolor(map(shadow, dark, tint_hover))} }}
+    .btn:active {{ box-shadow: inset 0px 5px 5px 0px {webcolor(map(shadow, tint, dark))} }}
+    .excerpt .btn {{ box-shadow: 0px 5px 5px 0px {webcolor(map(shadow, dark, more))} }}
+    .excerpt .btn:hover {{ box-shadow: 0px 5px 5px 0px {webcolor(map(shadow, dark, more_hover))} }}
+    .excerpt .btn:active {{ box-shadow: inset 0px 5px 5px 0px {webcolor(map(shadow, more, dark))} }}
+    .excerpt .btn:disabled {{ box-shadow: 0px 5px 5px 0px {webcolor(map(shadow, dark, more))} }}
     .link {{
         color: {webcolor(link)}
     }}
-
     .link:hover {{
         color: {webcolor(link_hover)}
     }}
-    
     footer {{
         background: none;
     }}
