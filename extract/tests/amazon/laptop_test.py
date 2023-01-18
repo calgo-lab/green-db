@@ -46,7 +46,7 @@ def test_amazon_electronics() -> None:
         "1 Notebook 33 cm (13 Zoll), 2K (Intel Core i7-1160G7, 16 GB RAM, 1 TB SSD, "
         "Intel Iris Xe Graphics, Windows 10 Pro), Schwarz spanische QWERTY-Tastatur",
         brand="Lenovo",
-        sustainability_labels=[CertificateType.EPEAT],  # type: ignore[attr-defined]
+        sustainability_labels=[CertificateType.EPEAT_LAPTOPS],  # type: ignore[attr-defined]
         price=2998.0,
         currency=CurrencyType.EUR,
         image_urls=[

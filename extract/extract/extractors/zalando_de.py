@@ -1,5 +1,3 @@
-# type: ignore[attr-defined]
-
 import json
 import urllib
 import xml.etree.ElementTree as ElementTree
@@ -153,8 +151,8 @@ def get_json_data(json_file: str) -> Any:
     try:
         return json.loads(json_file)
     except json.decoder.JSONDecodeError:
-        json_file = ElementTree.fromstring(f"<root>{json_file}</root>").text
-        return json.loads(json_file)
+        unquoted = ElementTree.fromstring(f"<root>{json_file}</root>").text
+        return json.loads(unquoted or "")
 
 
 def get_sustainability_strings(parsed_page: ParsedPage) -> Iterator[str]:

@@ -1,5 +1,3 @@
-# type: ignore[attr-defined]
-
 import re
 from enum import Enum
 from logging import getLogger
@@ -37,6 +35,8 @@ _LABEL_MAPPING = {
     "TCO Certified": CertificateType.TCO,  # TODO: There are 2 additional types for phone and laptop
 }
 
+_ENERGY_LABELS = {"Energielabel", "Energy Label"}
+
 
 class _Language(Enum):
     de = "de"
@@ -44,19 +44,16 @@ class _Language(Enum):
     en = "co.uk"
 
 
-_LANGUAGE_LOCALES = {
-    _Language.de: {
-        "info": ("Besuche den ", "-Store", "Marke: "),
-        "table": ("Marke", "Hersteller", "Brand"),
-    },
-    _Language.fr: {
-        "info": ("Visiter la boutique ", "Marque\xa0: "),
-        "table": ("Marque", "Fabricant"),
-    },
-    _Language.en: {
-        "info": ("Visit the ", " Store", "Brand: "),
-        "table": ("Brand", "Manufacturer"),
-    },
+_LANGUAGE_LOCALE_INFO = {
+    _Language.de: ("Besuche den ", "-Store", "Marke: "),
+    _Language.fr: ("Visiter la boutique ", "Marque\xa0: "),
+    _Language.en: ("Visit the ", " Store", "Brand: "),
+}
+
+_LANGUAGE_LOCALE_TABLE = {
+    _Language.de: ("Marke", "Hersteller", "Brand"),
+    _Language.fr: ("Marque", "Fabricant"),
+    _Language.en: ("Brand", "Manufacturer"),
 }
 
 
@@ -89,20 +86,18 @@ def extract_amazon_de(parsed_page: ParsedPage) -> Optional[Product]:
     currency = "GBP" if language == _Language.en else "EUR"
 
     sustainability_spans = soup.find_all("span", id=re.compile("CPF-BTF-Certificate-Name"))
-    sustainability_texts = [span.text for span in sustainability_spans]
+    sustainability_texts = {span.text for span in sustainability_spans}
 
     if repairability_index := get_repairability_index(soup):
-        sustainability_texts.append(repairability_index)
+        sustainability_texts.add(repairability_index)
 
-    for energy_label in ["Energielabel", "Energy Label"]:
-        if energy_label in sustainability_texts:
-            if label_with_level := get_energy_label_level(soup):
-                sustainability_texts = [
-                    label.replace(energy_label, label_with_level) for label in sustainability_texts
-                ]
+    if label_with_level := get_energy_label_level(soup):
+        # check and remove Energy label strings that are extracted from CPF section
+        sustainability_texts = sustainability_texts.difference(_ENERGY_LABELS)
+        sustainability_texts.add(label_with_level)  # add Energy label with level
 
     sustainability_labels = sustainability_labels_to_certificates(
-        sustainability_texts, _LABEL_MAPPING
+        sustainability_texts, _LABEL_MAPPING, parsed_page.scraped_page.category
     )
 
     brand = _get_brand(soup, language)
@@ -195,14 +190,10 @@ def get_energy_label_level(soup: BeautifulSoup) -> Optional[str]:
         returned.
     """
 
-    targets = [soup.find(id="energyEfficiency").find("text")]
-
-    def parse_energy_efficiency(energy_efficiency: BeautifulSoup) -> Optional[str]:
-        if energy_efficiency:
-            return "EU Energy label " + energy_efficiency.get_text().strip()
-        return None
-
-    return _handle_parse(targets, parse_energy_efficiency)
+    if energy_efficiency := soup.find(id="energyEfficiency"):
+        if energy_efficiency.find("text"):
+            return "EU Energy label " + energy_efficiency.find("text").get_text().strip()
+    return None
 
 
 def _get_color(soup: BeautifulSoup) -> Optional[str]:
@@ -241,14 +232,11 @@ def _get_image_urls(soup: BeautifulSoup) -> Optional[list[str]]:
         Optional[list[str]]: `list` object containing `str` objects representing the image urls.
             If nothing was found `None` or empty list is returned.
     """
-    targets = [
-        soup.find("div", {"id": "altImages"}).find_all("img"),
-    ]
 
-    def parse_image_urls(images: list[BeautifulSoup]) -> list[str]:
+    def parse_image_urls(images: BeautifulSoup) -> list[str]:
         image_urls = [
             str(image["src"])
-            for image in images
+            for image in images.find_all("img")
             if not image["src"].endswith(".gif")
             and "play-button-overlay" not in image["src"]
             and "play-icon-overlay" not in image["src"]
@@ -256,7 +244,12 @@ def _get_image_urls(soup: BeautifulSoup) -> Optional[list[str]]:
         ]
         return [re.sub("_[^>]+_.", "", image) for image in image_urls]
 
-    return _handle_parse(targets, parse_image_urls)
+    images = soup.find("div", {"id": "altImages"}) or soup.find(
+        "div", {"class": "unrolledScrollBox"}
+    )
+    if images:
+        return parse_image_urls(images)
+    return None
 
 
 def _get_sizes(soup: BeautifulSoup) -> Optional[List[str]]:
@@ -267,19 +260,15 @@ def _get_sizes(soup: BeautifulSoup) -> Optional[List[str]]:
         soup (BeautifulSoup): Parsed HTML
 
     Returns:
-        Optional[str]: `str` object containing all sizes. If nothing was found `None`.
+        Optional[List[str]]: list of sizes. If nothing was found `None`.
     """
-    targets = [
+    sizes = (
         soup.find_all("span", {"class", "a-size-base swatch-title-text-display swatch-title-text"})[
             1:
-        ],
-        soup.find_all("option", id=re.compile("size_name"))[1:],
-    ]
-
-    def parse_sizes(sizes: list[BeautifulSoup]) -> str:
-        return [size.text.strip() for size in sizes if size.text.strip()]
-
-    return _handle_parse(targets, parse_sizes)
+        ]
+        or soup.find_all("option", id=re.compile("size_name"))[1:]
+    )
+    return [size.text.strip() for size in sizes if size.text.strip()] if sizes else None
 
 
 def _get_price(parsed_page: ParsedPage) -> Optional[float]:
@@ -292,17 +281,14 @@ def _get_price(parsed_page: ParsedPage) -> Optional[float]:
     Returns:
         Optional[float]: `float` object if a price is given, else `None`.
     """
-    targets = [
-        parsed_page.scraped_page.meta_information.get("price", None),
-    ]
+    if meta_info := parsed_page.scraped_page.meta_information:
+        if price := meta_info.get("price", None):
+            return float(price.replace(".", "").replace(",", "."))
 
-    def parse_price(price: str) -> float:
-        return float(price.replace(".", "").replace(",", "."))
-
-    return _handle_parse(targets, parse_price)
+    return None
 
 
-def _get_brand(soup: BeautifulSoup, language: str) -> Optional[str]:
+def _get_brand(soup: BeautifulSoup, language: _Language) -> Optional[str]:
     """
     Helper function that extracts the product's brand.
 
@@ -317,7 +303,7 @@ def _get_brand(soup: BeautifulSoup, language: str) -> Optional[str]:
     ]
 
     def parse_brand(brand: str) -> Optional[str]:
-        info_locales = _LANGUAGE_LOCALES[language]["info"]
+        info_locales = _LANGUAGE_LOCALE_INFO[language]
         if brand.startswith(info_locales[0]):
             if language == _Language.de:
                 return brand[len(info_locales[0]) : -len(info_locales[1])]  # noqa
@@ -327,7 +313,7 @@ def _get_brand(soup: BeautifulSoup, language: str) -> Optional[str]:
             return brand[len(info_locales[-1]) :]  # noqa
         return None
 
-    table_locales = _LANGUAGE_LOCALES[language]["table"]
+    table_locales = _LANGUAGE_LOCALE_TABLE[language]
     return (
         _handle_parse(targets, parse_brand)
         or _find_from_details_section(soup, table_locales[0])
@@ -353,7 +339,7 @@ def _get_description(soup: BeautifulSoup) -> str:
         soup.find("div", {"id": "feature-bullets"}),
     ]
 
-    def parse_description(description: BeautifulSoup) -> str:
+    def parse_description(description: BeautifulSoup) -> Optional[str]:
         desc_paragraph = getattr(description, "p", None)
         if desc_paragraph:
             return desc_paragraph.get_text().strip()
@@ -366,10 +352,9 @@ def _get_description(soup: BeautifulSoup) -> str:
     description = _handle_parse(targets[:1], parse_description)
     bullets = _handle_parse(targets[1:], parse_description)
 
-    if all([description, bullets]):
-        return ". ".join([bullets, description])
-    else:
-        return description or bullets or ""
+    if description and bullets:
+        return f"{bullets}. {description}"
+    return description or bullets or ""
 
 
 def _find_from_details_section(soup: BeautifulSoup, prop: str) -> Optional[str]:
@@ -402,3 +387,4 @@ def _find_from_details_section(soup: BeautifulSoup, prop: str) -> Optional[str]:
             return parent.parent.find("td").text.strip().replace("\u200e", "")
         except AttributeError:
             return None
+    return None

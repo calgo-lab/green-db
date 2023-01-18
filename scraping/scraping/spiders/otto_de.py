@@ -8,6 +8,7 @@ from scrapy_splash import SplashJsonResponse, SplashRequest
 from core.constants import TABLE_NAME_SCRAPING_OTTO_DE
 
 from ..splash import minimal_script
+from ..start_scripts.otto_de import SUSTAINABILITY_FILTER
 from ._base import BaseSpider
 
 logger = getLogger(__name__)
@@ -71,7 +72,10 @@ class OttoSpider(BaseSpider):
                 url_parsed = url_parsed._replace(query=urlencode(queries, True))
                 url = urlunparse(url_parsed)
 
-                url = f'{url.rstrip("/")}&l={pagination_info["l"]}&o={pagination_info["o"]}'
+                if SUSTAINABILITY_FILTER in url:
+                    url = f'{url.rstrip("/")}&l={pagination_info["l"]}&o={pagination_info["o"]}'
+                else:
+                    url = f'{url}?l={pagination_info["l"]}&o={pagination_info["o"]}'
 
                 yield SplashRequest(
                     url=url,

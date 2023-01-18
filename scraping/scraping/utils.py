@@ -1,7 +1,8 @@
 import json
 import pkgutil
 from os.path import join
-from typing import Any
+from typing import Any, Optional, Set
+from urllib.parse import parse_qsl, urlencode, urlparse, urlunparse
 
 
 def get_json_data(path: str) -> Any:
@@ -9,3 +10,13 @@ def get_json_data(path: str) -> Any:
     data = pkgutil.get_data("scraping", join("data", path))
     assert data
     return json.loads(data.decode("utf-8"))
+
+
+def strip_url(url: str, strip_keys: Optional[Set[str]] = None) -> str:
+    scheme, netloc, path, params, query, fragment = urlparse(url)
+    if strip_keys:
+        query = urlencode([(key, val) for key, val in parse_qsl(query) if key not in strip_keys])
+    else:
+        query = ""
+
+    return urlunparse((scheme, netloc, path, params, query, ""))

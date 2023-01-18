@@ -2,7 +2,7 @@ volumePermissions:
   enabled: true
 primary:
   persistence:
-    size: 1000Gi
+    size: 5000Gi
     existingClaim: postgres-pvc
   extraEnvVars:
     - name: TZ
