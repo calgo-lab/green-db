@@ -3,17 +3,22 @@
 
 # GreenDB: Sustainability Data for Consumer Products
 
-:: section div.container div.row
-::: column.weight=5
+:: section div.container
+
+::: div.row
+:::: column.weight=5
 
 GreenDB is a publicly available database of sustainable products, scraped from European online shops on a weekly basis. As proxy for the products’ sustainability, it relies on sustainability labels, which are evaluated by experts. The GreenDB schema extends the well-known schema.org Product definition and can be readily integrated into existing product catalogs to improve sustainability information available for search and recommendation experiences.
 
-::: column.weight=3
+:::: column.weight=3 div.stats content.name=stats
+
+::: div.row div.ff
+
 [Data](https://doi.org/10.5281/zenodo.6078038){.btn}[Publications](#publications){.btn}[Demos](#demos){.btn}[Github](https://github.com/calgo-lab/green-db/){.btn}
 
 :: section div.container div.row
 ## Sample
-::: div.ff excerpt
+::: div.ff content.name=excerpt
 
 :: section div.container
 ## Schema
@@ -37,8 +42,6 @@ GreenDB is a publicly available database of sustainable products, scraped from E
 
 :: section div.container div.row
 ::: content.name=plot_category_cred
-::: div.ff
-Normalized product count with vs. without credibility by category.
 
 :: section#demos div.container
 
