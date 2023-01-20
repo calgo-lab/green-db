@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "db-exporting"
+version = "0.1.0"
+description = "DB Exporter to Zenodo"
+authors = ["ivana <ivana.trajanovska@bht-berlin.de>"]
+readme = "README.md"
+packages = [{include = "db_exporting"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+core = {path = "../core", develop = true}
+database = {path = "../database", develop = true}
+message_queue = {path = "../message-queue", develop = true}
+
+[tool.poetry.dev-dependencies]
+pytest = "^7.2.0"
+flake8 = "^6.0.0"
+mypy = "^0.991"
+isort = "^5.11.4"
+black = "^21.12b0"
+pandas = "^1.5.2"
+pyarrow = "^10.0.1"
+requests= "^2.28.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
