@@ -1036,3 +1036,35 @@ class GreenDB(Connection):
                     "mean_credibility",
                 ],
             )
+
+    def get_aggregated_unique_products(self) -> pd.DataFrame:
+        """Fetches the unique rows ['url', 'id', 'categories', 'genders'], aggregated by the 'url'.
+
+        :return:
+            A pd.DataFrame of the fetched db rows.
+        """
+        with self._session_factory() as db_session:
+            query = (
+                db_session.query(
+                    func.max(self._database_class.id),
+                    func.array_agg(self._database_class.category),
+                    func.array_agg(self._database_class.gender),
+                )
+                .group_by(self._database_class.url)
+                .all()
+            )
+
+            return pd.DataFrame(
+                query, columns=["id", "categories", "genders"]
+            ).convert_dtypes()
+
+    def get_products_with_ids(self, ids: list) -> Iterator[Product]:
+        """Fetches the products for the given `ids`
+
+        :param ids: A list of ids to filter the green-db::green-db rows.
+        :return:
+            An iterator of core.domain::Product.
+        """
+        with self._session_factory() as db_session:
+            query = db_session.query(GreenDBTable).filter(GreenDBTable.id.in_(ids))
+            return (Product.from_orm(row) for row in query.all())
