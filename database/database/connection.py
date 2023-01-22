@@ -1054,9 +1054,7 @@ class GreenDB(Connection):
                 .all()
             )
 
-            return pd.DataFrame(
-                query, columns=["id", "categories", "genders"]
-            ).convert_dtypes()
+            return pd.DataFrame(query, columns=["id", "categories", "genders"]).convert_dtypes()
 
     def get_products_with_ids(self, ids: list) -> Iterator[Product]:
         """Fetches the products for the given `ids`
