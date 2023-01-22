@@ -1,189 +1,264 @@
-from datetime import date
-
 import json
+import logging
 import os
+from datetime import date
+from typing import List, Tuple, Iterator
+
 import pandas as pd
-
-from db_exporting.db_connection import DBConnection
 import requests
+from database.connection import GreenDB
 
-DEPOSITION_ID = os.environ.get("DEPOSITION_ID", None)
-# todo add it as a secret
-ACCESS_TOKEN = "dRC51Ri9Td7aQSjtmgLBYqQVaZ8ymBQuZJMkb72billaWhgy3Z8Py2K1Rrtj"
+from core import log
 
+log.setup_logger(__name__)
+logger = logging.getLogger(__name__)
+
+DEPOSITION_BASE_URL = "https://zenodo.org/api/deposit/depositions"
+LOCAL_DEPOSITION_VERSION_STORAGE = "/storage/db-exporting/deposition_id_version"
+ACCESS_TOKEN = os.environ.get("ZENODO_API_KEY", None)
 COLUMNS_COUNT = 20
+SUCCESSFUL_STATUS_CODES = [200, 201, 202]
 
-r = {'conceptdoi': '10.5072/zenodo.1143578', 'conceptrecid': '1143578', 'created': '2023-01-20T13:08:47.643567+00:00',
-     'doi': '10.5072/zenodo.1149632', 'doi_url': 'https://doi.org/10.5072/zenodo.1149632', 'files': [{'checksum':
-                                                                                                          'a92ad26c3c69b538c3f7b0f478f9a993',
-                                                                                                      'filename': 'products.csv',
-                                                                                                      'filesize': 1723623,
-                                                                                                      'id': '7c43c945-2cae-4f91-87db-7a3b8a58903b',
-                                                                                                      'links': {
-                                                                                                          'download':
-                                                                                                              'https://sandbox.zenodo.org/api/files/7e00e6a4-63c3-4ced-aeed-b611713e49b7/products.csv',
-                                                                                                          'self': 'https://sandbox.zenodo.org/api/deposit/depositions/1149632/files/7c43c945-2cae-4f91-87db-7a3b8a58903b'}},
-                                                                                                     {
-                                                                                                         'checksum': '675eb3dfdd7628d416ecffc3f64932cc',
-                                                                                                         'filename': 'products.parquet',
-                                                                                                         'filesize': 524629,
-                                                                                                         'id': 'e52f37ad-a044-4be7-a266-75593ca361ad',
-                                                                                                         'links': {
-                                                                                                             'download':
-                                                                                                                 'https://sandbox.zenodo.org/api/files/7e00e6a4-63c3-4ced-aeed-b611713e49b7/products.parquet',
-                                                                                                             'self': 'https://sandbox.zenodo.org/api/deposit/depositions/1149632/files/e52f37ad-a044-4be7-a266-75593ca361ad'}},
-                                                                                                     {
-                                                                                                         'checksum': '95de8d2b0856d45e30008859a93f08f4',
-                                                                                                         'filename': 'sustainability_labels.csv',
-                                                                                                         'filesize': 154758,
-                                                                                                         'id': 'e0c03683-e14e-408b-ab14-c1141823f853',
-                                                                                                         'links': {
-                                                                                                             'download':
-                                                                                                                 'https://sandbox.zenodo.org/api/files/7e00e6a4-63c3-4ced-aeed-b611713e49b7/sustainability_labels.csv',
-                                                                                                             'self': 'https://sandbox.zenodo.org/api/deposit/depositions/1149632/files/e0c03683-e14e-408b-ab14-c1141823f853'}}],
-     'id': 1149632, 'links': {'badge': 'https://sandbox.zenodo.org/badge/doi/10.5072/zenodo.1149632.svg',
-                              'bucket': 'https://sandbox.zenodo.org/api/files/7e00e6a4-63c3-4ced-aeed-b611713e49b7',
-                              'conceptbadge':
-                                  'https://sandbox.zenodo.org/badge/doi/10.5072/zenodo.1143578.svg', 'conceptdoi':
-                                  'https://doi.org/10.5072/zenodo.1143578',
-                              'doi': 'https://doi.org/10.5072/zenodo.1149632', 'latest':
-                                  'https://sandbox.zenodo.org/api/records/1149632', 'latest_draft':
-                                  'https://sandbox.zenodo.org/api/deposit/depositions/1149643', 'latest_draft_html':
-                                  'https://sandbox.zenodo.org/deposit/1149643',
-                              'latest_html': 'https://sandbox.zenodo.org/record/1149632',
-                              'record': 'https://sandbox.zenodo.org/api/records/1149632', 'record_html':
-                                  'https://sandbox.zenodo.org/record/1149632'},
-     'metadata': {'access_conditions': '<p>People with access key</p>',
-                  'access_right': 'restricted', 'communities': [{'identifier': 'zenodo'}], 'creators': [{'name': 'IT'}],
-                  'description': '<p>Some test data</p>', 'doi': '10.5072/zenodo.1149632', 'prereserve_doi': {'doi':
-                                                                                                                  '10.5072/zenodo.1149632',
-                                                                                                              'recid': 1149632},
-                  'publication_date': '2023-01-04', 'title': 'green', 'upload_type':
-                      'dataset', 'version': '0.3.0'}, 'modified': '2023-01-20T13:08:52.793136+00:00', 'owner': 136315,
-     'record_id':
-         1149632, 'state': 'done', 'submitted': True, 'title': 'green'}
+PRODUCTS = "products"
+LABELS = "sustainability_labels"
+
+VERSION_INDEX = 2
 
 
-#
-# publication_date = set to today's date
-# publication_date = date(r.json['modified']) -> From HERE 1
+def increment_version(version: str):
+    """Increments the patch number of the `version`.
 
-def increment_ver(version):
-    version = version.split('.')
-    version[2] = str(int(version[2]) + 1)
-    return '.'.join(version)
+    E.g. version = 1.2.3; returns 1.2.4
+
+    :param version: The deposition version as a string
+    :return:
+        The patch-incremented `version`.
+    """
+    try:
+        version = version.split(".")
+        current_version = int(version[VERSION_INDEX])
+        version[VERSION_INDEX] = str(current_version + 1)
+        return ".".join(version)
+    except Exception as e:
+        logger.warning(
+            f"There's been an issue while incrementing the {version} - {e}. Exiting..."
+        )
+        return None
 
 
-def exporter():
-    print(DEPOSITION_ID)
-    SANDBOX_DEP_ID = DEPOSITION_ID if DEPOSITION_ID else 1149632
-    print(SANDBOX_DEP_ID)
+def check_request_status(response: requests.Response, step: str):
+    """Checks if a status of a certain request is invalid and raises an error in that case.
 
-    params = {'access_token': ACCESS_TOKEN}
+    :param response: The Response from the Zenodo Deposition Api.
+    :param step:
+        The step in which the response was made = [New Version, File Upload, File Publish..]
+    """
+    if response.status_code not in SUCCESSFUL_STATUS_CODES:
+        logger.warning(response.json())
+        error_msg = (
+            f"There's been an issue while executing step {step} - "
+            f"Request status_code = [{response.status_code}]. Exiting..."
+        )
+        raise requests.exceptions.RequestException(error_msg)
 
-    filenames = ["products.csv", "products.parquet", "sustainability_labels.csv", "sustainability_labels.parquet"]
-    print("HERE 1")
-    headers = {"Content-Type": "application/json"}
-    # base_url = f"https://sandbox.zenodo.org/api/deposit/depositions"
-    # r_old = requests.get(f'{base_url}/{SANDBOX_DEP_ID}',
-    #                  params=params)
-    # print(r_old.json())
-    # print(r_old.status_code)
 
-    print("1. Create new version")
-    base_url = f"https://sandbox.zenodo.org/api/deposit/depositions"
-    r = requests.post(f'{base_url}/{SANDBOX_DEP_ID}/actions/newversion',
-                      params=params)
-    new_version_r = r.json()
-    print(r.json())
-    print(r.status_code)
+def prepare_metadata(response_data: dict, version: str) -> Tuple[dict, str]:
+    """Prepares the metadata for the publishing request.
 
+    Extracts the metadata from the Zenodo Api (`response_data`) for creating the new deposition;
+    Sets the response_data to today's date;
+    Replaces the version number with a new incremented version number.
+
+
+    :param response_data: The data object which was obtained by the Zenodo Api,
+        for creating the new deposition.
+    :param version: The version of the latest deposition.
+    :return:
+        The new metadata as a dict to be send to Zenodo's '/actions/publish' ,
+        containing the updated publication data and version.
+    """
+    data = {"metadata": response_data["metadata"]}
+    data["metadata"]["publication_date"] = str(date.today())
+    new_version = increment_version(version)
+    if new_version is None:
+        raise ValueError(f"Couldn't parse the version {version}")
+    data["metadata"]["version"] = new_version
+    return data, new_version
+
+
+def create_new_version(
+    deposition_id: str, version: str, params: dict
+) -> Tuple[str, str, str, dict]:
+    """Prepares a new version for the deposition with a `deposition_id`.
+
+    :param deposition_id: The id of the latest deposition.
+    :param version: The version of the latest deposition.
+    :param params: The params needed for the requests, containing 'access_token'.
+    :return:
+    """
+    # Create the new version.
+    step = "1. Create new version"
+    logger.info(step)
+    r = requests.post(
+        f"{DEPOSITION_BASE_URL}/{deposition_id}/actions/newversion", params=params
+    )
+    check_request_status(r, step)
+
+    # Get the new link and the new id for the new version (deposition) of the data.
     new_link = r.json()["links"]["latest_draft"]
     new_id = new_link.split("/")[-1]
 
-    print("2. Get the bucket from the new version?")
-    r = requests.get(f'{base_url}/{new_id}',
-                     params=params)
-
+    # Request and extract the bucket for data upload for the new version (deposition) of the data.
+    step = "2. Get the bucket from the new version"
+    logger.info(step)
+    r = requests.get(f"{DEPOSITION_BASE_URL}/{new_id}", params=params)
+    check_request_status(r, step)
     bucket = r.json()["links"]["bucket"]
-    data = {"metadata": r.json()["metadata"]}
-    #todo ivana parse this
-    # publication_date = date(new_version_r["modified"])
-    publication_date = "2023-01-20"
-    data["metadata"]["publication_date"] = publication_date
-    data["metadata"]["version"] = increment_ver(data["metadata"]["version"])
-    # publication_date = set to today's date
-    # parse date
-    print(f"NEW ID = {new_id}")
-    if new_id:
-        os.environ["DEPOSITION_ID"] = new_id
 
-    for filename in filenames:
-        # todo update pah accordingly
-        path = filename
-        with open(path, "rb") as fp:
-            print(f"3. Upload the files to {bucket}")
+    # Extract the metadata for the json file
+    data, new_version = prepare_metadata(r.json(), version)
+
+    return new_id, new_version, bucket, data
+
+
+def export_to_zenodo(filenames: List[str], deposition_id: str, version: str):
+    params = {"access_token": ACCESS_TOKEN}
+    if ACCESS_TOKEN is None:
+        raise ValueError("Access token is required")
+
+    headers = {"Content-Type": "application/json"}
+
+    new_id, new_version, bucket, data = create_new_version(
+        deposition_id=deposition_id, version=version, params=params
+    )
+
+    # For every filename ...
+    for idx, filename in enumerate(filenames):
+        with open(filename, "rb") as fp:
+            # ...upload it to the bucket..
+            step = f"3.{idx + 1} Upload the file [{filename}] to {bucket}"
+            logger.info(step)
             r = requests.put("%s/%s" % (bucket, filename), data=fp, params=params)
-            print(r.json())
-            print(r.status_code)
+            # ... check the upload status.
+            check_request_status(r, step)
 
-    print(f"4. Upload meta data with the new version and today's date")
-    r = requests.put(f'{base_url}/{new_id}',
-                     params=params, data=json.dumps(data),
-                     headers=headers)
-    print(r.json())
-    print(r.status_code)
+    # Upload the (meta)data.
+    step = "4. Upload meta data with the new version and today's date"
+    logger.info(step)
+    r = requests.put(
+        f"{DEPOSITION_BASE_URL}/{new_id}",
+        params=params,
+        data=json.dumps(data),
+        headers=headers,
+    )
+    check_request_status(r, step)
 
-    print("4. Publish ")
-    url = f'{base_url}/{new_id}/actions/publish'
+    # Publish the data and metadata.
+    step = "5. Publish "
+    logger.info(step)
+    url = f"{DEPOSITION_BASE_URL}/{new_id}/actions/publish"
     r = requests.post(url, data=data, params=params)
-    print(r.json())
-    print(r.status_code)
+    check_request_status(r, step)
+
+    return new_id, new_version
 
 
-def to_df(objects):
-    return pd.DataFrame([product.__dict__ for product in objects])
+def to_df(objects: Iterator) -> pd.DataFrame:
+    return pd.DataFrame([obj.__dict__ for obj in objects])
 
 
-def aggregate_data():
-    db_conn = DBConnection()
+def process_db_data(
+    unique_aggregated_urls: pd.DataFrame, products: pd.DataFrame
+) -> pd.DataFrame:
+    """Further processes the db data.
+
+    Joins the `unique_aggregated_urls` and `products`;
+    Applies ::set to the categories;
+    Applies a UNISEX gender to the genders columns;
+
+    :param unique_aggregated_urls: The uniquely aggregated urls containing the ids,
+        categories and genders from each table row.
+    :param products: The exported greendb::green-db products.
+    :return:
+        The joined data as a dataframe.
+    """
+    joined = unique_aggregated_urls.join(products)
+    joined["categories"] = joined["categories"].apply(lambda x: list(set(x)))
+    joined["genders"] = joined["genders"].apply(lambda x: list(set(x)))
+    joined["genders"] = joined["genders"].apply(
+        lambda x: x[0] if len(x) == 1 else "UNISEX"
+    )
+
+    joined = joined.drop("gender", axis=1)
+    joined = joined.rename(columns={"genders": "gender"})
+    joined = joined.drop("category", axis=1)
+
+    return joined.convert_dtypes()
+
+
+def export_db_data() -> list:
+    """Exports (dumps) the db data to local csv files.
+
+    Creates a dump of all unique data rows in the green-db::green-db, a
+    nd green-db::sustainability_labels accordingly;
+    Stores them as (temporary) parquet and csv files.
+
+    :return:
+        The stored file names as a list.
+    """
+    # Connect to the db, get the unique ids and the products for those ids.
+    db_conn = GreenDB()
     unique_aggregated_urls = db_conn.get_aggregated_unique_products()
     products = db_conn.get_products_with_ids(unique_aggregated_urls["id"].astype(int))
     products = to_df(products)
-    joined = unique_aggregated_urls.join(products)
 
-    joined["categories"] = joined["categories"].apply(lambda x: list(set(x)))
-    joined["genders"] = joined["genders"].apply(lambda x: list(set(x)))
-    joined["genders"] = joined["genders"].apply(lambda x: x[0] if len(x) == 1 else "UNISEX")
-    joined.drop("gender", axis=1)
-    joined = joined.rename(columns={"genders": "gender"})
-    joined = joined.drop("category", axis=1)
-    joined = joined.convert_dtypes()
+    # Preprocess the data.
+    products = process_db_data(unique_aggregated_urls, products)
 
-    assert joined.shape[1] == COLUMNS_COUNT
+    assert len(products.columns) == COLUMNS_COUNT
 
-    joined.to_parquet("products.parquet", index=False)
-    joined.to_csv("products.csv", index=False)
+    # Store the products files locally.
+    products.to_parquet(f"{PRODUCTS}.parquet", index=False)
+    products.to_csv(f"{PRODUCTS}.csv", index=False)
 
+    # Get the labels from the db and store the labels files locally.
     labels = to_df(db_conn.get_sustainability_labels())
-    labels.to_parquet("labels.parquet", index=False)
-    labels.to_csv("labels.csv", index=False)
+    labels.to_parquet(f"{LABELS}.parquet", index=False)
+    labels.to_csv(f"{LABELS}.csv", index=False)
+
+    return [
+        f"{PRODUCTS}.parquet",
+        f"{PRODUCTS}.csv",
+        f"{LABELS}.parquet",
+        f"{LABELS}.csv",
+    ]
 
 
-def shuffle_and_store():
-    pr = pd.read_csv("products.csv")
-    prq = pd.read_parquet("products.parquet")
-    sl = pd.read_csv("sustainability_labels.csv")
-    slq = pd.read_parquet("sustainability_labels.parquet")
+def start():
+    """A starting point for the db export.
 
-    pr.sample(frac=1)[:-1].to_csv("products.csv", index=False)
-    prq.sample(frac=1)[:-1].to_parquet("products.parquet", index=False)
-    sl.sample(frac=1)[:-1].to_csv("sustainability_labels.csv", index=False)
-    slq.sample(frac=1)[:-1].to_parquet("sustainability_labels.parquet", index=False)
+    Reads the latest deposition_id and version;
+    Exports the db data and stores them locally (main::export_db_data);
+    Exports the data to Zenodo.
+    """
+    # Read the file with the stored deposition_id and version.
+    f = open(LOCAL_DEPOSITION_VERSION_STORAGE, "r")
+    deposition_id, version = str(f.read().strip()).split(",")
 
+    # Export the db data and get their locally stored data files.
+    data_files = export_db_data()
+    # Export the data files to zenodo
+    new_deposition_id, new_version = export_to_zenodo(
+        data_files, deposition_id, version
+    )
+    # Finally, write down the new_deposition_id and new version to the same storage file.
+    with open(LOCAL_DEPOSITION_VERSION_STORAGE, "w") as f:
+        f.write(str(f"{new_deposition_id},{new_version}"))
+        logger.info(
+            f"Writing latest deposition_id = [{new_deposition_id}] and "
+            f"latest version = [{new_version}"
+        )
 
-if __name__ == '__main__':
-    # aggregate_data()
-    shuffle_and_store()
-    # DEPOSITION_ID = os.environ.get("DEPOSITION_ID", None)
-    exporter()
+    logger.info("Cleanup ... removing cached files locally")
+    for file in data_files:
+        os.remove(file)

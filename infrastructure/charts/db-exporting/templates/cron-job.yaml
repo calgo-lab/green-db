@@ -1,0 +1,30 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ include "db-exporting.fullname" . }}
+  labels:
+    {{- include "db-exporting.labels" . | nindent 4 }}
+spec:
+  schedule: "00 18 1 * *"  # "At 18:00 Every 1st of the month."
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          {{- with  .Values.imagePullSecrets }}
+          imagePullSecrets:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumes:
+            - name: {{ .Values.pvc }}
+              persistentVolumeClaim:
+                claimName: {{ .Values.pvc }}
+          containers:
+            - name: {{  .Chart.Name }}
+              image: "{{  .Values.image.repository }}:{{  .Values.image.tag | default  .Chart.AppVersion }}"
+              imagePullPolicy: {{  .Values.image.pullPolicy }}
+              env:
+                {{- toYaml  .Values.env | nindent 16 }}
+              volumeMounts:
+                - name: {{ .Values.pvc }}
+                  mountPath: {{ .Values.mount_path }}
+          restartPolicy: OnFailure

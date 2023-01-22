@@ -8,7 +8,7 @@ RUN pip install redis rq psycopg2 poetry SQLAlchemy pydantic beautifulsoup4 extr
 COPY core /green-db/core
 COPY database /green-db/database
 COPY extract /green-db/extract
-COPY message-queue /green-db/message-queue
+COPY messadge-queue /green-db/message-queue
 COPY workers /green-db/workers
 
 WORKDIR /green-db/workers

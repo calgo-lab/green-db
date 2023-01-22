@@ -1,16 +1,18 @@
 [tool.poetry]
 name = "db-exporting"
-version = "0.1.0"
+version = "0.1.2"
 description = "DB Exporter to Zenodo"
 authors = ["ivana <ivana.trajanovska@bht-berlin.de>"]
 readme = "README.md"
 packages = [{include = "db_exporting"}]
 
+[tool.poetry.scripts]
+exporter = "db_exporting.main:start"
+
 [tool.poetry.dependencies]
 python = "^3.10"
-core = {path = "../core", develop = true}
-database = {path = "../database", develop = true}
-message_queue = {path = "../message-queue", develop = true}
+core = {git = "https://github.com/calgo-lab/green-db", branch = "test-database-with-new-poetry", subdirectory = "core"}
+database = {git = "https://github.com/calgo-lab/green-db", branch = "test-database-with-new-poetry", subdirectory = "database"}
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.2.0"
