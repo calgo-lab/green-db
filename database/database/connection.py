@@ -1038,7 +1038,9 @@ class GreenDB(Connection):
             )
 
     def get_aggregated_unique_products(self) -> pd.DataFrame:
-        """Fetches the unique rows ['url', 'id', 'categories', 'genders'], aggregated by the 'url'.
+        """Fetches the unique rows ['url', 'id', 'categories', 'genders'].
+
+        Aggregates the unique rows by ['url', 'timestamp'].
 
         :return:
             A pd.DataFrame of the fetched db rows.
@@ -1047,14 +1049,16 @@ class GreenDB(Connection):
             query = (
                 db_session.query(
                     func.max(self._database_class.id),
+                    func.max(self._database_class.url),
                     func.array_agg(self._database_class.category),
                     func.array_agg(self._database_class.gender),
                 )
-                .group_by(self._database_class.url)
+                .group_by(self._database_class.url, self._database_class.timestamp)
                 .all()
             )
-
-            return pd.DataFrame(query, columns=["id", "categories", "genders"]).convert_dtypes()
+            columns = ["id", "url", "categories", "genders"]
+            res_df = pd.DataFrame(query, columns=columns).convert_dtypes()
+            return res_df.sort_values("id", ascending=False).drop_duplicates("url", keep="first")
 
     def get_products_with_ids(self, ids: list) -> Iterator[Product]:
         """Fetches the products for the given `ids`
