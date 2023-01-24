@@ -182,6 +182,9 @@ def process_db_data(
     :return:
         The joined data as a dataframe.
     """
+    products = products.set_index("url", drop=False)
+    unique_aggregated_urls = unique_aggregated_urls.set_index("url")
+
     joined = unique_aggregated_urls.join(products)
     joined["categories"] = joined["categories"].apply(lambda x: list(set(x)))
     joined["genders"] = joined["genders"].apply(lambda x: list(set(x)))
