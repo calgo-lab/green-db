@@ -185,7 +185,7 @@ files = [
 
 [[package]]
 name = "core"
-version = "0.2.4"
+version = "0.2.6"
 description = ""
 category = "main"
 optional = false
@@ -200,11 +200,11 @@ pydantic = "^1.9.0"
 type = "git"
 url = "https://github.com/calgo-lab/green-db"
 reference = "test-database-with-new-poetry"
-resolved_reference = "5301e566c4351f79b4fef5e3155b8bf7b4ccaddc"
+resolved_reference = "cf32dfb3475d2c976ae302a27cb7b8ad297911be"
 subdirectory = "core"
 [[package]]
 name = "database"
-version = "0.2.4"
+version = "0.2.6"
 description = ""
 category = "main"
 optional = false
@@ -221,7 +221,7 @@ SQLAlchemy = "^1.4.29"
 type = "git"
 url = "https://github.com/calgo-lab/green-db"
 reference = "test-database-with-new-poetry"
-resolved_reference = "5301e566c4351f79b4fef5e3155b8bf7b4ccaddc"
+resolved_reference = "cf32dfb3475d2c976ae302a27cb7b8ad297911be"
 subdirectory = "database"
 [[package]]
 name = "exceptiongroup"

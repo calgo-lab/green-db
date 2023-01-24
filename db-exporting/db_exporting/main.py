@@ -2,13 +2,14 @@ import json
 import logging
 import os
 from datetime import date
-from typing import List, Tuple, Iterator
+from typing import Iterator, List, Tuple, Union
 
 import pandas as pd
 import requests
-from database.connection import GreenDB
 
 from core import log
+from core.domain import Product, SustainabilityLabel
+from database.connection import GreenDB
 
 log.setup_logger(__name__)
 logger = logging.getLogger(__name__)
@@ -25,7 +26,7 @@ LABELS = "sustainability_labels"
 VERSION_INDEX = 2
 
 
-def increment_version(version: str):
+def increment_version(version: str) -> str:
     """Increments the patch number of the `version`.
 
     E.g. version = 1.2.3; returns 1.2.4
@@ -35,18 +36,17 @@ def increment_version(version: str):
         The patch-incremented `version`.
     """
     try:
-        version = version.split(".")
-        current_version = int(version[VERSION_INDEX])
-        version[VERSION_INDEX] = str(current_version + 1)
-        return ".".join(version)
+        version_split = version.split(".")
+        current_version = int(version_split[VERSION_INDEX])
+        version_split[VERSION_INDEX] = str(current_version + 1)
+        return ".".join(version_split)
     except Exception as e:
         logger.warning(
             f"There's been an issue while incrementing the {version} - {e}. Exiting..."
         )
-        return None
 
 
-def check_request_status(response: requests.Response, step: str):
+def check_request_status(response: requests.Response, step: str) -> None:
     """Checks if a status of a certain request is invalid and raises an error in that case.
 
     :param response: The Response from the Zenodo Deposition Api.
@@ -121,7 +121,17 @@ def create_new_version(
     return new_id, new_version, bucket, data
 
 
-def export_to_zenodo(filenames: List[str], deposition_id: str, version: str):
+def export_to_zenodo(
+    filenames: List[str], deposition_id: str, version: str
+) -> Tuple[str, str]:
+    """Export the files [`filenames`] to Zenodo, with updated `deposition_id` and a new `version`.
+
+    :param filenames: A list of local filenames to be uploaded to Zenodo.
+    :param deposition_id: The new deposition id to be used for the data upload.
+    :param version: The new version to be added in the metadata during the data Publish.
+    :return:
+        A Tuple of the new deposition id and version (to be stored for the next iteration).
+    """
     params = {"access_token": ACCESS_TOKEN}
     if ACCESS_TOKEN is None:
         raise ValueError("Access token is required")
@@ -163,7 +173,7 @@ def export_to_zenodo(filenames: List[str], deposition_id: str, version: str):
     return new_id, new_version
 
 
-def to_df(objects: Iterator) -> pd.DataFrame:
+def to_df(objects: Iterator[Union[Product, SustainabilityLabel]]) -> pd.DataFrame:
     return pd.DataFrame([obj.__dict__ for obj in objects])
 
 
@@ -212,11 +222,13 @@ def export_db_data() -> list:
     # Connect to the db, get the unique ids and the products for those ids.
     db_conn = GreenDB()
     unique_aggregated_urls = db_conn.get_aggregated_unique_products()
-    products = db_conn.get_products_with_ids(unique_aggregated_urls["id"].astype(int))
-    products = to_df(products)
+    db_products = db_conn.get_products_with_ids(
+        unique_aggregated_urls["id"].astype(int)
+    )
+    db_products = to_df(db_products)
 
     # Preprocess the data.
-    products = process_db_data(unique_aggregated_urls, products)
+    products = process_db_data(unique_aggregated_urls, db_products)
 
     assert len(products.columns) == COLUMNS_COUNT
 
@@ -237,7 +249,7 @@ def export_db_data() -> list:
     ]
 
 
-def start():
+def start() -> None:
     """A starting point for the db export.
 
     Reads the latest deposition_id and version;
