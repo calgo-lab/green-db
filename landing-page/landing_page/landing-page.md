@@ -16,6 +16,8 @@ GreenDB is a publicly available database of sustainable products, scraped from E
 
 [Data](https://doi.org/10.5281/zenodo.6078038){.btn}[Publications](#publications){.btn}[Demos](#demos){.btn}[Github](https://github.com/calgo-lab/green-db/){.btn}
 
+:: section div.container div.row content.name=plot_category_cred
+
 :: section div.container div.row
 ## Sample
 ::: div.ff content.name=excerpt
@@ -39,9 +41,6 @@ GreenDB is a publicly available database of sustainable products, scraped from E
 | -: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-:
 | **data type** | text | timestamp | text | text | int4 | int4 | int4 | int4 | int4 | int4 | int4 | int4 | int4 | int4 | int4 | int4 | int4 | int4
 | **nullable** | no | no | no | no | yes | yes | yes | yes | yes | yes | yes | yes | yes | yes | yes | yes | yes | yes
-
-:: section div.container div.row
-::: content.name=plot_category_cred
 
 :: section#demos div.container
 
