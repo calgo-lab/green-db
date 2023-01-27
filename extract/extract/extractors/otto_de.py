@@ -73,7 +73,7 @@ def extract_otto_de(parsed_page: ParsedPage) -> Optional[Product]:
     parsed_url = urlparse(parsed_page.scraped_page.url)
 
     # Check if the SUSTAINABILITY_FILTER was in the URL
-    orig_url = parsed_page.scraped_page.original_URL
+    orig_url = parsed_page.scraped_page.meta_information.get("original_URL", None)
     assign_unavailable = orig_url is not None and SUSTAINABILITY_FILTER not in orig_url
 
     sustainability_labels = _get_sustainability(

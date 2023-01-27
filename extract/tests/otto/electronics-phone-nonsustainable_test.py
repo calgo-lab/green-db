@@ -16,8 +16,7 @@ def test_otto_basic() -> None:
     country = CountryType.DE
     file_name = "electronics-phone-nonsustainable.html"
     category = "SMARTPHONE"
-    meta_information = {"family": "electronics"}
-    original_URL = url
+    meta_information = {"family": "electronics", "original_URL": url}
 
     scraped_page = read_test_html(
         timestamp=timestamp,
@@ -27,8 +26,7 @@ def test_otto_basic() -> None:
         file_name=file_name,
         category=category,
         meta_information=meta_information,
-        url=url,
-        original_URL=original_URL,
+        url=url
     )
 
     actual = extract_product(TABLE_NAME_SCRAPING_OTTO_DE, scraped_page)

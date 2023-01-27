@@ -56,7 +56,6 @@ class ScrapedPage(BaseModel):
 
     page_type: PageType
     meta_information: Optional[dict]
-    original_URL: Optional[str]
 
     class Config:
         orm_mode = True

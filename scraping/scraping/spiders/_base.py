@@ -263,6 +263,8 @@ class BaseSpider(Spider):
         else:
             meta_information = response.meta.get("request_meta_information")
 
+        meta_information["original_URL"] = response.meta.get("original_URL", None)
+
         scraped_page = ScrapedPage(
             timestamp=self.timestamp,
             source=self.source,
@@ -274,8 +276,7 @@ class BaseSpider(Spider):
             category=response.meta.get("category"),
             gender=response.meta.get("gender"),
             consumer_lifestage=response.meta.get("consumer_lifestage"),
-            meta_information=meta_information,
-            original_URL=response.meta.get("original_URL"),
+            meta_information=meta_information
         )
 
         self.message_queue.add_scraping(table_name=self.table_name, scraped_page=scraped_page)
