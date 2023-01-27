@@ -795,5 +795,5 @@ window.PlotlyConfig={{MathJaxConfig:'local'}};
 
 if __name__ == "__main__":
     content = rebuild_landing_page()
-    with open("index.html", "w", encoding="utf-8") as f:
+    with open("../../index.html", "w", encoding="utf-8") as f:
         f.write(content)
