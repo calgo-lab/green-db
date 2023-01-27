@@ -8,7 +8,7 @@
 ::: div.row
 :::: column.weight=5
 
-GreenDB is a publicly available database of sustainable products, scraped from European online shops on a weekly basis. As proxy for the products’ sustainability, it relies on sustainability labels, which are evaluated by experts. The GreenDB schema extends the well-known schema.org Product definition and can be readily integrated into existing product catalogs to improve sustainability information available for search and recommendation experiences.
+GreenDB is a publicly available database of sustainable products, scraped from European online shops on a weekly basis. As proxy for the products’ sustainability, it relies on sustainability labels, which are evaluated by experts. The GreenDB schema extends the well-known schema.org Product definition and is compatible with standardized fine grained product taxonomies such as [GS1](https://gpc-browser.gs1.org){.link}.
 
 :::: column.weight=3 div.stats content.name=stats
 
