@@ -2,7 +2,6 @@ import json
 from logging import getLogger
 from typing import List, Optional
 from urllib.parse import ParseResult, urlparse
-
 from bs4 import BeautifulSoup
 from pydantic import ValidationError
 
@@ -19,6 +18,8 @@ logger = getLogger(__name__)
 
 NUM_IMAGE_URLS = 3
 IMAGE_ID_INDEX = 5
+
+SUSTAINABILITY_FILTER = "?nachhaltigkeit=alle-nachhaltigen-artikel"
 
 
 def extract_otto_de(parsed_page: ParsedPage) -> Optional[Product]:
@@ -71,8 +72,15 @@ def extract_otto_de(parsed_page: ParsedPage) -> Optional[Product]:
     product_data = _get_product_data(parsed_page.beautiful_soup)
     parsed_url = urlparse(parsed_page.scraped_page.url)
 
+    # Check if the SUSTAINABILITY_FILTER was in the URL
+    orig_url = parsed_page.scraped_page.original_URL
+    assign_unavailable = orig_url and SUSTAINABILITY_FILTER not in orig_url
+
     sustainability_labels = _get_sustainability(
-        product_data, parsed_page.beautiful_soup, parsed_page.scraped_page.category
+        product_data,
+        parsed_page.beautiful_soup,
+        parsed_page.scraped_page.category,
+        assign_unavailable,
     )
     image_urls = _get_image_urls(product_data, parsed_url)[:NUM_IMAGE_URLS]
 
@@ -266,7 +274,10 @@ def _get_energy_labels(product_data: dict, beautiful_soup: BeautifulSoup) -> Lis
 
 
 def _get_sustainability(
-    product_data: dict, beautiful_soup: BeautifulSoup, product_category: str
+    product_data: dict,
+    beautiful_soup: BeautifulSoup,
+    product_category: str,
+    assign_unavailable: bool,
 ) -> Optional[List[str]]:
     """
     Helper function that extracts the product's sustainability information.
@@ -275,6 +286,9 @@ def _get_sustainability(
         product_data (dict): Representation of the product data JSON
         beautiful_soup (BeautifulSoup): Parsed HTML of Product Website.
         product_category (str): Product Category
+        assign_unavailable (bool): Whether to assign the UNAVAILABLE label,
+            Needed for Otto's "outdated" product pages, which are scraped as
+            sustainable at first, but no Sustainable information was found during extraction.
     Returns:
         List[str]: Sorted `list` of found sustainability labels
     """
@@ -286,7 +300,7 @@ def _get_sustainability(
     # Due to the `filter` being empty, we expect that in `sustainability_information_htmls` there
     # wouldn't be anything found for the non-sustainable products, so we set a default label
     # UNAVAILABLE, so the non-sustainable products can be distinguished from the other products.
-    if not certificate_strings:
+    if not certificate_strings and assign_unavailable:
         return [CertificateType.UNAVAILABLE]
 
     return sustainability_labels_to_certificates(

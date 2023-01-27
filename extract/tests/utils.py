@@ -16,6 +16,7 @@ def read_test_html(
     url: str = "dummy_url",
     gender: Optional[GenderType] = None,
     consumer_lifestage: Optional[ConsumerLifestageType] = None,
+    original_URL: Optional[str] = None,
 ) -> ScrapedPage:
     path = TEST_DATA_DIR / merchant / "data" / file_name
     with open(path, encoding="utf-8") as f:
@@ -31,6 +32,7 @@ def read_test_html(
             consumer_lifestage=consumer_lifestage,
             page_type=PageType("PRODUCT"),
             meta_information=meta_information,
+            original_URL=original_URL,
         )
 
 

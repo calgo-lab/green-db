@@ -18,6 +18,7 @@ class OttoSpider(BaseSpider):
     name = TABLE_NAME_SCRAPING_OTTO_DE
     source, _ = name.rsplit("_", 1)
     allowed_domains = ["otto.de"]
+    custom_settings = {"DOWNLOAD_DELAY": 4}
 
     def parse_SERP(self, response: SplashJsonResponse) -> Iterator[SplashRequest]:
 

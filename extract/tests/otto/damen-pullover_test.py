@@ -25,6 +25,7 @@ def test_otto_basic() -> None:
     gender = GenderType.FEMALE
     consumer_lifestage = ConsumerLifestageType.ADULT
     meta_information = {"family": "FASHION"}
+    original_URL = url
 
     scraped_page = read_test_html(
         timestamp=timestamp,
@@ -37,6 +38,7 @@ def test_otto_basic() -> None:
         consumer_lifestage=consumer_lifestage,
         meta_information=meta_information,
         url=url,
+        original_URL=original_URL,
     )
 
     actual = extract_product(TABLE_NAME_SCRAPING_OTTO_DE, scraped_page)
