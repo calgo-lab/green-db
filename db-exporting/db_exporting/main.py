@@ -2,7 +2,7 @@ import json
 import logging
 import os
 from datetime import date
-from typing import Iterator, List, Tuple, Union
+from typing import Iterable, List, Tuple, Union
 
 import pandas as pd
 import requests
@@ -42,6 +42,7 @@ def increment_version(version: str) -> str:
         return ".".join(version_split)
     except Exception as e:
         logger.warning(f"There's been an issue while incrementing the {version} - {e}. Exiting...")
+        raise
 
 
 def check_request_status(response: requests.Response, step: str) -> None:
@@ -167,7 +168,7 @@ def export_to_zenodo(filenames: List[str], deposition_id: str, version: str) -> 
     return new_id, new_version
 
 
-def to_df(objects: Iterator[Union[Product, SustainabilityLabel]]) -> pd.DataFrame:
+def to_df(objects: Iterable[Union[Product, SustainabilityLabel]]) -> pd.DataFrame:
     return pd.DataFrame([obj.__dict__ for obj in objects])
 
 
