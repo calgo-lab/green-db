@@ -41,9 +41,7 @@ def increment_version(version: str) -> str:
         version_split[VERSION_INDEX] = str(current_version + 1)
         return ".".join(version_split)
     except Exception as e:
-        logger.warning(
-            f"There's been an issue while incrementing the {version} - {e}. Exiting..."
-        )
+        logger.warning(f"There's been an issue while incrementing the {version} - {e}. Exiting...")
 
 
 def check_request_status(response: requests.Response, step: str) -> None:
@@ -99,9 +97,7 @@ def create_new_version(
     # Create the new version.
     step = "1. Create new version"
     logger.info(step)
-    r = requests.post(
-        f"{DEPOSITION_BASE_URL}/{deposition_id}/actions/newversion", params=params
-    )
+    r = requests.post(f"{DEPOSITION_BASE_URL}/{deposition_id}/actions/newversion", params=params)
     check_request_status(r, step)
 
     # Get the new link and the new id for the new version (deposition) of the data.
@@ -121,9 +117,7 @@ def create_new_version(
     return new_id, new_version, bucket, data
 
 
-def export_to_zenodo(
-    filenames: List[str], deposition_id: str, version: str
-) -> Tuple[str, str]:
+def export_to_zenodo(filenames: List[str], deposition_id: str, version: str) -> Tuple[str, str]:
     """Export the files [`filenames`] to Zenodo, with updated `deposition_id` and a new `version`.
 
     :param filenames: A list of local filenames to be uploaded to Zenodo.
@@ -177,9 +171,7 @@ def to_df(objects: Iterator[Union[Product, SustainabilityLabel]]) -> pd.DataFram
     return pd.DataFrame([obj.__dict__ for obj in objects])
 
 
-def process_db_data(
-    unique_aggregated_urls: pd.DataFrame, products: pd.DataFrame
-) -> pd.DataFrame:
+def process_db_data(unique_aggregated_urls: pd.DataFrame, products: pd.DataFrame) -> pd.DataFrame:
     """Further processes the db data.
 
     Joins the `unique_aggregated_urls` and `products`;
@@ -198,9 +190,7 @@ def process_db_data(
     joined = unique_aggregated_urls.join(products)
     joined["categories"] = joined["categories"].apply(lambda x: list(set(x)))
     joined["genders"] = joined["genders"].apply(lambda x: list(set(x)))
-    joined["genders"] = joined["genders"].apply(
-        lambda x: x[0] if len(x) == 1 else "UNISEX"
-    )
+    joined["genders"] = joined["genders"].apply(lambda x: x[0] if len(x) == 1 else "UNISEX")
 
     joined = joined.drop("gender", axis=1)
     joined = joined.rename(columns={"genders": "gender"})
@@ -222,9 +212,7 @@ def export_db_data() -> list:
     # Connect to the db, get the unique ids and the products for those ids.
     db_conn = GreenDB()
     unique_aggregated_urls = db_conn.get_aggregated_unique_products()
-    db_products = db_conn.get_products_with_ids(
-        unique_aggregated_urls["id"].astype(int)
-    )
+    db_products = db_conn.get_products_with_ids(unique_aggregated_urls["id"].astype(int))
     db_products = to_df(db_products)
 
     # Preprocess the data.
@@ -263,9 +251,7 @@ def start() -> None:
     # Export the db data and get their locally stored data files.
     data_files = export_db_data()
     # Export the data files to zenodo
-    new_deposition_id, new_version = export_to_zenodo(
-        data_files, deposition_id, version
-    )
+    new_deposition_id, new_version = export_to_zenodo(data_files, deposition_id, version)
     # Finally, write down the new_deposition_id and new version to the same storage file.
     with open(LOCAL_DEPOSITION_VERSION_STORAGE, "w") as f:
         f.write(str(f"{new_deposition_id},{new_version}"))
