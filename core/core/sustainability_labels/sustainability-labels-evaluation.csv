@@ -4,6 +4,8 @@ certificate:BIORE,bioRe,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 certificate:BLUE_ANGEL,Blauer Engel,Fashion,93,86,0,81,100,100,0,24,40,55,0,0,0,0
 certificate:BLUE_ANGEL_LAPTOPS,Blauer Engel - Laptops,Electronics,73,77,87,0,0,100,40,71,0,0,0,0,0,0
 certificate:BLUE_ANGEL_LEATHER,Blaue Engel - Leder,Fashion,73,67,0,100,60,0,0,0,0,22,0,0,0,0
+certificate:BLUE_ANGEL_PRINTER,Blaue Engel - Printer,Electronics,73,88,50,0,0,50,25,67,0,50,0,0,0,100
+certificate:BLUE_ANGEL_SMARTPHONES,Blaue Engel - Smartphones,Electronics/Smartphones,73,71,83,0,0,50,25,67,0,72,0,0,0,100
 certificate:BLUE_ANGEL_TEXTILES,Blaue Engel - Textilien,Fashion,93,86,0,81,100,100,0,24,40,55,0,0,0,0
 certificate:BLUESIGN_APPROVED,Bluesign Approved,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 certificate:BLUESIGN_PRODUCT,Bluesign - Product,Fashion,79,81,0,100,38,75,50,62,41,65,33,0,0,0
@@ -78,6 +80,7 @@ certificate:RECYCLED_CLAIM_STANDARD_BLENDED,Recycled Claim Standard - Blended,Fa
 certificate:RESPONSIBLE_DOWN_STANDARD,Responsible Down Standard,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 certificate:RESPONSIBLE_WOOL_STANDARD,Responsible Wool Standard ,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 certificate:SA8000,SA8000,Fashion,90,0,0,0,0,0,0,0,30,92,50,0,0,0
+certificate:TCO_TABLETS,TCO Tablets,Electronic,78,63,83,0,0,50,50,67,100,55,0,0,0,100
 certificate:TCO_8_NOTEBOOKS,TCO - Notebooks,Electronics,78,78,75,0,33,100,50,57,100,52,0,0,0,100
 certificate:TCO_8_SMARTPHONES,TCO - Smartphones,Electronics,78,78,50,0,33,50,60,57,100,60,0,0,0,100
 certificate:TUEV_RHEINLAND_GREEN_PRODUCT_MARK_LAPTOPS,TÜV Rheinland Green Product Mark Siegel - Laptops,Electronics,56,22,50,0,66,0,33,71,0,84,0,0,0,0
