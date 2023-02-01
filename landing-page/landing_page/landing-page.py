@@ -603,6 +603,10 @@ def rebuild_landing_page(
     font-size: 1.1em;
 }}
 
+.stats td:first-child {{
+    white-space: nowrap;
+}}
+
 * {{
     box-sizing: border-box;
     animation-timing-function: cubic-bezier(.19,1,.22,1);
