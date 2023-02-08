@@ -610,6 +610,8 @@ def rebuild_landing_page(
 
 .overlay .container {{
     padding: 25px;
+    padding-bottom: 40px;
+    border-radius: 15px;
     background: white;
 }}
 
