@@ -892,14 +892,14 @@ const label_info = {js_label_info};
 
 label_overlay.addEventListener("click", function(event) {{
     label_overlay.style.display = "none";
-    document.body.style.overflow = 'auto';
+    document.body.style.overflow = "";
 }})
 
 function focusLabel(event, label) {{
     event.stopPropagation();
     event.preventDefault();
     label_overlay.style.display = "block";
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = "hidden";
     const info = label_info[label];
     label_name.innerText = info.name;
     label_description.innerText = info.description;
