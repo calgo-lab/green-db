@@ -63,6 +63,5 @@ GreenDB is a publicly available database of sustainable products, scraped from E
 .
 
 :: div.overlay#label_overlay div.container div.row
-::: div.ff content.name=label_name
-::: column.weight=5 content.name=label_description
+::: column.weight=5 content.name=label_name content.name=label_description
 ::: column.weight=3 content.name=label_data
