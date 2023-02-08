@@ -22,7 +22,7 @@ from database.connection import GreenDB, Scraping
 label_map = {label.id: label for label in sustainability_labels}
 js_label_info = json.dumps(
     {
-        label.id: {k: v or 0 for k, v in label.dict().items() if k not in {"id", "timestamp"}}
+        label.id: {k: 0 if v is None else v for k, v in label.dict().items() if k not in {"id", "timestamp"}}
         for label in sustainability_labels
     }
 )
