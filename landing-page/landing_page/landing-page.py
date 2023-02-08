@@ -605,7 +605,7 @@ def rebuild_landing_page(
     z-index: 2;
     cursor: pointer;
     display: none;
-    padding: 25px;
+    padding: 25px 0;
 }}
 
 .overlay .container {{
