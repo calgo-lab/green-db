@@ -36,7 +36,6 @@ scrapy_config_parser.read("/green-db/scraping/scrapy.cfg")  # Repo gets cloned
 SCRAPYD_CLUSTER_TARGET = scrapy_config_parser.get("deploy:in-cluster", "url")
 
 if __name__ == "__main__":
-
     for merchant in MERCHANTS:
         command = (
             f"scrapyd-client -t {SCRAPYD_CLUSTER_TARGET} schedule -p scraping --arg "
