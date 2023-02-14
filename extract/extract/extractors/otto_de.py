@@ -2,10 +2,10 @@ import json
 from logging import getLogger
 from typing import List, Optional
 from urllib.parse import ParseResult, urlparse
-from bs4 import BeautifulSoup
-from pydantic import ValidationError
 
+from bs4 import BeautifulSoup
 from core.domain import CertificateType, Product
+from pydantic import ValidationError
 
 from ..parse import DUBLINCORE, JSON_LD, MICRODATA, ParsedPage
 from ..utils import (
@@ -73,7 +73,8 @@ def extract_otto_de(parsed_page: ParsedPage) -> Optional[Product]:
     parsed_url = urlparse(parsed_page.scraped_page.url)
 
     # Check if the SUSTAINABILITY_FILTER was in the URL
-    orig_url = parsed_page.scraped_page.meta_information.get("original_URL", None)
+    meta_info = parsed_page.scraped_page.meta_information
+    orig_url = meta_info.get("original_URL", None) if meta_info else None
     assign_unavailable = orig_url is not None and SUSTAINABILITY_FILTER not in orig_url
 
     sustainability_labels = _get_sustainability(

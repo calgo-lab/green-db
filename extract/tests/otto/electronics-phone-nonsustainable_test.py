@@ -26,7 +26,7 @@ def test_otto_basic() -> None:
         file_name=file_name,
         category=category,
         meta_information=meta_information,
-        url=url
+        url=url,
     )
 
     actual = extract_product(TABLE_NAME_SCRAPING_OTTO_DE, scraped_page)

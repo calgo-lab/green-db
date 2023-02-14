@@ -1,15 +1,10 @@
-from extract.extractors.otto_de import SUSTAINABILITY_FILTER
-from tests.utils import read_test_html
-
 from core.constants import TABLE_NAME_SCRAPING_OTTO_DE
-from core.domain import (
-    ConsumerLifestageType,
-    CountryType,
-    GenderType,
-)
+from core.domain import ConsumerLifestageType, CountryType, GenderType
 
 # TODO: This is a false positive of mypy
 from extract import extract_product  # type: ignore
+from extract.extractors.otto_de import SUSTAINABILITY_FILTER
+from tests.utils import read_test_html
 
 
 def test_otto_basic() -> None:
@@ -35,7 +30,7 @@ def test_otto_basic() -> None:
         gender=gender,
         consumer_lifestage=consumer_lifestage,
         meta_information=meta_information,
-        url=url
+        url=url,
     )
 
     actual = extract_product(TABLE_NAME_SCRAPING_OTTO_DE, scraped_page)

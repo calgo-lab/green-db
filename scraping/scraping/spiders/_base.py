@@ -276,7 +276,7 @@ class BaseSpider(Spider):
             category=response.meta.get("category"),
             gender=response.meta.get("gender"),
             consumer_lifestage=response.meta.get("consumer_lifestage"),
-            meta_information=meta_information
+            meta_information=meta_information,
         )
 
         self.message_queue.add_scraping(table_name=self.table_name, scraped_page=scraped_page)
