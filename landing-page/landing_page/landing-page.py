@@ -140,6 +140,12 @@ def render_dataframe(df: pd.DataFrame) -> str:
 
 
 product_table_attribs = ["name", "category", "brand", "labels", "price", "currency"]
+seed(1)
+label_cred_tint = [blend(kurgel(random() * 6, random()), .05, .1) for i in range(3)]
+label_eco_tint = [blend(kurgel(random() * 6, random()), .05, .1) for i in range(3)]
+label_social_tint = [blend(kurgel(random() * 6, random()), .05, .1) for i in range(3)]
+label_eco_tint = [blend(kurgel(random() * 6, random()), .05, .1) for i in range(3)]
+label_eco_tint = [blend(kurgel(random() * 6, random()), .05, .1) for i in range(3)]
 
 
 def render_label(label: str) -> str:
@@ -460,18 +466,43 @@ def build_default_content(use_cached: bool = True) -> Dict[str, str]:
 def render_label_data() -> str:
     left = 'style="text-align:left"'
     right = 'style="text-align:right"'
-    head = render_tag(
-        "thead",
-        None,
-        [],
-        f"<tr><th {left}>metric</th><th {right}>rating</th></tr>",
-    )
-    body = "".join(
-        f'<tr><td {left}>{name}</td><td id="{id}" {right}>100%</td></tr>'
-        for id, name in label_metrics
-    )
-    body = render_tag("tbody", None, [], body)
-    return render_tag("table", None, [], head + body)
+    return f'''
+<table>
+<thead><tr><th {left}>metric</th><th {right}>rating</th></tr></thead>
+</table>
+<div class="label_metrics label_cred">
+<table>
+<tbody>
+<tr><td {left}>Credibility</td><td id="label_cred_credibility" {right}></td></tr>
+</tbody>
+</table>
+</div>
+<div class="label_metrics label_eco">
+<table>
+<tbody>
+<tr><td {left}>Chemical use</td><td id="label_eco_chemicals" {right}></td></tr>
+<tr><td {left}>Product lifetime</td><td id="label_eco_lifetime" {right}></td></tr>
+<tr><td {left}>Water use</td><td id="label_eco_water" {right}></td></tr>
+<tr><td {left}>Inputs</td><td id="label_eco_inputs" {right}></td></tr>
+<tr><td {left}>Product quality</td><td id="label_eco_quality" {right}></td></tr>
+<tr><td {left}>Energy use</td><td id="label_eco_energy" {right}></td></tr>
+<tr><td {left}>Waste and air polution</td><td id="label_eco_waste_air" {right}></td></tr>
+<tr><td {left}>Environmental management</td><td id="label_eco_environmental_management" {right}></td></tr>
+</tbody>
+</table>
+</div>
+<div class="label_metrics label_social">
+<table>
+<tbody>
+<tr><td {left}>Labour rights and working conditions</td><td id="label_social_labour_rights" {right}></td></tr>
+<tr><td {left}>Ethical business practice</td><td id="label_social_business_practice" {right}></td></tr>
+<tr><td {left}>Social rights</td><td id="label_social_social_rights" {right}></td></tr>
+<tr><td {left}>Company responsibility</td><td id="label_social_company_responsibility" {right}></td></tr>
+<tr><td {left}>Conflict minerals</td><td id="label_social_conflict_minerals" {right}></td></tr>
+</tbody>
+</table>
+</div>
+'''
 
 
 def rebuild_landing_page(
@@ -487,7 +518,6 @@ def rebuild_landing_page(
     """builds the"""
 
     content = build_default_content(use_cached_content) | content_map
-    print(content)
     content["label_name"] = '<h1 id="label_name"></h1>'
     content["label_description"] = '<p id="label_description"></p>'
     content["label_data"] = render_label_data()
@@ -614,8 +644,22 @@ def rebuild_landing_page(
     background: white;
 }}
 
-.overlay table {{
+.label_metrics {{
+    color: white;
     margin: 20px 0;
+    border-radius: 6.5px;
+    padding: 4px;
+}}
+.label_cred {{
+    background: {webcolor(label_cred_tint)};
+}}
+
+.label_eco {{
+    background: {webcolor(label_eco_tint)};
+}}
+
+.label_social {{
+    background: {webcolor(label_social_tint)};
 }}
 
 @media (prefers-color-scheme: dark) {{
