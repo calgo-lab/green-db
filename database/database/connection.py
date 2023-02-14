@@ -245,7 +245,6 @@ class GreenDB(Connection):
                 .filter(SustainabilityLabelsTable.timestamp == sustainability_labels[0].timestamp)
                 .first()
             ):
-
                 for label in sustainability_labels:
                     db_session.add(SustainabilityLabelsTable(**label.dict()))
 
@@ -280,7 +279,6 @@ class GreenDB(Connection):
                 of domain object representations
         """
         with self._session_factory() as db_session:
-
             sustainability_labels = db_session.query(SustainabilityLabelsTable).all()
             sustainability_labels_iterator = (
                 SustainabilityLabel.from_orm(sustainability_label)
@@ -572,7 +570,6 @@ class GreenDB(Connection):
            pd.DataFrame: Query results as `pd.Dataframe`.
         """
         with self._session_factory() as db_session:
-
             labels = self.get_sustainability_labels_subquery()
 
             all_unique = self.get_all_unique_products()
@@ -631,7 +628,6 @@ class GreenDB(Connection):
            pd.DataFrame: Query results as `pd.Dataframe`.
         """
         with self._session_factory() as db_session:
-
             labels = self.get_sustainability_labels_subquery()
 
             credible_labels = [
