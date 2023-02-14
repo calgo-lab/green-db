@@ -25,7 +25,7 @@ pytest = "^7.1.2"
 flake8 = "^3.9.2"
 mypy = "^0.910"
 isort = "^5.10.1"
-black = "^21.12b0"
+black = "^23.1.0"
 scrapyd-client = "^1.2.0"
 
 [build-system]
