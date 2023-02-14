@@ -2,12 +2,9 @@ from tests.utils import read_test_html
 
 from core.constants import TABLE_NAME_SCRAPING_OTTO_DE
 from core.domain import (
-    CertificateType,
     ConsumerLifestageType,
     CountryType,
-    CurrencyType,
     GenderType,
-    Product,
 )
 
 # TODO: This is a false positive of mypy
