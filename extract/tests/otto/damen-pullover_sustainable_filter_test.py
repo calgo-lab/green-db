@@ -1,11 +1,7 @@
 from tests.utils import read_test_html
 
 from core.constants import TABLE_NAME_SCRAPING_OTTO_DE
-from core.domain import (
-    ConsumerLifestageType,
-    CountryType,
-    GenderType,
-)
+from core.domain import ConsumerLifestageType, CountryType, GenderType
 
 # TODO: This is a false positive of mypy
 from extract import extract_product  # type: ignore
