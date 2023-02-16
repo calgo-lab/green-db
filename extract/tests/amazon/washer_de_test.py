@@ -59,5 +59,4 @@ def test_amazon_electronics() -> None:
         asin="B08R3YHPK1",
     )
     for attribute in expected.__dict__.keys():
-
         assert actual.__dict__[attribute] == expected.__dict__[attribute]

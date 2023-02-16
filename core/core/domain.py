@@ -121,7 +121,6 @@ class SustainabilityLabel(BaseModel):
 
 # if you make an edge case decision, please document it here.
 class ProductCategory(str, Enum):
-
     # bags
     BACKPACK = "BACKPACK"
     BAG = "BAG"
