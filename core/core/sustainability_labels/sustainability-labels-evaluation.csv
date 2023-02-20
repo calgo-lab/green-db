@@ -4,10 +4,14 @@ certificate:BIORE,bioRe,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 certificate:BLUE_ANGEL,Blauer Engel,Fashion,93,86,0,81,100,100,0,24,40,55,0,0,0,0
 certificate:BLUE_ANGEL_LAPTOPS,Blauer Engel - Laptops,Electronics,73,77,87,0,0,100,40,71,0,0,0,0,0,0
 certificate:BLUE_ANGEL_LEATHER,Blaue Engel - Leder,Fashion,73,67,0,100,60,0,0,0,0,22,0,0,0,0
+certificate:BLUE_ANGEL_SMARTPHONES,Blaue Engel - Smartphones,Electronics/Smartphones,73,71,83,0,0,50,25,67,0,72,0,0,0,100
+certificate:BLUE_ANGEL_PRINTER,Blaue Engel - Printer,Electronics,73,88,50,0,0,50,25,67,0,50,0,0,0,100
+certificate:TCO_TABLETS,TCO Tablets,Electronic,78,63,83,0,0,50,50,67,100,55,0,0,0,100
 certificate:BLUE_ANGEL_TEXTILES,Blaue Engel - Textilien,Fashion,93,86,0,81,100,100,0,24,40,55,0,0,0,0
 certificate:BLUESIGN_APPROVED,Bluesign Approved,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 certificate:BLUESIGN_PRODUCT,Bluesign - Product,Fashion,79,81,0,100,38,75,50,62,41,65,33,0,0,0
 certificate:CA_BIOCOTTON,C&A Biocotton,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+certificate:CARBON_TRUST_REDUCING ,Carbon Trust Reducing,Multiple,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 certificate:CONTENT_CLAIM_STANDARD,Content Claim Standard,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 certificate:COTTON_MADE_IN_AFRICA,Cotton made in Africa,Fashion,80,63,0,40,33,0,100,18,20,87,67,17,0,0
 certificate:CRADLE_TO_CRADLE_GOLD,Cradle to Cradle - Gold Level,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
@@ -23,7 +27,7 @@ certificate:EU_ECOLABEL_TEXTILES,EU Ecolabel - Textilien,Fashion,92,86,0,76,49,1
 certificate:EU_ENERGY_LABEL_A,EU Energielabel A,Electronics,100,0,0,0,0,0,100,0,0,0,0,0,0,0
 certificate:EU_ENERGY_LABEL_B,EU Energielabel B,Electronics,100,0,0,0,0,0,80,0,0,0,0,0,0,0
 certificate:EU_ENERGY_LABEL_C,EU Energielabel C,Electronics,100,0,0,0,0,0,60,0,0,0,0,0,0,0
-certificate:EU_ENERGY_LABEL_D,EU Energielabel D,Electronics,100,0,0,0,0,0,40,0,0,0,0,0,0,0
+certificate:EU_ENERGY_LABEL_D,EU Energielabel D,Electronics,100,0,0,0,0,0,0,0,0,0,0,0,0,0
 certificate:EU_ENERGY_LABEL_E,EU Energielabel E,Electronics,100,0,0,0,0,0,0,0,0,0,0,0,0,0
 certificate:EU_ENERGY_LABEL_F,EU Energielabel F,Electronics,100,0,0,0,0,0,0,0,0,0,0,0,0,0
 certificate:EU_ENERGY_LABEL_G,EU Energielabel G,Electronics,100,0,0,0,0,0,0,0,0,0,0,0,0,0
@@ -46,10 +50,10 @@ certificate:GOTS_MADE_WITH_ORGANIC_MATERIALS,GOTS - label grade ‘made with org
 certificate:GOTS_ORGANIC,GOTS - label grade ‘organic’,Fashion,89,89,0,63,83,100,90,13,30,87,10,21,0,0
 certificate:GREEN_BUTTON,Grüner Knopf,Fashion,90,89,0,60,80,100,90,10,30,85,10,20,0,0
 certificate:HIGG_INDEX_MATERIALS,Higg Index Materials,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+certificate:HIGG_INDEX_MATERIALS_0,Higg Index Materials Baeline 0 ,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 certificate:HIGG_INDEX_MATERIALS_1,Higg Index Products_Level_1,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 certificate:HIGG_INDEX_MATERIALS_2,Higg Index Products Level 2,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 certificate:HIGG_INDEX_MATERIALS_3,Higg Index Products Level 3,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-certificate:HIGG_INDEX_MATERIALS_BASELINE_0,Higg Index Materials_Baeline_0,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 certificate:HM_CONSCIOUS,H&M Conscious,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 certificate:IFIXIT_REPARABILITY_INDEX,iFixit Score ,Electronics,100,0,0,0,0,0,0,0,0,0,0,0,0,0
 certificate:IFIXIT_REPARABILITY_INDEX_1,ifixit Reparierbarkeitsindex 1,Electronics,100,0,0,0,0,0,0,0,0,0,0,0,0,0
@@ -85,7 +89,6 @@ certificate:TUEV_RHEINLAND_GREEN_PRODUCT_MARK_SMARTPHONES,TÜV Rheinland Green P
 certificate:VFI_SOZIAL_FAIR,sozial-fair VFI Sozialstandard für Fertigwaren,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 certificate:WORLD_FAIR_TRADE_ORGANIZATION,World Fair Trade Organization,Fashion,54,0,0,2,0,0,38,8,30,73,49,35,0,0
 missing_1,Modal TENCEL™,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-missing_14,Higg Index,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 missing_15,SEAQUAL™,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 missing_16,Pre-owned Certified - bei Amazon,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 missing_2,Lyocell Tencel™,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0

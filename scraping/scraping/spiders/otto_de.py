@@ -18,9 +18,9 @@ class OttoSpider(BaseSpider):
     name = TABLE_NAME_SCRAPING_OTTO_DE
     source, _ = name.rsplit("_", 1)
     allowed_domains = ["otto.de"]
+    custom_settings = {"DOWNLOAD_DELAY": 4}
 
     def parse_SERP(self, response: SplashJsonResponse) -> Iterator[SplashRequest]:
-
         # Save HTML to database
         self._save_SERP(response)
 
@@ -60,10 +60,8 @@ class OttoSpider(BaseSpider):
         ).getall()
 
         if len(pagination_list) > 0:
-
             pagination_info = json.loads(pagination_list[-1])
             if int(pagination_info["o"]) > response.meta.get("o", 0):
-
                 # Drop existing 'o' and 'l' parameters
                 url_parsed = urlparse(response.url)
                 queries = parse_qs(url_parsed.query, keep_blank_values=True)

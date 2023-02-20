@@ -239,6 +239,22 @@
       }
     }
   },
+    "certificate:BLUE_ANGEL_PRINTER": {
+    "languages": {
+      "de": {
+        "name": "Blauer Engel - Printer",
+        "description": "Der Blaue Engel f\u00fcr Büroger\u00e4te mit Druckfunktion zeichnet Ger\u00e4te aus, die sich durch folgende Umwelteigenschaften auszeichnen: langlebige und recyclinggerechte Konstruktion; Vermeidung und Verminderung umwelt- und gesundheitsbelastender Materialien; geringer Stromverbrauch; geringe Emissionen von Ger\u00e4uschen und Schadstoffen; sozialvertr\u00e4gliche HerstellungDer Blaue Engel f\u00fcr B\u00fcroger\u00e4te mit Druckfunktion zeichnet Ger\u00e4te aus, die sich durch folgende Umwelteigenschaften auszeichnen: langlebige und recyclinggerechte Konstruktion; Vermeidung und Verminderung umwelt- und gesundheitsbelastender Materialien; geringer Stromverbrauch; geringe Emissionen von Ger\u00e4uschen und Schadstoffen; sozialvertr\u00e4gliche Herstellung."
+      }
+    }
+  },
+  "certificate:BLUE_ANGEL_SMARTPHONE": {
+    "languages": {
+      "de": {
+        "name": "Blauer Engel - Smartphones",
+        "description": "Der Blaue Engel f\u00fcr Mobiltelefone (Smartphones) bietet eine gute Orientierung, wenn man Wert auf Gesundheit und Ressourcenschonung legt. Zum vorsorglichen Gesundheitsschutz sind strenge Grenzwerte f\u00fcr die elektromagnetische Strahlung festgelegt und Schadstoffe in den Kunststoffen minimiert. Die Langlebigkeit der ausgezeichneten Ger\u00e4te wird durch eine Reihe von Anforderungen gew\u00e4hrleistet"
+      }
+    }
+  },
   "certificate:BLUE_ANGEL_TEXTILES": {
     "languages": {
       "de": {
@@ -1532,6 +1548,16 @@
     },
     "image_url": "https://m.media-amazon.com/images/G/01/Wisp/cpf/certificate/higgindex_materialsseal_200.png"
   },
+  "certificate:HIGG_INDEX_MATERIALS_0": {
+    "languages": {
+      "en": {
+        "name": "Higg Index Materials: Level 0",
+        "description": "Recognises products made with lower environmental impact materials, with supporting data provided to customers.",
+        "url": "https://profiles.higg.com/"
+      }
+    },
+    "image_url": "https://m.media-amazon.com/images/G/01/Wisp/cpf/certificate/higgindex_materialsseal_200.png"
+  },
   "certificate:HIGG_INDEX_MATERIALS_1": {
     "languages": {
       "en": {
@@ -2342,6 +2368,18 @@
       "de": {
         "name": "TCO Certified Smartphones 8.0",
         "description": "Ziel von TCO ist es, den Fortschritt hin zu nachhaltigen IT-Produkten voranzutreiben. Zertifizierte Produkte m\u00fcssen w\u00e4hrend des gesamten Lebenszyklus umfassende \u00f6kologische und soziale Kriterien erf\u00fcllen. So m\u00fcssen die Fabriken, in denen zertifizierte Produkte hergestellt werden, Kriterien zu Arbeitszeiten, Arbeitsumgebung und L\u00f6hnen einhalten. Die Produkte m\u00fcssen Kriterien f\u00fcr Energieeffizienz, ergonomisches Design und einen begrenzten Gehalt an gef\u00e4hrlichen Stoffen erf\u00fcllen. Unabh\u00e4ngige, akkreditierte Organisationen verifizieren, dass Fabriken und Produkte alle Kriterien in TCO Certified erf\u00fcllen. Die Verifizierung erfolgt sowohl vor als auch nach der Ausstellung des Zertifikats und deckt den gesamten G\u00fcltigkeitszeitraum ab."
+      }
+    }
+  },
+  "certificate:TCO_TABLETS": {
+    "languages": {
+      "de": {
+        "name": "TCO Tablets",
+        "description": "Ziel von TCO ist es, den Fortschritt hin zu nachhaltigen IT-Produkten voranzutreiben. Zertifizierte Produkte m\u00fcssen w\u00e4hrend des gesamten Lebenszyklus umfassende \u00f6kologische und soziale Kriterien erf\u00fcllen. So m\u00fcssen die Fabriken, in denen zertifizierte Produkte hergestellt werden, Kriterien zu Arbeitszeiten, Arbeitsumgebung und L\u00f6hnen einhalten. Die Produkte m\u00fcssen Kriterien f\u00fcr Energieeffizienz, ergonomisches Design und einen begrenzten Gehalt an gef\u00e4hrlichen Stoffen erf\u00fcllen. Unabh\u00e4ngige, akkreditierte Organisationen verifizieren, dass Fabriken und Produkte alle Kriterien in TCO Certified erf\u00fcllen. Die Verifizierung erfolgt sowohl vor als auch nach der Ausstellung des Zertifikats und deckt den gesamten G\u00fcltigkeitszeitraum ab."
+      },
+      "en": {
+        "name": "TCO Tablets",
+        "description": "TCO Certified is a third-party certification independent of the IT industry and buyers. TCO Certified meets the requirements of ISO 14024 Ecolabel Type 1. TCO Certified Tablets cover multiple attributes, including minimal use of hazardous materials, energy efficiency, visual and workload ergonomics, design for recycling as well as corporate social responsibility in the production phase."
       }
     }
   },
