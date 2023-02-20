@@ -2,6 +2,7 @@ import json
 import logging
 import os
 from datetime import date
+from pathlib import PurePath
 from typing import Iterable, List, Tuple, Union
 
 import pandas as pd
@@ -14,16 +15,33 @@ from database.connection import GreenDB
 log.setup_logger(__name__)
 logger = logging.getLogger(__name__)
 
+ZENODO_PREFIX = "https://zenodo.org/record"
+DEPOSITION_DOI = "https://doi.org/10.5281/zenodo.6078038"
 DEPOSITION_BASE_URL = "https://zenodo.org/api/deposit/depositions"
-LOCAL_DEPOSITION_VERSION_STORAGE = "/storage/db-exporting/deposition_id_version"
 ACCESS_TOKEN = os.environ.get("ZENODO_API_KEY", None)
+
 COLUMNS_COUNT = 20
-SUCCESSFUL_STATUS_CODES = [200, 201, 202]
+SUCCESSFUL_STATUS_CODES = {200, 201, 202}
 
 PRODUCTS = "products"
 LABELS = "sustainability_labels"
 
 VERSION_INDEX = 2
+
+
+def extract_deposition_id_and_timestamp(url: str, params: dict) -> Tuple[str, str]:
+    """Extracts the Deposition ID and the timestamp from the latest Zenodo version (`url`).
+
+    :param url: The URL to the latest Zenodo version.
+    :param params: The params needed to access the deposition via the Zenodo API.
+    :return:
+        The latest deposition_id and version.
+    """
+    deposition_id = PurePath(url).name
+    r = requests.get(f"{DEPOSITION_BASE_URL}/{deposition_id}", params=params)
+    data = r.json()
+    version = data["metadata"]["version"]
+    return deposition_id, version
 
 
 def increment_version(version: str) -> str:
@@ -61,7 +79,7 @@ def check_request_status(response: requests.Response, step: str) -> None:
         raise requests.exceptions.RequestException(error_msg)
 
 
-def prepare_metadata(response_data: dict, version: str) -> Tuple[dict, str]:
+def prepare_metadata(metadata: dict, version: str) -> Tuple[dict, str]:
     """Prepares the metadata for the publishing request.
 
     Extracts the metadata from the Zenodo Api (`response_data`) for creating the new deposition;
@@ -69,24 +87,22 @@ def prepare_metadata(response_data: dict, version: str) -> Tuple[dict, str]:
     Replaces the version number with a new incremented version number.
 
 
-    :param response_data: The data object which was obtained by the Zenodo Api,
+    :param metadata: The metadata from the response object which was obtained by the Zenodo Api,
         for creating the new deposition.
     :param version: The version of the latest deposition.
     :return:
         The new metadata as a dict to be send to Zenodo's '/actions/publish' ,
         containing the updated publication data and version.
     """
-    data = {"metadata": response_data["metadata"]}
+    data = {"metadata": metadata}
     data["metadata"]["publication_date"] = str(date.today())
     new_version = increment_version(version)
-    if new_version is None:
-        raise ValueError(f"Couldn't parse the version {version}")
     data["metadata"]["version"] = new_version
     return data, new_version
 
 
 def create_new_version(
-    deposition_id: str, version: str, params: dict
+        deposition_id: str, version: str, params: dict
 ) -> Tuple[str, str, str, dict]:
     """Prepares a new version for the deposition with a `deposition_id`.
 
@@ -113,21 +129,20 @@ def create_new_version(
     bucket = r.json()["links"]["bucket"]
 
     # Extract the metadata for the json file
-    data, new_version = prepare_metadata(r.json(), version)
+    data, new_version = prepare_metadata(r.json()["metadata"], version)
 
     return new_id, new_version, bucket, data
 
 
-def export_to_zenodo(filenames: List[str], deposition_id: str, version: str) -> Tuple[str, str]:
+def export_to_zenodo(filenames: List[str], deposition_id: str, version: str, params: dict) -> None:
     """Export the files [`filenames`] to Zenodo, with updated `deposition_id` and a new `version`.
 
     :param filenames: A list of local filenames to be uploaded to Zenodo.
     :param deposition_id: The new deposition id to be used for the data upload.
     :param version: The new version to be added in the metadata during the data Publish.
-    :return:
-        A Tuple of the new deposition id and version (to be stored for the next iteration).
+    :param params: The parameters needed for the Zenodo API.
     """
-    params = {"access_token": ACCESS_TOKEN}
+
     if ACCESS_TOKEN is None:
         raise ValueError("Access token is required")
 
@@ -164,8 +179,6 @@ def export_to_zenodo(filenames: List[str], deposition_id: str, version: str) -> 
     url = f"{DEPOSITION_BASE_URL}/{new_id}/actions/publish"
     r = requests.post(url, data=data, params=params)
     check_request_status(r, step)
-
-    return new_id, new_version
 
 
 def to_df(objects: Iterable[Union[Product, SustainabilityLabel]]) -> pd.DataFrame:
@@ -211,6 +224,7 @@ def export_db_data() -> list:
         The stored file names as a list.
     """
     # Connect to the db, get the unique ids and the products for those ids.
+    logger.info("Fetching data from GreenDB")
     db_conn = GreenDB()
     unique_aggregated_urls = db_conn.get_aggregated_unique_products()
     db_products = db_conn.get_products_with_ids(unique_aggregated_urls["id"].astype(int))
@@ -230,12 +244,30 @@ def export_db_data() -> list:
     labels.to_parquet(f"{LABELS}.parquet", index=False)
     labels.to_csv(f"{LABELS}.csv", index=False)
 
+    logger.info(f"Exporting {products.shape[0]} products and {labels.shape[0]} labels")
+
     return [
         f"{PRODUCTS}.parquet",
         f"{PRODUCTS}.csv",
         f"{LABELS}.parquet",
         f"{LABELS}.csv",
     ]
+
+
+def resolve_deposition_url():
+    """Resolves the latest Zenodo URL (containing the Deposition ID) from `DEPOSITION_DOI`.
+
+    Tracks and returns the redirection of the `DEPOSITION_DOI` url
+    to the latest Zenodo url of the deposition.
+
+    E.g starts with https://doi.org/10.5281/zenodo.6078038, and will trace the redirection
+    to https://zenodo.org/record/7568712 (which is the latest version currently, on 20.02.23)
+
+    :return:
+        The latest Zenodo url of the deposition.
+    """
+    response = requests.head(DEPOSITION_DOI, allow_redirects=True)
+    return response.url
 
 
 def start() -> None:
@@ -245,21 +277,14 @@ def start() -> None:
     Exports the db data and stores them locally (main::export_db_data);
     Exports the data to Zenodo.
     """
-    # Read the file with the stored deposition_id and version.
-    f = open(LOCAL_DEPOSITION_VERSION_STORAGE, "r")
-    deposition_id, version = str(f.read().strip()).split(",")
+    params = {"access_token": ACCESS_TOKEN}
+    # Fetch the deposition_id and version.
+    deposition_id, version = extract_deposition_id_and_timestamp(resolve_deposition_url(), params)
 
     # Export the db data and get their locally stored data files.
     data_files = export_db_data()
     # Export the data files to zenodo
-    new_deposition_id, new_version = export_to_zenodo(data_files, deposition_id, version)
-    # Finally, write down the new_deposition_id and new version to the same storage file.
-    with open(LOCAL_DEPOSITION_VERSION_STORAGE, "w") as f:
-        f.write(str(f"{new_deposition_id},{new_version}"))
-        logger.info(
-            f"Writing latest deposition_id = [{new_deposition_id}] and "
-            f"latest version = [{new_version}"
-        )
+    export_to_zenodo(data_files, deposition_id, version, params)
 
     logger.info("Cleanup ... removing cached files locally")
     for file in data_files:
