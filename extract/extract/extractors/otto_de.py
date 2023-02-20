@@ -161,6 +161,9 @@ _LABEL_MAPPING = {
     "SEAQUAL™": CertificateType.OTHER,
     "adidas: mit recycelten Materialien": CertificateType.OTHER,
     "adidas: mit Parley Ocean Plastic": CertificateType.OTHER,
+    "Schnell nachwachsende Rohstoffe": CertificateType.OTHER,
+    "Recyceltes Plastik aus der Umwelt": CertificateType.OTHER,
+    "Organic Content Standard (OCS) - Organic In conversion": CertificateType.OTHER,
     "": CertificateType.OTHER,
 }
 

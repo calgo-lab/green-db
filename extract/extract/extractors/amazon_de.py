@@ -33,6 +33,10 @@ _LABEL_MAPPING = {
     "Pre-owned": CertificateType.OTHER,
     "Pre-owned Certified": CertificateType.OTHER,
     "TCO Certified": CertificateType.TCO,  # TODO: There are 2 additional types for phone and laptop
+    "STANDARD 100 by OEKO-TEX": CertificateType.OEKO_TEX_100,
+    "Recycled Claim Standard 100": CertificateType.RECYCLED_CLAIM_STANDARD_100,
+    "STANDARD 100 de OEKO-TEX": CertificateType.OEKO_TEX_100,
+    "STANDARD 100 von OEKO-TEX": CertificateType.OEKO_TEX_100,
 }
 
 _ENERGY_LABELS = {"Energielabel", "Energy Label"}
