@@ -145,7 +145,7 @@ def export_to_zenodo(
 
     :param filenames: A list of local filenames to be uploaded to Zenodo.
     :param deposition_id: The new deposition id to be used for the data upload.
-    :param version: The new version to be added in the metadata during the data Publish.
+    :param version: The latest version of the deposition (to be later increased).
     :param params: The parameters needed for the Zenodo API.
     """
 
