@@ -10,7 +10,7 @@ packages = [{include = "db_exporting"}]
 exporter = "db_exporting.main:start"
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.10,<3.11"
 core = {git = "https://github.com/calgo-lab/green-db", branch = "test-database-with-new-poetry", subdirectory = "core"}
 database = {git = "https://github.com/calgo-lab/green-db", branch = "test-database-with-new-poetry", subdirectory = "database"}
 pandas = "^1.5.2"
