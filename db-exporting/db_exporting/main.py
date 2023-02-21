@@ -7,6 +7,7 @@ from typing import Iterable, List, Tuple, Union
 
 import pandas as pd
 import requests
+
 from core import log
 from core.domain import Product, SustainabilityLabel
 from database.connection import GreenDB
