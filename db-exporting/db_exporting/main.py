@@ -85,7 +85,6 @@ def prepare_metadata(metadata: dict, version: str) -> Tuple[dict, str]:
     Sets the response_data to today's date;
     Replaces the version number with a new incremented version number.
 
-
     :param metadata: The metadata from the response object which was obtained by the Zenodo Api,
         for creating the new deposition.
     :param version: The version of the latest deposition.
@@ -109,6 +108,7 @@ def create_new_version(
     :param version: The version of the latest deposition.
     :param params: The params needed for the requests, containing 'access_token'.
     :return:
+        The new deposition id, the new deposition version, bucket and metadata.
     """
     # Create the new version.
     step = "1. Create new version"
