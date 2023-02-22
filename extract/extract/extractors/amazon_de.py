@@ -221,18 +221,17 @@ def _get_color(soup: BeautifulSoup) -> Optional[str]:
     return _handle_parse(targets, parse_color)
 
 
-def _remove_image_processing_instructions(url: str) -> str:
+def _strip_image_url(url: str) -> str:
     """
-    Amazon has a service to perform simple image operations like resizing and overlays.
-
-    It consumes a list of instructions which are appended to the filename right before the extension
-    Since we just want the unmodified base image in its original size we have to remove them.
+    The images on product pages are usually resized and they might have overlays
+    like watermarks and play buttons for video thumbnails.
+    This function finds the url of the source image without additional processing applied.
 
     Args:
         url (str): the url of the image
 
     Returns:
-        str: The url with processing instructions removed
+        str: The url of the source image
     """
     scheme, netloc, path, query, fragment = urlsplit(url)
     path_segments = path.split("/")
@@ -257,7 +256,7 @@ def _get_image_urls(soup: BeautifulSoup) -> Optional[list[str]]:
 
     def parse_image_urls(images: BeautifulSoup) -> list[str]:
         return [
-            _remove_image_processing_instructions(str(image["src"]))
+            _strip_image_url(str(image["src"]))
             for image in images.find_all("img")
             if not image["src"].endswith(".gif")
             and "play-button-overlay" not in image["src"]
