@@ -260,9 +260,9 @@ def _get_image_urls(soup: BeautifulSoup) -> Optional[list[str]]:
             _remove_image_processing_instructions(str(image["src"]))
             for image in images.find_all("img")
             if not image["src"].endswith(".gif")
-            and "play-button-overlay" not in url
-            and "play-icon-overlay" not in url
-            and "360_icon" not in url
+            and "play-button-overlay" not in image["src"]
+            and "play-icon-overlay" not in image["src"]
+            and "360_icon" not in image["src"]
         ]
 
     images = soup.find("div", {"id": "altImages"}) or soup.find(
