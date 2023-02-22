@@ -221,6 +221,28 @@ def _get_color(soup: BeautifulSoup) -> Optional[str]:
     return _handle_parse(targets, parse_color)
 
 
+def _remove_image_processing_instructions(url: str) -> str:
+    """
+    Amazon has a service to perform simple image operations like resizing and overlays.
+
+    It consumes a list of instructions which are appended to the filename right before the extension
+    Since we just want the unmodified base image in its original size we have to remove them.
+
+    Args:
+        url (str): the url of the image
+
+    Returns:
+        str: The url with processing instructions removed
+    """
+    scheme, netloc, path, query, fragment = urlsplit(url)
+    path_segments = path.split("/")
+    filename = path_segments[-1].split(".")
+    base_name = filename[0]
+    extension = filename[-1]
+    path_segments[-1] = f"{base_name}.{extension}"
+    return urlunsplit((scheme, netloc, "/".join(path_segments), query, fragment))
+
+
 def _get_image_urls(soup: BeautifulSoup) -> Optional[list[str]]:
     """
     Helper function that extracts the product's image urls.
@@ -233,22 +255,19 @@ def _get_image_urls(soup: BeautifulSoup) -> Optional[list[str]]:
             If nothing was found `None` or empty list is returned.
     """
 
-    def remove_image_metadata(url: str) -> str:
-        scheme, netloc, path, query, fragment = urlsplit(url)
-        path_segments = path.split(".")
-        del path_segments[-2]
-        return urlunsplit((scheme, netloc, ".".join(path_segments), query, fragment))
-
     def parse_image_urls(images: BeautifulSoup) -> list[str]:
         image_urls = [
-            str(image["src"])
+            _remove_image_processing_instructions(str(image["src"]))
             for image in images.find_all("img")
             if not image["src"].endswith(".gif")
-            and "play-button-overlay" not in image["src"]
-            and "play-icon-overlay" not in image["src"]
-            and "360_icon" not in image["src"]
         ]
-        return [remove_image_metadata(image) for image in image_urls]
+        return [
+            url
+            for url in image_urls
+            if "play-button-overlay" not in url
+            and "play-icon-overlay" not in url
+            and "360_icon" not in url
+        ]
 
     images = soup.find("div", {"id": "altImages"}) or soup.find(
         "div", {"class": "unrolledScrollBox"}
