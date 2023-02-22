@@ -61,6 +61,7 @@ def test_amazon_electronics() -> None:
         image_urls=[
             "https://m.media-amazon.com/images/I/41UAg0LchaL.jpg",
             "https://m.media-amazon.com/images/I/41ybCjXFRkL.jpg",
+            "https://m.media-amazon.com/images/I/51+aflmBblL.jpg",
         ],
         colors=["Grau"],
         sizes=[
