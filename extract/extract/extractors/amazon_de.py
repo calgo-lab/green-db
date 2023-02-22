@@ -2,7 +2,7 @@ import re
 from enum import Enum
 from logging import getLogger
 from typing import Any, Callable, List, Optional
-from urllib.parse import urlparse
+from urllib.parse import urlparse, urlsplit, urlunsplit
 
 from bs4 import BeautifulSoup
 from pydantic import ValidationError
@@ -233,17 +233,22 @@ def _get_image_urls(soup: BeautifulSoup) -> Optional[list[str]]:
             If nothing was found `None` or empty list is returned.
     """
 
+    def remove_image_metadata(url: str) -> str:
+        scheme, netloc, path, query, fragment = urlsplit(url)
+        path_segments = path.split('.')
+        del path_segments[-2]
+        return urlunsplit((scheme, netloc, '.'.join(path_segments), query, fragment))
+
     def parse_image_urls(images: BeautifulSoup) -> list[str]:
         image_urls = [
             str(image["src"])
             for image in images.find_all("img")
             if not image["src"].endswith(".gif")
-            and "IMAGERENDERINGjpg" not in image["src"]
             and "play-button-overlay" not in image["src"]
             and "play-icon-overlay" not in image["src"]
             and "360_icon" not in image["src"]
         ]
-        return [re.sub("_[^>]+_.", "", image) for image in image_urls]
+        return [remove_image_metadata(image) for image in image_urls]
 
     images = soup.find("div", {"id": "altImages"}) or soup.find(
         "div", {"class": "unrolledScrollBox"}
