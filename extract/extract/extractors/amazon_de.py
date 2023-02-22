@@ -235,9 +235,9 @@ def _get_image_urls(soup: BeautifulSoup) -> Optional[list[str]]:
 
     def remove_image_metadata(url: str) -> str:
         scheme, netloc, path, query, fragment = urlsplit(url)
-        path_segments = path.split('.')
+        path_segments = path.split(".")
         del path_segments[-2]
-        return urlunsplit((scheme, netloc, '.'.join(path_segments), query, fragment))
+        return urlunsplit((scheme, netloc, ".".join(path_segments), query, fragment))
 
     def parse_image_urls(images: BeautifulSoup) -> list[str]:
         image_urls = [
