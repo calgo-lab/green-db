@@ -303,5 +303,5 @@ def _get_sustainability(
         return [CertificateType.UNAVAILABLE]
 
     return sustainability_labels_to_certificates(
-        certificate_strings, _LABEL_MAPPING, parsed_page.scraped_page.source, parsed_page.scraped_page.product_category
+        certificate_strings, _LABEL_MAPPING, parsed_page.scraped_page.source, parsed_page.scraped_page.category
     )
