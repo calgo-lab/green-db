@@ -105,7 +105,7 @@ def extract_zalando_de(
 
     sustainability_strings = get_sustainability_strings(parsed_page)
     sustainability_labels = sustainability_labels_to_certificates(
-        sustainability_strings, label_mapping
+        sustainability_strings, label_mapping, parsed_page.scraped_page.source
     )
 
     try:
