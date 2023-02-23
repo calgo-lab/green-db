@@ -60,7 +60,6 @@ def combine_results(
     gender: Optional[str] = None,
     consumer_lifestage: Optional[str] = None,
 ) -> List[dict]:
-
     country_code_to_url = {
         "fr": "https://www.amazon.fr",
         "de": "https://www.amazon.de",

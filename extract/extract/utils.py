@@ -2,15 +2,17 @@ import re
 from logging import getLogger
 from typing import Any, Iterable, List, Optional, Union
 
-from core.domain import CertificateType
+from core.domain import CertificateType, ProductCategory
 from core.sustainability_labels import load_and_get_sustainability_labels
 
 SUSTAINABILITY_LABELS = load_and_get_sustainability_labels()
 logger = getLogger(__name__)
 
 _certificate_category_names = {
-    "LAPTOP": ["LAPTOPS", "NOTEBOOKS"],
-    "SMARTPHONE": ["SMARTPHONES", "MOBILE_PHONES"],
+    ProductCategory.LAPTOP.value: ["LAPTOPS", "NOTEBOOKS", "LAPTOP", "NOTEBOOK"],
+    ProductCategory.SMARTPHONE.value: ["SMARTPHONES", "MOBILE_PHONES"],
+    ProductCategory.PRINTER.value: ["PRINTER"],
+    ProductCategory.TABLET.value: ["TABLETS"],
 }
 
 
@@ -73,6 +75,7 @@ def get_product_from_JSON_LD(json_ld: List[Any], else_return: Any = {}) -> Any:
 def sustainability_labels_to_certificates(
     certificate_strings: Iterable[str],
     certificate_mapping: dict,
+    source: str,
     product_category: str = "",
 ) -> Optional[list[str]]:
     """
@@ -86,6 +89,7 @@ def sustainability_labels_to_certificates(
     Args:
         certificate_strings (list[str]): Certificate strings from the HTML span tags
         certificate_mapping (dict): Mapping of certificate strings to certificates
+        source: source (str) of the product coming from, for logging purposes
         product_category (str): Category of the product, to infer category-specific labels
 
     Returns:
@@ -115,7 +119,7 @@ def sustainability_labels_to_certificates(
                 result.update({certificate_string: certificate_mapping[certificate_string]})
             else:  # if certificate_string can not be mapped, assign UNKNOWN and create log message
                 result.update({certificate_string: CertificateType.UNKNOWN})  # type: ignore[attr-defined] # noqa
-                logger.info(f"unknown sustainability label: {certificate_string}")
+                logger.info(f"unknown sustainability label from {source}: {certificate_string}")
 
     # assign (general) extracted certificates to a product category-specific version, if possible
     if product_category in _certificate_category_names.keys():

@@ -149,8 +149,6 @@ def electronics() -> List[dict]:
         "smartphone": ProductCategory.SMARTPHONE.value,
         "laptop": ProductCategory.LAPTOP.value,
         "tablet": ProductCategory.TABLET.value,
-        "audio/kopfhoerer": ProductCategory.HEADPHONES.value,
-        "fernseher": ProductCategory.TV.value,
     }
 
     results = []
