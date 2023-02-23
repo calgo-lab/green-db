@@ -41,7 +41,7 @@ def test_otto_basic() -> None:
         "48 MP Kamera)",
         description="Leave short description",
         brand="Fairphone",
-        sustainability_labels=[CertificateType.BLUE_ANGEL_SMARTPHONE, CertificateType.OTHER],  # type: ignore[attr-defined] # noqa
+        sustainability_labels=[CertificateType.BLUE_ANGEL_SMARTPHONES, CertificateType.OTHER],  # type: ignore[attr-defined] # noqa
         image_urls=[
             "https://i.otto.mock/i/otto/34a45e3a-7b50-45fd-86b7-c10373a243b7",
             "https://i.otto.mock/i/otto/0ae22a98-b2fc-4015-a6b1-67bf6997219b",
