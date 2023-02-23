@@ -2,7 +2,6 @@ from tests.utils import read_test_html
 
 from core.constants import TABLE_NAME_SCRAPING_OTTO_DE
 from core.domain import CertificateType, CountryType, CurrencyType, Product
-
 from extract import extract_product  # type: ignore
 
 
