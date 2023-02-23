@@ -1,9 +1,8 @@
-from tests.utils import read_test_html
-
 from core.constants import TABLE_NAME_SCRAPING_OTTO_DE
 from core.domain import CertificateType, CountryType, CurrencyType, Product
 
 from extract import extract_product  # type: ignore
+from tests.utils import read_test_html
 
 
 def test_otto_basic() -> None:
@@ -39,11 +38,11 @@ def test_otto_basic() -> None:
         gender=None,
         consumer_lifestage=None,
         name="Fairphone Fairphone 4 Bundle mit recable USB-C Kabel + Charger Smartphone (6,3 Zoll, "
-             "48 MP Kamera)",
+        "48 MP Kamera)",
         description="Leave short description",
         brand="Fairphone",
         sustainability_labels=[CertificateType.BLUE_ANGEL_SMARTPHONE, CertificateType.OTHER],  # type: ignore[attr-defined] # noqa
-        image_urls= [
+        image_urls=[
             "https://i.otto.mock/i/otto/34a45e3a-7b50-45fd-86b7-c10373a243b7",
             "https://i.otto.mock/i/otto/0ae22a98-b2fc-4015-a6b1-67bf6997219b",
             "https://i.otto.mock/i/otto/c6de4b64-bda1-4a8c-bcd2-331eba4e1fbf"

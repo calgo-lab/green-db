@@ -10,7 +10,12 @@ logger = getLogger(__name__)
 
 _certificate_category_names = {
     ProductCategory.LAPTOP.value: ["LAPTOPS", "NOTEBOOKS", "LAPTOP", "NOTEBOOK"],
-    ProductCategory.SMARTPHONE.value: ["SMARTPHONES", "MOBILE_PHONES", "SMARTPHONE", "MOBILE_PHONE"],
+    ProductCategory.SMARTPHONE.value: [
+        "SMARTPHONES",
+        "MOBILE_PHONES",
+        "SMARTPHONE",
+        "MOBILE_PHONE",
+    ],
     ProductCategory.PRINTER.value: ["PRINTERS", "PRINTER"],
     ProductCategory.TABLET.value: ["TABLETS", "TABLET"],
 }
