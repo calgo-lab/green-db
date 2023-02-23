@@ -9,8 +9,8 @@ SUSTAINABILITY_LABELS = load_and_get_sustainability_labels()
 logger = getLogger(__name__)
 
 _certificate_category_names = {
-    "LAPTOP": ["LAPTOPS", "NOTEBOOKS"],
-    "SMARTPHONE": ["SMARTPHONES", "MOBILE_PHONES"],
+    "LAPTOP": ["LAPTOPS", "NOTEBOOKS", "LAPTOP", "NOTEBOOK"],
+    "SMARTPHONE": ["SMARTPHONES", "MOBILE_PHONES", "SMARTPHONE", "MOBILE_PHONE"],
 }
 
 

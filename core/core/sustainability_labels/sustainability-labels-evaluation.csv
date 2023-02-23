@@ -4,7 +4,7 @@ certificate:BIORE,bioRe,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 certificate:BLUE_ANGEL,Blauer Engel,Fashion,93,86,0,81,100,100,0,24,40,55,0,0,0,0
 certificate:BLUE_ANGEL_LAPTOPS,Blauer Engel - Laptops,Electronics,73,77,87,0,0,100,40,71,0,0,0,0,0,0
 certificate:BLUE_ANGEL_LEATHER,Blaue Engel - Leder,Fashion,73,67,0,100,60,0,0,0,0,22,0,0,0,0
-certificate:BLUE_ANGEL_SMARTPHONES,Blaue Engel - Smartphones,Electronics/Smartphones,73,71,83,0,0,50,25,67,0,72,0,0,0,100
+certificate:BLUE_ANGEL_SMARTPHONE,Blaue Engel - Smartphones,Electronics/Smartphones,73,71,83,0,0,50,25,67,0,72,0,0,0,100
 certificate:BLUE_ANGEL_PRINTER,Blaue Engel - Printer,Electronics,73,88,50,0,0,50,25,67,0,50,0,0,0,100
 certificate:TCO_TABLETS,TCO Tablets,Electronic,78,63,83,0,0,50,50,67,100,55,0,0,0,100
 certificate:BLUE_ANGEL_TEXTILES,Blaue Engel - Textilien,Fashion,93,86,0,81,100,100,0,24,40,55,0,0,0,0
