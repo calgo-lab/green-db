@@ -1,6 +1,7 @@
 import re
 from enum import Enum
 from logging import getLogger
+from pathlib import PurePosixPath
 from typing import Any, Callable, List, Optional
 from urllib.parse import urlparse, urlsplit, urlunsplit
 
@@ -223,9 +224,28 @@ def _get_color(soup: BeautifulSoup) -> Optional[str]:
 
 def _strip_image_url(url: str) -> str:
     """
-    The images on product pages are usually resized and they might have overlays
-    like watermarks and play buttons for video thumbnails.
+    The images on product pages are usually resized and they might
+    have overlays like watermarks and play buttons for video thumbnails.
     This function finds the url of the source image without additional processing applied.
+
+    amazon image url syntax: (feb 2023)
+    image processing instructions are stored in the filename
+    as additional suffixes before the file extension.
+    like this: https://something.amazon.com/some/path/some-image._some._processing._instructions.jpg
+
+
+    for example
+    https://m.media-amazon.com/images/I/215G7G0ZmtL._AC_SR38,50_.jpg
+    will return https://m.media-amazon.com/images/I/215G7G0ZmtL.jpg but resized to 38x50
+
+    images can have multiple instructions
+
+    for example
+    https://m.media-amazon.com/images/I/5125-zWFo-L._SX500_SY400._CR0,0,600,3000_BG255,0,255._BR-150._PKdp-play-icon-overlay__.jpg
+    will return https://m.media-amazon.com/images/I/5125-zWFo-L.jpg
+    but resized to 500x400
+    then expanded to 600x3000 with a pink background
+    and finally overlayed with a play button
 
     Args:
         url (str): the url of the image
@@ -233,13 +253,10 @@ def _strip_image_url(url: str) -> str:
     Returns:
         str: The url of the source image
     """
-    scheme, netloc, path, query, fragment = urlsplit(url)
-    path_segments = path.split("/")
-    filename = path_segments[-1].split(".")
-    base_name = filename[0]
-    extension = filename[-1]
-    path_segments[-1] = f"{base_name}.{extension}"
-    return urlunsplit((scheme, netloc, "/".join(path_segments), query, fragment))
+    scheme, netloc, path_string, query, fragment = urlsplit(url)
+    path = PurePosixPath(path_string)
+    stem = path.stem[: path.stem.index(".")]
+    return urlunsplit((scheme, netloc, str(path.with_stem(stem)), query, fragment))
 
 
 def _get_image_urls(soup: BeautifulSoup) -> Optional[list[str]]:
