@@ -80,8 +80,7 @@ def extract_otto_de(parsed_page: ParsedPage) -> Optional[Product]:
 
     sustainability_labels = _get_sustainability(
         product_data,
-        parsed_page.beautiful_soup,
-        parsed_page.scraped_page.category,
+        parsed_page,
         assign_unavailable,
     )
     image_urls = _get_image_urls(product_data, parsed_url)[:NUM_IMAGE_URLS]
@@ -277,8 +276,7 @@ def _get_energy_labels(product_data: dict, beautiful_soup: BeautifulSoup) -> Lis
 
 def _get_sustainability(
     product_data: dict,
-    beautiful_soup: BeautifulSoup,
-    product_category: str,
+    parsed_page: ParsedPage,
     assign_unavailable: bool,
 ) -> Optional[List[str]]:
     """
@@ -286,16 +284,15 @@ def _get_sustainability(
 
     Args:
         product_data (dict): Representation of the product data JSON
-        beautiful_soup (BeautifulSoup): Parsed HTML of Product Website.
-        product_category (str): Product Category
+        parsed_page (ParsedPage): Intermediate representation of `ScrapedPage` domain object
         assign_unavailable (bool): Whether to assign the UNAVAILABLE label,
             Needed for Otto's "outdated" product pages, which are scraped as
             sustainable at first, but no Sustainable information was found during extraction.
     Returns:
         List[str]: Sorted `list` of found sustainability labels
     """
-    energy_labels = _get_energy_labels(product_data, beautiful_soup)
-    other_labels = _get_sustainability_info(beautiful_soup)
+    energy_labels = _get_energy_labels(product_data, parsed_page.beautiful_soup)
+    other_labels = _get_sustainability_info(parsed_page.beautiful_soup)
 
     certificate_strings = other_labels + energy_labels
 
@@ -306,5 +303,5 @@ def _get_sustainability(
         return [CertificateType.UNAVAILABLE]
 
     return sustainability_labels_to_certificates(
-        certificate_strings, _LABEL_MAPPING, product_category
+        certificate_strings, _LABEL_MAPPING, parsed_page.scraped_page.source, parsed_page.scraped_page.product_category
     )

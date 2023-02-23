@@ -73,6 +73,7 @@ def get_product_from_JSON_LD(json_ld: List[Any], else_return: Any = {}) -> Any:
 def sustainability_labels_to_certificates(
     certificate_strings: Iterable[str],
     certificate_mapping: dict,
+    source: str,
     product_category: str = "",
 ) -> Optional[list[str]]:
     """
@@ -86,6 +87,7 @@ def sustainability_labels_to_certificates(
     Args:
         certificate_strings (list[str]): Certificate strings from the HTML span tags
         certificate_mapping (dict): Mapping of certificate strings to certificates
+        source: source (str) of the product coming from, for logging purposes
         product_category (str): Category of the product, to infer category-specific labels
 
     Returns:
@@ -115,7 +117,7 @@ def sustainability_labels_to_certificates(
                 result.update({certificate_string: certificate_mapping[certificate_string]})
             else:  # if certificate_string can not be mapped, assign UNKNOWN and create log message
                 result.update({certificate_string: CertificateType.UNKNOWN})  # type: ignore[attr-defined] # noqa
-                logger.info(f"unknown sustainability label: {certificate_string}")
+                logger.info(f"unknown sustainability label from {source}: {certificate_string}")
 
     # assign (general) extracted certificates to a product category-specific version, if possible
     if product_category in _certificate_category_names.keys():

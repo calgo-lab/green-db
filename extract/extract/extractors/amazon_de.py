@@ -98,7 +98,7 @@ def extract_amazon_de(parsed_page: ParsedPage) -> Optional[Product]:
         sustainability_texts.add(label_with_level)  # add Energy label with level
 
     sustainability_labels = sustainability_labels_to_certificates(
-        sustainability_texts, _LABEL_MAPPING, parsed_page.scraped_page.category
+        sustainability_texts, _LABEL_MAPPING, parsed_page.scraped_page.source, parsed_page.scraped_page.category,
     )
 
     brand = _get_brand(soup, language)
