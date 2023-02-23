@@ -2,17 +2,17 @@ import re
 from logging import getLogger
 from typing import Any, Iterable, List, Optional, Union
 
-from core.domain import CertificateType
+from core.domain import CertificateType, ProductCategory
 from core.sustainability_labels import load_and_get_sustainability_labels
 
 SUSTAINABILITY_LABELS = load_and_get_sustainability_labels()
 logger = getLogger(__name__)
 
 _certificate_category_names = {
-    "LAPTOP": ["LAPTOPS", "NOTEBOOKS", "LAPTOP", "NOTEBOOK"],
-    "SMARTPHONE": ["SMARTPHONES", "MOBILE_PHONES", "SMARTPHONE", "MOBILE_PHONE"],
-    "PRINTER": ["PRINTERS", "PRINTER"],
-    "TABLET": ["TABLETS", "TABLET"],
+    ProductCategory.LAPTOP.value: ["LAPTOPS", "NOTEBOOKS", "LAPTOP", "NOTEBOOK"],
+    ProductCategory.SMARTPHONE.value: ["SMARTPHONES", "MOBILE_PHONES", "SMARTPHONE", "MOBILE_PHONE"],
+    ProductCategory.PRINTER.value: ["PRINTERS", "PRINTER"],
+    ProductCategory.TABLET.value: ["TABLETS", "TABLET"],
 }
 
 
