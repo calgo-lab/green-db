@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "db-exporting"
-version = "0.1.2"
+version = "0.1.3"
 description = "DB Exporter to Zenodo"
 authors = ["ivana <ivana.trajanovska@bht-berlin.de>"]
 readme = "README.md"
