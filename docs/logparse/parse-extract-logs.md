@@ -11,5 +11,5 @@ kubectl -n greendb logs extract-workers-687c7557c4-rvqg8 --since-time=2023-02-22
 python parse-unknown-labels.py -f "D:/GitHub/green-db/docs/logparse/extract-logs-2023-02-28.txt"
 ```
 
-3. Add manually the unknown labels in the corresponding extractors in [`extract.extract.extractors.
-   <shop-name>_<country>.py`](../extract/extract/extractors)
+3. Add manually the unknown labels (and certificate mappings) in the corresponding extractors in 
+   [`extract.extract.extractors.<shop-name>_<country>.py`](../extract/extract/extractors)
