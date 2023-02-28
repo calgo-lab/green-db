@@ -21,13 +21,13 @@ patch-chart:
 
 patch-version: patch-package patch-chart
 	# commit and push new version
-	git add pyproject.toml ${DB_EXPORTING_CHART}/Chart.yaml
+	git add pyproject.toml poetry.lock ${DB_EXPORTING_CHART}/Chart.yaml
 	git commit -m "bump version to '${NEW_VERSION}'"
-	git tag ${NEW_VERSION}
+	#git tag ${NEW_VERSION}
 
 	# push everything
 	git push
-	git push origin ${NEW_VERSION}
+	#git push origin ${NEW_VERSION} #todo this should be done with the greendb version
 
 set-docker-tag:
 	$(eval DOCKER_IMAGE_TAG=$(shell poetry version -s))
