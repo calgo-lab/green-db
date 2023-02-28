@@ -1,14 +1,15 @@
-import re
-import pandas as pd
-import json
 import argparse
+import json
+import re
+
+import pandas as pd
 
 shop_regex = re.compile("(?<=INFO - extract.utils: unknown sustainability label from ).*(?=:)")
 
 
 def parse_args():
-    argparser = argparse.ArgumentParser(description='process arguments')
-    argparser.add_argument('-f', '--file', type=str, help='Absolute path to logfile to parse.')
+    argparser = argparse.ArgumentParser(description="process arguments")
+    argparser.add_argument("-f", "--file", type=str, help="Absolute path to logfile to parse.")
     return argparser.parse_args()
 
 
@@ -29,9 +30,13 @@ def main():
             shop_labels.append((shop, unknown_label[0]))
 
     df = pd.DataFrame(shop_labels, columns=["shop", "label"])
-    df_stats = pd.DataFrame(df.value_counts()).sort_values(by=['shop', 0], ascending=[False, False])
-    summary = df_stats.reset_index().groupby('shop', as_index=False).agg({'shop': 'first',
-                                                                          'label': lambda x: sorted(list(x))}).to_json(orient="records")
+    df_stats = pd.DataFrame(df.value_counts()).sort_values(by=["shop", 0], ascending=[False, False])
+    summary = (
+        df_stats.reset_index()
+        .groupby("shop", as_index=False)
+        .agg({"shop": "first", "label": lambda x: sorted(list(x))})
+        .to_json(orient="records")
+    )
     parsed = json.loads(summary)
 
     outfile = f"{infile.rsplit('.')[0]}-unknown-labels.json"
@@ -43,5 +48,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-

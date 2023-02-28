@@ -38,7 +38,7 @@ _LABEL_MAPPING = {
     "Global Recycled Standard": CertificateType.GLOBAL_RECYCLED_STANDARD,
     "Global Recycle Standard": CertificateType.GLOBAL_RECYCLED_STANDARD,  # TODO: this is probably a typo on zalando's end # noqa
     "Global Recycled Standard (GRS)": CertificateType.GLOBAL_RECYCLED_STANDARD,
-    "Recycled Claim Standard (RCS) - 100" CertificateType.RECYCLED_CLAIM_STANDARD_100,
+    "Recycled Claim Standard (RCS) - 100": CertificateType.RECYCLED_CLAIM_STANDARD_100,
     "Recycled Claim Standard (RCS) - Blended": CertificateType.RECYCLED_CLAIM_STANDARD_BLENDED,
     "Hergestellt aus mindestens 50% Lyocell": CertificateType.OTHER,
     "Biologisch abbaubar": CertificateType.OTHER,
