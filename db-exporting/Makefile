@@ -21,7 +21,7 @@ patch-chart:
 
 patch-version: patch-package patch-chart
 	# commit and push new version
-	git add green-db pyproject.toml ${DB_EXPORTING_CHART}/Chart.yaml
+	git add pyproject.toml ${DB_EXPORTING_CHART}/Chart.yaml
 	git commit -m "bump version to '${NEW_VERSION}'"
 	git tag ${NEW_VERSION}
 
