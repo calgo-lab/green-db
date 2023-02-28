@@ -81,6 +81,10 @@ def shadow(bg: float, fg: float, s: float = 0.5, p: float = 0.62) -> float:
     return bg * s / (1.0 - p * bg * fg)
 
 
+def bevel(bg: float, fg: float, s: float, p: float = 0.62) -> float:
+    return fg + shadow(bg, fg, s, p)
+
+
 def medium(a: float, t: float) -> float:
     return 1 / (t * (1 - a) + 1)
 
@@ -160,7 +164,8 @@ def render_label(label: str) -> str:
     tint = [kurgel(random() * 4, random()) for i in range(3)]
     color = [1 if cred >= 50 else 0.5] * 3
     idle = [blend(t, 0.05, 1 - cred / 100) for t in tint]
-    hover = [blend(a, b, .1) for a,b in zip(idle, [.25, .25, .5])]
+    seed(11)
+    hover = [blend(t, medium(random(), 50), .2) for t in idle]
     label_colors[label_text] = (color, idle, hover)
     assert " " not in label_text, label_text
     return render_tag(
@@ -912,20 +917,24 @@ footer {{
 .product-link .{label} {{
     color: {webcolor(color)};
     background: {webcolor(idle)};
-    box-shadow: 0px 3px 3px 0px {webcolor(map(shadow, excerpt, idle))};
+    box-shadow: 0px 3px 3px 0px {webcolor(map(shadow, excerpt, idle))},
+        inset 0 0 2px 0 {webcolor(map(bevel, excerpt, idle, [medium(t, 2) for t in idle]))};
 }}
 
 .product-link:nth-child(even) .{label} {{
-    box-shadow: 0px 3px 3px 0px {webcolor(map(shadow, excerpt_hover, idle))};
+    box-shadow: 0px 3px 3px 0px {webcolor(map(shadow, excerpt_hover, idle))},
+        inset 0 0 2px 0 {webcolor(map(bevel, excerpt_hover, idle, [medium(t, 2) for t in idle]))};
 }}
 
 .product-link .{label}:hover {{
     background: {webcolor(hover)};
-    box-shadow: 0px 3px 3px 0px {webcolor(map(shadow, excerpt, hover))};
+    box-shadow: 0px 3px 3px 0px {webcolor(map(shadow, excerpt, hover))},
+        inset 0 0 2px 0 {webcolor(map(bevel, excerpt, hover, [medium(t, 2) for t in hover]))};
 }}
 
 .product-link:nth-child(even) .{label}:hover {{
-    box-shadow: 0px 3px 3px 0px {webcolor(map(shadow, excerpt_hover, hover))};
+    box-shadow: 0px 3px 3px 0px {webcolor(map(shadow, excerpt_hover, hover))},
+        inset 0 0 2px 0 {webcolor(map(bevel, excerpt_hover, hover, [medium(t, 2) for t in hover]))};
 }}
 
 .product-link .{label}:active {{
