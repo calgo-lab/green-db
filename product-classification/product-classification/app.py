@@ -54,11 +54,14 @@ def product_classifier_handler() -> Response:
     confidence = [np.max(p) for p in pred_probs.values]
 
     # TODO: add label qualities via cleanlab as well (needs mapping from GreenDB to GPC)
+    # drop new categories or incorporate into existing
+    # return label for products with multiple categories
+    # return label for misclassified
 
     data = {
-        "pred_probs": pred_probs.to_json(),
+        "pred_probs": pred_probs.to_dict(),
         "predictions": predicted_category,
-        "confidence": confidence,
+        "confidence": str(confidence),
     }
 
     return Response(json.dumps(data), mimetype="application/json")
