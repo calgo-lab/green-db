@@ -100,7 +100,7 @@ def map(func: Any, *iterables: Any, **kwargs: Any) -> Any:
 
 
 def webcolor(color: List[float]) -> str:
-    return "#" + "".join(f"{int(to_srgb(c)*255):02x}" for c in color)
+    return "#" + "".join(f"{round(to_srgb(c)*255):02x}" for c in color)
 
 
 def linspace(start: float, end: float, n: int) -> List[float]:
@@ -149,22 +149,26 @@ label_eco_tint = [blend(kurgel(random() * 6, random()), 0.05, 0.1) for i in rang
 label_social_tint = [blend(kurgel(random() * 6, random()), 0.05, 0.1) for i in range(3)]
 label_eco_tint = [blend(kurgel(random() * 6, random()), 0.05, 0.1) for i in range(3)]
 label_eco_tint = [blend(kurgel(random() * 6, random()), 0.05, 0.1) for i in range(3)]
+label_colors = {}
 
 
 def render_label(label: str) -> str:
+    label_text = re.sub(r"^certificate:", "", label)
     label_info = label_map[label]
     cred = label_info.cred_credibility or 0
     seed(label + "1")
-    tint = [kurgel(random() * 6, random()) for i in range(3)]
+    tint = [kurgel(random() * 4, random()) for i in range(3)]
     color = [1 if cred >= 50 else 0.5] * 3
-    background = [blend(t, 0.05, 1 - cred / 100) for t in tint]
+    idle = [blend(t, 0.05, 1 - cred / 100) for t in tint]
+    hover = [blend(a, b, .1) for a,b in zip(idle, [.25, .25, .5])]
+    label_colors[label_text] = (color, idle, hover)
+    assert " " not in label_text, label_text
     return render_tag(
         "div",
         None,
-        ["label"],
-        re.sub(r"^certificate:", "", label),
+        ["label", label_text],
+        label_text,
         [
-            f'style="color:{webcolor(color)};background:{webcolor(background)}"',
             f'onclick="focusLabel(event, {repr(label)})"',
         ],
     )
@@ -761,13 +765,6 @@ def rebuild_landing_page(
     .container {{ width:1170px }}
 }}
 
-.label {{
-    padding: 8px;
-    margin: 2px;
-    display: inline;
-    border-radius: 3.5px;
-}}
-
 .stats {{
     font-size: 1.1em;
 }}
@@ -884,11 +881,6 @@ footer {{
     padding: 12px;
 }}
 
-.product-link:nth-child(even) {{
-    background: {webcolor(excerpt_hover)};
-    box-shadow: inset 0px 2px 3px 0px {webcolor(map(shadow, excerpt_hover, excerpt))};
-}}
-
 .product-link {{
     color: white;
     background: {webcolor(excerpt)};
@@ -903,6 +895,50 @@ footer {{
     animation-name: appear;
     animation-duration: 1s;
 }}
+
+.product-link:nth-child(even) {{
+    background: {webcolor(excerpt_hover)};
+    box-shadow: inset 0px 2px 3px 0px {webcolor(map(shadow, excerpt_hover, excerpt))};
+}}
+
+.product-link .label {{
+    padding: 8px;
+    margin: 2px;
+    display: inline;
+    border-radius: 3.5px;
+}}
+
+{''.join(f'''
+.product-link .{label} {{
+    color: {webcolor(color)};
+    background: {webcolor(idle)};
+    box-shadow: 0px 3px 3px 0px {webcolor(map(shadow, excerpt, idle))};
+}}
+
+.product-link:nth-child(even) .{label} {{
+    box-shadow: 0px 3px 3px 0px {webcolor(map(shadow, excerpt_hover, idle))};
+}}
+
+.product-link .{label}:hover {{
+    background: {webcolor(hover)};
+    box-shadow: 0px 3px 3px 0px {webcolor(map(shadow, excerpt, hover))};
+}}
+
+.product-link:nth-child(even) .{label}:hover {{
+    box-shadow: 0px 3px 3px 0px {webcolor(map(shadow, excerpt_hover, hover))};
+}}
+
+.product-link .{label}:active {{
+    background: {webcolor(idle)};
+    box-shadow: inset 0px 3px 3px 0px {webcolor(map(shadow, idle, excerpt))};
+}}
+
+.product-link:nth-child(even) .{label}:active {{
+    box-shadow: inset 0px 3px 3px 0px {webcolor(map(shadow, idle, excerpt_hover))};
+}}
+'''
+    for label, (color, idle, hover) in label_colors.items()
+)}
 
 .btn {{
     margin: 7px;
