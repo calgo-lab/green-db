@@ -201,14 +201,13 @@ def process_db_data(unique_aggregated_urls: pd.DataFrame, products: pd.DataFrame
     products = products.set_index("url", drop=False)
     unique_aggregated_urls = unique_aggregated_urls.set_index("url")
 
-    joined = unique_aggregated_urls.join(products)
+    joined = unique_aggregated_urls.join(products).reset_index(drop=True)
     joined["categories"] = joined["categories"].apply(lambda x: list(set(x)))
     joined["genders"] = joined["genders"].apply(lambda x: list(set(x)))
     joined["genders"] = joined["genders"].apply(lambda x: x[0] if len(x) == 1 else "UNISEX")
 
-    joined = joined.drop("gender", axis=1)
+    joined = joined.drop(["category", "gender"], axis=1)
     joined = joined.rename(columns={"genders": "gender"})
-    joined = joined.drop("category", axis=1)
 
     return joined.convert_dtypes()
 
