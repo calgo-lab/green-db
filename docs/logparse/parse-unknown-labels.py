@@ -1,13 +1,14 @@
 import argparse
 import json
 import re
+from argparse import Namespace
 
 import pandas as pd
 
 shop_regex = re.compile("(?<=INFO - extract.utils: unknown sustainability label from ).*(?=:)")
 
 
-def parse_args() -> argparse.ArgumentParser:
+def parse_args() -> Namespace:
     """
     Parses the cmd arguments.
 
@@ -28,11 +29,11 @@ def main() -> None:
     print(f"Parsing {infile}")
 
     with open(infile, encoding="utf-8") as f:
-        f = f.readlines()
+        file = f.readlines()
 
     shop_labels = []
 
-    for line in f:
+    for line in file:
         if shop := shop_regex.findall(line):
             shop = shop[0]
             unknown_label = re.findall(f"(?<={shop}: ).*", line)
