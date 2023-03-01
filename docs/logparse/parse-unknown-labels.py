@@ -7,13 +7,22 @@ import pandas as pd
 shop_regex = re.compile("(?<=INFO - extract.utils: unknown sustainability label from ).*(?=:)")
 
 
-def parse_args():
+def parse_args() -> argparse.ArgumentParser:
+    """
+    Parses the cmd arguments.
+
+    Returns:
+        argparse.ArgumentParser: Object containing the parsed arguments.
+    """
     argparser = argparse.ArgumentParser(description="process arguments")
     argparser.add_argument("-f", "--file", type=str, help="Absolute path to logfile to parse.")
     return argparser.parse_args()
 
 
-def main():
+def main() -> None:
+    """
+    Main method to parse an extractor logfile for unknown sustainability labels.
+    """
     args = parse_args()
     infile = args.file
     print(f"Parsing {infile}")
