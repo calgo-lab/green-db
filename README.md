@@ -91,7 +91,7 @@ If you are using our code or the GreenDB dataset, please reference the [preprint
 
 1. Gossen, M., Jäger, S., Hoffmann, M.L., Biessmann, F., Korenke, R., & Santarius, T. (2022). Nudging Sustainable Consumption: A Large-Scale Data Analysis of Sustainability Labels for Fashion in German Online Retail. Frontiers in Sustainability. DOI: https://doi.org/10.3389/frsus.2022.922984 
 2. Jäger, S., Flick, A., Garcia, J.A., Driesch, K.V., Brendel, K., & Biessmann, F. (2022). GreenDB - A Dataset and Benchmark for Extraction of Sustainability Information of Consumer Goods. [ArXiv, abs/2207.10733](https://arxiv.org/abs/2207.10733). DOI: https://doi.org/10.48550/arXiv.2207.10733
-3. Flick, A., Jäger, S., Trajanovska, I. & Biessmann, F. (2023). Automated Extraction of Fine-Grained Standardized Product Information from Unstructured Multilingual Web Data.  [ArXiv, abs/2302.12139](http://arxiv.org/abs/2302.12139). DOI: https://doi.org/10.48550/arXiv.2302.12139
+3. Flick, A., Jäger, S., Trajanovska, I., & Biessmann, F. (2023). Automated Extraction of Fine-Grained Standardized Product Information from Unstructured Multilingual Web Data.  [ArXiv, abs/2302.12139](http://arxiv.org/abs/2302.12139). DOI: https://doi.org/10.48550/arXiv.2302.12139
 
 ## Disclaimer!
 
