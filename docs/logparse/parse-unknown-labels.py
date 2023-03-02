@@ -44,7 +44,7 @@ def main() -> None:
     unknown_labels_per_shop = (
         df.groupby("shop", as_index=False)
         .agg({"shop": "first", "label": lambda x: sorted(set(x))})
-        .to_json(orient="records", force_ascii=False)
+        .to_dict(orient="records")
     )
 
     outfile = f"{infile.rsplit('.')[0]}-unknown-labels.json"
