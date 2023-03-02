@@ -148,6 +148,7 @@ _LABEL_MAPPING = {
     "Umweltfreundlicher Färbeprozess": CertificateType.OTHER,
     "TENCEL™ Lyocell": CertificateType.OTHER,
     "TENCEL™ Modal": CertificateType.OTHER,
+    "TENCEL™ x REFIBRA™ Technologie": CertificateType.OTHER,
     "LENZING™ ECOVERO™": CertificateType.OTHER,
     "REPREVE®": CertificateType.OTHER,
     "Nachhaltige Viskose": CertificateType.OTHER,
@@ -160,6 +161,9 @@ _LABEL_MAPPING = {
     "SEAQUAL™": CertificateType.OTHER,
     "adidas: mit recycelten Materialien": CertificateType.OTHER,
     "adidas: mit Parley Ocean Plastic": CertificateType.OTHER,
+    "Schnell nachwachsende Rohstoffe": CertificateType.OTHER,
+    "Recyceltes Plastik aus der Umwelt": CertificateType.OTHER,
+    "Organic Content Standard (OCS) - Organic In conversion": CertificateType.OTHER,
     "": CertificateType.OTHER,
 }
 
