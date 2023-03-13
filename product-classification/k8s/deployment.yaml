@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: product-classification-pod
+  namespace: s76866
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: product-classification-pod
+  strategy:
+  template:
+    metadata:
+      labels:
+        service: product-classification-pod
+    spec:
+      containers:
+        - name: product-classification-container
+          image: registry.datexis.com/s76866/product-classification:latest
+          imagePullPolicy: "Always"
+          ports:
+            - name: client-port
+              containerPort: 8282
+          volumeMounts:
+            - mountPath: "/usr/src/app/data" # mounting
+              name: data
+      imagePullSecrets:
+        - name: private-registry-auth
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: product-classification-pvc
