@@ -25,11 +25,11 @@ redis = "^4.1.1"
 rq = "^1.10.1"
 
 [tool.poetry.dev-dependencies]
-pytest = "^5.2"
-flake8 = "^3.9.2"
-mypy = "^0.910"
-isort = "^5.10.1"
-black = "^21.12b0"
+pytest = "*"
+flake8 = "*"
+mypy = "*"
+isort = "*"
+black = "*"
 types-redis = "^4.1.10"
 
 [build-system]
