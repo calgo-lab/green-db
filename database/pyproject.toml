@@ -16,7 +16,7 @@ classifiers = [
 python = "^3.10"
 core = {path = "../core", develop = true}
 SQLAlchemy = "^1.4.29"
-psycopg2 = "^2.9.3"
+psycopg2-binary = "^2.9.3"
 
 [tool.poetry.dev-dependencies]
 pytest = "*"
