@@ -834,7 +834,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "0eec7e048e7e4e443b74c74bd54ab836add991a5031b943620c4c8244303a6e2"
+content-hash = "7decfd77c1f9a483ecebf4c36d29fa9f7dca02fa04138bfe7a3a0a48b813ab0a"
 
 [metadata.files]
 async-timeout = [
