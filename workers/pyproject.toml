@@ -11,6 +11,7 @@ classifiers = [
     "Framework :: Scrapy",
     "Topic :: Database"
 ]
+packages = [{include = "workers"}]
 
 [tool.poetry.scripts]
 worker = "workers.main:start"

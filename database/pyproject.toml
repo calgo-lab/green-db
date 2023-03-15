@@ -11,6 +11,7 @@ classifiers = [
     "Framework :: Scrapy",
     "Topic :: Database"
 ]
+packages = [{include = "database"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"

@@ -11,6 +11,7 @@ classifiers = [
     "Framework :: Scrapy",
     "Topic :: Database"
 ]
+packages = [{include = "message_queue"}]
 
 [tool.poetry.dependencies]
 python = "^3.9"
