@@ -17,10 +17,11 @@ worker = "workers.main:start"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-core = {path = "../core", develop = true}
-database = {path = "../database", develop = true}
-extract = {path = "../extract", develop = true}
-message_queue = {path = "../message-queue", develop = true}
+core = {git = "https://github.com/calgo-lab/green-db", subdirectory = "core"}
+database = {git = "https://github.com/calgo-lab/green-db", subdirectory = "database"}
+extract = {git = "https://github.com/calgo-lab/green-db", subdirectory = "extract"}
+message_queue = {git = "https://github.com/calgo-lab/green-db", subdirectory = "message-queue"}
+
 redis = "^4.1.1"
 rq = "^1.10.1"
 
