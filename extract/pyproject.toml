@@ -11,12 +11,11 @@ classifiers = [
     "Framework :: Scrapy",
     "Topic :: Database"
 ]
-packages = [{include = "extract"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-core = {git = "https://github.com/calgo-lab/green-db", subdirectory = "core"}
-database = {git = "https://github.com/calgo-lab/green-db", subdirectory = "database"}
+core = {git = "https://github.com/calgo-lab/green-db", branch = "kvdd-update-dev-dependencies", subdirectory = "core"}
+database = {git = "https://github.com/calgo-lab/green-db", branch = "kvdd-update-dev-dependencies", subdirectory = "database"}
 beautifulsoup4 = "^4.10.0"
 extruct = "^0.13.0"
 chompjs = "^1.1.6"

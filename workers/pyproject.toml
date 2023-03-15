@@ -11,17 +11,16 @@ classifiers = [
     "Framework :: Scrapy",
     "Topic :: Database"
 ]
-packages = [{include = "workers"}]
 
 [tool.poetry.scripts]
 worker = "workers.main:start"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-core = {git = "https://github.com/calgo-lab/green-db", subdirectory = "core"}
-database = {git = "https://github.com/calgo-lab/green-db", subdirectory = "database"}
-extract = {git = "https://github.com/calgo-lab/green-db", subdirectory = "extract"}
-message_queue = {git = "https://github.com/calgo-lab/green-db", subdirectory = "message-queue"}
+core = {git = "https://github.com/calgo-lab/green-db", branch = "kvdd-update-dev-dependencies", subdirectory = "core"}
+database = {git = "https://github.com/calgo-lab/green-db", branch = "kvdd-update-dev-dependencies", subdirectory = "database"}
+extract = {git = "https://github.com/calgo-lab/green-db", branch = "kvdd-update-dev-dependencies", subdirectory = "extract"}
+message_queue = {git = "https://github.com/calgo-lab/green-db", branch = "kvdd-update-dev-dependencies", subdirectory = "message-queue"}
 
 redis = "^4.1.1"
 rq = "^1.10.1"

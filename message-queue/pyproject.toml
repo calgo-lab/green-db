@@ -11,11 +11,10 @@ classifiers = [
     "Framework :: Scrapy",
     "Topic :: Database"
 ]
-packages = [{include = "message_queue"}]
 
 [tool.poetry.dependencies]
 python = "^3.9"
-core = {git = "https://github.com/calgo-lab/green-db", subdirectory = "core/"}
+core = {git = "https://github.com/calgo-lab/green-db", branch = "kvdd-update-dev-dependencies", subdirectory = "core/"}
 redis = "^4.1.1"
 rq = "^1.10.1"
 
