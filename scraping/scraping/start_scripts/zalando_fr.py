@@ -80,7 +80,7 @@ def male() -> List[dict]:
         "/pantacourts-sport-homme/": (ProductCategory.PANTS.value, {"type": "SPORT"}),
         "/sport-pantalons-homme/": (ProductCategory.PANTS.value, {"type": "SPORT"}),
         "/collants-running-homme/": (ProductCategory.PANTS.value, {"type": "SPORT"}),
-        "/pantalon-de-ski-homme/" : (ProductCategory.PANTS.value, {"type": "SPORT"}),
+        "/pantalon-de-ski-homme/": (ProductCategory.PANTS.value, {"type": "SPORT"}),
         "/pulls-homme/": (ProductCategory.SWEATER.value, {"type": "SPORT"}),
         "/sport-sweats-capuche-homme/": (ProductCategory.SWEATER.value, {"type": "SPORT"}),
         "/sport-polaires-homme/": (ProductCategory.SWEATER.value, {"type": "SPORT"}),
