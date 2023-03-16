@@ -14,7 +14,7 @@ numpy = "^1.23.1"
 core = {git = "https://github.com/calgo-lab/green-db", branch = "kvdd-update-dev-dependencies", subdirectory = "core"}
 database = {git = "https://github.com/calgo-lab/green-db", branch = "kvdd-update-dev-dependencies", subdirectory = "database"}
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 pytest = "*"
 flake8 = "*"
 mypy = "*"

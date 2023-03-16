@@ -16,7 +16,7 @@ classifiers = [
 python = "^3.9"
 pydantic = "^1.9.0"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 pytest = "*"
 flake8 = "*"
 mypy = "*"

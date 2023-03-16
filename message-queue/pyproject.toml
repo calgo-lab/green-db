@@ -18,7 +18,7 @@ core = {git = "https://github.com/calgo-lab/green-db", branch = "kvdd-update-dev
 redis = "^4.1.1"
 rq = "^1.10.1"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 pytest = "*"
 
 [build-system]

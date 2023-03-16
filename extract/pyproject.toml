@@ -20,7 +20,7 @@ beautifulsoup4 = "^4.10.0"
 extruct = "^0.13.0"
 chompjs = "^1.1.6"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 pytest = "*"
 flake8 = "*"
 mypy = "*"
