@@ -16,7 +16,7 @@ classifiers = [
 python = "^3.9"
 core = {git = "https://github.com/calgo-lab/green-db", branch = "kvdd-update-dev-dependencies", subdirectory = "core"}
 message_queue = {git = "https://github.com/calgo-lab/green-db", branch = "kvdd-update-dev-dependencies", subdirectory = "message-queue"}
-Scrapy = "^2"
+Scrapy = "^2.6.1"
 scrapy-splash = "^0.9.0"
 scrapy-playwright = "^0.0.17"
 
