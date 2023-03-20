@@ -11,6 +11,7 @@ from core.constants import (
     TABLE_NAME_SCRAPING_ZALANDO_DE,
     TABLE_NAME_SCRAPING_ZALANDO_FR,
     TABLE_NAME_SCRAPING_ZALANDO_GB,
+    TABLE_NAME_SCRAPING_ELECLERC_FR
 )
 from core.domain import Product, ScrapedPage
 
@@ -23,6 +24,7 @@ from .extractors.otto_de import extract_otto_de
 from .extractors.zalando_de import extract_zalando_de
 from .extractors.zalando_fr import extract_zalando_fr
 from .extractors.zalando_gb import extract_zalando_uk
+from .extractors.eleclerc_fr import extract_eleclerc_fr
 from .parse import parse_page
 
 log.setup_logger(__name__)
@@ -33,12 +35,13 @@ EXTRACTOR_FOR_TABLE_NAME: Dict[str, Any] = {
     TABLE_NAME_SCRAPING_AMAZON_DE: extract_amazon_de,
     TABLE_NAME_SCRAPING_AMAZON_FR: extract_amazon_fr,
     TABLE_NAME_SCRAPING_AMAZON_GB: extract_amazon_gb,
-    TABLE_NAME_SCRAPING_ASOS_FR: extract_asos_fr,
+    TABLE_NAME_SCRAPING_ASOS_FR: extract_eleclerc_fr,
     TABLE_NAME_SCRAPING_HM_FR: extract_hm_fr,
     TABLE_NAME_SCRAPING_OTTO_DE: extract_otto_de,
     TABLE_NAME_SCRAPING_ZALANDO_DE: extract_zalando_de,
     TABLE_NAME_SCRAPING_ZALANDO_FR: extract_zalando_fr,
     TABLE_NAME_SCRAPING_ZALANDO_GB: extract_zalando_uk,
+    TABLE_NAME_SCRAPING_ELECLERC_FR: extract_eleclerc_fr,
 }
 
 

@@ -15,6 +15,7 @@ from core.constants import (
     TABLE_NAME_SCRAPING_ZALANDO_FR,
     TABLE_NAME_SCRAPING_ZALANDO_GB,
     TABLE_NAME_SUSTAINABILITY_LABELS,
+    TABLE_NAME_SCRAPING_ELECLERC_FR,
 )
 
 # TODO: Here decide which database to use
@@ -191,6 +192,16 @@ class AmazonGbScrapingTable(ScrapingBaseTable, ScrapingTable):
 
     __tablename__ = TABLE_NAME_SCRAPING_AMAZON_GB
 
+class EleclercFrScrapingTable(ScrapingBaseTable, ScrapingTable):
+    """
+    The actual scraping table for E.Leclerc France.
+    Args:
+        ScrapingBaseTable ([type]): `sqlalchemy` base class for the Scraping database
+        ScrapingTable ([type]): To inherit the table definition
+    """
+
+    __tablename__ = TABLE_NAME_SCRAPING_ELECLERC_FR
+
 
 # Used to dynamically map a table name to the correct Table class.
 SCRAPING_TABLE_CLASS_FOR: Dict[str, Type[ScrapingTable]] = {
@@ -203,6 +214,7 @@ SCRAPING_TABLE_CLASS_FOR: Dict[str, Type[ScrapingTable]] = {
     TABLE_NAME_SCRAPING_AMAZON_FR: AmazonFrScrapingTable,
     TABLE_NAME_SCRAPING_AMAZON_GB: AmazonGbScrapingTable,
     TABLE_NAME_SCRAPING_HM_FR: HmFrScrapingTable,
+    TABLE_NAME_SCRAPING_ELECLERC_FR: EleclercFrScrapingTable,
 }
 
 
