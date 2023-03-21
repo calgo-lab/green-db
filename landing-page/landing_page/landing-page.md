@@ -47,8 +47,8 @@ GreenDB is a publicly available database of sustainable products, scraped from E
 ## Demos
 
 ::: div.row div.ff
+* [Product search demo](https://search.demo.calgo-lab.de/){.link}
 * [Automated extraction of product information](https://product-classification.demo.calgo-lab.de/){.link}
-* [Product Search](https://search.demo.calgo-lab.de/){.link}
 
 :: section#publications div.container
 
@@ -56,9 +56,9 @@ GreenDB is a publicly available database of sustainable products, scraped from E
 
 ::: div.row div.ff
 
+* [Flick, A., Jäger, S., Trajanovska, I., Biessmann, F. (2023). Automated Extraction of Fine-Grained Standardized Product Information from Unstructured Multilingual Web Data. In: , et al. Advances in Information Retrieval. ECIR 2023. Lecture Notes in Computer Science, vol 13982. Springer, Cham.](https://doi.org/10.1007/978-3-031-28241-6_19){.link}
 * [Jäger, S., Greene, J., Jakob, M., Korenke, R., Santarius, T., and Bießmann, F. (2022). GreenDB: Toward a Product-by-Product Sustainability Database. ArXiv, abs/2205.02908.](https://arxiv.org/abs/2205.02908){.link}
 * [Jäger, S., Flick, A., Sanchez Garcia, J. A., von den Driesch, K., Brendel, K., and Bießmann, F. (2022). GreenDB: A Dataset and Benchmark for Extraction of Sustainability Information of Consumer Goods., ArXiv, abs/2207.10733.](https://arxiv.org/abs/2207.10733){.link}
-* [Flick, A., Jäger, S., Trajanovska, I., Biessmann, F. (2023). Automated Extraction of Fine-Grained Standardized Product Information from Unstructured Multilingual Web Data. In: , et al. Advances in Information Retrieval. ECIR 2023. Lecture Notes in Computer Science, vol 13982. Springer, Cham.](https://doi.org/10.1007/978-3-031-28241-6_19) {.link}
 
 :: footer div.container div.row
 
