@@ -14,7 +14,7 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.9"
-core = {git = "https://github.com/calgo-lab/green-db", branch = "kvdd-update-dev-dependencies", subdirectory = "core"}
+core = {path = "../core", develop = true}
 redis = "^4.1.1"
 rq = "^1.10.1"
 
