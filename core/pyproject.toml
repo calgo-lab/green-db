@@ -17,11 +17,11 @@ python = "^3.9"
 pydantic = "^1.9.0"
 
 [tool.poetry.group.dev.dependencies]
-pytest = "*"
-flake8 = "*"
-mypy = "*"
-isort = "*"
-black = "*"
+pytest = "^7.2.2"
+flake8 = "^6.0.0"
+mypy = "^1.1.1"
+isort = "^5.12.0"
+black = "^23.1.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
