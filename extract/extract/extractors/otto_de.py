@@ -235,14 +235,16 @@ def _get_sustainability_info(beautiful_soup: BeautifulSoup) -> List[str]:
         list: includes found sustainability strings.
     """
 
-    return_value = []
+    sustainability_classes = [
+        "pdp_sustainability-sheet__label-name",
+        "pdp_sustainability-details-sheet__label-name",
+    ]
 
-    for label_html in beautiful_soup.find_all(
-        "figcaption", attrs={"class": "pdp_sustainability-sheet__label-name"}
-    ):
-        return_value.append(label_html.text.strip())
-
-    return return_value
+    return [
+        label_html.text.strip()
+        for sc in sustainability_classes
+        for label_html in beautiful_soup.find_all("figcaption", attrs={"class": sc})
+    ]
 
 
 def _get_energy_labels(product_data: dict, beautiful_soup: BeautifulSoup) -> List[str]:
