@@ -15,11 +15,11 @@ database = {path = "../database"}
 altair = "^4.2.0"
 
 [tool.poetry.dev-dependencies]
-pytest = "^5.2"
+pytest = "^7.2.2"
 flake8 = "^6.0.0"
-mypy = "^0.991"
-isort = "^5.11.2"
-black = "^22.12.0"
+mypy = "^1.1.1"
+isort = "^5.12.0"
+black = "^23.1.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

@@ -191,7 +191,6 @@ def product2dict(product: Product) -> dict:
 
 
 def render_products(products: List[Product], n: int = 5) -> str:
-
     dicts = [product2dict(product) for product in products]
 
     optional = [True, False, True, False, True, True]
@@ -366,7 +365,6 @@ def get_cred_by_category(self: GreenDB, credibility_threshold: int = 50) -> pd.D
        pd.DataFrame: Query results as `pd.Dataframe`.
     """
     with self._session_factory() as db_session:
-
         labels = self.get_sustainability_labels_subquery()
 
         all_unique = self.get_all_unique_products()
