@@ -24,6 +24,23 @@ spec:
           volumeMounts:
             - mountPath: "/usr/src/app/data" # mounting
               name: data
+          env:
+            - name: TZ
+              value: Europe/Berlin
+            - name: POSTGRES_GREEN_DB_HOST
+              value: postgresql
+            - name: POSTGRES_GREEN_DB_PORT
+              value: "5432"
+            - name: POSTGRES_GREEN_DB_USER
+              valueFrom:
+                secretKeyRef:
+                  key: postgres-user
+                  name: green-db-secret
+            - name: POSTGRES_GREEN_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: postgres-password
+                  name: green-db-secret
       imagePullSecrets:
         - name: private-registry-auth
       volumes:
