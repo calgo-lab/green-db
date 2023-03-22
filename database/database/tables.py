@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Dict, List, Type
 
-from sqlalchemy import ARRAY, BIGINT, INTEGER, JSON, NUMERIC, TEXT, TIMESTAMP, VARCHAR, Column
+from sqlalchemy import ARRAY, BIGINT, INTEGER, JSON, NUMERIC, TEXT, TIMESTAMP, VARCHAR, Column, ForeignKey
 
 from core.constants import (
     TABLE_NAME_GREEN_DB,
@@ -15,8 +15,10 @@ from core.constants import (
     TABLE_NAME_SCRAPING_ZALANDO_FR,
     TABLE_NAME_SCRAPING_ZALANDO_GB,
     TABLE_NAME_SUSTAINABILITY_LABELS,
+    TABLE_NAME_PRODUCT_CLASSIFICATION,
 )
 
+from core.core.domain import ProductCategory
 # TODO: Here decide which database to use
 from .postgres import (  # noqa
     GreenDBBaseTable,
@@ -270,3 +272,20 @@ class SustainabilityLabelsTable(GreenDBBaseTable, __TableMixin):
     social_social_rights = Column(INTEGER, nullable=True)
     social_company_responsibility = Column(INTEGER, nullable=True)
     social_conflict_minerals = Column(INTEGER, nullable=True)
+
+
+class ProductClassificationTable(GreenDBBaseTable, __TableMixin):
+    """
+    Defines the Product Classification columns.
+
+    Args:
+        GreenDBBaseTable ([type]): `sqlalchemy` base class for the GreenDB database
+        __TableMixin ([type]): Mixin that implements some convenience methods
+    """
+
+    __tablename__ = TABLE_NAME_PRODUCT_CLASSIFICATION
+
+    id = Column(INTEGER, ForeignKey(f"{TABLE_NAME_GREEN_DB}.id"), nullable=False, autoincrement=False, primary_key=True)
+    timestamp = Column(TIMESTAMP, nullable=False, primary_key=True)
+
+    # TODO: add all categories from ENUM in core.domain.py
