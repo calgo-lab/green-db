@@ -213,6 +213,7 @@ class BaseSpider(Spider):
                     url=start_url,
                     callback=self.parse_SERP,
                     meta={
+                        "original_URL": start_url,
                         "category": setting.get("category"),
                         "gender": setting.get("gender"),
                         "consumer_lifestage": setting.get("consumer_lifestage"),

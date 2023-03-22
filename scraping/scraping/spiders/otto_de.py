@@ -25,7 +25,7 @@ class OttoSpider(BaseSpider):
         self._save_SERP(response)
 
         # Get all unique links
-        all_links = list(set(response.css("[href]::attr(href)").getall()))
+        all_links = list(set(response.css("#san_resultSection").css("[href]::attr(href)").getall()))
 
         # Filter for product links
         all_product_links = [
