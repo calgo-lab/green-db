@@ -1,8 +1,9 @@
 import re
 from enum import Enum
 from logging import getLogger
+from pathlib import PurePosixPath
 from typing import Any, Callable, List, Optional
-from urllib.parse import urlparse
+from urllib.parse import urlparse, urlsplit, urlunsplit
 
 from bs4 import BeautifulSoup
 from pydantic import ValidationError
@@ -33,7 +34,16 @@ _LABEL_MAPPING = {
     "Pre-owned": CertificateType.OTHER,
     "Pre-owned Certified": CertificateType.OTHER,
     "TCO Certified": CertificateType.TCO,  # TODO: There are 2 additional types for phone and laptop
+    "STANDARD 100 by OEKO-TEX": CertificateType.OEKO_TEX_100,
+    "Recycled Claim Standard 100": CertificateType.RECYCLED_CLAIM_STANDARD_100,
+    "Recycled Blended Claim Standard": CertificateType.RECYCLED_CLAIM_STANDARD_BLENDED,
+    "Recycled Claim Standard Blended": CertificateType.RECYCLED_CLAIM_STANDARD_BLENDED,
+    "STANDARD 100 de OEKO-TEX": CertificateType.OEKO_TEX_100,
+    "STANDARD 100 von OEKO-TEX": CertificateType.OEKO_TEX_100,
+    "Étiquetage Énergétique": CertificateType.OTHER,
 }
+
+_ENERGY_LABELS = {"Energielabel", "Energy Label"}
 
 
 class _Language(Enum):
@@ -84,20 +94,21 @@ def extract_amazon_de(parsed_page: ParsedPage) -> Optional[Product]:
     currency = "GBP" if language == _Language.en else "EUR"
 
     sustainability_spans = soup.find_all("span", id=re.compile("CPF-BTF-Certificate-Name"))
-    sustainability_texts = [span.text for span in sustainability_spans]
+    sustainability_texts = {span.text for span in sustainability_spans}
 
     if repairability_index := get_repairability_index(soup):
-        sustainability_texts.append(repairability_index)
+        sustainability_texts.add(repairability_index)
 
-    for energy_label in ["Energielabel", "Energy Label"]:
-        if energy_label in sustainability_texts:
-            if label_with_level := get_energy_label_level(soup):
-                sustainability_texts = [
-                    label.replace(energy_label, label_with_level) for label in sustainability_texts
-                ]
+    if label_with_level := get_energy_label_level(soup):
+        # check and remove Energy label strings that are extracted from CPF section
+        sustainability_texts = sustainability_texts.difference(_ENERGY_LABELS)
+        sustainability_texts.add(label_with_level)  # add Energy label with level
 
     sustainability_labels = sustainability_labels_to_certificates(
-        sustainability_texts, _LABEL_MAPPING, parsed_page.scraped_page.category
+        sustainability_texts,
+        _LABEL_MAPPING,
+        parsed_page.scraped_page.source,
+        parsed_page.scraped_page.category,
     )
 
     brand = _get_brand(soup, language)
@@ -190,14 +201,10 @@ def get_energy_label_level(soup: BeautifulSoup) -> Optional[str]:
         returned.
     """
 
-    targets = [soup.find(id="energyEfficiency").find("text")]
-
-    def parse_energy_efficiency(energy_efficiency: BeautifulSoup) -> Optional[str]:
-        if energy_efficiency:
-            return "EU Energy label " + energy_efficiency.get_text().strip()
-        return None
-
-    return _handle_parse(targets, parse_energy_efficiency)
+    if energy_efficiency := soup.find(id="energyEfficiency"):
+        if energy_efficiency.find("text"):
+            return "EU Energy label " + energy_efficiency.find("text").get_text().strip()
+    return None
 
 
 def _get_color(soup: BeautifulSoup) -> Optional[str]:
@@ -225,6 +232,43 @@ def _get_color(soup: BeautifulSoup) -> Optional[str]:
     return _handle_parse(targets, parse_color)
 
 
+def _strip_image_url(url: str) -> str:
+    """
+    The images on product pages are usually resized and they might
+    have overlays like watermarks and play buttons for video thumbnails.
+    This function finds the url of the source image without additional processing applied.
+
+    amazon image url syntax: (feb 2023)
+    image processing instructions are stored in the filename
+    as additional suffixes before the file extension.
+    like this: https://something.amazon.com/some/path/some-image._some._processing._instructions.jpg
+
+
+    for example
+    https://m.media-amazon.com/images/I/215G7G0ZmtL._AC_SR38,50_.jpg
+    will return https://m.media-amazon.com/images/I/215G7G0ZmtL.jpg but resized to 38x50
+
+    images can have multiple instructions
+
+    for example
+    https://m.media-amazon.com/images/I/5125-zWFo-L._SX500_SY400._CR0,0,600,3000_BG255,0,255._BR-150._PKdp-play-icon-overlay__.jpg
+    will return https://m.media-amazon.com/images/I/5125-zWFo-L.jpg
+    but resized to 500x400
+    then expanded to 600x3000 with a pink background
+    and finally overlayed with a play button
+
+    Args:
+        url (str): the url of the image
+
+    Returns:
+        str: The url of the source image
+    """
+    scheme, netloc, path_string, query, fragment = urlsplit(url)
+    path = PurePosixPath(path_string)
+    stem = path.stem[: path.stem.index(".")]
+    return urlunsplit((scheme, netloc, str(path.with_stem(stem)), query, fragment))
+
+
 def _get_image_urls(soup: BeautifulSoup) -> Optional[list[str]]:
     """
     Helper function that extracts the product's image urls.
@@ -236,22 +280,23 @@ def _get_image_urls(soup: BeautifulSoup) -> Optional[list[str]]:
         Optional[list[str]]: `list` object containing `str` objects representing the image urls.
             If nothing was found `None` or empty list is returned.
     """
-    targets = [
-        soup.find("div", {"id": "altImages"}).find_all("img"),
-    ]
 
-    def parse_image_urls(images: list[BeautifulSoup]) -> list[str]:
-        image_urls = [
-            str(image["src"])
-            for image in images
+    def parse_image_urls(images: BeautifulSoup) -> list[str]:
+        return [
+            _strip_image_url(str(image["src"]))
+            for image in images.find_all("img")
             if not image["src"].endswith(".gif")
             and "play-button-overlay" not in image["src"]
             and "play-icon-overlay" not in image["src"]
             and "360_icon" not in image["src"]
         ]
-        return [re.sub("_[^>]+_.", "", image) for image in image_urls]
 
-    return _handle_parse(targets, parse_image_urls)
+    images = soup.find("div", {"id": "altImages"}) or soup.find(
+        "div", {"class": "unrolledScrollBox"}
+    )
+    if images:
+        return parse_image_urls(images)
+    return None
 
 
 def _get_sizes(soup: BeautifulSoup) -> Optional[List[str]]:

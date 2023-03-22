@@ -60,7 +60,6 @@ def combine_results(
     gender: Optional[str] = None,
     consumer_lifestage: Optional[str] = None,
 ) -> List[dict]:
-
     country_code_to_url = {
         "fr": "https://www.amazon.fr",
         "de": "https://www.amazon.de",
@@ -304,8 +303,8 @@ def household(country_code: str) -> List[dict]:
 
 def get_settings(country_code: str) -> List[dict]:
     return (
-        male(country_code)
+        electronics(country_code)
+        + male(country_code)
         + female(country_code)
-        + electronics(country_code)
         + household(country_code)
     )

@@ -22,10 +22,8 @@ class ZalandoSpider(BaseSpider):
     def parse_SERP(
         self, response: SplashJsonResponse, is_first_page: bool = True
     ) -> Iterator[SplashRequest]:
-
         if original_URL := response.meta.get("original_URL"):
             if urlsplit(response.url).path.strip("/") != urlsplit(original_URL).path.strip("/"):
-
                 # If Zalando do not have results for a given filter,
                 # the will redirect to a page where results are found.
                 # Therefore, the URL path changes and we should return here
@@ -74,7 +72,7 @@ class ZalandoSpider(BaseSpider):
             )
 
         # Pagination: Parse next SERP 'recursively'
-        pagination = response.css('[class="DJxzzA PgtkyN"]::attr(href)').getall()
+        pagination = response.css('[class="DJxzzA OldB32"]::attr(href)').getall()
 
         if (is_first_page and pagination) or len(pagination) == 2:
             next_page = response.urljoin(pagination[-1])

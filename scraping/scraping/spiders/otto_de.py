@@ -8,6 +8,7 @@ from scrapy_splash import SplashJsonResponse, SplashRequest
 from core.constants import TABLE_NAME_SCRAPING_OTTO_DE
 
 from ..splash import minimal_script
+from ..start_scripts.otto_de import SUSTAINABILITY_FILTER
 from ._base import BaseSpider
 
 logger = getLogger(__name__)
@@ -17,14 +18,14 @@ class OttoSpider(BaseSpider):
     name = TABLE_NAME_SCRAPING_OTTO_DE
     source, _ = name.rsplit("_", 1)
     allowed_domains = ["otto.de"]
+    custom_settings = {"DOWNLOAD_DELAY": 4}
 
     def parse_SERP(self, response: SplashJsonResponse) -> Iterator[SplashRequest]:
-
         # Save HTML to database
         self._save_SERP(response)
 
         # Get all unique links
-        all_links = list(set(response.css("[href]::attr(href)").getall()))
+        all_links = list(set(response.css("#san_resultSection").css("[href]::attr(href)").getall()))
 
         # Filter for product links
         all_product_links = [
@@ -59,10 +60,8 @@ class OttoSpider(BaseSpider):
         ).getall()
 
         if len(pagination_list) > 0:
-
             pagination_info = json.loads(pagination_list[-1])
             if int(pagination_info["o"]) > response.meta.get("o", 0):
-
                 # Drop existing 'o' and 'l' parameters
                 url_parsed = urlparse(response.url)
                 queries = parse_qs(url_parsed.query, keep_blank_values=True)
@@ -71,7 +70,10 @@ class OttoSpider(BaseSpider):
                 url_parsed = url_parsed._replace(query=urlencode(queries, True))
                 url = urlunparse(url_parsed)
 
-                url = f'{url.rstrip("/")}&l={pagination_info["l"]}&o={pagination_info["o"]}'
+                if SUSTAINABILITY_FILTER in url:
+                    url = f'{url.rstrip("/")}&l={pagination_info["l"]}&o={pagination_info["o"]}'
+                else:
+                    url = f'{url}?l={pagination_info["l"]}&o={pagination_info["o"]}'
 
                 yield SplashRequest(
                     url=url,

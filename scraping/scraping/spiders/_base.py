@@ -213,6 +213,7 @@ class BaseSpider(Spider):
                     url=start_url,
                     callback=self.parse_SERP,
                     meta={
+                        "original_URL": start_url,
                         "category": setting.get("category"),
                         "gender": setting.get("gender"),
                         "consumer_lifestage": setting.get("consumer_lifestage"),
@@ -262,6 +263,8 @@ class BaseSpider(Spider):
             meta_information |= response.meta.get("request_meta_information", {})
         else:
             meta_information = response.meta.get("request_meta_information")
+
+        meta_information["original_URL"] = response.meta.get("original_URL", None)
 
         scraped_page = ScrapedPage(
             timestamp=self.timestamp,

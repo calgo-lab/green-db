@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "database"
-version = "0.2.3"
+version = "0.2.10"
 description = ""
 license = "Apache-2.0"
 authors = ["Sebastian Jäger <message@sebastian-jaeger.me>"]
@@ -16,14 +16,14 @@ classifiers = [
 python = "^3.10"
 core = {path = "../core", develop = true}
 SQLAlchemy = "^1.4.29"
-psycopg2 = "^2.9.3"
+psycopg2-binary = "^2.9.3"
 
-[tool.poetry.dev-dependencies]
-pytest = "^5.2"
-flake8 = "^3.9.2"
-mypy = "^0.910"
-isort = "^5.10.1"
-black = "^21.12b0"
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.2.2"
+flake8 = "^6.0.0"
+mypy = "^1.1.1"
+isort = "^5.12.0"
+black = "^23.1.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

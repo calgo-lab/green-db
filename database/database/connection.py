@@ -245,7 +245,6 @@ class GreenDB(Connection):
                 .filter(SustainabilityLabelsTable.timestamp == sustainability_labels[0].timestamp)
                 .first()
             ):
-
                 for label in sustainability_labels:
                     db_session.add(SustainabilityLabelsTable(**label.dict()))
 
@@ -280,7 +279,6 @@ class GreenDB(Connection):
                 of domain object representations
         """
         with self._session_factory() as db_session:
-
             sustainability_labels = db_session.query(SustainabilityLabelsTable).all()
             sustainability_labels_iterator = (
                 SustainabilityLabel.from_orm(sustainability_label)
@@ -303,9 +301,11 @@ class GreenDB(Connection):
             Iterator[Product]: `Iterator` of domain object representations
         """
         with self._session_factory() as db_session:
-            query = db_session.query(self._database_class).filter(
-                self._database_class.timestamp == timestamp
-            )
+            query = db_session.query(self._database_class)
+
+            if timestamp is not None:
+                query = query.filter(self._database_class.timestamp == timestamp)
+
             return (Product.from_orm(row) for row in query.all())
 
     def get_latest_products(self) -> Iterator[Product]:
@@ -570,7 +570,6 @@ class GreenDB(Connection):
            pd.DataFrame: Query results as `pd.Dataframe`.
         """
         with self._session_factory() as db_session:
-
             labels = self.get_sustainability_labels_subquery()
 
             all_unique = self.get_all_unique_products()
@@ -629,7 +628,6 @@ class GreenDB(Connection):
            pd.DataFrame: Query results as `pd.Dataframe`.
         """
         with self._session_factory() as db_session:
-
             labels = self.get_sustainability_labels_subquery()
 
             credible_labels = [
@@ -1034,3 +1032,37 @@ class GreenDB(Connection):
                     "mean_credibility",
                 ],
             )
+
+    def get_aggregated_unique_products(self) -> pd.DataFrame:
+        """Fetches the unique rows ['url', 'id', 'categories', 'genders'].
+
+        Aggregates the unique rows by ['url', 'timestamp'].
+
+        :return:
+            A pd.DataFrame of the fetched db rows.
+        """
+        with self._session_factory() as db_session:
+            query = (
+                db_session.query(
+                    func.max(self._database_class.id),
+                    func.max(self._database_class.url),
+                    func.array_agg(self._database_class.category),
+                    func.array_agg(self._database_class.gender),
+                )
+                .group_by(self._database_class.url, self._database_class.timestamp)
+                .all()
+            )
+            columns = ["id", "url", "categories", "genders"]
+            res_df = pd.DataFrame(query, columns=columns).convert_dtypes()
+            return res_df.sort_values("id", ascending=False).drop_duplicates("url", keep="first")
+
+    def get_products_with_ids(self, ids: list) -> Iterator[Product]:
+        """Fetches the products for the given `ids`
+
+        :param ids: A list of ids to filter the green-db::green-db rows.
+        :return:
+            An iterator of core.domain::Product.
+        """
+        with self._session_factory() as db_session:
+            query = db_session.query(GreenDBTable).filter(GreenDBTable.id.in_(ids))
+            return (Product.from_orm(row) for row in query.all())
