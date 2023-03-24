@@ -13,7 +13,7 @@ RUN pip install torch==1.13.1+cpu torchvision==0.14.1+cpu -f https://download.py
 RUN pip install autogluon.multimodal
 
 # Pre-installed some packages
-RUN pip install poetry numpy pandas flask waitress sqlalchemy pydantic
+RUN pip install poetry numpy pandas flask waitress sqlalchemy pydantic psycopg2-binary
 EXPOSE 8282
 
 COPY product-classification /green-db/product-classification
@@ -30,9 +30,6 @@ RUN poetry build -f wheel && pip install --no-deps dist/*.whl
 
 WORKDIR /green-db/product-classification
 RUN poetry build -f wheel && pip install --no-deps dist/*.whl
-#RUN poetry config virtualenvs.create false && poetry install --only main --no-interaction --no-ansi
 
 COPY /product-classification/product-classification/app.py .
 ENTRYPOINT ["poetry", "run", "waitress-serve", "--port", "8282", "--call", "app:create_app"]
-#ENTRYPOINT ["poetry", "run", "waitress-serve", "--port", "8282", "--call", "app.create_app"]
-#ENTRYPOINT ["waitress-serve", "--port", "8282", "--call", "app:create_app"]
