@@ -18,7 +18,7 @@ from core.constants import (
     TABLE_NAME_PRODUCT_CLASSIFICATION,
 )
 
-from core.core.domain import ProductCategory
+from core.domain import ProductCategory
 # TODO: Here decide which database to use
 from .postgres import (  # noqa
     GreenDBBaseTable,
@@ -286,6 +286,8 @@ class ProductClassificationTable(GreenDBBaseTable, __TableMixin):
     __tablename__ = TABLE_NAME_PRODUCT_CLASSIFICATION
 
     id = Column(INTEGER, ForeignKey(f"{TABLE_NAME_GREEN_DB}.id"), nullable=False, autoincrement=False, primary_key=True)
-    timestamp = Column(TIMESTAMP, nullable=False, primary_key=True)
-
-    # TODO: add all categories from ENUM in core.domain.py
+    ml_model_name = Column(TEXT, nullable=False, primary_key=True)
+    timestamp = Column(TIMESTAMP, nullable=False)
+    predicted_category = Column(TEXT, nullable=False)
+    confidence = Column(NUMERIC, nullable=False)
+    all_predicted_probabilities = Column(JSON, nullable=False)

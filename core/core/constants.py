@@ -37,3 +37,5 @@ DATABASE_NAME_GREEN_DB = "green-db"
 TABLE_NAME_GREEN_DB = "green-db"
 TABLE_NAME_SUSTAINABILITY_LABELS = "sustainability-labels"
 TABLE_NAME_PRODUCT_CLASSIFICATION = "product-classification"
+
+PRODUCT_CLASSIFICATION_MODEL = "good-planet-278"

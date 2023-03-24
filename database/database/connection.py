@@ -7,14 +7,15 @@ import pandas as pd
 from sqlalchemy import desc, func, literal_column, or_
 from sqlalchemy.orm import Session
 
-from core.constants import DATABASE_NAME_GREEN_DB, DATABASE_NAME_SCRAPING
-from core.domain import CertificateType, PageType, Product, ScrapedPage, SustainabilityLabel
+from core.constants import DATABASE_NAME_GREEN_DB, DATABASE_NAME_SCRAPING, PRODUCT_CLASSIFICATION_MODEL
+from core.domain import CertificateType, PageType, Product, ScrapedPage, SustainabilityLabel, ProductClassification
 
 from .tables import (
     SCRAPING_TABLE_CLASS_FOR,
     GreenDBTable,
     ScrapingTable,
     SustainabilityLabelsTable,
+    ProductClassificationTable,
     bootstrap_tables,
     get_session_factory,
 )
@@ -24,7 +25,8 @@ logger = getLogger(__name__)
 
 class Connection:
     def __init__(
-            self, database_class: Type[GreenDBTable] | Type[ScrapingTable], database_name: str
+            self, database_class: Type[GreenDBTable] | Type[ScrapingTable] | Type[ProductClassificationTable],
+            database_name: str
     ) -> None:
         """
         Base `class` of connections.
@@ -41,7 +43,8 @@ class Connection:
 
         bootstrap_tables(database_name)
 
-    def write(self, domain_object: ScrapedPage | Product) -> ScrapingTable | GreenDBTable:
+    def write(self,
+              domain_object: ScrapedPage | Product | ProductClassification) -> ScrapingTable | GreenDBTable | ProductClassificationTable:
         """
         Writes a `domain_object` into the database and returns an updated Table object.
         This is useful if, e.g., the `id` of the database row is necessary in the future.
@@ -61,7 +64,8 @@ class Connection:
             self,
             db_session: Session,
             database_class: Optional[
-                Type[GreenDBTable] | Type[ScrapingTable] | Type[SustainabilityLabelsTable]
+                Type[GreenDBTable] | Type[ScrapingTable] | Type[SustainabilityLabelsTable] | Type[
+                    ProductClassificationTable]
                 ] = None,
     ) -> datetime:
         """
@@ -89,7 +93,8 @@ class Connection:
     def get_latest_timestamp(
             self,
             database_class: Optional[
-                Type[GreenDBTable] | Type[ScrapingTable] | Type[SustainabilityLabelsTable]
+                Type[GreenDBTable] | Type[ScrapingTable] | Type[SustainabilityLabelsTable] | Type[
+                    ProductClassificationTable]
                 ] = None,
     ) -> datetime:
         """
@@ -1072,3 +1077,19 @@ class GreenDB(Connection):
         with self._session_factory() as db_session:
             query = db_session.query(GreenDBTable).filter(GreenDBTable.id.in_(ids))
             return (Product.from_orm(row) for row in query.all())
+
+    def get_product_classification(self, id: int, ml_model_name: Optional[str] = PRODUCT_CLASSIFICATION_MODEL) -> ProductClassification:
+        """
+        Fetch `Product's Classification` with given `id` and 'timestamp'.
+
+        Args:
+            ml_model_name: the name of the ml model used for prediction.
+            id (int): Row `id` to fetch
+
+        Returns:
+            Product: Domain object representation of table row
+        """
+        with self._session_factory() as db_session:
+            return ProductClassification.from_orm(
+                db_session.query(ProductClassificationTable).filter(ProductClassificationTable.id == id).filter(ProductClassificationTable.ml_model_name == ml_model_name).first()
+            )
