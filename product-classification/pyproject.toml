@@ -4,14 +4,13 @@ version = "0.1.0"
 description = ""
 authors = ["Alex Flick <alex.flick@gmx.de>"]
 readme = "README.md"
-packages = [{include = "product-classification"}]
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.11"
 Flask = "^2.2.3"
 waitress = "^2.1.2"
 pandas = "^1.5.3"
-scikit-learn = "^1.2.2"
+scikit-learn = "==1.2.1"
 autogluon-multimodal = {git = "https://github.com/autogluon/autogluon/", branch = "0.7.0", subdirectory = "multimodal"}
 core = {path = "../core", develop = true}
 database = {path = "../database", develop = true}
