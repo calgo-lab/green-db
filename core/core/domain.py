@@ -184,7 +184,7 @@ class ProductClassification(BaseModel):
     ml_model_name: str
     predicted_category: ProductCategory
     confidence: float
-    all_predicted_probabilities: dict[ProductCategory: float]
+    all_predicted_probabilities: dict[ProductCategory, float]
 
     class Config:
         orm_mode = True
