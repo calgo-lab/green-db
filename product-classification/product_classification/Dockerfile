@@ -31,5 +31,5 @@ RUN poetry build -f wheel && pip install --no-deps dist/*.whl
 WORKDIR /green-db/product-classification
 RUN poetry build -f wheel && pip install --no-deps dist/*.whl
 
-COPY /product-classification/product-classification/app.py .
+COPY /product-classification/product_classification/app.py .
 ENTRYPOINT ["poetry", "run", "waitress-serve", "--port", "8282", "--call", "app:create_app"]
