@@ -1078,7 +1078,8 @@ class GreenDB(Connection):
             query = db_session.query(GreenDBTable).filter(GreenDBTable.id.in_(ids))
             return (Product.from_orm(row) for row in query.all())
 
-    def get_product_classification(self, id: int, ml_model_name: Optional[str] = PRODUCT_CLASSIFICATION_MODEL) -> ProductClassification:
+    def get_product_classification(self, id: int, ml_model_name: Optional[
+        str] = PRODUCT_CLASSIFICATION_MODEL) -> ProductClassification:
         """
         Fetch `Product's Classification` with given `id` and 'timestamp'.
 
@@ -1091,5 +1092,24 @@ class GreenDB(Connection):
         """
         with self._session_factory() as db_session:
             return ProductClassification.from_orm(
-                db_session.query(ProductClassificationTable).filter(ProductClassificationTable.id == id).filter(ProductClassificationTable.ml_model_name == ml_model_name).first()
+                db_session.query(ProductClassificationTable).filter(ProductClassificationTable.id == id).filter(
+                    ProductClassificationTable.ml_model_name == ml_model_name).first()
             )
+
+    def write_dataframe(self, data_frame):
+        with self._session_factory() as db_session:
+            df_len = len(data_frame)
+
+            for index, (df_index, product_classification) in enumerate(data_frame.iterrows(), start=1):
+                try:
+                    db_object = ProductClassificationTable(**ProductClassification.parse_obj(product_classification).dict())
+                    db_session.add(db_object)
+
+                except Exception as e:
+                    logger.info(f"error for product with index: {df_index}")
+                    logger.info(f"{e}")
+
+                # commit every 1000 products and at the end
+                if (index % 1000 == 0) or (index == df_len):
+                    db_session.commit()
+                    logger.info(f"Commited {index} products")
