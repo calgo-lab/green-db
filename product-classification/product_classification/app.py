@@ -71,7 +71,7 @@ features = ["name", "description"]
 MODEL_DIR = f"/usr/src/app/data/models/{PRODUCT_CLASSIFICATION_MODEL}"
 db_connection = GreenDB()
 model = MultiModalPredictor.load(MODEL_DIR)
-
+model.set_num_gpus(0)
 
 def predict_proba(df):
     if not set(features).issubset(set(df.columns)):
@@ -90,8 +90,9 @@ def predict_proba(df):
 def create_ProductClassification(pred_probs) -> List[ProductClassification]:
     pred_probs = convert_classes(pred_probs)
     pred_probs.columns = le.inverse_transform(pred_probs.columns)
+    pred_probs.columns = [gpc_to_greendb.get(col) for col in pred_probs.columns]
 
-    predicted_category = [model_classes[np.argmax(p)] for p in pred_probs.values]
+    predicted_category = [pred_probs.columns[np.argmax(p)] for p in pred_probs.values]
     confidence = [np.max(p) for p in pred_probs.values]
 
     result = pd.DataFrame({
@@ -152,6 +153,7 @@ def certificates_persistence_handler() -> Response:
     result = create_ProductClassification(pred_probs)
 
     # TODO: write results to db
+    db_connection.write_dataframe(result)
 
     return Response(result.to_json(orient="records"), mimetype="application/json")
 
