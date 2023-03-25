@@ -24,8 +24,14 @@ class OttoSpider(BaseSpider):
         # Save HTML to database
         self._save_SERP(response)
 
-        # Get all unique links
-        all_links = list(set(response.css("#san_resultSection").css("[href]::attr(href)").getall()))
+        # we exclude 'similar products', since some belong to a different category
+        # preceding-sibling::* retrieves all previous nodes at the same level
+        if similar_section := response.xpath(
+            "//*[contains(text(), 'Ähnliche Artikel')]/preceding-sibling::*"
+        ):
+            all_links = list(set(similar_section.css("[href]::attr(href)").getall()))
+        else:
+            all_links = list(set(response.css("[href]::attr(href)").getall()))
 
         # Filter for product links
         all_product_links = [
@@ -56,7 +62,7 @@ class OttoSpider(BaseSpider):
 
         # Pagination uses parameters 'l' and 'o' to load next batch of products
         pagination_list = response.css(
-            '[class*="js_pagingLink ts-link p_btn50--1st san_paging__btn"]::attr(data-page)'
+            '[class*="js_pagingLink ts-link p_btn50"]::attr(data-page)'
         ).getall()
 
         if len(pagination_list) > 0:
