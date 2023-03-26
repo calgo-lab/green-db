@@ -43,6 +43,8 @@ spec:
                   name: green-db-secret
       imagePullSecrets:
         - name: private-registry-auth
+      nodeSelector:
+        cpuclass: epyc
       volumes:
         - name: data
           persistentVolumeClaim:
