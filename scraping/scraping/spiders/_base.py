@@ -20,6 +20,7 @@ from core.constants import (
     TABLE_NAME_SCRAPING_ZALANDO_DE,
     TABLE_NAME_SCRAPING_ZALANDO_FR,
     TABLE_NAME_SCRAPING_ZALANDO_GB,
+    TABLE_NAME_SCRAPING_ELECLERC_FR,
 )
 from core.domain import ConsumerLifestageType, CountryType, GenderType, PageType, ScrapedPage
 
@@ -31,6 +32,7 @@ from ..start_scripts.otto_de import get_settings as get_otto_de_settings
 from ..start_scripts.zalando_de import get_settings as get_zalando_de_settings
 from ..start_scripts.zalando_fr import get_settings as get_zalando_fr_settings
 from ..start_scripts.zalando_gb import get_settings as get_zalando_gb_settings
+from ..start_scripts.eleclerc_fr import get_settings as get_eleclerc_fr_settings
 
 logger = getLogger(__name__)
 
@@ -44,6 +46,7 @@ SETTINGS = {
     TABLE_NAME_SCRAPING_AMAZON_DE: get_amazon_eu_settings("de"),
     TABLE_NAME_SCRAPING_AMAZON_FR: get_amazon_eu_settings("fr"),
     TABLE_NAME_SCRAPING_AMAZON_GB: get_amazon_eu_settings("uk"),
+    TABLE_NAME_SCRAPING_ELECLERC_FR: get_eleclerc_fr_settings()
 }
 
 
