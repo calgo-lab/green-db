@@ -54,6 +54,7 @@ certificate:HIGG_INDEX_MATERIALS_0,Higg Index Materials Baeline 0 ,Fashion,0,0,0
 certificate:HIGG_INDEX_MATERIALS_1,Higg Index Products_Level_1,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 certificate:HIGG_INDEX_MATERIALS_2,Higg Index Products Level 2,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 certificate:HIGG_INDEX_MATERIALS_3,Higg Index Products Level 3,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+certificate:HIGG_INDEX_MATERIALS_BASELINE_0,Higg Index Materials_Baeline_0,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 certificate:HM_CONSCIOUS,H&M Conscious,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 certificate:IFIXIT_REPARABILITY_INDEX,iFixit Score ,Electronics,100,0,0,0,0,0,0,0,0,0,0,0,0,0
 certificate:IFIXIT_REPARABILITY_INDEX_1,ifixit Reparierbarkeitsindex 1,Electronics,100,0,0,0,0,0,0,0,0,0,0,0,0,0
@@ -89,6 +90,7 @@ certificate:TUEV_RHEINLAND_GREEN_PRODUCT_MARK_SMARTPHONES,TÜV Rheinland Green P
 certificate:VFI_SOZIAL_FAIR,sozial-fair VFI Sozialstandard für Fertigwaren,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 certificate:WORLD_FAIR_TRADE_ORGANIZATION,World Fair Trade Organization,Fashion,54,0,0,2,0,0,38,8,30,73,49,35,0,0
 missing_1,Modal TENCEL™,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+missing_14,Higg Index,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 missing_15,SEAQUAL™,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 missing_16,Pre-owned Certified - bei Amazon,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 missing_2,Lyocell Tencel™,Fashion,0,0,0,0,0,0,0,0,0,0,0,0,0,0
