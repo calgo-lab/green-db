@@ -24,6 +24,13 @@ spec:
           volumeMounts:
             - mountPath: "/usr/src/app/data" # mounting
               name: data
+          resources:
+            requests:
+              cpu: "8"
+              memory: 8Gi
+            limits:
+              cpu: "16"
+              memory: 16Gi
           env:
             - name: TZ
               value: Europe/Berlin
