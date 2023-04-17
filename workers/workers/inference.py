@@ -10,9 +10,6 @@ from core.domain import Product, ProductClassification
 from core.redis import REDIS_HOST, REDIS_PASSWORD, REDIS_PORT, REDIS_USER
 from database.connection import GreenDB
 
-# TODO: This is a false positive of mypy
-from inference import infer_product_category  # type: ignore
-
 green_db_connection = GreenDB()
 
 
@@ -45,4 +42,4 @@ def inference_and_write_to_green_db(row_id: int) -> None:
 def infer_product_category(product: Product, row_id: int) -> ProductClassification:
     json_post = json.dumps({str(row_id): product.__dict__})
     r = requests.post("http://product-classification:8080", json_post)
-    return ProductClassification.parse_obj(eval(r.text)[0])
+    return ProductClassification.parse_obj(json.loads(r.text)[0])

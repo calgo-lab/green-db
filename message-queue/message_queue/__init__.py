@@ -10,7 +10,7 @@ from core.constants import (
     WORKER_FUNCTION_INFERENCE,
     WORKER_QUEUE_EXTRACT,
     WORKER_QUEUE_SCRAPING,
-    WORKER_QUEUE_INFERENCE, TABLE_NAME_GREEN_DB
+    WORKER_QUEUE_INFERENCE,
 )
 from core.domain import ScrapedPage
 from core.redis import REDIS_HOST, REDIS_PASSWORD, REDIS_PORT, REDIS_USER
@@ -31,7 +31,7 @@ class MessageQueue:
 
         self.__scraping_queue = Queue(WORKER_QUEUE_SCRAPING, connection=self.__redis_connection)
         self.__extract_queue = Queue(WORKER_QUEUE_EXTRACT, connection=self.__redis_connection)
-        self.__inference_queue = Queue(WORKER_QUEUE_INFERENCE, connection=self.__inference_queue)
+        self.__inference_queue = Queue(WORKER_QUEUE_INFERENCE, connection=self.__redis_connection)
 
         logger.info("Redis connection established and message queues initialized.")
 
