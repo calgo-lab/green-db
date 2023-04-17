@@ -7,8 +7,10 @@ from core import log
 from core.constants import (
     WORKER_FUNCTION_EXTRACT,
     WORKER_FUNCTION_SCRAPING,
+    WORKER_FUNCTION_INFERENCE,
     WORKER_QUEUE_EXTRACT,
     WORKER_QUEUE_SCRAPING,
+    WORKER_QUEUE_INFERENCE, TABLE_NAME_GREEN_DB
 )
 from core.domain import ScrapedPage
 from core.redis import REDIS_HOST, REDIS_PASSWORD, REDIS_PORT, REDIS_USER
@@ -29,6 +31,7 @@ class MessageQueue:
 
         self.__scraping_queue = Queue(WORKER_QUEUE_SCRAPING, connection=self.__redis_connection)
         self.__extract_queue = Queue(WORKER_QUEUE_EXTRACT, connection=self.__redis_connection)
+        self.__inference_queue = Queue(WORKER_QUEUE_INFERENCE, connection=self.__inference_queue)
 
         logger.info("Redis connection established and message queues initialized.")
 
@@ -63,3 +66,19 @@ class MessageQueue:
             result_ttl=1,
             retry=Retry(max=5, interval=30),
         )
+
+    def add_inference(self, row_id: int) -> None:
+        """
+        Enqueue job to "inference" `Queue`.
+
+        Args:
+            row_id (int): id of the row used for inference
+        """
+        self.__extract_queue.enqueue(
+            WORKER_FUNCTION_INFERENCE,
+            args=row_id,
+            job_timeout=10,
+            result_ttl=1,
+            retry=Retry(max=5, interval=30),
+        )
+

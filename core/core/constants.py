@@ -4,6 +4,9 @@ WORKER_FUNCTION_SCRAPING = "workers.scraping.write_to_scraping_database"
 WORKER_QUEUE_EXTRACT = "extract"
 WORKER_FUNCTION_EXTRACT = "workers.extract.extract_and_write_to_green_db"
 
+WORKER_QUEUE_INFERENCE = "inference"
+WORKER_FUNCTION_INFERENCE = "workers.inference.inference_and_write_to_green_db"
+
 DATABASE_NAME_SCRAPING = "scraping"
 
 # New table variable and names need to follow the structure:

@@ -19,6 +19,15 @@ def start_scraping() -> None:
     start()
 
 
+def start_inference() -> None:
+    """
+    This indirection is necessary to "lazy" load the `inference` module.
+    """
+    from .inference import start
+
+    start()
+
+
 def start() -> None:
     """
     CLI implementation of the `worker` command.
@@ -33,6 +42,10 @@ def start() -> None:
     # extract
     extract_parser = subparsers.add_parser("extract")
     extract_parser.set_defaults(command_function=start_extract)
+
+    # inference
+    inference_parser = subparsers.add_parser("inference")
+    inference_parser.set_defaults(command_function=start_inference)
 
     args = parser.parse_args()
     args.command_function(
