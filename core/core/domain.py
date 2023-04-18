@@ -180,7 +180,6 @@ class ProductCategory(str, Enum):
 
 class ProductClassification(BaseModel):
     id: int
-    timestamp: datetime
     ml_model_name: str
     predicted_category: ProductCategory
     confidence: float

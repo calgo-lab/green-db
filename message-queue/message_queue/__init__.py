@@ -10,7 +10,7 @@ from core.constants import (
     WORKER_FUNCTION_INFERENCE,
     WORKER_QUEUE_EXTRACT,
     WORKER_QUEUE_SCRAPING,
-    WORKER_QUEUE_INFERENCE,
+    WORKER_QUEUE_INFERENCE, TABLE_NAME_GREEN_DB,
 )
 from core.domain import ScrapedPage
 from core.redis import REDIS_HOST, REDIS_PASSWORD, REDIS_PORT, REDIS_USER
@@ -67,16 +67,17 @@ class MessageQueue:
             retry=Retry(max=5, interval=30),
         )
 
-    def add_inference(self, row_id: int) -> None:
+    # TODO: table name is not used within code, but needed for log messages
+    def add_inference(self, row_id: int, table_name=TABLE_NAME_GREEN_DB) -> None:
         """
         Enqueue job to "inference" `Queue`.
 
         Args:
             row_id (int): id of the row used for inference
         """
-        self.__extract_queue.enqueue(
+        self.__inference_queue.enqueue(
             WORKER_FUNCTION_INFERENCE,
-            args=row_id,
+            args=(row_id, table_name),
             job_timeout=10,
             result_ttl=1,
             retry=Retry(max=5, interval=30),

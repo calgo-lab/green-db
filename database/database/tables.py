@@ -287,7 +287,6 @@ class ProductClassificationTable(GreenDBBaseTable, __TableMixin):
 
     id = Column(INTEGER, ForeignKey(f"{TABLE_NAME_GREEN_DB}.id"), nullable=False, autoincrement=False, primary_key=True)
     ml_model_name = Column(TEXT, nullable=False, primary_key=True)
-    timestamp = Column(TIMESTAMP, nullable=False)
     predicted_category = Column(TEXT, nullable=False)
     confidence = Column(NUMERIC, nullable=False)
     all_predicted_probabilities = Column(JSON, nullable=False)

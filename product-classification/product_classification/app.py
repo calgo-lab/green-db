@@ -9,7 +9,7 @@ import pandas as pd
 from autogluon.multimodal import MultiModalPredictor
 from sklearn.preprocessing import LabelEncoder
 from datetime import datetime
-from core.constants import PRODUCT_CLASSIFICATION_MODEL
+from core.constants import PRODUCT_CLASSIFICATION_MODEL, PRODUCT_CLASSIFICATION_MODEL_FEATURES
 from core.domain import ProductClassification
 
 from database.connection import GreenDB
@@ -66,28 +66,19 @@ combine_classes = {
 le = LabelEncoder()
 le.fit(model_classes)
 
-features = ["name", "description"]
-
 MODEL_DIR = f"/usr/src/app/data/models/{PRODUCT_CLASSIFICATION_MODEL}"
 db_connection = GreenDB()
 model = MultiModalPredictor.load(MODEL_DIR)
 model.set_num_gpus(0)
 
 def predict_proba(df):
-    if not set(features).issubset(set(df.columns)):
-        logger.warning(
-            f"The dataframe is missing features."
-            f"Returning 'None'."
-        )
-        return None
-
     logger.info(f"Predicting for {len(df)} products ...")
     pred_probs = model.predict_proba(df)
     logger.info(f"Finished prediction.")
     return pred_probs
 
 
-def create_ProductClassification(pred_probs) -> List[ProductClassification]:
+def create_ProductClassification(pred_probs) -> pd.DataFrame:
     pred_probs = convert_classes(pred_probs)
     pred_probs.columns = le.inverse_transform(pred_probs.columns)
     pred_probs.columns = [gpc_to_greendb.get(col) for col in pred_probs.columns]
@@ -98,7 +89,6 @@ def create_ProductClassification(pred_probs) -> List[ProductClassification]:
     result = pd.DataFrame({
         "id": pred_probs.index,
         "ml_model_name": PRODUCT_CLASSIFICATION_MODEL,
-        "timestamp": datetime.now(),
         "predicted_category": predicted_category,
         "confidence": confidence,
         "all_predicted_probabilities": pred_probs.to_dict(orient='records')
@@ -136,7 +126,7 @@ def get_latest_products():
     products = db_connection.get_latest_products(convert_orm=False)
     logger.info(f"Loaded {len(products)} latest products from database.")
     products = to_df(products)
-    products = products.set_index("id")[features]
+    products = products.set_index("id")[PRODUCT_CLASSIFICATION_MODEL_FEATURES]
     return products
 
 
@@ -157,6 +147,19 @@ def certificates_persistence_handler() -> Response:
 
     return Response(result.to_json(orient="records"), mimetype="application/json")
 
+def eval_request(request_data):
+    df = pd.read_json(request_data)
+
+    if not set(PRODUCT_CLASSIFICATION_MODEL_FEATURES).issubset(set(df.columns)):
+        logger.warning(
+            f"The dataframe is missing features."
+            f"Returning 'None'."
+        )
+        return None
+
+    df = df.set_index("id")[PRODUCT_CLASSIFICATION_MODEL_FEATURES]
+    return df
+
 
 @app.route("/", methods=['POST'])
 def product_classifier_handler() -> Response:
@@ -167,7 +170,7 @@ def product_classifier_handler() -> Response:
         A flask Response containing the predictions.
     """
     request_data = request.get_json()
-    df = pd.read_json(request_data)
+    df = eval_request(request_data)
     pred_probs = predict_proba(df)
 
     result = create_ProductClassification(pred_probs)

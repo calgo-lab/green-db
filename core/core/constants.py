@@ -42,3 +42,4 @@ TABLE_NAME_SUSTAINABILITY_LABELS = "sustainability-labels"
 TABLE_NAME_PRODUCT_CLASSIFICATION = "product-classification"
 
 PRODUCT_CLASSIFICATION_MODEL = "copper-armadillo-279"
+PRODUCT_CLASSIFICATION_MODEL_FEATURES = ["name", "description"]

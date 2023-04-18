@@ -168,7 +168,7 @@ def female() -> List[dict]:
         "/womens-base-layers/": (ProductCategory.UNDERWEAR.value, {"type": "SPORT"}),
         "/womens-sports-socks/": (ProductCategory.SOCKS.value, {"type": "SPORT"}),
         "/tracksuit-womens/": (ProductCategory.TRACKSUIT.value, {"type": "SPORT"}),
-        "/gymsuit-leotards-women/": (ProductCategory.OVERALL.value, {"type": "SPORT"})
+        "/gymsuit-leotards-women/": (ProductCategory.OVERALL.value, {"type": "SPORT"}),
         "/womens-sports-swimwear/": (ProductCategory.SWIMWEAR.value, {"type": "SPORT"}),
         "/womens-sports-shoes/": (ProductCategory.SHOES.value, {"type": "SPORT"}),
         "/womens-sports-bags-rucksacks/": (ProductCategory.BACKPACK.value, {"type": "SPORT"}),
