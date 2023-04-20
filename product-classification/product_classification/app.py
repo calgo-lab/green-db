@@ -1,5 +1,5 @@
 import json
-from logging import getLogger
+import logging
 from typing import Union, Iterator, List
 
 from flask import Flask, Response, request
@@ -12,7 +12,8 @@ from core.constants import PRODUCT_CLASSIFICATION_MODEL, PRODUCT_CLASSIFICATION_
 
 from database.connection import GreenDB
 
-logger = getLogger(__name__)
+logger = logging.getLogger('waitress')
+logger.setLevel(logging.INFO)
 
 app = Flask(__name__)
 
