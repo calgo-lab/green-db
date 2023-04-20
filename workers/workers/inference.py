@@ -1,5 +1,6 @@
 import json
 
+import pandas as pd
 import requests
 
 from redis import Redis
@@ -43,6 +44,6 @@ def infer_product_category(product: Product, row_id: int) -> ProductClassificati
     reduced = {k: v for k, v in product.__dict__.items() if
                k in PRODUCT_CLASSIFICATION_MODEL_FEATURES}
     reduced["id"] = row_id
-    json_post = json.dumps([reduced])
+    json_post = pd.DataFrame.from_records(reduced, index=[0]).to_json()
     r = requests.post("http://product-classification-pod:8080", json=json_post, timeout=30)
     return ProductClassification.parse_obj(json.loads(r.text)[0])

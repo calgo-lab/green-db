@@ -255,7 +255,7 @@ class GreenDB(Connection):
 
             db_session.commit()
 
-    def get_product(self, id: int, convert_orm = True) -> Product:
+    def get_product(self, id: int) -> Product:
         """
         Fetch `Product` with given `id`.
 
@@ -265,13 +265,6 @@ class GreenDB(Connection):
         Returns:
             Product: Domain object representation of table row
         """
-        # with self._session_factory() as db_session:
-        #     result = db_session.query(GreenDBTable).filter(GreenDBTable.id == id).first()
-        #     if convert_orm:
-        #         return Product.from_orm(result)
-        #     else:
-        #         return result
-
         with self._session_factory() as db_session:
             return Product.from_orm(
                 db_session.query(GreenDBTable).filter(GreenDBTable.id == id).first()
