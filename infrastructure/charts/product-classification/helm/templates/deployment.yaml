@@ -30,21 +30,22 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            {{- toYaml  .Values.env | nindent 12 }}
           volumeMounts:
           - mountPath: "/usr/src/app/data"
             name: {{ .Values.volumes.name }}
           ports:
             - name: http
-              containerPort: {{ .Values.service.port }}
-              protocol: TCP
+              containerPort: {{ .Values.service.targetPort }}
           livenessProbe:
             httpGet:
-              path: /
-              port: {{ .Values.service.port }}
+              path: /test
+              port: {{ .Values.service.targetPort }}
           readinessProbe:
             httpGet:
-              path: /
-              port: {{ .Values.service.port }}
+              path: /test
+              port: {{ .Values.service.targetPort }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       volumes:

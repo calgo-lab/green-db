@@ -87,6 +87,11 @@ def product_classifier_handler() -> Response:
     return Response(result.to_json(orient="records"), mimetype="application/json")
 
 
+@app.route("/test", methods=['GET'])
+def test() -> Response:
+    return Response("test")
+
+
 def create_app():
     serve(app, host="0.0.0.0", port=8282)
     return app
