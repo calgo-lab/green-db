@@ -22,6 +22,10 @@ class EleclercSpider(BaseSpider):
     allowed_domains = ["e.leclerc"]
     _product_api = "https://www.e.leclerc/api/rest/live-api/product-details-by-sku/{sku}/stores/0100-0000"
 
+    custom_settings = {
+        "DOWNLOAD_DELAY": 2
+    }
+
     def __init__(self, timestamp: datetime.datetime, **kwargs):  # type: ignore
         super().__init__(timestamp, **kwargs)
         self.StartRequest = ScrapyHttpRequest
