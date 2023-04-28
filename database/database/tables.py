@@ -15,7 +15,7 @@ from core.constants import (
     TABLE_NAME_SCRAPING_ZALANDO_FR,
     TABLE_NAME_SCRAPING_ZALANDO_GB,
     TABLE_NAME_SUSTAINABILITY_LABELS,
-    TABLE_NAME_PRODUCT_CLASSIFICATION,
+    TABLE_NAME_PRODUCT_CLASSIFICATION, TABLE_NAME_PRODUCT_CLASSIFICATION_THRESHOLDS,
 )
 
 from core.domain import ProductCategory
@@ -290,3 +290,20 @@ class ProductClassificationTable(GreenDBBaseTable, __TableMixin):
     predicted_category = Column(TEXT, nullable=False)
     confidence = Column(NUMERIC, nullable=False)
     all_predicted_probabilities = Column(JSON, nullable=False)
+
+
+class ProductClassificationThresholdsTable(GreenDBBaseTable, __TableMixin):
+    """
+    Defines the Product Classification Thresholds columns.
+
+    Args:
+        GreenDBBaseTable ([type]): `sqlalchemy` base class for the GreenDB database
+        __TableMixin ([type]): Mixin that implements some convenience methods
+    """
+
+    __tablename__ = TABLE_NAME_PRODUCT_CLASSIFICATION_THRESHOLDS
+
+    ml_model_name = Column(TEXT, nullable=False, primary_key=True)
+    timestamp = Column(TIMESTAMP, nullable=False, primary_key=True)
+    category = Column(TEXT, nullable=False, primary_key=True)
+    threshold = Column(NUMERIC, nullable=False)

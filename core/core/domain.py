@@ -188,3 +188,14 @@ class ProductClassification(BaseModel):
     class Config:
         orm_mode = True
         use_enum_values = True
+
+
+class ProductClassificationThreshold(BaseModel):
+    ml_model_name: str
+    timestamp: datetime
+    category: ProductCategory
+    threshold: float
+
+    class Config:
+        orm_mode = True
+        use_enum_values = True

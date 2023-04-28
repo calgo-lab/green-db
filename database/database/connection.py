@@ -16,6 +16,7 @@ from .tables import (
     ScrapingTable,
     SustainabilityLabelsTable,
     ProductClassificationTable,
+    ProductClassificationThresholdsTable,
     bootstrap_tables,
     get_session_factory,
 )
@@ -241,6 +242,7 @@ class GreenDB(Connection):
         super().__init__(GreenDBTable, DATABASE_NAME_GREEN_DB)
 
         from core.sustainability_labels.bootstrap_database import sustainability_labels
+        from core.product_classification_thresholds.bootstrap_database import thresholds
 
         with self._session_factory() as db_session:
             # NOTE: this is slowly...
@@ -252,6 +254,22 @@ class GreenDB(Connection):
             ):
                 for label in sustainability_labels:
                     db_session.add(SustainabilityLabelsTable(**label.dict()))
+
+            db_session.commit()
+
+        #
+        with self._session_factory() as db_session:
+            # NOTE: this is slowly...
+            # if we have many more thresholds to bootstrap, we should refactor it.
+            if (  # If current threshold version (timestamp) does not exists, add them
+                    not db_session.query(ProductClassificationThresholdsTable.timestamp,
+                                         ProductClassificationThresholdsTable.ml_model_name)
+                            .filter(ProductClassificationThresholdsTable.timestamp == thresholds[0].timestamp and
+                                    ProductClassificationThresholdsTable.ml_model_name == thresholds[0].ml_model_name)
+                            .first()
+            ):
+                for threshold in thresholds:
+                    db_session.add(ProductClassificationThresholdsTable(**threshold.dict()))
 
             db_session.commit()
 
