@@ -1,6 +1,6 @@
 import json
 import logging
-from typing import Union, Iterator, List
+from typing import Optional
 
 from flask import Flask, Response, request
 from waitress import serve
@@ -34,36 +34,68 @@ model = MultiModalPredictor.load(MODEL_DIR)
 model.set_num_gpus(0)
 
 
-def predict_proba(df):
+def predict_proba(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    This function is used to perform inference on the retrieved products.
+
+    Args:
+        df (pd.Dataframe): Dataframe with Product instances.
+
+    Returns: pd.DataFrame: pd.DataFrame with predicted probabilites for each product category /
+    model_class.
+    """
+
     logger.info(f"Predicting for {len(df)} products ...")
-    pred_probs = model.predict_proba(df)
+    probas = model.predict_proba(df)
     logger.info(f"Finished prediction.")
-    return pred_probs
+    return probas
 
 
-def create_ProductClassification(pred_probs) -> pd.DataFrame:
-    pred_probs.columns = le.inverse_transform(pred_probs.columns)
-    predicted_category = [pred_probs.columns[np.argmax(p)] for p in pred_probs.values]
-    confidence = [np.max(p) for p in pred_probs.values]
+def probas_to_ProductClassifications(probas: pd.DataFrame) -> pd.DataFrame:
+    """
+    This function is used to transform predicted probabilities into a DataFrame with complete
+    ProductClassification objects.
+
+    Args:
+        probas (pd.Dataframe): Dataframe with predicted probabilities.
+
+    Returns:
+        pd.DataFrame: pd.DataFrame of ProductClassification objects.
+    """
+
+    probas.columns = le.inverse_transform(probas.columns)
+    predicted_category = [probas.columns[np.argmax(p)] for p in probas.values]
+    confidence = [np.max(p) for p in probas.values]
 
     result = pd.DataFrame({
-        "id": pred_probs.index,
+        "id": probas.index,
         "ml_model_name": PRODUCT_CLASSIFICATION_MODEL,
         "predicted_category": predicted_category,
         "confidence": confidence,
-        "all_predicted_probabilities": pred_probs.to_dict(orient='records')
+        "all_predicted_probabilities": probas.to_dict(orient='records')
     })
 
     return result
 
 
-def eval_request(request_data):
-    df = pd.read_json(request_data)
+def eval_request(request_data: json) -> Optional[pd.DataFrame]:
+    """
+    This function is used to evaluate the data of the request and checks whether all necessary
+    columns/features are part of the request data.
 
-    if not set(PRODUCT_CLASSIFICATION_MODEL_FEATURES).issubset(set(df.columns)):
+    Args: request_data (json): data which was sent along the POST request. Should include a
+    pd.DataFrame that was transformed into json.
+
+    Returns:
+        Optional(pd.DataFrame): pd.DataFrame of the request data.
+    """
+
+    df = pd.read_json(request_data)
+    required_columns = PRODUCT_CLASSIFICATION_MODEL_FEATURES + ["id"]
+    if not set(required_columns).issubset(set(df.columns)):
         logger.warning(
-            f"The dataframe is missing features."
-            f"Returning 'None'."
+            f"The dataframe is missing features. Make sure it includes the following columns: "
+            f"{required_columns}. Returning 'None'."
         )
         return None
 
@@ -83,13 +115,18 @@ def product_classifier_handler() -> Response:
     df = eval_request(request_data)
     pred_probs = predict_proba(df)
 
-    result = create_ProductClassification(pred_probs)
+    result = probas_to_ProductClassifications(pred_probs)
     return Response(result.to_json(orient="records"), mimetype="application/json")
 
 
 @app.route("/test", methods=['GET'])
 def test() -> Response:
-    return Response("test")
+    """test endpoint used for test purposes and kubernetes readiness/liveness probes.
+
+    :return:
+        A flask Response containing the message: 'Successful'.
+    """
+    return Response("Successful!")
 
 
 def create_app():

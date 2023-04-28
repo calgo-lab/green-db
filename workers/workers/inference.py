@@ -41,6 +41,15 @@ def inference_and_write_to_green_db(row_id: int, table_name: str) -> None:
 
 
 def infer_product_category(product: Product, row_id: int) -> ProductClassification:
+    """
+    This function is used to call the product-classification microservice.
+    It transforms the data into the correct format for the microservice, sends a request and
+    returns the corresponding product classification.
+
+    Args:
+        product (Product): a Product instance.
+        row_id (int): The id of the Product instance from the database.
+    """
     reduced = {k: v for k, v in product.__dict__.items() if
                k in PRODUCT_CLASSIFICATION_MODEL_FEATURES}
     reduced["id"] = row_id
