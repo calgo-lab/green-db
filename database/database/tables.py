@@ -305,5 +305,7 @@ class ProductClassificationThresholdsTable(GreenDBBaseTable, __TableMixin):
 
     ml_model_name = Column(TEXT, nullable=False, primary_key=True)
     timestamp = Column(TIMESTAMP, nullable=False, primary_key=True)
+    source = Column(TEXT, nullable=False, primary_key=True)
+    merchant = Column(TEXT, nullable=False, primary_key=True)
     category = Column(TEXT, nullable=False, primary_key=True)
     threshold = Column(NUMERIC, nullable=False)

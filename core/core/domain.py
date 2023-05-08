@@ -164,6 +164,8 @@ class ProductCategory(str, Enum):
     SMARTWATCH = "SMARTWATCH"
     TABLET = "TABLET"  # see also LAPTOP.
     TV = "TV"
+    MONITOR = "MONITOR"  # computer monitors
+    DESKTOP_PC = "DESKTOP_PC"
 
     # household
     COOKER_HOOD = "COOKER_HOOD"
@@ -193,6 +195,8 @@ class ProductClassification(BaseModel):
 class ProductClassificationThreshold(BaseModel):
     ml_model_name: str
     timestamp: datetime
+    source: str
+    merchant: str
     category: ProductCategory
     threshold: float
 

@@ -26,9 +26,11 @@ thresholds = [
     ProductClassificationThreshold(
         ml_model_name=PRODUCT_CLASSIFICATION_MODEL,
         timestamp=datetime(2023, 4, 28),  # NOTE: Change me after updating thresholds
+        source=source,
+        merchant=merchant,
         category=category,
         threshold=threshold)
-    for category, threshold in _load_json_file(THRESHOLDS_JSON_FILE_PATH).items()
+    for source, merchants in _load_json_file(THRESHOLDS_JSON_FILE_PATH).items()
+    for merchant, values in merchants.items()
+    for category, threshold in values.items()
 ]
-
-
