@@ -25,7 +25,7 @@ def _load_json_file(file_path: Path) -> dict:
 thresholds = [
     ProductClassificationThreshold(
         ml_model_name=PRODUCT_CLASSIFICATION_MODEL,
-        timestamp=datetime(2023, 4, 28),  # NOTE: Change me after updating thresholds
+        timestamp=datetime(2023, 5, 8),  # NOTE: Change me after updating thresholds
         source=source,
         merchant=merchant,
         category=category,
