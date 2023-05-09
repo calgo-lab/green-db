@@ -28,7 +28,7 @@ thresholds = [
         timestamp=datetime(2023, 5, 8),  # NOTE: Change me after updating thresholds
         source=source,
         merchant=merchant,
-        category=category,
+        predicted_category=category,
         threshold=threshold)
     for source, merchants in _load_json_file(THRESHOLDS_JSON_FILE_PATH).items()
     for merchant, values in merchants.items()

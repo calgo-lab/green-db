@@ -43,6 +43,6 @@ TABLE_NAME_PRODUCT_CLASSIFICATION = "product-classification"
 TABLE_NAME_PRODUCT_CLASSIFICATION_THRESHOLDS = "product-classification-thresholds"
 
 
-PRODUCT_CLASSIFICATION_MODEL = "colorful-voice-284"
+PRODUCT_CLASSIFICATION_MODEL = "zesty-wildflower-297"
 PRODUCT_CLASSIFICATION_MODEL_FEATURES = ["name", "description"]
 

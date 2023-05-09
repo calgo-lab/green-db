@@ -197,7 +197,7 @@ class ProductClassificationThreshold(BaseModel):
     timestamp: datetime
     source: str
     merchant: str
-    category: ProductCategory
+    predicted_category: ProductCategory
     threshold: float
 
     class Config:

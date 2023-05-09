@@ -8,7 +8,8 @@ from sqlalchemy import desc, func, literal_column, or_
 from sqlalchemy.orm import Session
 
 from core.constants import DATABASE_NAME_GREEN_DB, DATABASE_NAME_SCRAPING, PRODUCT_CLASSIFICATION_MODEL
-from core.domain import CertificateType, PageType, Product, ScrapedPage, SustainabilityLabel, ProductClassification
+from core.domain import CertificateType, PageType, Product, ScrapedPage, SustainabilityLabel, \
+    ProductClassification, ProductClassificationThreshold
 
 from .tables import (
     SCRAPING_TABLE_CLASS_FOR,
@@ -95,7 +96,7 @@ class Connection:
             self,
             database_class: Optional[
                 Type[GreenDBTable] | Type[ScrapingTable] | Type[SustainabilityLabelsTable] | Type[
-                    ProductClassificationTable]
+                    ProductClassificationTable | ProductClassificationThresholdsTable]
                 ] = None,
     ) -> datetime:
         """
@@ -1137,4 +1138,14 @@ class GreenDB(Connection):
                 # commit every 1000 products and at the end
                 if (index % 1000 == 0) or (index == df_len):
                     db_session.commit()
-                    logger.info(f"Commited {index} products")
+                    logger.info(f"Committed {index} products")
+
+    def get_product_classification_thresholds(self, timestamp, ml_model_name=PRODUCT_CLASSIFICATION_MODEL):
+        with self._session_factory() as db_session:
+            query = db_session.query(ProductClassificationThresholdsTable).filter(
+                    ProductClassificationThresholdsTable.timestamp == timestamp).filter(
+                    ProductClassificationThresholdsTable.ml_model_name == ml_model_name)
+            return (ProductClassificationThreshold.from_orm(row) for row in query.all())
+
+    def get_latest_product_classification_thresholds(self, ml_model_name=PRODUCT_CLASSIFICATION_MODEL):
+        return self.get_product_classification_thresholds(self.get_latest_timestamp(ProductClassificationThresholdsTable), ml_model_name)
