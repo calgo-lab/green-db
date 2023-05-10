@@ -46,8 +46,9 @@ def predict_proba(df: pd.DataFrame) -> pd.DataFrame:
     Args:
         df (pd.Dataframe): Dataframe with Product instances.
 
-    Returns: pd.DataFrame: pd.DataFrame with predicted probabilites for each product category /
-    model_class.
+    Returns:
+        pd.DataFrame: pd.DataFrame with predicted probabilites for each product category /
+        model_class.
     """
 
     logger.info(f"Predicting for {len(df)} products ...")
@@ -57,10 +58,33 @@ def predict_proba(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def join_features_with_inference(product_df, classification_df):
+    """
+    This function is used to join the product dataframe with the retrieved classification Dataframe.
+
+    Args:
+        product_df (pd.Dataframe): Dataframe with product instances.
+        classification_df (pd.Dataframe): Dataframe with ProductClassification instances.
+
+    Returns:
+        pd.DataFrame: pd.DataFrame of ProductClassification objects with thresholded
+        categories and corresponding thresholds.
+    """
+
     return classification_df.join(product_df, on="id")
 
 
 def apply_shop_thresholds(product_df, classification_df):
+    """
+    This function is used to apply thresholds on the predictions to exclude out-of-distribution products.
+
+    Args:
+        product_df (pd.Dataframe): Dataframe with product instances.
+        classification_df (pd.Dataframe): Dataframe with ProductClassification instances.
+
+    Returns:
+        pd.DataFrame: pd.DataFrame of ProductClassification objects with thresholded
+        categories and corresponding thresholds.
+    """
     combined = join_features_with_inference(product_df, classification_df)
 
     # add fallback threshold if a shop/category was not present during evaluation
