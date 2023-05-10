@@ -71,7 +71,7 @@ def apply_shop_thresholds(product_df, classification_df):
 
     # set shop specific thresholds if source and merchant are sent along with request
     if {"source", "merchant"}.issubset(set(product_df.columns)):
-        join_keys = ["source", "merchant", "predicted_category"]
+        join_keys = ["ml_model_name", "source", "merchant", "predicted_category"]
         combined = combined.join(shop_thresholds.set_index(join_keys), on=join_keys)
         combined["threshold"].fillna(combined["fallback_threshold"])
     else:
