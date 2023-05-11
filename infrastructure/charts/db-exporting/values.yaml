@@ -1,0 +1,38 @@
+# Default values for db-exporting.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+image:
+  repository: registry.datexis.com/trajanovska/db-exporting
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag:
+
+env:
+  - name: TZ
+    value: Europe/Berlin
+  - name: POSTGRES_GREEN_DB_HOST
+    value: postgresql
+  - name: POSTGRES_GREEN_DB_PORT
+    value: "5432"
+  - name: POSTGRES_GREEN_DB_USER
+    valueFrom:
+      secretKeyRef:
+        name: green-db-secret
+        key: postgres-user
+  - name: POSTGRES_GREEN_DB_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: green-db-secret
+        key: postgres-password
+  - name: ZENODO_API_KEY
+    valueFrom:
+      secretKeyRef:
+        name: zenodo-api-key
+        key: token
+
+imagePullSecrets:
+  - name: private-registry-auth
+
+pvc: gca-pvc
+mount_path: /storage
