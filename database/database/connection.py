@@ -1116,6 +1116,12 @@ class GreenDB(Connection):
             )
 
     def write_product_classification(self, product_classification):
+        """
+        Writes a `ProductClassification domain_object` into the database.
+
+        Args:
+            product_classification: The domain object to write into the database.
+        """
         with self._session_factory() as db_session:
             db_object = ProductClassificationTable(**product_classification.dict())
             db_session.add(db_object)
@@ -1141,11 +1147,31 @@ class GreenDB(Connection):
                     logger.info(f"Committed {index} products")
 
     def get_product_classification_thresholds(self, timestamp, ml_model_name=PRODUCT_CLASSIFICATION_MODEL):
+        """
+        Fetch `Product's Classification Thresholds` for given timestamp and ml_model_name.
+
+        Args:
+            timestamp: the timestamp when thresholds were calculated
+            ml_model_name: the name of the ml model for which the thresholds were calculated.
+
+        Returns:
+            Iterator[ProductClassificationThreshold]: `Iterator` of domain object representations
+        """
+
         with self._session_factory() as db_session:
             query = db_session.query(ProductClassificationThresholdsTable).filter(
                     ProductClassificationThresholdsTable.timestamp == timestamp).filter(
                     ProductClassificationThresholdsTable.ml_model_name == ml_model_name)
             return (ProductClassificationThreshold.from_orm(row) for row in query.all())
 
-    def get_latest_product_classification_thresholds(self, ml_model_name=PRODUCT_CLASSIFICATION_MODEL):
+    def get_latest_product_classification_thresholds(self, ml_model_name=PRODUCT_CLASSIFICATION_MODEL) -> Iterator[ProductClassificationThreshold]:
+        """
+        Fetch latest `Product's Classification Thresholds` for given ml_model_name.
+
+        Args:
+            ml_model_name: the name of the ml model for which the thresholds were calculated.
+
+        Returns:
+            Iterator[ProductClassificationThreshold]: `Iterator` of domain object representations
+        """
         return self.get_product_classification_thresholds(self.get_latest_timestamp(ProductClassificationThresholdsTable), ml_model_name)

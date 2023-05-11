@@ -9,6 +9,7 @@ import pandas as pd
 from autogluon.multimodal import MultiModalPredictor
 from sklearn.preprocessing import LabelEncoder
 from core.constants import PRODUCT_CLASSIFICATION_MODEL, PRODUCT_CLASSIFICATION_MODEL_FEATURES
+from core.domain import ProductClassification
 
 from database.connection import GreenDB
 from product_classification.utils import to_df
@@ -73,7 +74,7 @@ def join_features_with_inference(product_df, classification_df):
     return classification_df.join(product_df, on="id")
 
 
-def apply_shop_thresholds(product_df, classification_df):
+def apply_shop_thresholds(classification_df, shop_thresholds, product_df=None):
     """
     This function is used to apply thresholds on the predictions to exclude out-of-distribution products.
 
@@ -85,24 +86,25 @@ def apply_shop_thresholds(product_df, classification_df):
         pd.DataFrame: pd.DataFrame of ProductClassification objects with thresholded
         categories and corresponding thresholds.
     """
-    combined = join_features_with_inference(product_df, classification_df)
 
     # add fallback threshold if a shop/category was not present during evaluation
     # use smallest threshold from all shops as fallback
-    thresh_fallback = shop_thresholds.groupby("predicted_category")["threshold"].agg(min).to_dict()
-    combined["fallback_threshold"] = combined["predicted_category"].apply(
-        lambda x: thresh_fallback.get(x))
+    fallback_thresh_by_category = shop_thresholds.groupby("predicted_category")["threshold"].agg(min).to_dict()
+    fallback_thresholds = classification_df["predicted_category"].apply(
+        lambda x: fallback_thresh_by_category.get(x))
 
     # set shop specific thresholds if source and merchant are sent along with request
-    if {"source", "merchant"}.issubset(set(product_df.columns)):
+    if product_df is not None and {"source", "merchant"}.issubset(set(product_df.columns)):
+        combined = join_features_with_inference(product_df, classification_df)
         join_keys = ["ml_model_name", "source", "merchant", "predicted_category"]
         combined = combined.join(shop_thresholds.set_index(join_keys), on=join_keys)
-        combined["threshold"].fillna(combined["fallback_threshold"])
+        combined["threshold"].fillna(fallback_thresholds)
     else:
-        combined = combined.rename({"fallback_threshold": "threshold"}, axis=1)
+        combined = pd.concat([classification_df, fallback_thresholds.rename("threshold")], axis=1)
 
     combined["category_thresholded"] = combined.apply(
-        lambda x: x["predicted_category"] if x["confidence"] >= x["threshold"] else "under_threshold", axis=1)
+        lambda x: x["predicted_category"] if x["confidence"] >= x[
+            "threshold"] else "under_threshold", axis=1)
 
     return combined[list(classification_df.columns) + ["category_thresholded", "threshold"]]
 
@@ -134,7 +136,7 @@ def probas_to_ProductClassifications(probas: pd.DataFrame) -> pd.DataFrame:
     return result
 
 
-def eval_request(request_data: json) -> Optional[pd.DataFrame]:
+def eval_request(request_data: json, data_format="products") -> Optional[pd.DataFrame]:
     """
     This function is used to evaluate the data of the request and checks whether all necessary
     columns/features are part of the request data.
@@ -147,7 +149,14 @@ def eval_request(request_data: json) -> Optional[pd.DataFrame]:
     """
 
     df = pd.read_json(request_data)
-    required_columns = PRODUCT_CLASSIFICATION_MODEL_FEATURES + ["id"]
+
+    if data_format == "products":
+        required_columns = PRODUCT_CLASSIFICATION_MODEL_FEATURES + ["id"]
+    elif data_format == "classifications":
+        required_columns = ProductClassification.__fields__.keys()
+    else:
+        return None
+
     if not set(required_columns).issubset(set(df.columns)):
         logger.warning(
             f"The dataframe is missing features. Make sure it includes the following columns: "
@@ -159,6 +168,16 @@ def eval_request(request_data: json) -> Optional[pd.DataFrame]:
     return df
 
 
+def run_pipeline(request_data, apply_thresholds=False):
+    df = eval_request(request_data)
+    pred_probs = predict_proba(df)
+
+    classification_df = probas_to_ProductClassifications(pred_probs)
+    if apply_thresholds:
+        classification_df = apply_shop_thresholds(classification_df, shop_thresholds, df)
+
+    return classification_df
+
 @app.route("/", methods=['POST'])
 def product_classifier_handler() -> Response:
     """Reads the JSON data from the POST request, which is expected to include product data,
@@ -168,11 +187,9 @@ def product_classifier_handler() -> Response:
         A flask Response containing the predictions.
     """
     request_data = request.get_json()
-    df = eval_request(request_data)
-    pred_probs = predict_proba(df)
+    classification_df = run_pipeline(request_data)
 
-    result = probas_to_ProductClassifications(pred_probs)
-    return Response(result.to_json(orient="records"), mimetype="application/json")
+    return Response(classification_df.to_json(orient="records"), mimetype="application/json")
 
 
 @app.route("/with_thresholds", methods=['POST'])
@@ -184,13 +201,27 @@ def thresholded_product_classifier_handler() -> Response:
         A flask Response containing the predictions.
     """
     request_data = request.get_json()
-    df = eval_request(request_data)
-    pred_probs = predict_proba(df)
+    classification_df = run_pipeline(request_data, apply_thresholds=True)
 
-    result = probas_to_ProductClassifications(pred_probs)
-    result = apply_shop_thresholds(df, result)
+    return Response(classification_df.to_json(orient="records"), mimetype="application/json")
 
-    return Response(result.to_json(orient="records"), mimetype="application/json")
+
+@app.route("/apply_thresholds", methods=['POST'])
+def apply_thresholds_handler() -> Response:
+    """Reads the JSON data from the POST request, which is expected to include product
+    classifications products data with shops and merchants which is used for
+    thresholding.
+
+    :return:
+        A flask Response containing the submitted product classifications with applied thresholds.
+    """
+    request_data = request.get_json()
+    product_df = eval_request(request_data.get("product_data"))
+    classification_df = eval_request(request_data.get("classification_data"), data_format="classifications")
+
+    classification_df = apply_shop_thresholds(classification_df, shop_thresholds, product_df)
+
+    return Response(classification_df.to_json(orient="records"), mimetype="application/json")
 
 
 @app.route("/test", methods=['GET'])
