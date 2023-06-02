@@ -141,8 +141,11 @@ def eval_request(request_data: json, data_format="products") -> Optional[pd.Data
     This function is used to evaluate the data of the request and checks whether all necessary
     columns/features are part of the request data.
 
-    Args: request_data (json): data which was sent along the POST request. Should include a
-    pd.DataFrame that was transformed into json.
+    Args:
+        request_data (json): data which was sent along the POST request in JSON format.
+        data_format (str): format to use for evaluating the request data. Either 'products' or
+        'classifications'.
+
 
     Returns:
         Optional(pd.DataFrame): pd.DataFrame of the request data.
@@ -168,7 +171,18 @@ def eval_request(request_data: json, data_format="products") -> Optional[pd.Data
     return df
 
 
-def run_pipeline(request_data, apply_thresholds=False):
+def run_pipeline(request_data: json, apply_thresholds=False) -> pd.DataFrame:
+    """The standard pipeline to run for evaluating the request data and performing inference.
+
+    Args:
+    request_data (json): data which was sent along the POST request. Should include a
+    pd.DataFrame that was transformed into json.
+    data_format (str): format to use for evaluating the request data. Either 'products' or
+    'classifications'.
+
+    :return:
+        A flask Response containing the predictions.
+    """
     df = eval_request(request_data)
     pred_probs = predict_proba(df)
 
