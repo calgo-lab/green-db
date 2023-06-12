@@ -95,7 +95,8 @@ def predict_proba(df: pd.DataFrame) -> pd.DataFrame:
     return probas
 
 
-def join_features_with_inference(product_df, classification_df):
+def join_features_with_inference(product_df: pd.DataFrame, classification_df: pd.DataFrame) \
+        -> pd.DataFrame:
     """
     This function is used to join the product dataframe with the retrieved classification Dataframe.
 
@@ -111,7 +112,8 @@ def join_features_with_inference(product_df, classification_df):
     return classification_df.join(product_df, on="id")
 
 
-def apply_shop_thresholds(classification_df, shop_thresholds, product_df=None):
+def apply_shop_thresholds(classification_df: pd.DataFrame, shop_thresholds: pd.DataFrame,
+                          product_df: Optional[pd.DataFrame] = None) -> pd.DataFrame:
     """
     This function is used to apply thresholds on the predictions to exclude out-of-distribution
     products.
@@ -136,7 +138,7 @@ def apply_shop_thresholds(classification_df, shop_thresholds, product_df=None):
 
     # set shop specific thresholds if source and merchant are sent along with request
     if product_df is not None and {"source", "merchant"}.issubset(
-        set(product_df.columns)
+            set(product_df.columns)
     ):
         combined = join_features_with_inference(product_df, classification_df)
         join_keys = ["ml_model_name", "source", "merchant", "predicted_category"]
@@ -156,7 +158,7 @@ def apply_shop_thresholds(classification_df, shop_thresholds, product_df=None):
 
     return combined[
         list(classification_df.columns) + ["category_thresholded", "threshold"]
-    ]
+        ]
 
 
 def probas_to_ProductClassifications(probas: pd.DataFrame) -> pd.DataFrame:
@@ -188,13 +190,13 @@ def probas_to_ProductClassifications(probas: pd.DataFrame) -> pd.DataFrame:
     return result
 
 
-def eval_request(request_data: json, data_format="products") -> Optional[pd.DataFrame]:
+def eval_request(request_data: str, data_format: str = "products") -> Optional[pd.DataFrame]:
     """
     This function is used to evaluate the data of the request and checks whether all necessary
     columns/features are part of the request data.
 
     Args:
-        request_data (json): data which was sent along the POST request in JSON format.
+        request_data (str): data which was sent along the POST request with a string in JSON format.
         data_format (str): format to use for evaluating the request data. Either 'products' or
         'classifications'.
 
@@ -223,12 +225,12 @@ def eval_request(request_data: json, data_format="products") -> Optional[pd.Data
     return df
 
 
-def run_pipeline(request_data: json, apply_thresholds=False) -> pd.DataFrame:
+def run_pipeline(request_data: str, apply_thresholds: bool = False) -> pd.DataFrame:
     """The standard pipeline to run for evaluating the request data and performing inference.
 
     Args:
     request_data (json): data which was sent along the POST request. Should include a
-    pd.DataFrame that was transformed into json.
+    pd.DataFrame that was transformed into serialized json format.
     data_format (str): format to use for evaluating the request data. Either 'products' or
     'classifications'.
 
@@ -313,6 +315,6 @@ def test() -> Response:
     return Response("Successful!")
 
 
-def create_app():
+def create_app() -> Flask:
     serve(app, host="0.0.0.0", port=8282)
     return app
