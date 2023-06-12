@@ -1,18 +1,17 @@
-import json
 import logging
 from typing import Optional
 
 import numpy as np
 import pandas as pd
 from autogluon.multimodal import MultiModalPredictor
-from flask import Flask, Response, request
-from product_classification.utils import to_df
-from sklearn.preprocessing import LabelEncoder
-from waitress import serve
-
 from core.constants import PRODUCT_CLASSIFICATION_MODEL, PRODUCT_CLASSIFICATION_MODEL_FEATURES
 from core.domain import ProductClassification
 from database.connection import GreenDB
+from flask import Flask, Response, request
+from sklearn.preprocessing import LabelEncoder
+from waitress import serve
+
+from product_classification.utils import to_df
 
 logger = logging.getLogger("waitress")
 logger.setLevel(logging.INFO)
@@ -95,8 +94,9 @@ def predict_proba(df: pd.DataFrame) -> pd.DataFrame:
     return probas
 
 
-def join_features_with_inference(product_df: pd.DataFrame, classification_df: pd.DataFrame) \
-        -> pd.DataFrame:
+def join_features_with_inference(
+    product_df: pd.DataFrame, classification_df: pd.DataFrame
+) -> pd.DataFrame:
     """
     This function is used to join the product dataframe with the retrieved classification Dataframe.
 
@@ -112,8 +112,11 @@ def join_features_with_inference(product_df: pd.DataFrame, classification_df: pd
     return classification_df.join(product_df, on="id")
 
 
-def apply_shop_thresholds(classification_df: pd.DataFrame, shop_thresholds: pd.DataFrame,
-                          product_df: Optional[pd.DataFrame] = None) -> pd.DataFrame:
+def apply_shop_thresholds(
+    classification_df: pd.DataFrame,
+    shop_thresholds: pd.DataFrame,
+    product_df: Optional[pd.DataFrame] = None,
+) -> pd.DataFrame:
     """
     This function is used to apply thresholds on the predictions to exclude out-of-distribution
     products.
@@ -137,17 +140,13 @@ def apply_shop_thresholds(classification_df: pd.DataFrame, shop_thresholds: pd.D
     )
 
     # set shop specific thresholds if source and merchant are sent along with request
-    if product_df is not None and {"source", "merchant"}.issubset(
-            set(product_df.columns)
-    ):
+    if product_df is not None and {"source", "merchant"}.issubset(set(product_df.columns)):
         combined = join_features_with_inference(product_df, classification_df)
         join_keys = ["ml_model_name", "source", "merchant", "predicted_category"]
         combined = combined.join(shop_thresholds.set_index(join_keys), on=join_keys)
         combined["threshold"].fillna(fallback_thresholds)
     else:
-        combined = pd.concat(
-            [classification_df, fallback_thresholds.rename("threshold")], axis=1
-        )
+        combined = pd.concat([classification_df, fallback_thresholds.rename("threshold")], axis=1)
 
     combined["category_thresholded"] = combined.apply(
         lambda x: x["predicted_category"]
@@ -156,9 +155,7 @@ def apply_shop_thresholds(classification_df: pd.DataFrame, shop_thresholds: pd.D
         axis=1,
     )
 
-    return combined[
-        list(classification_df.columns) + ["category_thresholded", "threshold"]
-        ]
+    return combined[list(classification_df.columns) + ["category_thresholded", "threshold"]]
 
 
 def probas_to_ProductClassifications(probas: pd.DataFrame) -> pd.DataFrame:
@@ -242,9 +239,7 @@ def run_pipeline(request_data: str, apply_thresholds: bool = False) -> pd.DataFr
 
     classification_df = probas_to_ProductClassifications(pred_probs)
     if apply_thresholds:
-        classification_df = apply_shop_thresholds(
-            classification_df, shop_thresholds, df
-        )
+        classification_df = apply_shop_thresholds(classification_df, shop_thresholds, df)
 
     return classification_df
 
@@ -260,9 +255,7 @@ def product_classifier_handler() -> Response:
     request_data = request.get_json()
     classification_df = run_pipeline(request_data)
 
-    return Response(
-        classification_df.to_json(orient="records"), mimetype="application/json"
-    )
+    return Response(classification_df.to_json(orient="records"), mimetype="application/json")
 
 
 @app.route("/with_thresholds", methods=["POST"])
@@ -276,9 +269,7 @@ def thresholded_product_classifier_handler() -> Response:
     request_data = request.get_json()
     classification_df = run_pipeline(request_data, apply_thresholds=True)
 
-    return Response(
-        classification_df.to_json(orient="records"), mimetype="application/json"
-    )
+    return Response(classification_df.to_json(orient="records"), mimetype="application/json")
 
 
 @app.route("/apply_thresholds", methods=["POST"])
@@ -296,13 +287,9 @@ def apply_thresholds_handler() -> Response:
         request_data.get("classification_data"), data_format="classifications"
     )
 
-    classification_df = apply_shop_thresholds(
-        classification_df, shop_thresholds, product_df
-    )
+    classification_df = apply_shop_thresholds(classification_df, shop_thresholds, product_df)
 
-    return Response(
-        classification_df.to_json(orient="records"), mimetype="application/json"
-    )
+    return Response(classification_df.to_json(orient="records"), mimetype="application/json")
 
 
 @app.route("/test", methods=["GET"])
