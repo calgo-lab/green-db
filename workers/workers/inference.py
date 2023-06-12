@@ -2,12 +2,13 @@ import json
 
 import pandas as pd
 import requests
+from redis import Redis
+from rq import Connection, Worker
+
 from core.constants import PRODUCT_CLASSIFICATION_MODEL_FEATURES, WORKER_QUEUE_INFERENCE
 from core.domain import Product, ProductClassification
 from core.redis import REDIS_HOST, REDIS_PASSWORD, REDIS_PORT, REDIS_USER
 from database.connection import GreenDB
-from redis import Redis
-from rq import Connection, Worker
 
 green_db_connection = GreenDB()
 

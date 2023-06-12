@@ -4,6 +4,9 @@ from logging import getLogger
 from typing import Any, Iterator, List, Optional, Type
 
 import pandas as pd
+from sqlalchemy import desc, func, literal_column, or_
+from sqlalchemy.orm import Session
+
 from core.constants import (
     DATABASE_NAME_GREEN_DB,
     DATABASE_NAME_SCRAPING,
@@ -18,8 +21,6 @@ from core.domain import (
     ScrapedPage,
     SustainabilityLabel,
 )
-from sqlalchemy import desc, func, literal_column, or_
-from sqlalchemy.orm import Session
 
 from .tables import (
     SCRAPING_TABLE_CLASS_FOR,

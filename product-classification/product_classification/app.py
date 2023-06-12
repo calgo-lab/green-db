@@ -4,14 +4,14 @@ from typing import Optional
 import numpy as np
 import pandas as pd
 from autogluon.multimodal import MultiModalPredictor
-from core.constants import PRODUCT_CLASSIFICATION_MODEL, PRODUCT_CLASSIFICATION_MODEL_FEATURES
-from core.domain import ProductClassification
-from database.connection import GreenDB
 from flask import Flask, Response, request
+from product_classification.utils import to_df
 from sklearn.preprocessing import LabelEncoder
 from waitress import serve
 
-from product_classification.utils import to_df
+from core.constants import PRODUCT_CLASSIFICATION_MODEL, PRODUCT_CLASSIFICATION_MODEL_FEATURES
+from core.domain import ProductClassification
+from database.connection import GreenDB
 
 logger = logging.getLogger("waitress")
 logger.setLevel(logging.INFO)

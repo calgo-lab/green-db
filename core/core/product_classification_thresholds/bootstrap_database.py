@@ -2,8 +2,9 @@ import json
 from datetime import datetime
 from pathlib import Path
 
-from ..domain import ProductClassificationThreshold
 from core.constants import PRODUCT_CLASSIFICATION_MODEL
+
+from ..domain import ProductClassificationThreshold
 
 THRESHOLDS_JSON_FILE_PATH = Path(__file__).parent / "thresholds.json"
 
@@ -29,7 +30,8 @@ thresholds = [
         source=source,
         merchant=merchant,
         predicted_category=category,
-        threshold=threshold)
+        threshold=threshold,
+    )
     for source, merchants in _load_json_file(THRESHOLDS_JSON_FILE_PATH).items()
     for merchant, values in merchants.items()
     for category, threshold in values.items()

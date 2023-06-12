@@ -45,4 +45,3 @@ TABLE_NAME_PRODUCT_CLASSIFICATION_THRESHOLDS = "product-classification-threshold
 
 PRODUCT_CLASSIFICATION_MODEL = "genial-butterfly-301"
 PRODUCT_CLASSIFICATION_MODEL_FEATURES = ["name", "description"]
-

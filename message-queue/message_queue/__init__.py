@@ -5,12 +5,13 @@ from rq import Queue, Retry
 
 from core import log
 from core.constants import (
+    TABLE_NAME_GREEN_DB,
     WORKER_FUNCTION_EXTRACT,
-    WORKER_FUNCTION_SCRAPING,
     WORKER_FUNCTION_INFERENCE,
+    WORKER_FUNCTION_SCRAPING,
     WORKER_QUEUE_EXTRACT,
+    WORKER_QUEUE_INFERENCE,
     WORKER_QUEUE_SCRAPING,
-    WORKER_QUEUE_INFERENCE, TABLE_NAME_GREEN_DB,
 )
 from core.domain import ScrapedPage
 from core.redis import REDIS_HOST, REDIS_PASSWORD, REDIS_PORT, REDIS_USER
@@ -82,4 +83,3 @@ class MessageQueue:
             result_ttl=1,
             retry=Retry(max=5, interval=30),
         )
-

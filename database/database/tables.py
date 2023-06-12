@@ -1,6 +1,19 @@
 from datetime import datetime
 from typing import Dict, List, Type
 
+from sqlalchemy import (
+    ARRAY,
+    BIGINT,
+    INTEGER,
+    JSON,
+    NUMERIC,
+    TEXT,
+    TIMESTAMP,
+    VARCHAR,
+    Column,
+    ForeignKey,
+)
+
 from core.constants import (
     TABLE_NAME_GREEN_DB,
     TABLE_NAME_PRODUCT_CLASSIFICATION,
@@ -15,18 +28,6 @@ from core.constants import (
     TABLE_NAME_SCRAPING_ZALANDO_FR,
     TABLE_NAME_SCRAPING_ZALANDO_GB,
     TABLE_NAME_SUSTAINABILITY_LABELS,
-)
-from sqlalchemy import (
-    ARRAY,
-    BIGINT,
-    INTEGER,
-    JSON,
-    NUMERIC,
-    TEXT,
-    TIMESTAMP,
-    VARCHAR,
-    Column,
-    ForeignKey,
 )
 
 # TODO: Here decide which database to use
