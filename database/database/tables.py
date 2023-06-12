@@ -1,10 +1,10 @@
 from datetime import datetime
 from typing import Dict, List, Type
 
-from sqlalchemy import ARRAY, BIGINT, INTEGER, JSON, NUMERIC, TEXT, TIMESTAMP, VARCHAR, Column, ForeignKey
-
 from core.constants import (
     TABLE_NAME_GREEN_DB,
+    TABLE_NAME_PRODUCT_CLASSIFICATION,
+    TABLE_NAME_PRODUCT_CLASSIFICATION_THRESHOLDS,
     TABLE_NAME_SCRAPING_AMAZON_DE,
     TABLE_NAME_SCRAPING_AMAZON_FR,
     TABLE_NAME_SCRAPING_AMAZON_GB,
@@ -15,10 +15,20 @@ from core.constants import (
     TABLE_NAME_SCRAPING_ZALANDO_FR,
     TABLE_NAME_SCRAPING_ZALANDO_GB,
     TABLE_NAME_SUSTAINABILITY_LABELS,
-    TABLE_NAME_PRODUCT_CLASSIFICATION, TABLE_NAME_PRODUCT_CLASSIFICATION_THRESHOLDS,
+)
+from sqlalchemy import (
+    ARRAY,
+    BIGINT,
+    INTEGER,
+    JSON,
+    NUMERIC,
+    TEXT,
+    TIMESTAMP,
+    VARCHAR,
+    Column,
+    ForeignKey,
 )
 
-from core.domain import ProductCategory
 # TODO: Here decide which database to use
 from .postgres import (  # noqa
     GreenDBBaseTable,
@@ -285,7 +295,13 @@ class ProductClassificationTable(GreenDBBaseTable, __TableMixin):
 
     __tablename__ = TABLE_NAME_PRODUCT_CLASSIFICATION
 
-    id = Column(INTEGER, ForeignKey(f"{TABLE_NAME_GREEN_DB}.id"), nullable=False, autoincrement=False, primary_key=True)
+    id = Column(
+        INTEGER,
+        ForeignKey(f"{TABLE_NAME_GREEN_DB}.id"),
+        nullable=False,
+        autoincrement=False,
+        primary_key=True,
+    )
     ml_model_name = Column(TEXT, nullable=False, primary_key=True)
     predicted_category = Column(TEXT, nullable=False)
     confidence = Column(NUMERIC, nullable=False)

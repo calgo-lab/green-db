@@ -4,20 +4,30 @@ from logging import getLogger
 from typing import Any, Iterator, List, Optional, Type
 
 import pandas as pd
+from core.constants import (
+    DATABASE_NAME_GREEN_DB,
+    DATABASE_NAME_SCRAPING,
+    PRODUCT_CLASSIFICATION_MODEL,
+)
+from core.domain import (
+    CertificateType,
+    PageType,
+    Product,
+    ProductClassification,
+    ProductClassificationThreshold,
+    ScrapedPage,
+    SustainabilityLabel,
+)
 from sqlalchemy import desc, func, literal_column, or_
 from sqlalchemy.orm import Session
-
-from core.constants import DATABASE_NAME_GREEN_DB, DATABASE_NAME_SCRAPING, PRODUCT_CLASSIFICATION_MODEL
-from core.domain import CertificateType, PageType, Product, ScrapedPage, SustainabilityLabel, \
-    ProductClassification, ProductClassificationThreshold
 
 from .tables import (
     SCRAPING_TABLE_CLASS_FOR,
     GreenDBTable,
-    ScrapingTable,
-    SustainabilityLabelsTable,
     ProductClassificationTable,
     ProductClassificationThresholdsTable,
+    ScrapingTable,
+    SustainabilityLabelsTable,
     bootstrap_tables,
     get_session_factory,
 )
@@ -27,8 +37,9 @@ logger = getLogger(__name__)
 
 class Connection:
     def __init__(
-            self, database_class: Type[GreenDBTable] | Type[ScrapingTable] | Type[ProductClassificationTable],
-            database_name: str
+        self,
+        database_class: Type[GreenDBTable] | Type[ScrapingTable] | Type[ProductClassificationTable],
+        database_name: str,
     ) -> None:
         """
         Base `class` of connections.
@@ -45,8 +56,9 @@ class Connection:
 
         bootstrap_tables(database_name)
 
-    def write(self,
-              domain_object: ScrapedPage | Product | ProductClassification) -> ScrapingTable | GreenDBTable | ProductClassificationTable:
+    def write(
+        self, domain_object: ScrapedPage | Product | ProductClassification
+    ) -> ScrapingTable | GreenDBTable | ProductClassificationTable:
         """
         Writes a `domain_object` into the database and returns an updated Table object.
         This is useful if, e.g., the `id` of the database row is necessary in the future.
@@ -63,12 +75,14 @@ class Connection:
         return db_object
 
     def __get_latest_timestamp(
-            self,
-            db_session: Session,
-            database_class: Optional[
-                Type[GreenDBTable] | Type[ScrapingTable] | Type[SustainabilityLabelsTable] | Type[
-                    ProductClassificationTable]
-                ] = None,
+        self,
+        db_session: Session,
+        database_class: Optional[
+            Type[GreenDBTable]
+            | Type[ScrapingTable]
+            | Type[SustainabilityLabelsTable]
+            | Type[ProductClassificationTable]
+        ] = None,
     ) -> datetime:
         """
         Helper method to fetch the latest available timestamp.
@@ -93,11 +107,13 @@ class Connection:
         )
 
     def get_latest_timestamp(
-            self,
-            database_class: Optional[
-                Type[GreenDBTable] | Type[ScrapingTable] | Type[SustainabilityLabelsTable] | Type[
-                    ProductClassificationTable | ProductClassificationThresholdsTable]
-                ] = None,
+        self,
+        database_class: Optional[
+            Type[GreenDBTable]
+            | Type[ScrapingTable]
+            | Type[SustainabilityLabelsTable]
+            | Type[ProductClassificationTable | ProductClassificationThresholdsTable]
+        ] = None,
     ) -> datetime:
         """
         Fetch the latest available timestamp.
@@ -190,7 +206,7 @@ class Scraping(Connection):
         return self.get_scraped_pages_for_timestamp(self.get_latest_timestamp())
 
     def get_scraped_page_count_per_merchant_and_country(
-            self, timestamp: Optional[datetime] = None
+        self, timestamp: Optional[datetime] = None
     ) -> pd.DataFrame:
         """
         Fetch count of scraped pages (excludes SERP `page_type`) for given `timestamp` or if `None`
@@ -242,16 +258,16 @@ class GreenDB(Connection):
         """
         super().__init__(GreenDBTable, DATABASE_NAME_GREEN_DB)
 
-        from core.sustainability_labels.bootstrap_database import sustainability_labels
         from core.product_classification_thresholds.bootstrap_database import thresholds
+        from core.sustainability_labels.bootstrap_database import sustainability_labels
 
         with self._session_factory() as db_session:
             # NOTE: this is slowly...
             # if we have many more labels to bootstrap, we should refactor it.
             if (  # If current label version (timestamp) does not exists, add them
-                    not db_session.query(SustainabilityLabelsTable.timestamp)
-                            .filter(SustainabilityLabelsTable.timestamp == sustainability_labels[0].timestamp)
-                            .first()
+                not db_session.query(SustainabilityLabelsTable.timestamp)
+                .filter(SustainabilityLabelsTable.timestamp == sustainability_labels[0].timestamp)
+                .first()
             ):
                 for label in sustainability_labels:
                     db_session.add(SustainabilityLabelsTable(**label.dict()))
@@ -263,11 +279,16 @@ class GreenDB(Connection):
             # NOTE: this is slowly...
             # if we have many more thresholds to bootstrap, we should refactor it.
             if (  # If current threshold version (timestamp) does not exists, add them
-                    not db_session.query(ProductClassificationThresholdsTable.timestamp,
-                                         ProductClassificationThresholdsTable.ml_model_name)
-                            .filter(ProductClassificationThresholdsTable.timestamp == thresholds[0].timestamp and
-                                    ProductClassificationThresholdsTable.ml_model_name == thresholds[0].ml_model_name)
-                            .first()
+                not db_session.query(
+                    ProductClassificationThresholdsTable.timestamp,
+                    ProductClassificationThresholdsTable.ml_model_name,
+                )
+                .filter(
+                    ProductClassificationThresholdsTable.timestamp == thresholds[0].timestamp
+                    and ProductClassificationThresholdsTable.ml_model_name
+                    == thresholds[0].ml_model_name
+                )
+                .first()
             ):
                 for threshold in thresholds:
                     db_session.add(ProductClassificationThresholdsTable(**threshold.dict()))
@@ -290,7 +311,7 @@ class GreenDB(Connection):
             )
 
     def get_sustainability_labels(
-            self, iterator: bool = False
+        self, iterator: bool = False
     ) -> List[SustainabilityLabel] | Iterator[SustainabilityLabel]:
         """
         Fetch all `SustainabilityLabel`s.
@@ -314,7 +335,9 @@ class GreenDB(Connection):
             else:
                 return list(sustainability_labels_iterator)
 
-    def get_products_for_timestamp(self, timestamp: datetime, convert_orm: Optional[bool] = True) -> Iterator[Product]:
+    def get_products_for_timestamp(
+        self, timestamp: datetime, convert_orm: Optional[bool] = True
+    ) -> Iterator[Product]:
         """
         Fetch all `Product`s for given `timestamp`.
 
@@ -346,7 +369,7 @@ class GreenDB(Connection):
         return self.get_products_for_timestamp(self.get_latest_timestamp(), convert_orm)
 
     def get_product_count_per_merchant_and_country(
-            self, timestamp: Optional[datetime] = None
+        self, timestamp: Optional[datetime] = None
     ) -> pd.DataFrame:
         """
         Fetch product count by merchant and country for given timestamp, or if `None` for all data.
@@ -388,7 +411,7 @@ class GreenDB(Connection):
         return self.get_product_count_per_merchant_and_country(self.get_latest_timestamp())
 
     def get_product_count_per_category_and_merchant(
-            self, timestamp: Optional[datetime] = None
+        self, timestamp: Optional[datetime] = None
     ) -> pd.DataFrame:
         """
         Fetch product count per category and merchant for given timestamp, or if `None` for all
@@ -423,7 +446,7 @@ class GreenDB(Connection):
         return self.get_product_count_per_category_and_merchant(self.get_latest_timestamp())
 
     def get_product_count_per_sustainability_label(
-            self, timestamp: Optional[datetime] = None
+        self, timestamp: Optional[datetime] = None
     ) -> pd.DataFrame:
         """
         Fetch product count per sustainability_label by given timestamp or if `None` for all
@@ -458,7 +481,7 @@ class GreenDB(Connection):
         return self.get_product_count_per_sustainability_label(self.get_latest_timestamp())
 
     def get_product_count_with_unknown_sustainability_label(
-            self, timestamp: Optional[datetime] = None
+        self, timestamp: Optional[datetime] = None
     ) -> pd.DataFrame:
         """
         Fetch product count for products with `certificate:UNKNOWN` by given timestamp or if `None`
@@ -498,7 +521,7 @@ class GreenDB(Connection):
         return self.get_product_count_with_unknown_sustainability_label(self.get_latest_timestamp())
 
     def get_products_with_unknown_sustainability_label(
-            self, timestamp: Optional[datetime] = None
+        self, timestamp: Optional[datetime] = None
     ) -> pd.DataFrame:
         """
         Fetch list of products with unknown sustainability label with: id, name, merchant and url
@@ -585,7 +608,7 @@ class GreenDB(Connection):
             )
 
     def get_product_count_by_sustainability_label_credibility(
-            self, credibility_threshold: int = 50
+        self, credibility_threshold: int = 50
     ) -> pd.DataFrame:
         """
         Function counts products by its sustainability labels credibility, >= 50 is credible,
@@ -643,7 +666,7 @@ class GreenDB(Connection):
         )
 
     def get_product_count_by_sustainability_label_credibility_all_timestamps(
-            self, credibility_threshold: int = 50
+        self, credibility_threshold: int = 50
     ) -> pd.DataFrame:
         """
         Function counts products by its sustainability labels credibility, >= 50 is credible,
@@ -706,8 +729,9 @@ class GreenDB(Connection):
                 func.count(self._database_class.id),
                 literal_column("'certificate:OTHER'"),
             )
-            .filter(self._database_class.sustainability_labels.any(
-                CertificateType.OTHER.value))  # type: ignore[attr-defined] # noqa
+            .filter(
+                self._database_class.sustainability_labels.any(CertificateType.OTHER.value)
+            )  # type: ignore[attr-defined] # noqa
             .group_by(self._database_class.merchant, self._database_class.timestamp)
             .all()
         )
@@ -829,27 +853,27 @@ class GreenDB(Connection):
                 db_session.query(
                     get_max_sustainability_scores.c.prod_id,
                     (
-                            func.sum(
-                                get_max_sustainability_scores.c.eco_chemicals
-                                + get_max_sustainability_scores.c.eco_lifetime
-                                + get_max_sustainability_scores.c.eco_water
-                                + get_max_sustainability_scores.c.eco_inputs
-                                + get_max_sustainability_scores.c.eco_quality
-                                + get_max_sustainability_scores.c.eco_energy
-                                + get_max_sustainability_scores.c.eco_waste_air
-                                + get_max_sustainability_scores.c.eco_environmental_management
-                            )
-                            / N_ECO_DIMENSIONS
+                        func.sum(
+                            get_max_sustainability_scores.c.eco_chemicals
+                            + get_max_sustainability_scores.c.eco_lifetime
+                            + get_max_sustainability_scores.c.eco_water
+                            + get_max_sustainability_scores.c.eco_inputs
+                            + get_max_sustainability_scores.c.eco_quality
+                            + get_max_sustainability_scores.c.eco_energy
+                            + get_max_sustainability_scores.c.eco_waste_air
+                            + get_max_sustainability_scores.c.eco_environmental_management
+                        )
+                        / N_ECO_DIMENSIONS
                     ).label("ecological_score"),
                     (
-                            func.sum(
-                                get_max_sustainability_scores.c.social_labour_rights
-                                + get_max_sustainability_scores.c.social_business_practice
-                                + get_max_sustainability_scores.c.social_social_rights
-                                + get_max_sustainability_scores.c.social_company_responsibility
-                                + get_max_sustainability_scores.c.social_conflict_minerals
-                            )
-                            / N_SOC_DIMENSIONS
+                        func.sum(
+                            get_max_sustainability_scores.c.social_labour_rights
+                            + get_max_sustainability_scores.c.social_business_practice
+                            + get_max_sustainability_scores.c.social_social_rights
+                            + get_max_sustainability_scores.c.social_company_responsibility
+                            + get_max_sustainability_scores.c.social_conflict_minerals
+                        )
+                        / N_SOC_DIMENSIONS
                     ).label("social_score"),
                     get_max_sustainability_scores.c.mean_credibility,
                 )
@@ -867,11 +891,11 @@ class GreenDB(Connection):
                     get_eco_and_social_means.c.social_score,
                     func.round(
                         (
-                                func.sum(
-                                    get_eco_and_social_means.c.ecological_score
-                                    + get_eco_and_social_means.c.social_score
-                                )
-                                / 2
+                            func.sum(
+                                get_eco_and_social_means.c.ecological_score
+                                + get_eco_and_social_means.c.social_score
+                            )
+                            / 2
                         ),
                         0,
                     ).label("sustainability_score"),
@@ -922,7 +946,7 @@ class GreenDB(Connection):
             )
 
     def get_top_products_by_credibility_or_sustainability_score(
-            self, merchants: list, categories: list, top: int, rank_by: str
+        self, merchants: list, categories: list, top: int, rank_by: str
     ) -> pd.DataFrame:
         """
         This function gets unique credible products with its scores, adds products attributes:
@@ -985,7 +1009,7 @@ class GreenDB(Connection):
         )
 
     def get_product_count_by_sustainability_label_and_category(
-            self, threshold: int = 50
+        self, threshold: int = 50
     ) -> pd.DataFrame:
         """
         This functions gets product count by sustainability label and category for unique credible
@@ -1097,8 +1121,9 @@ class GreenDB(Connection):
             query = db_session.query(GreenDBTable).filter(GreenDBTable.id.in_(ids))
             return (Product.from_orm(row) for row in query.all())
 
-    def get_product_classification(self, id: int, ml_model_name: Optional[
-        str] = PRODUCT_CLASSIFICATION_MODEL) -> ProductClassification:
+    def get_product_classification(
+        self, id: int, ml_model_name: Optional[str] = PRODUCT_CLASSIFICATION_MODEL
+    ) -> ProductClassification:
         """
         Fetch `Product's Classification` with given `id` and 'timestamp'.
 
@@ -1111,11 +1136,13 @@ class GreenDB(Connection):
         """
         with self._session_factory() as db_session:
             return ProductClassification.from_orm(
-                db_session.query(ProductClassificationTable).filter(ProductClassificationTable.id == id).filter(
-                    ProductClassificationTable.ml_model_name == ml_model_name).first()
+                db_session.query(ProductClassificationTable)
+                .filter(ProductClassificationTable.id == id)
+                .filter(ProductClassificationTable.ml_model_name == ml_model_name)
+                .first()
             )
 
-    def write_product_classification(self, product_classification):
+    def write_product_classification(self, product_classification: ProductClassification) -> None:
         """
         Writes a `ProductClassification domain_object` into the database.
 
@@ -1127,14 +1154,17 @@ class GreenDB(Connection):
             db_session.add(db_object)
             db_session.commit()
 
-
-    def write_dataframe(self, data_frame):
+    def write_dataframe(self, data_frame: pd.DataFrame) -> None:
         with self._session_factory() as db_session:
             df_len = len(data_frame)
 
-            for index, (df_index, product_classification) in enumerate(data_frame.iterrows(), start=1):
+            for index, (df_index, product_classification) in enumerate(
+                data_frame.iterrows(), start=1
+            ):
                 try:
-                    db_object = ProductClassificationTable(**ProductClassification.parse_obj(product_classification).dict())
+                    db_object = ProductClassificationTable(
+                        **ProductClassification.parse_obj(product_classification).dict()
+                    )
                     db_session.add(db_object)
 
                 except Exception as e:
@@ -1146,7 +1176,9 @@ class GreenDB(Connection):
                     db_session.commit()
                     logger.info(f"Committed {index} products")
 
-    def get_product_classification_thresholds(self, timestamp, ml_model_name=PRODUCT_CLASSIFICATION_MODEL):
+    def get_product_classification_thresholds(
+        self, timestamp: datetime, ml_model_name: str = PRODUCT_CLASSIFICATION_MODEL
+    ) -> Iterator[ProductClassificationThreshold]:
         """
         Fetch `Product's Classification Thresholds` for given timestamp and ml_model_name.
 
@@ -1159,12 +1191,16 @@ class GreenDB(Connection):
         """
 
         with self._session_factory() as db_session:
-            query = db_session.query(ProductClassificationThresholdsTable).filter(
-                    ProductClassificationThresholdsTable.timestamp == timestamp).filter(
-                    ProductClassificationThresholdsTable.ml_model_name == ml_model_name)
+            query = (
+                db_session.query(ProductClassificationThresholdsTable)
+                .filter(ProductClassificationThresholdsTable.timestamp == timestamp)
+                .filter(ProductClassificationThresholdsTable.ml_model_name == ml_model_name)
+            )
             return (ProductClassificationThreshold.from_orm(row) for row in query.all())
 
-    def get_latest_product_classification_thresholds(self, ml_model_name=PRODUCT_CLASSIFICATION_MODEL) -> Iterator[ProductClassificationThreshold]:
+    def get_latest_product_classification_thresholds(
+        self, ml_model_name: str = PRODUCT_CLASSIFICATION_MODEL
+    ) -> Iterator[ProductClassificationThreshold]:
         """
         Fetch latest `Product's Classification Thresholds` for given ml_model_name.
 
@@ -1174,4 +1210,6 @@ class GreenDB(Connection):
         Returns:
             Iterator[ProductClassificationThreshold]: `Iterator` of domain object representations
         """
-        return self.get_product_classification_thresholds(self.get_latest_timestamp(ProductClassificationThresholdsTable), ml_model_name)
+        return self.get_product_classification_thresholds(
+            self.get_latest_timestamp(ProductClassificationThresholdsTable), ml_model_name
+        )
