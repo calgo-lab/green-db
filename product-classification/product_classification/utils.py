@@ -1,4 +1,4 @@
-from typing import Union, Iterator
+from typing import Iterator, Union
 
 import pandas as pd
 
