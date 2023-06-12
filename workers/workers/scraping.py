@@ -1,11 +1,10 @@
-from message_queue import MessageQueue
-from redis import Redis
-from rq import Connection, Worker
-
-from core.constants import WORKER_QUEUE_SCRAPING, ALL_SCRAPING_TABLE_NAMES
+from core.constants import ALL_SCRAPING_TABLE_NAMES, WORKER_QUEUE_SCRAPING
 from core.domain import PageType, ScrapedPage
 from core.redis import REDIS_HOST, REDIS_PASSWORD, REDIS_PORT, REDIS_USER
 from database.connection import Scraping
+from message_queue import MessageQueue
+from redis import Redis
+from rq import Connection, Worker
 
 CONNECTION_FOR_TABLE = {name: Scraping(name) for name in ALL_SCRAPING_TABLE_NAMES}
 

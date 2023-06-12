@@ -2,14 +2,12 @@ import json
 
 import pandas as pd
 import requests
-
-from redis import Redis
-from rq import Connection, Worker
-
-from core.constants import WORKER_QUEUE_INFERENCE, PRODUCT_CLASSIFICATION_MODEL_FEATURES
+from core.constants import PRODUCT_CLASSIFICATION_MODEL_FEATURES, WORKER_QUEUE_INFERENCE
 from core.domain import Product, ProductClassification
 from core.redis import REDIS_HOST, REDIS_PASSWORD, REDIS_PORT, REDIS_USER
 from database.connection import GreenDB
+from redis import Redis
+from rq import Connection, Worker
 
 green_db_connection = GreenDB()
 
@@ -50,8 +48,9 @@ def infer_product_category(product: Product, row_id: int) -> ProductClassificati
         product (Product): a Product instance.
         row_id (int): The id of the Product instance from the database.
     """
-    reduced = {k: v for k, v in product.__dict__.items() if
-               k in PRODUCT_CLASSIFICATION_MODEL_FEATURES}
+    reduced = {
+        k: v for k, v in product.__dict__.items() if k in PRODUCT_CLASSIFICATION_MODEL_FEATURES
+    }
     reduced["id"] = row_id
     json_post = pd.DataFrame.from_records(reduced, index=[0]).to_json()
     r = requests.post("http://product-classification-pod:8080", json=json_post, timeout=30)

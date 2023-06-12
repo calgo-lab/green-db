@@ -55,9 +55,7 @@ def start() -> None:
             if parameter != "command_function"
         }
     else:
-        parsed_args = {
-            "row_id": args[0]
-        }
+        parsed_args = {"row_id": args[0]}
 
     args.command_function(
         # call given command function with parameters

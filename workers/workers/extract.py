@@ -1,13 +1,12 @@
-from message_queue import MessageQueue
-from redis import Redis
-from rq import Connection, Worker
-
-from core.constants import WORKER_QUEUE_EXTRACT, TABLE_NAME_GREEN_DB, ALL_SCRAPING_TABLE_NAMES
+from core.constants import ALL_SCRAPING_TABLE_NAMES, WORKER_QUEUE_EXTRACT
 from core.redis import REDIS_HOST, REDIS_PASSWORD, REDIS_PORT, REDIS_USER
 from database.connection import GreenDB, Scraping
 
 # TODO: This is a false positive of mypy
 from extract import extract_product  # type: ignore
+from message_queue import MessageQueue
+from redis import Redis
+from rq import Connection, Worker
 
 CONNECTION_FOR_TABLE = {name: Scraping(name) for name in ALL_SCRAPING_TABLE_NAMES}
 
