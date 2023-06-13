@@ -4,9 +4,10 @@ from typing import Optional
 import numpy as np
 import pandas as pd
 from autogluon.multimodal import MultiModalPredictor
+from sklearn.preprocessing import LabelEncoder
+
 from core.constants import PRODUCT_CLASSIFICATION_MODEL_FEATURES
 from core.domain import ProductClassification
-from sklearn.preprocessing import LabelEncoder
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -64,8 +65,9 @@ le.fit(MODEL_CLASSES)
 class InferenceEngine:
     """A class to load the XLM from autogluon and perform inference."""
 
-    def __init__(self, model_name, model_path, shop_thresholds):
+    def __init__(self, model_name: str, model_path: str, shop_thresholds: pd.DataFrame):
         """
+        :param model_name: The name of the model.
         :param model_path: The path to the model on the system.
         :param shop_thresholds: The thresholds for each shop to use for thresholding.
         """
@@ -75,9 +77,10 @@ class InferenceEngine:
         self.classes = MODEL_CLASSES
         self.model = None
 
-    def load_model(self):
-        self.model = MultiModalPredictor.load(self.model_path)
-        self.model.set_num_gpus(0)
+    def load_model(self) -> None:
+        self.model = MultiModalPredictor.load(self.path)
+        if self.model is not None:
+            self.model.set_num_gpus(0)
 
     def predict_proba(self, df: pd.DataFrame) -> pd.DataFrame:
         """
@@ -90,8 +93,16 @@ class InferenceEngine:
             pd.DataFrame: pd.DataFrame with predicted probabilites for each product category /
             model_class.
         """
-        probas = self.model.predict_proba(df)
-        return probas
+        if self.model is None:
+            self.load_model()
+
+        if self.model is not None:
+            probas = self.model.predict_proba(df)
+            return probas
+        else:
+            # Handle the case when the model fails to load
+            logger.warning("Model failed to load. Returning empty DataFrame.")
+            return pd.DataFrame()
 
     @staticmethod
     def join_features_with_inference(
@@ -200,7 +211,7 @@ class InferenceEngine:
             A flask Response containing the predictions.
         """
         df = self.eval_request(request_data)
-        pred_probs = self.model.predict_proba(df)
+        pred_probs = self.predict_proba(df)
 
         classification_df = self.probas_to_ProductClassifications(pred_probs)
         if apply_thresholds:

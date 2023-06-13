@@ -1,10 +1,10 @@
 import numpy as np
 import pandas as pd
-from core.constants import PRODUCT_CLASSIFICATION_MODEL
-from core.product_classification_thresholds.bootstrap_database import thresholds
-
 from product_classification.InferenceEngine import InferenceEngine
 from product_classification.utils import to_df
+
+from core.constants import PRODUCT_CLASSIFICATION_MODEL
+from core.product_classification_thresholds.bootstrap_database import thresholds
 
 shop_thresholds = to_df(thresholds)
 
@@ -36,17 +36,19 @@ product_pred_probs = (
 )
 
 
-def test_eval_product_request():
+def test_eval_product_request() -> None:
     df = IE.eval_request(product_json)
+    assert df is not None
     assert df.shape == (1, 2)
 
 
-def test_eval_products_request():
+def test_eval_products_request() -> None:
     df = IE.eval_request(products_json)
+    assert df is not None
     assert df.shape == (2, 2)
 
 
-def prep_pred_probs():
+def prep_pred_probs() -> pd.DataFrame:
     actual_probs = pd.read_json(product_pred_probs)
     actual_probs.columns = IE.classes
     actual_probs = actual_probs.to_dict(orient="records")
@@ -62,7 +64,7 @@ def prep_pred_probs():
     )
 
 
-def test_convert_pred_probs():
+def test_convert_pred_probs() -> None:
     product_classification = prep_pred_probs()
     pcl = IE.probas_to_ProductClassifications(pd.read_json(product_pred_probs))
     rows, cols = product_classification.shape
@@ -74,7 +76,7 @@ def test_convert_pred_probs():
                 assert product_classification.iloc[row, col] == pcl.iloc[row, col]
 
 
-def test_above_thresholding():
+def test_above_thresholding() -> None:
     pc_above_thresh = prep_pred_probs()
     thresholded = IE.apply_shop_thresholds(pc_above_thresh)
     # check for using minimal fallback threshold
@@ -82,7 +84,7 @@ def test_above_thresholding():
     assert thresholded.loc[0, "category_thresholded"] == "SNEAKERS"
 
 
-def test_below_thresholding():
+def test_below_thresholding() -> None:
     pc_below_thresh = prep_pred_probs()
     # manipulate original confidence with a value below the threshold value
     pc_below_thresh["confidence"] = 0.995
@@ -90,9 +92,10 @@ def test_below_thresholding():
     assert thresholded_below.loc[0, "category_thresholded"] == "under_threshold"
 
 
-def test_shop_thresholding():
+def test_shop_thresholding() -> None:
     pc = prep_pred_probs()
     p = IE.eval_request(product_json)
+    assert p is not None
     p["merchant"] = "otto"
     p["source"] = "otto"
     thresholded = IE.apply_shop_thresholds(pc, p)
@@ -100,5 +103,5 @@ def test_shop_thresholding():
     assert thresholded.loc[0, "category_thresholded"] == "SNEAKERS"
 
 
-def test_threshold_existence_per_category():
+def test_threshold_existence_per_category() -> None:
     assert set(IE.shop_thresholds["predicted_category"].unique()) == set(IE.classes)

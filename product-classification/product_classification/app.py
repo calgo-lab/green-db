@@ -1,12 +1,12 @@
 import logging
 
-from core.constants import PRODUCT_CLASSIFICATION_MODEL
-from database.connection import GreenDB
 from flask import Flask, Response, request
-from waitress import serve
-
 from product_classification.InferenceEngine import InferenceEngine
 from product_classification.utils import to_df
+from waitress import serve
+
+from core.constants import PRODUCT_CLASSIFICATION_MODEL
+from database.connection import GreenDB
 
 app = Flask(__name__)
 
@@ -16,7 +16,6 @@ db_connection = GreenDB()
 shop_thresholds = to_df(db_connection.get_latest_product_classification_thresholds())
 
 IE = InferenceEngine(PRODUCT_CLASSIFICATION_MODEL, MODEL_DIR, shop_thresholds)
-IE.load_model()
 
 logger = logging.getLogger("waitress")
 logger.setLevel(logging.INFO)
