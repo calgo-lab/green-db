@@ -4102,6 +4102,18 @@ video = ["decord (==0.6.0)"]
 vision = ["Pillow"]
 
 [[package]]
+name = "types-waitress"
+version = "2.1.4.8"
+description = "Typing stubs for waitress"
+category = "dev"
+optional = false
+python-versions = "*"
+files = [
+    {file = "types-waitress-2.1.4.8.tar.gz", hash = "sha256:c6fe82e81726a83dd4ae3c2957ddcb9ac03297316045d850508633a7837595ba"},
+    {file = "types_waitress-2.1.4.8-py3-none-any.whl", hash = "sha256:41214933536395fe6d512b8b4585a5b353a16c77d93f3b3d889a6553ee908d68"},
+]
+
+[[package]]
 name = "typing-extensions"
 version = "4.6.3"
 description = "Backported and Experimental Type Hints for Python 3.7+"
@@ -4399,4 +4411,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<3.11"
-content-hash = "88faba5af4694d37217774ccef4bd1371b27488a09c8dd1c68f56a157bc0a90a"
+content-hash = "9741b6109f61155853e84aeb3d561c44499354334a4c8437fc3d8af998edf548"
