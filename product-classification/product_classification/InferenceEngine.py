@@ -1,13 +1,12 @@
 import logging
-
-from sklearn.preprocessing import LabelEncoder
-from autogluon.multimodal import MultiModalPredictor
-import numpy as np
-import pandas as pd
 from typing import Optional
 
+import numpy as np
+import pandas as pd
+from autogluon.multimodal import MultiModalPredictor
 from core.constants import PRODUCT_CLASSIFICATION_MODEL_FEATURES
 from core.domain import ProductClassification
+from sklearn.preprocessing import LabelEncoder
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -96,10 +95,11 @@ class InferenceEngine:
 
     @staticmethod
     def join_features_with_inference(
-            product_df: pd.DataFrame, classification_df: pd.DataFrame
+        product_df: pd.DataFrame, classification_df: pd.DataFrame
     ) -> pd.DataFrame:
         """
-        This function is used to join the product dataframe with the retrieved classification Dataframe.
+        This function is used to join the product dataframe with the retrieved classification
+        Dataframe.
 
         Args:
             product_df (pd.Dataframe): Dataframe with product instances.
@@ -113,9 +113,9 @@ class InferenceEngine:
         return classification_df.join(product_df, on="id")
 
     def apply_shop_thresholds(
-            self,
-            classification_df: pd.DataFrame,
-            product_df: Optional[pd.DataFrame] = None,
+        self,
+        classification_df: pd.DataFrame,
+        product_df: Optional[pd.DataFrame] = None,
     ) -> pd.DataFrame:
         """
         This function is used to apply thresholds on the predictions to exclude out-of-distribution
@@ -146,8 +146,9 @@ class InferenceEngine:
             combined = combined.join(self.shop_thresholds.set_index(join_keys), on=join_keys)
             combined["threshold"].fillna(fallback_thresholds)
         else:
-            combined = pd.concat([classification_df, fallback_thresholds.rename("threshold")],
-                                 axis=1)
+            combined = pd.concat(
+                [classification_df, fallback_thresholds.rename("threshold")], axis=1
+            )
 
         combined["category_thresholded"] = combined.apply(
             lambda x: x["predicted_category"]
@@ -213,10 +214,9 @@ class InferenceEngine:
         This function is used to evaluate the data of the request and checks whether all necessary
         columns/features are part of the request data.
 
-        Args:
-            request_data (str): data which was sent along the POST request with a string in JSON format.
-            data_format (str): format to use for evaluating the request data. Either 'products' or
-            'classifications'.
+        Args: request_data (str): data which was sent along the POST request with a string in
+        JSON format. data_format (str): format to use for evaluating the request data. Either
+        'products' or 'classifications'.
 
 
         Returns:

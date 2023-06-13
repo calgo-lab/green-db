@@ -1,14 +1,12 @@
 import logging
 
+from core.constants import PRODUCT_CLASSIFICATION_MODEL
+from database.connection import GreenDB
 from flask import Flask, Response, request
+from waitress import serve
 
 from product_classification.InferenceEngine import InferenceEngine
 from product_classification.utils import to_df
-
-from waitress import serve
-from core.constants import PRODUCT_CLASSIFICATION_MODEL
-
-from database.connection import GreenDB
 
 app = Flask(__name__)
 
