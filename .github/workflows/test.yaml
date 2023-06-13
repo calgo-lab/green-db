@@ -72,7 +72,7 @@ jobs:
         run: |
           cd scraping; make test
 
-    pytest-product-classification:
+  pytest-product-classification:
     runs-on: ubuntu-latest
     steps:
       #----------------------------------------------
