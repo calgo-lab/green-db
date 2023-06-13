@@ -48,14 +48,12 @@ def start() -> None:
     inference_parser.set_defaults(command_function=start_inference)
 
     args = parser.parse_args()
-    if not isinstance(args, int):
-        parsed_args = {
-            parameter: value
-            for parameter, value in vars(args).items()
-            if parameter != "command_function"
-        }
-    else:
-        parsed_args = {"row_id": args[0]}
+
+    parsed_args = {
+        parameter: value
+        for parameter, value in vars(args).items()
+        if parameter != "command_function"
+    }
 
     args.command_function(
         # call given command function with parameters

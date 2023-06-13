@@ -69,11 +69,12 @@ class MessageQueue:
         )
 
     # TODO: table name is not used within code, but needed for log messages
-    def add_inference(self, row_id: int, table_name=TABLE_NAME_GREEN_DB) -> None:
+    def add_inference(self, row_id: int, table_name: str = TABLE_NAME_GREEN_DB) -> None:
         """
         Enqueue job to "inference" `Queue`.
 
         Args:
+            table_name (str): Table name used for logging purposes.
             row_id (int): id of the row used for inference
         """
         self.__inference_queue.enqueue(
