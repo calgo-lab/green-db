@@ -9,7 +9,7 @@ from sklearn.preprocessing import LabelEncoder
 from core.constants import PRODUCT_CLASSIFICATION_MODEL_FEATURES
 from core.domain import ProductClassification
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("waitress")
 logger.setLevel(logging.INFO)
 
 MODEL_CLASSES = [
