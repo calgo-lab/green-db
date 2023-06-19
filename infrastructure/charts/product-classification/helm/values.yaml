@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   # repository: ghcr.io/calgo-lab/green-db/product-classification
-  repository: registry.datexis.com/s76866/product-classification
+  repository: registry.datexis.com/greendb/product-classification
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag: "latest"

@@ -1126,11 +1126,11 @@ class GreenDB(Connection):
         self, id: int, ml_model_name: Optional[str] = PRODUCT_CLASSIFICATION_MODEL
     ) -> ProductClassification:
         """
-        Fetch `Product's Classification` with given `id` and 'timestamp'.
+        Fetch `Product's Classification` with given `id` and 'model name'.
 
         Args:
             ml_model_name: the name of the ml model used for prediction.
-            id (int): Row `id` to fetch
+            id (int): Row `id` to fetch.
 
         Returns:
             Product: Domain object representation of table row
@@ -1155,7 +1155,15 @@ class GreenDB(Connection):
             db_session.add(db_object)
             db_session.commit()
 
-    def write_dataframe(self, data_frame: pd.DataFrame) -> None:
+    def write_product_classification_dataframe(self, data_frame: pd.DataFrame) -> None:
+        """
+        Writes a pd.Dataframe with multiple `ProductClassification domain_objects` into the
+        database.
+
+        Args:
+            data_frame: a pd.Dataframe with multiple `ProductClassification domain_objects`
+        """
+
         with self._session_factory() as db_session:
             df_len = len(data_frame)
 
@@ -1184,11 +1192,11 @@ class GreenDB(Connection):
         Fetch `Product's Classification Thresholds` for given timestamp and ml_model_name.
 
         Args:
-            timestamp: the timestamp when thresholds were calculated
+            timestamp: the timestamp when thresholds were calculated.
             ml_model_name: the name of the ml model for which the thresholds were calculated.
 
         Returns:
-            Iterator[ProductClassificationThreshold]: `Iterator` of domain object representations
+            Iterator[ProductClassificationThreshold]: `Iterator` of domain object representations.
         """
 
         with self._session_factory() as db_session:

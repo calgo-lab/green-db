@@ -67,9 +67,10 @@ class InferenceEngine:
 
     def __init__(self, model_name: str, model_path: str, shop_thresholds: pd.DataFrame):
         """
-        :param model_name: The name of the model.
-        :param model_path: The path to the model on the system.
-        :param shop_thresholds: The thresholds for each shop to use for thresholding.
+        Args:
+            model_name (str): The name of the model.
+            model_path (str): The path to the model on the system.
+            shop_thresholds (pd.DataFrame): The thresholds for each shop to use for thresholding.
         """
         self.name = model_name
         self.path = model_path
@@ -82,46 +83,28 @@ class InferenceEngine:
         if self.model is not None:
             self.model.set_num_gpus(0)
 
-    def predict_proba(self, df: pd.DataFrame) -> pd.DataFrame:
+    def predict_probabilities(self, df: pd.DataFrame) -> pd.DataFrame:
         """
-        This function is used to perform inference on the retrieved products.
+        This function is used to perform inference on the retrieved products. The function
+        will return a pd.Dataframe with predicted probabilities for each product category.
 
         Args:
             df (pd.Dataframe): Dataframe with Product instances.
 
         Returns:
-            pd.DataFrame: pd.DataFrame with predicted probabilites for each product category /
+            pd.DataFrame: pd.DataFrame with predicted probabilities for each product category /
             model_class.
         """
         if self.model is None:
             self.load_model()
 
         if self.model is not None:
-            probas = self.model.predict_proba(df)
+            probas = self.model.predict_probabilities(df)
             return probas
         else:
             # Handle the case when the model fails to load
-            logger.warning("Model failed to load. Returning empty DataFrame.")
+            logger.warning(f"Model failed to load for path:{self.path}. Returning empty DataFrame.")
             return pd.DataFrame()
-
-    @staticmethod
-    def join_features_with_inference(
-        product_df: pd.DataFrame, classification_df: pd.DataFrame
-    ) -> pd.DataFrame:
-        """
-        This function is used to join the product dataframe with the retrieved classification
-        Dataframe.
-
-        Args:
-            product_df (pd.Dataframe): Dataframe with product instances.
-            classification_df (pd.Dataframe): Dataframe with ProductClassification instances.
-
-        Returns:
-            pd.DataFrame: pd.DataFrame of ProductClassification objects with thresholded
-            categories and corresponding thresholds.
-        """
-
-        return classification_df.join(product_df, on="id")
 
     def apply_shop_thresholds(
         self,
@@ -152,7 +135,7 @@ class InferenceEngine:
 
         # set shop specific thresholds if source and merchant are sent along with request
         if product_df is not None and {"source", "merchant"}.issubset(set(product_df.columns)):
-            combined = self.join_features_with_inference(product_df, classification_df)
+            combined = classification_df.join(product_df, on="id")
             join_keys = ["ml_model_name", "source", "merchant", "predicted_category"]
             combined = combined.join(self.shop_thresholds.set_index(join_keys), on=join_keys)
             combined["threshold"].fillna(fallback_thresholds)
@@ -161,6 +144,9 @@ class InferenceEngine:
                 [classification_df, fallback_thresholds.rename("threshold")], axis=1
             )
 
+        # Based on the retrieved thresholds for each category (and shop) we check whether the
+        # prediction reaches the threshold. If so, we set the predicted category, if not we set it
+        # to "under_threshold", so that it can be excluded later on.
         combined["category_thresholded"] = combined.apply(
             lambda x: x["predicted_category"]
             if x["confidence"] >= x["threshold"]
@@ -170,7 +156,7 @@ class InferenceEngine:
 
         return combined[list(classification_df.columns) + ["category_thresholded", "threshold"]]
 
-    def probas_to_ProductClassifications(self, probas: pd.DataFrame) -> pd.DataFrame:
+    def probs_to_ProductClassifications(self, probas: pd.DataFrame) -> pd.DataFrame:
         """
         This function is used to transform predicted probabilities into a DataFrame with complete
         ProductClassification objects.
@@ -198,23 +184,22 @@ class InferenceEngine:
 
         return result
 
-    def run_pipeline(self, request_data: str, apply_thresholds: bool = False) -> pd.DataFrame:
+    def run_pipeline(self, request_data: str, apply_shop_thresholds: bool = False) -> pd.DataFrame:
         """The standard pipeline to run for evaluating the request data and performing inference.
 
         Args:
-        request_data (json): data which was sent along the POST request. Should include a
-        pd.DataFrame that was transformed into serialized json format.
-        data_format (str): format to use for evaluating the request data. Either 'products' or
-        'classifications'.
+            request_data (json): data which was sent along the POST request. Should include a
+            pd.DataFrame that was transformed into serialized json format.
+            apply_shop_thresholds (bool): boolean, whether to apply thresholding or not.
 
         :return:
-            A flask Response containing the predictions.
+            A pd.Dataframe containing the predictions.
         """
         df = self.eval_request(request_data)
-        pred_probs = self.predict_proba(df)
+        pred_probs = self.predict_probabilities(df)
 
-        classification_df = self.probas_to_ProductClassifications(pred_probs)
-        if apply_thresholds:
+        classification_df = self.probs_to_ProductClassifications(pred_probs)
+        if apply_shop_thresholds:
             classification_df = self.apply_shop_thresholds(classification_df, df)
 
         return classification_df
@@ -223,11 +208,15 @@ class InferenceEngine:
     def eval_request(request_data: str, data_format: str = "products") -> Optional[pd.DataFrame]:
         """
         This function is used to evaluate the data of the request and checks whether all necessary
-        columns/features are part of the request data.
+        columns/features are part of the request data. When the "data_format" is "products" it
+        should include products and when it is "classifications", it should include
+        ProductClassifications.
 
-        Args: request_data (str): data which was sent along the POST request with a string in
-        JSON format. data_format (str): format to use for evaluating the request data. Either
-        'products' or 'classifications'.
+        Args:
+            request_data (str): data which was sent along the POST request with a string in
+            JSON format.
+            data_format (str): format to use for evaluating the request data. Either
+            'products' or 'classifications'.
 
 
         Returns:

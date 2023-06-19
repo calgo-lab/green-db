@@ -32,6 +32,7 @@ def inference_and_write_to_green_db(row_id: int, table_name: str) -> None:
         and performs inference, which result is then inserted into the GreenDB.
 
     Args:
+        table_name:
         row_id (int): The id of the to-be-fetched-row
     """
     product = green_db_connection.get_product(id=row_id)

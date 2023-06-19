@@ -44,7 +44,7 @@ def thresholded_product_classifier_handler() -> Response:
         A flask Response containing the predictions.
     """
     request_data = request.get_json()
-    classification_df = IE.run_pipeline(request_data, apply_thresholds=True)
+    classification_df = IE.run_pipeline(request_data, apply_shop_thresholds=True)
 
     return Response(classification_df.to_json(orient="records"), mimetype="application/json")
 

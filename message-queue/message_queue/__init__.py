@@ -75,7 +75,7 @@ class MessageQueue:
 
         Args:
             table_name (str): Table name used for logging purposes.
-            row_id (int): id of the row used for inference
+            row_id (int): id of the row used for inference.
         """
         self.__inference_queue.enqueue(
             WORKER_FUNCTION_INFERENCE,

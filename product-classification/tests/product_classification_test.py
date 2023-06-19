@@ -11,6 +11,8 @@ shop_thresholds = to_df(thresholds)
 MODEL_DIR = f"/usr/src/app/data/models/{PRODUCT_CLASSIFICATION_MODEL}"
 IE = InferenceEngine(PRODUCT_CLASSIFICATION_MODEL, MODEL_DIR, shop_thresholds)
 
+OTTO_SNEAKERS_THRESHOLD = 0.999751627445221
+
 product_json = '{"description":{"0":"blue sneakers"},"id":{"0":0},"name":{"0":"sneakers blue"}}'
 products_json = (
     '{"id":{"0":0,"1":1},"name":{"0":"sneakers blue","1":"t-shirt red"},'
@@ -66,7 +68,7 @@ def prep_pred_probs() -> pd.DataFrame:
 
 def test_convert_pred_probs() -> None:
     product_classification = prep_pred_probs()
-    pcl = IE.probas_to_ProductClassifications(pd.read_json(product_pred_probs))
+    pcl = IE.probs_to_ProductClassifications(pd.read_json(product_pred_probs))
     rows, cols = product_classification.shape
     for row in range(rows):
         for col in range(cols):
@@ -99,7 +101,7 @@ def test_shop_thresholding() -> None:
     p["merchant"] = "otto"
     p["source"] = "otto"
     thresholded = IE.apply_shop_thresholds(pc, p)
-    assert np.isclose(0.999751627445221, thresholded.loc[0, "threshold"])
+    assert np.isclose(OTTO_SNEAKERS_THRESHOLD, thresholded.loc[0, "threshold"])
     assert thresholded.loc[0, "category_thresholded"] == "SNEAKERS"
 
 
