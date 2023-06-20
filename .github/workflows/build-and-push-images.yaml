@@ -10,6 +10,7 @@ env:
   IMAGE_NAME_WORKERS: workers
   IMAGE_NAME_SCRAPYD: scrapyd
   IMAGE_NAME_MONITORING: monitoring
+  IMAGE_NAME_PRODUCT_CLASSIFICATION: product-classification
 
 jobs:
   build-and-push-workers-image:
@@ -104,6 +105,38 @@ jobs:
         with:
           context: .
           file: ./scraping/Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+  build-and-push-product-classification-image:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v1.12.0
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v3.6.2
+        with:
+          images: ${{ env.REGISTRY }}/${{ github.repository }}/${{ env.IMAGE_NAME_PRODUCT_CLASSIFICATION }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2.8.0
+        with:
+          context: .
+          file: ./product-classification/Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
