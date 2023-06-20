@@ -80,7 +80,7 @@ class MessageQueue:
         self.__inference_queue.enqueue(
             WORKER_FUNCTION_INFERENCE,
             args=(row_id, table_name),
-            job_timeout=10,
+            job_timeout=30,
             result_ttl=1,
             retry=Retry(max=5, interval=30),
         )
