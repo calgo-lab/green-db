@@ -99,7 +99,7 @@ class InferenceEngine:
             self.load_model()
 
         if self.model is not None:
-            probas = self.model.predict_probabilities(df)
+            probas = self.model.predict_proba(df)
             return probas
         else:
             # Handle the case when the model fails to load
