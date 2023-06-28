@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "product-classification"
-version = "0.1.0"
+version = "0.2.11"
 description = ""
 authors = ["Alex Flick <alex.flick@gmx.de>"]
 readme = "README.md"
