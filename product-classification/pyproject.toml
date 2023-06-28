@@ -2,8 +2,15 @@
 name = "product-classification"
 version = "0.2.11"
 description = ""
+license = "Apache-2.0"
 authors = ["Alex Flick <alex.flick@gmx.de>"]
 readme = "README.md"
+repository = "https://github.com/calgo-lab/green-db"
+keywords = ["GreenDB", "inference", "classification", "products"]
+classifiers = [
+    "Framework :: Flask",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence"
+]
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.11"
