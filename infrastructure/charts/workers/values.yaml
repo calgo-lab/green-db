@@ -17,6 +17,8 @@ queues: # defined in 'core' package 'constants.py' prefix: 'WORKER_QUEUE_<...>'
   extract:
     - scraping
     - greenDb
+  inference:
+    - greenDb
 
 DBEnv:
   scraping:

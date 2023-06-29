@@ -5,9 +5,12 @@ from rq import Queue, Retry
 
 from core import log
 from core.constants import (
+    TABLE_NAME_GREEN_DB,
     WORKER_FUNCTION_EXTRACT,
+    WORKER_FUNCTION_INFERENCE,
     WORKER_FUNCTION_SCRAPING,
     WORKER_QUEUE_EXTRACT,
+    WORKER_QUEUE_INFERENCE,
     WORKER_QUEUE_SCRAPING,
 )
 from core.domain import ScrapedPage
@@ -29,6 +32,7 @@ class MessageQueue:
 
         self.__scraping_queue = Queue(WORKER_QUEUE_SCRAPING, connection=self.__redis_connection)
         self.__extract_queue = Queue(WORKER_QUEUE_EXTRACT, connection=self.__redis_connection)
+        self.__inference_queue = Queue(WORKER_QUEUE_INFERENCE, connection=self.__redis_connection)
 
         logger.info("Redis connection established and message queues initialized.")
 
@@ -60,6 +64,23 @@ class MessageQueue:
             WORKER_FUNCTION_EXTRACT,
             args=(table_name, row_id),
             job_timeout=10,
+            result_ttl=1,
+            retry=Retry(max=5, interval=30),
+        )
+
+    # TODO: table name is not used within code, but needed for log messages
+    def add_inference(self, row_id: int, table_name: str = TABLE_NAME_GREEN_DB) -> None:
+        """
+        Enqueue job to "inference" `Queue`.
+
+        Args:
+            table_name (str): Table name used for logging purposes.
+            row_id (int): id of the row used for inference.
+        """
+        self.__inference_queue.enqueue(
+            WORKER_FUNCTION_INFERENCE,
+            args=(row_id, table_name),
+            job_timeout=30,
             result_ttl=1,
             retry=Retry(max=5, interval=30),
         )

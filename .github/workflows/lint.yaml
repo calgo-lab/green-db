@@ -107,7 +107,7 @@ jobs:
           export TERM=xterm
       - name: Install dependencies
         run: |
-          pip install mypy==1.* types-redis types-requests
+          pip install mypy==1.* types-redis types-requests types-waitress
       - name: Run mypy
         run: |
           mypy --show-column-numbers .

@@ -1,0 +1,48 @@
+[tool.poetry]
+name = "product-classification"
+version = "0.2.11"
+description = ""
+license = "Apache-2.0"
+authors = ["Alex Flick <alex.flick@gmx.de>"]
+readme = "README.md"
+repository = "https://github.com/calgo-lab/green-db"
+keywords = ["GreenDB", "inference", "classification", "products"]
+classifiers = [
+    "Framework :: Flask",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence"
+]
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.11"
+Flask = "^2.2.3"
+waitress = "^2.1.2"
+pandas = "^1.5.3"
+scikit-learn = "==1.2.1"
+autogluon-multimodal = {git = "https://github.com/autogluon/autogluon/", branch = "0.7.0", subdirectory = "multimodal"}
+core = {path = "../core", develop = true}
+database = {path = "../database", develop = true}
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.1.0"
+isort = "^5.12.0"
+mypy = "^1.1.1"
+flake8 = "^6.0.0"
+pytest = "^7.3.2"
+types-waitress = "^2.1.4.8"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.mypy]
+python_version = "3.10"
+disallow_untyped_defs = true
+ignore_missing_imports = true
+
+[tool.isort]
+profile = "black"
+line_length = 100
+
+[tool.black]
+line-length = 100
