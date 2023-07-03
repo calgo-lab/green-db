@@ -138,7 +138,7 @@ class InferenceEngine:
             combined = classification_df.join(product_df, on="id")
             join_keys = ["ml_model_name", "source", "merchant", "predicted_category"]
             combined = combined.join(self.shop_thresholds.set_index(join_keys), on=join_keys)
-            combined["threshold"].fillna(fallback_thresholds)
+            combined["threshold"] = combined["threshold"].fillna(fallback_thresholds)
         else:
             combined = pd.concat(
                 [classification_df, fallback_thresholds.rename("threshold")], axis=1
