@@ -1124,7 +1124,7 @@ class GreenDB(Connection):
 
     def get_product_classifications_with_ids(
         self, ids: list, ml_model_name: Optional[str] = PRODUCT_CLASSIFICATION_MODEL
-    ) -> ProductClassification:
+    ) -> Iterator[ProductClassification]:
         """
         Fetch `Product's Classifications` for given `ids` and 'model name'.
 
@@ -1136,9 +1136,11 @@ class GreenDB(Connection):
             Product: Domain object representation of table row
         """
         with self._session_factory() as db_session:
-            query = db_session.query(ProductClassificationTable).filter(
-                ProductClassificationTable.id.in_(ids)).filter(
-                ProductClassificationTable.ml_model_name == ml_model_name)
+            query = (
+                db_session.query(ProductClassificationTable)
+                .filter(ProductClassificationTable.id.in_(ids))
+                .filter(ProductClassificationTable.ml_model_name == ml_model_name)
+            )
             return (ProductClassification.from_orm(row) for row in query.all())
 
     def write_product_classification(self, product_classification: ProductClassification) -> None:
