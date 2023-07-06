@@ -154,7 +154,9 @@ class InferenceEngine:
             axis=1,
         )
 
-        return combined[list(ProductClassification.__fields__.keys()) + ["category_thresholded", "threshold"]]
+        return combined[
+            list(ProductClassification.__fields__.keys()) + ["category_thresholded", "threshold"]
+        ]
 
     def probs_to_ProductClassifications(self, probas: pd.DataFrame) -> pd.DataFrame:
         """
