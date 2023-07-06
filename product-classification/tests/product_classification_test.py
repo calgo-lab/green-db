@@ -41,13 +41,13 @@ product_pred_probs = (
 def test_eval_product_request() -> None:
     df = IE.eval_request(product_json)
     assert df is not None
-    assert df.shape == (1, 2)
+    assert df.shape == (1, 3)
 
 
 def test_eval_products_request() -> None:
     df = IE.eval_request(products_json)
     assert df is not None
-    assert df.shape == (2, 2)
+    assert df.shape == (2, 3)
 
 
 def prep_pred_probs() -> pd.DataFrame:
