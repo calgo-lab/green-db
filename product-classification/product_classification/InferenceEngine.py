@@ -135,7 +135,7 @@ class InferenceEngine:
 
         # set shop specific thresholds if source and merchant are sent along with request
         if product_df is not None and {"source", "merchant"}.issubset(set(product_df.columns)):
-            combined = classification_df.join(product_df, on="id")
+            combined = classification_df.join(product_df, on="id", lsuffix="_cls")
             join_keys = ["ml_model_name", "source", "merchant", "predicted_category"]
             combined = combined.join(self.shop_thresholds.set_index(join_keys), on=join_keys)
             combined["threshold"] = combined["threshold"].fillna(fallback_thresholds)
@@ -154,7 +154,7 @@ class InferenceEngine:
             axis=1,
         )
 
-        return combined[list(classification_df.columns) + ["category_thresholded", "threshold"]]
+        return combined[list(ProductClassification.__fields__.keys()) + ["category_thresholded", "threshold"]]
 
     def probs_to_ProductClassifications(self, probas: pd.DataFrame) -> pd.DataFrame:
         """
@@ -239,5 +239,5 @@ class InferenceEngine:
             )
             return None
 
-        df = df.set_index("id")
+        df = df.set_index("id", drop=False).rename_axis(None)
         return df
