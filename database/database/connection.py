@@ -1122,26 +1122,26 @@ class GreenDB(Connection):
             query = db_session.query(GreenDBTable).filter(GreenDBTable.id.in_(ids))
             return (Product.from_orm(row) for row in query.all())
 
-    def get_product_classification(
-        self, id: int, ml_model_name: Optional[str] = PRODUCT_CLASSIFICATION_MODEL
-    ) -> ProductClassification:
+    def get_product_classifications_with_ids(
+        self, ids: list, ml_model_name: Optional[str] = PRODUCT_CLASSIFICATION_MODEL
+    ) -> Iterator[ProductClassification]:
         """
-        Fetch `Product's Classification` with given `id` and 'model name'.
+        Fetch `Product's Classifications` for given `ids` and 'model name'.
 
         Args:
             ml_model_name: the name of the ml model used for prediction.
-            id (int): Row `id` to fetch.
+            ids (list): Row `ids` to fetch.
 
         Returns:
             Product: Domain object representation of table row
         """
         with self._session_factory() as db_session:
-            return ProductClassification.from_orm(
+            query = (
                 db_session.query(ProductClassificationTable)
-                .filter(ProductClassificationTable.id == id)
+                .filter(ProductClassificationTable.id.in_(ids))
                 .filter(ProductClassificationTable.ml_model_name == ml_model_name)
-                .first()
             )
+            return (ProductClassification.from_orm(row) for row in query.all())
 
     def write_product_classification(self, product_classification: ProductClassification) -> None:
         """
