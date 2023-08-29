@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "workers"
-version = "0.2.12"
+version = "0.2.13"
 description = ""
 license = "Apache-2.0"
 authors = ["Sebastian Jäger <message@sebastian-jaeger.me>"]
