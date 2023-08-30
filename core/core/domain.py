@@ -58,8 +58,9 @@ class ScrapedPage(BaseModel):
     meta_information: Optional[dict]
 
     class Config:
-        orm_mode = True
+        from_attributes = True
         use_enum_values = True
+
 
 
 class Product(BaseModel):
@@ -72,7 +73,7 @@ class Product(BaseModel):
     name: str
     description: str
     brand: str
-    sustainability_labels: conlist(CertificateType, min_items=1)  # type: ignore
+    sustainability_labels: conlist(CertificateType, min_length=1)  # type: ignore
     price: float
     currency: CurrencyType
     image_urls: List[str]
@@ -90,8 +91,9 @@ class Product(BaseModel):
     asin: Optional[str]
 
     class Config:
-        orm_mode = True
+        from_attributes = True
         use_enum_values = True
+
 
 
 class SustainabilityLabel(BaseModel):
@@ -115,7 +117,7 @@ class SustainabilityLabel(BaseModel):
     social_conflict_minerals: Optional[conint(ge=0, le=100)]  # type: ignore
 
     class Config:
-        orm_mode = True
+        from_attributes = True
         use_enum_values = True
 
 
@@ -188,7 +190,7 @@ class ProductClassification(BaseModel):
     all_predicted_probabilities: dict[ProductCategory, float]
 
     class Config:
-        orm_mode = True
+        from_attributes = True
         use_enum_values = True
 
 
@@ -201,5 +203,5 @@ class ProductClassificationThreshold(BaseModel):
     threshold: float
 
     class Config:
-        orm_mode = True
+        from_attributes = True
         use_enum_values = True
