@@ -62,7 +62,6 @@ class ScrapedPage(BaseModel):
         use_enum_values = True
 
 
-
 class Product(BaseModel):
     timestamp: datetime
     url: str
@@ -93,7 +92,6 @@ class Product(BaseModel):
     class Config:
         from_attributes = True
         use_enum_values = True
-
 
 
 class SustainabilityLabel(BaseModel):
