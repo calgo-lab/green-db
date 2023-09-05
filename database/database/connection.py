@@ -68,7 +68,7 @@ class Connection:
             [ScrapingTable | GreenDBTable]: Updated Table object representing the database row
         """
         with self._session_factory() as db_session:
-            db_object = self._database_class(**domain_object.dict())
+            db_object = self._database_class(**domain_object.model_dump())
             db_session.add(db_object)
             db_session.commit()
             db_session.refresh(db_object)
@@ -177,7 +177,7 @@ class Scraping(Connection):
             ScrapedPage: Domain object representation of table row
         """
         with self._session_factory() as db_session:
-            return ScrapedPage.from_orm(
+            return ScrapedPage.model_validate(
                 db_session.query(self._database_class).filter(self._database_class.id == id).first()
             )
 
@@ -195,7 +195,7 @@ class Scraping(Connection):
             query = db_session.query(self._database_class).filter(
                 self._database_class.timestamp == timestamp
             )
-            return (ScrapedPage.from_orm(row) for row in query.all())
+            return (ScrapedPage.model_validate(row) for row in query.all())
 
     def get_latest_scraped_pages(self) -> Iterator[ScrapedPage]:
         """
@@ -271,7 +271,7 @@ class GreenDB(Connection):
                 .first()
             ):
                 for label in sustainability_labels:
-                    db_session.add(SustainabilityLabelsTable(**label.dict()))
+                    db_session.add(SustainabilityLabelsTable(**label.model_dump()))
 
             db_session.commit()
 
@@ -292,7 +292,7 @@ class GreenDB(Connection):
                 .first()
             ):
                 for threshold in thresholds:
-                    db_session.add(ProductClassificationThresholdsTable(**threshold.dict()))
+                    db_session.add(ProductClassificationThresholdsTable(**threshold.model_dump()))
 
             db_session.commit()
 
@@ -307,7 +307,7 @@ class GreenDB(Connection):
             Product: Domain object representation of table row
         """
         with self._session_factory() as db_session:
-            return Product.from_orm(
+            return Product.model_validate(
                 db_session.query(GreenDBTable).filter(GreenDBTable.id == id).first()
             )
 
@@ -327,7 +327,7 @@ class GreenDB(Connection):
         with self._session_factory() as db_session:
             sustainability_labels = db_session.query(SustainabilityLabelsTable).all()
             sustainability_labels_iterator = (
-                SustainabilityLabel.from_orm(sustainability_label)
+                SustainabilityLabel.model_validate(sustainability_label)
                 for sustainability_label in sustainability_labels
             )
             if iterator:
@@ -356,7 +356,7 @@ class GreenDB(Connection):
                 query = query.filter(self._database_class.timestamp == timestamp)
 
             if convert_orm:
-                return (Product.from_orm(row) for row in query.all())
+                return (Product.model_validate(row) for row in query.all())
             else:
                 return query.all()
 
@@ -1120,7 +1120,7 @@ class GreenDB(Connection):
         """
         with self._session_factory() as db_session:
             query = db_session.query(GreenDBTable).filter(GreenDBTable.id.in_(ids))
-            return (Product.from_orm(row) for row in query.all())
+            return (Product.model_validate(row) for row in query.all())
 
     def get_product_classifications_with_ids(
         self, ids: list, ml_model_name: Optional[str] = PRODUCT_CLASSIFICATION_MODEL
@@ -1141,7 +1141,7 @@ class GreenDB(Connection):
                 .filter(ProductClassificationTable.id.in_(ids))
                 .filter(ProductClassificationTable.ml_model_name == ml_model_name)
             )
-            return (ProductClassification.from_orm(row) for row in query.all())
+            return (ProductClassification.model_validate(row) for row in query.all())
 
     def write_product_classification(self, product_classification: ProductClassification) -> None:
         """
@@ -1151,7 +1151,7 @@ class GreenDB(Connection):
             product_classification: The domain object to write into the database.
         """
         with self._session_factory() as db_session:
-            db_object = ProductClassificationTable(**product_classification.dict())
+            db_object = ProductClassificationTable(**product_classification.model_dump())
             db_session.add(db_object)
             db_session.commit()
 
@@ -1172,7 +1172,7 @@ class GreenDB(Connection):
             ):
                 try:
                     db_object = ProductClassificationTable(
-                        **ProductClassification.parse_obj(product_classification).dict()
+                        **ProductClassification.model_validate(product_classification).model_dump()
                     )
                     db_session.add(db_object)
 
@@ -1205,7 +1205,7 @@ class GreenDB(Connection):
                 .filter(ProductClassificationThresholdsTable.timestamp == timestamp)
                 .filter(ProductClassificationThresholdsTable.ml_model_name == ml_model_name)
             )
-            return (ProductClassificationThreshold.from_orm(row) for row in query.all())
+            return (ProductClassificationThreshold.model_validate(row) for row in query.all())
 
     def get_latest_product_classification_thresholds(
         self, ml_model_name: str = PRODUCT_CLASSIFICATION_MODEL

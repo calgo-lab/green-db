@@ -80,7 +80,7 @@ jobs:
           export TERM=xterm
       - name: Install dependencies
         run: |
-          pip install flake8==6.*
+          pip install flake8==6.0.0
       - name: Run flake8
         run: |
           flake8 .
