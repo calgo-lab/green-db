@@ -32,10 +32,10 @@ patch-workers-version:
 patch-product-classification-version:
 	$(MAKE) -C product-classification patch-version
 
-patch-start-job-version
-    $(MAKE) -C start-job patch-version
+patch-start-job-version:
+	$(MAKE) -C start-job patch-version
 
-patch-all: patch-core-version patch-database-version patch-extract-version patch-message-queue-version patch-monitoring-version patch-scraping-version patch-workers-version patch-product-classification-version patch-start-job-version
+patch-all: patch-core-version patch-database-version patch-extract-version patch-message-queue-version patch-monitoring-version patch-scraping-version patch-workers-version patch-product-classification-version
 
 patch-version: patch-all
 	# get version from core package.
