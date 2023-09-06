@@ -5,7 +5,10 @@ ifndef DOCKER_IMAGE_NAME
 	$(error DOCKER_IMAGE_NAME is not set)
 endif
 
+patch-version: patch-chart
+
 patch-chart:
+    # we do not have a poetry env for start-job so we use the workers env to retrieve NEW_VERSION
     $(eval OLD_VERSION=$(shell helm show chart ${START_JOB_CHART} | grep '^appVersion:' | awk '{print $2}'))
 	$(eval NEW_VERSION=$(shell cd ../workers; poetry version -s))
 	${SED_INPLACE} 's/${OLD_VERSION}/${NEW_VERSION}/' ${START_JOB_CHART}/Chart.yaml
