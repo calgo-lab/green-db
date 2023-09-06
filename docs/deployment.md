@@ -20,4 +20,5 @@ helm install scrapyd -n greendb infrastructure/charts/scrapyd
 helm install workers -n greendb infrastructure/charts/workers
 helm install product-classification -n greendb infrastructure/charts/product-classification/helm
 helm install start-job -n greendb infrastructure/charts/start-job
+helm install db-exporting -n greendb infrastructure/charts/db-exporting
 ```
