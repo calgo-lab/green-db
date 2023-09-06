@@ -6,7 +6,7 @@ DB_EXPORTING_CHART=infrastructure/charts/db-exporting
 START_JOB_CHART=infrastructure/charts/start-job
 
 
-.PHONY: patch-core-version patch-database-version patch-extract-version patch-message-queue-version patch-scraping-version patch-workers-version patch-product-classification-version patch-start-job-version patch-all patch-version
+.PHONY: patch-core-version patch-database-version patch-extract-version patch-message-queue-version patch-scraping-version patch-workers-version patch-product-classification-version patch-start-job-version patch-db-exporting-version patch-all patch-version
 
 patch-core-version:
 	$(MAKE) -C core patch-version
@@ -35,7 +35,10 @@ patch-product-classification-version:
 patch-start-job-version:
 	$(MAKE) -C start-job patch-version
 
-patch-all: patch-core-version patch-database-version patch-extract-version patch-message-queue-version patch-monitoring-version patch-scraping-version patch-workers-version patch-product-classification-version
+patch-db-exporting-version:
+	$(MAKE) -C db-exporting patch-version
+
+patch-all: patch-core-version patch-database-version patch-extract-version patch-message-queue-version patch-monitoring-version patch-scraping-version patch-workers-version patch-product-classification-version patch-db-exporting-version
 
 patch-version: patch-all
 	# get version from core package.
