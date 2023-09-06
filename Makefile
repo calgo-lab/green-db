@@ -41,18 +41,11 @@ patch-version: patch-all
 	# get version from core package.
 	$(eval VERSION=$(shell cd core; poetry version -s))
 	
-	git add core/pyproject.toml database/pyproject.toml extract/pyproject.toml message-queue/pyproject.toml monitoring/pyproject.toml scraping/pyproject.toml workers/pyproject.toml product-classification/pyproject.toml ${MONITORING_CHART}/Chart.yaml ${WORKERS_CHART}/Chart.yaml ${SCRAPYD_CHART}/Chart.yaml ${PRODUCT_CLASSIFICATION_CHART}/Chart.yaml ${DB_EXPORTING_CHART}/Chart.yaml ${START_JOB_CHART}/Chart.yaml
+	git add core/pyproject.toml database/pyproject.toml extract/pyproject.toml message-queue/pyproject.toml monitoring/pyproject.toml scraping/pyproject.toml workers/pyproject.toml db-exporting/pyproject.toml product-classification/pyproject.toml ${MONITORING_CHART}/Chart.yaml ${WORKERS_CHART}/Chart.yaml ${SCRAPYD_CHART}/Chart.yaml ${PRODUCT_CLASSIFICATION_CHART}/Chart.yaml ${DB_EXPORTING_CHART}/Chart.yaml ${START_JOB_CHART}/Chart.yaml
 	git commit -m "bump version to '${VERSION}'"
 	git tag ${VERSION}
 
-patch-version-push: patch-all
-	# get version from core package.
-	$(eval VERSION=$(shell cd core; poetry version -s))
-
-	git add core/pyproject.toml database/pyproject.toml extract/pyproject.toml message-queue/pyproject.toml monitoring/pyproject.toml scraping/pyproject.toml workers/pyproject.toml db-exporting/pyproject.toml {MONITORING_CHART}/Chart.yaml ${WORKERS_CHART}/Chart.yaml ${SCRAPYD_CHART}/Chart.yaml ${PRODUCT_CLASSIFICATION_CHART}/Chart.yaml ${DB_EXPORTING_CHART}/Chart.yaml ${START_JOB_CHART}/Chart.yaml
-	git commit -m "bump version to '${VERSION}'"
-	git tag ${VERSION}
-
+patch-version-push: patch-version
 	# push everything
 	git push
 	git push origin ${VERSION}
