@@ -1,6 +1,7 @@
 import json
 import urllib
 import xml.etree.ElementTree as ElementTree
+from json import JSONDecodeError
 from logging import getLogger
 from typing import Any, Dict, Iterator, Optional
 
@@ -251,7 +252,11 @@ def get_sustainability_strings(parsed_page: ParsedPage) -> Iterator[str]:
 
     # Loop over all JSON objects on the page to find sustainability information
     for json_file in parsed_page.beautiful_soup.findAll("script", {"type": "application/json"}):
-        json_values = [get_json_data(json_file.get_text())]
+        try:
+            json_values = [get_json_data(json_file.get_text())]
+        except JSONDecodeError:
+            # some json structures can not be decoded, so we just continue with the next json
+            continue
         for json_value in json_values:
             match json_value:
                 case {"sustainabilityClusterKind": "certificates", "attributes": [*attributes]}:
