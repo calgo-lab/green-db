@@ -15,7 +15,9 @@ In order to create a new version one should use one fo the `make` commands as fo
 Then to restart the jobs with the new changes, one should run:
 
 ```yaml
-helm delete -n greendb workers scrapyd
-helm install workers -n greendb infrastructure/charts/workers
+helm delete -n greendb workers scrapyd product-classification
 helm install scrapyd -n greendb infrastructure/charts/scrapyd
+helm install workers -n greendb infrastructure/charts/workers
+helm install product-classification -n greendb infrastructure/charts/product-classification/helm
+helm install start-job -n greendb infrastructure/charts/start-job
 ```
