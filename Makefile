@@ -38,7 +38,7 @@ patch-start-job-version:
 patch-db-exporting-version:
 	$(MAKE) -C db-exporting patch-version
 
-patch-all: patch-core-version patch-database-version patch-extract-version patch-message-queue-version patch-monitoring-version patch-scraping-version patch-workers-version patch-product-classification-version patch-db-exporting-version
+patch-all: patch-core-version patch-database-version patch-extract-version patch-message-queue-version patch-monitoring-version patch-scraping-version patch-workers-version patch-product-classification-version patch-db-exporting-version patch-start-job-version
 
 patch-version: patch-all
 	# get version from core package.
