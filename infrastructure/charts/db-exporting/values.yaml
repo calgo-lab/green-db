@@ -3,7 +3,7 @@
 # Declare variables to be passed into your templates.
 
 image:
-  repository: registry.datexis.com/trajanovska/db-exporting
+  repository: registry.datexis.com/greendb/db-exporting
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag:
