@@ -3,7 +3,7 @@ from typing import List
 
 from core.domain import ConsumerLifestageType, GenderType, ProductCategory
 
-SUSTAINABILITY_FILTER = "?nachhaltigkeit=alle-nachhaltigen-artikel"
+SUSTAINABILITY_FILTER = "?nachhaltigkeit=beruecksichtigt-tierwohl,energieeffiziente-nutzung,foerderung-sozialer-initiativen,kreislauffaehiges-design,materialien-aus-biologischem-anbau,naturkosmetik,recycelte-materialien,verbesserte-herstellung,verbesserte-rohstoffbeschaffung"  # noqa
 
 
 def clothes_and_shoes() -> List[dict]:
