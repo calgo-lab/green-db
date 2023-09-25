@@ -36,7 +36,7 @@ def test_startjob() -> None:
 
             if isinstance(start_urls, list):
                 for start_url in start_urls:
-                    assert_is_valid_url(start_urls)
+                    assert_is_valid_url(start_url)
             else:
                 assert_is_valid_url(start_urls)
 
