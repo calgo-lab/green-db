@@ -15,7 +15,7 @@ def enum_has_value(enum: Type[Enum], value: Any) -> bool:
     return True
 
 
-def assert_is_valid_url(url: str) -> bool:
+def assert_is_valid_url(url: str) -> None:
     assert isinstance(url, str)
     assert "," not in url
     result = urlparse(url)
