@@ -58,7 +58,7 @@ class ScrapedPage(BaseModel):
     meta_information: Optional[dict]
 
     class Config:
-        orm_mode = True
+        from_attributes = True
         use_enum_values = True
 
 
@@ -72,7 +72,7 @@ class Product(BaseModel):
     name: str
     description: str
     brand: str
-    sustainability_labels: conlist(CertificateType, min_items=1)  # type: ignore
+    sustainability_labels: conlist(CertificateType, min_length=1)  # type: ignore
     price: float
     currency: CurrencyType
     image_urls: List[str]
@@ -90,7 +90,7 @@ class Product(BaseModel):
     asin: Optional[str]
 
     class Config:
-        orm_mode = True
+        from_attributes = True
         use_enum_values = True
 
 
@@ -115,12 +115,12 @@ class SustainabilityLabel(BaseModel):
     social_conflict_minerals: Optional[conint(ge=0, le=100)]  # type: ignore
 
     class Config:
-        orm_mode = True
+        from_attributes = True
         use_enum_values = True
 
 
-# if you make an edge case decision, please document it here.
 class ProductCategory(str, Enum):
+    # if you make an edge case decision, please document it here.
     # bags
     BACKPACK = "BACKPACK"
     BAG = "BAG"
@@ -164,6 +164,8 @@ class ProductCategory(str, Enum):
     SMARTWATCH = "SMARTWATCH"
     TABLET = "TABLET"  # see also LAPTOP.
     TV = "TV"
+    MONITOR = "MONITOR"  # computer monitors
+    DESKTOP_PC = "DESKTOP_PC"
 
     # household
     COOKER_HOOD = "COOKER_HOOD"
@@ -176,3 +178,28 @@ class ProductCategory(str, Enum):
     STOVE = "STOVE"
     TOWEL = "TOWEL"  # for drying yourself. No kitchen towels.
     WASHER = "WASHER"  # includes Washer-Dryers
+
+
+class ProductClassification(BaseModel):
+    id: int
+    ml_model_name: str
+    predicted_category: ProductCategory
+    confidence: float
+    all_predicted_probabilities: dict[ProductCategory, float]
+
+    class Config:
+        from_attributes = True
+        use_enum_values = True
+
+
+class ProductClassificationThreshold(BaseModel):
+    ml_model_name: str
+    timestamp: datetime
+    source: str
+    merchant: str
+    predicted_category: ProductCategory
+    threshold: float
+
+    class Config:
+        from_attributes = True
+        use_enum_values = True

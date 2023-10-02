@@ -2,5 +2,5 @@ apiVersion: v2
 name: scrapyd
 description: A Helm chart to deploy scrapyd on Kubernetes
 type: application
-version: 0.2.1
-appVersion: "0.2.1"
+version: 0.2.14
+appVersion: "0.2.14"

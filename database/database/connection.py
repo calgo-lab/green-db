@@ -7,12 +7,26 @@ import pandas as pd
 from sqlalchemy import desc, func, literal_column, or_
 from sqlalchemy.orm import Session
 
-from core.constants import DATABASE_NAME_GREEN_DB, DATABASE_NAME_SCRAPING
-from core.domain import CertificateType, PageType, Product, ScrapedPage, SustainabilityLabel
+from core.constants import (
+    DATABASE_NAME_GREEN_DB,
+    DATABASE_NAME_SCRAPING,
+    PRODUCT_CLASSIFICATION_MODEL,
+)
+from core.domain import (
+    CertificateType,
+    PageType,
+    Product,
+    ProductClassification,
+    ProductClassificationThreshold,
+    ScrapedPage,
+    SustainabilityLabel,
+)
 
 from .tables import (
     SCRAPING_TABLE_CLASS_FOR,
     GreenDBTable,
+    ProductClassificationTable,
+    ProductClassificationThresholdsTable,
     ScrapingTable,
     SustainabilityLabelsTable,
     bootstrap_tables,
@@ -24,7 +38,9 @@ logger = getLogger(__name__)
 
 class Connection:
     def __init__(
-        self, database_class: Type[GreenDBTable] | Type[ScrapingTable], database_name: str
+        self,
+        database_class: Type[GreenDBTable] | Type[ScrapingTable] | Type[ProductClassificationTable],
+        database_name: str,
     ) -> None:
         """
         Base `class` of connections.
@@ -41,7 +57,9 @@ class Connection:
 
         bootstrap_tables(database_name)
 
-    def write(self, domain_object: ScrapedPage | Product) -> ScrapingTable | GreenDBTable:
+    def write(
+        self, domain_object: ScrapedPage | Product | ProductClassification
+    ) -> ScrapingTable | GreenDBTable | ProductClassificationTable:
         """
         Writes a `domain_object` into the database and returns an updated Table object.
         This is useful if, e.g., the `id` of the database row is necessary in the future.
@@ -50,7 +68,7 @@ class Connection:
             [ScrapingTable | GreenDBTable]: Updated Table object representing the database row
         """
         with self._session_factory() as db_session:
-            db_object = self._database_class(**domain_object.dict())
+            db_object = self._database_class(**domain_object.model_dump())
             db_session.add(db_object)
             db_session.commit()
             db_session.refresh(db_object)
@@ -61,7 +79,10 @@ class Connection:
         self,
         db_session: Session,
         database_class: Optional[
-            Type[GreenDBTable] | Type[ScrapingTable] | Type[SustainabilityLabelsTable]
+            Type[GreenDBTable]
+            | Type[ScrapingTable]
+            | Type[SustainabilityLabelsTable]
+            | Type[ProductClassificationTable]
         ] = None,
     ) -> datetime:
         """
@@ -89,7 +110,10 @@ class Connection:
     def get_latest_timestamp(
         self,
         database_class: Optional[
-            Type[GreenDBTable] | Type[ScrapingTable] | Type[SustainabilityLabelsTable]
+            Type[GreenDBTable]
+            | Type[ScrapingTable]
+            | Type[SustainabilityLabelsTable]
+            | Type[ProductClassificationTable | ProductClassificationThresholdsTable]
         ] = None,
     ) -> datetime:
         """
@@ -153,7 +177,7 @@ class Scraping(Connection):
             ScrapedPage: Domain object representation of table row
         """
         with self._session_factory() as db_session:
-            return ScrapedPage.from_orm(
+            return ScrapedPage.model_validate(
                 db_session.query(self._database_class).filter(self._database_class.id == id).first()
             )
 
@@ -171,7 +195,7 @@ class Scraping(Connection):
             query = db_session.query(self._database_class).filter(
                 self._database_class.timestamp == timestamp
             )
-            return (ScrapedPage.from_orm(row) for row in query.all())
+            return (ScrapedPage.model_validate(row) for row in query.all())
 
     def get_latest_scraped_pages(self) -> Iterator[ScrapedPage]:
         """
@@ -235,6 +259,7 @@ class GreenDB(Connection):
         """
         super().__init__(GreenDBTable, DATABASE_NAME_GREEN_DB)
 
+        from core.product_classification_thresholds.bootstrap_database import thresholds
         from core.sustainability_labels.bootstrap_database import sustainability_labels
 
         with self._session_factory() as db_session:
@@ -246,7 +271,28 @@ class GreenDB(Connection):
                 .first()
             ):
                 for label in sustainability_labels:
-                    db_session.add(SustainabilityLabelsTable(**label.dict()))
+                    db_session.add(SustainabilityLabelsTable(**label.model_dump()))
+
+            db_session.commit()
+
+        #
+        with self._session_factory() as db_session:
+            # NOTE: this is slowly...
+            # if we have many more thresholds to bootstrap, we should refactor it.
+            if (  # If current threshold version (timestamp) does not exists, add them
+                not db_session.query(
+                    ProductClassificationThresholdsTable.timestamp,
+                    ProductClassificationThresholdsTable.ml_model_name,
+                )
+                .filter(
+                    ProductClassificationThresholdsTable.timestamp == thresholds[0].timestamp
+                    and ProductClassificationThresholdsTable.ml_model_name
+                    == thresholds[0].ml_model_name
+                )
+                .first()
+            ):
+                for threshold in thresholds:
+                    db_session.add(ProductClassificationThresholdsTable(**threshold.model_dump()))
 
             db_session.commit()
 
@@ -261,7 +307,7 @@ class GreenDB(Connection):
             Product: Domain object representation of table row
         """
         with self._session_factory() as db_session:
-            return Product.from_orm(
+            return Product.model_validate(
                 db_session.query(GreenDBTable).filter(GreenDBTable.id == id).first()
             )
 
@@ -281,7 +327,7 @@ class GreenDB(Connection):
         with self._session_factory() as db_session:
             sustainability_labels = db_session.query(SustainabilityLabelsTable).all()
             sustainability_labels_iterator = (
-                SustainabilityLabel.from_orm(sustainability_label)
+                SustainabilityLabel.model_validate(sustainability_label)
                 for sustainability_label in sustainability_labels
             )
             if iterator:
@@ -290,11 +336,14 @@ class GreenDB(Connection):
             else:
                 return list(sustainability_labels_iterator)
 
-    def get_products_for_timestamp(self, timestamp: datetime) -> Iterator[Product]:
+    def get_products_for_timestamp(
+        self, timestamp: datetime, convert_orm: Optional[bool] = True
+    ) -> Iterator[Product]:
         """
         Fetch all `Product`s for given `timestamp`.
 
         Args:
+            convert_orm (boolean): Convert the results to Product instances or not.
             timestamp (datetime): Defines which rows to fetch
 
         Yields:
@@ -306,16 +355,19 @@ class GreenDB(Connection):
             if timestamp is not None:
                 query = query.filter(self._database_class.timestamp == timestamp)
 
-            return (Product.from_orm(row) for row in query.all())
+            if convert_orm:
+                return (Product.model_validate(row) for row in query.all())
+            else:
+                return query.all()
 
-    def get_latest_products(self) -> Iterator[Product]:
+    def get_latest_products(self, convert_orm: Optional[bool] = True) -> Iterator[Product]:
         """
         Fetch all `Product`s for latest available `timestamp`.
 
         Yields:
             Iterator[Product]: `Iterator` of domain object representation
         """
-        return self.get_products_for_timestamp(self.get_latest_timestamp())
+        return self.get_products_for_timestamp(self.get_latest_timestamp(), convert_orm)
 
     def get_product_count_per_merchant_and_country(
         self, timestamp: Optional[datetime] = None
@@ -450,7 +502,8 @@ class GreenDB(Connection):
 
             query = (
                 query.filter(
-                    self._database_class.sustainability_labels.any(CertificateType.UNKNOWN.value)  # type: ignore[attr-defined] # noqa
+                    self._database_class.sustainability_labels.any(CertificateType.UNKNOWN.value)
+                    # type: ignore[attr-defined] # noqa
                 )
                 .group_by(self._database_class.timestamp)
                 .all()
@@ -677,7 +730,9 @@ class GreenDB(Connection):
                 func.count(self._database_class.id),
                 literal_column("'certificate:OTHER'"),
             )
-            .filter(self._database_class.sustainability_labels.any(CertificateType.OTHER.value))  # type: ignore[attr-defined] # noqa
+            .filter(
+                self._database_class.sustainability_labels.any(CertificateType.OTHER.value)
+            )  # type: ignore[attr-defined] # noqa
             .group_by(self._database_class.merchant, self._database_class.timestamp)
             .all()
         )
@@ -1065,4 +1120,105 @@ class GreenDB(Connection):
         """
         with self._session_factory() as db_session:
             query = db_session.query(GreenDBTable).filter(GreenDBTable.id.in_(ids))
-            return (Product.from_orm(row) for row in query.all())
+            return (Product.model_validate(row) for row in query.all())
+
+    def get_product_classifications_with_ids(
+        self, ids: list, ml_model_name: Optional[str] = PRODUCT_CLASSIFICATION_MODEL
+    ) -> Iterator[ProductClassification]:
+        """
+        Fetch `Product's Classifications` for given `ids` and 'model name'.
+
+        Args:
+            ml_model_name: the name of the ml model used for prediction.
+            ids (list): Row `ids` to fetch.
+
+        Returns:
+            Product: Domain object representation of table row
+        """
+        with self._session_factory() as db_session:
+            query = (
+                db_session.query(ProductClassificationTable)
+                .filter(ProductClassificationTable.id.in_(ids))
+                .filter(ProductClassificationTable.ml_model_name == ml_model_name)
+            )
+            return (ProductClassification.model_validate(row) for row in query.all())
+
+    def write_product_classification(self, product_classification: ProductClassification) -> None:
+        """
+        Writes a `ProductClassification domain_object` into the database.
+
+        Args:
+            product_classification: The domain object to write into the database.
+        """
+        with self._session_factory() as db_session:
+            db_object = ProductClassificationTable(**product_classification.model_dump())
+            db_session.add(db_object)
+            db_session.commit()
+
+    def write_product_classification_dataframe(self, data_frame: pd.DataFrame) -> None:
+        """
+        Writes a pd.Dataframe with multiple `ProductClassification domain_objects` into the
+        database.
+
+        Args:
+            data_frame: a pd.Dataframe with multiple `ProductClassification domain_objects`
+        """
+
+        with self._session_factory() as db_session:
+            df_len = len(data_frame)
+
+            for index, (df_index, product_classification) in enumerate(
+                data_frame.iterrows(), start=1
+            ):
+                try:
+                    db_object = ProductClassificationTable(
+                        **ProductClassification.model_validate(product_classification).model_dump()
+                    )
+                    db_session.add(db_object)
+
+                except Exception as e:
+                    logger.info(f"error for product with index: {df_index}")
+                    logger.info(f"{e}")
+
+                # commit every 1000 products and at the end
+                if (index % 1000 == 0) or (index == df_len):
+                    db_session.commit()
+                    logger.info(f"Committed {index} products")
+
+    def get_product_classification_thresholds(
+        self, timestamp: datetime, ml_model_name: str = PRODUCT_CLASSIFICATION_MODEL
+    ) -> Iterator[ProductClassificationThreshold]:
+        """
+        Fetch `Product's Classification Thresholds` for given timestamp and ml_model_name.
+
+        Args:
+            timestamp: the timestamp when thresholds were calculated.
+            ml_model_name: the name of the ml model for which the thresholds were calculated.
+
+        Returns:
+            Iterator[ProductClassificationThreshold]: `Iterator` of domain object representations.
+        """
+
+        with self._session_factory() as db_session:
+            query = (
+                db_session.query(ProductClassificationThresholdsTable)
+                .filter(ProductClassificationThresholdsTable.timestamp == timestamp)
+                .filter(ProductClassificationThresholdsTable.ml_model_name == ml_model_name)
+            )
+            return (ProductClassificationThreshold.model_validate(row) for row in query.all())
+
+    def get_latest_product_classification_thresholds(
+        self, ml_model_name: str = PRODUCT_CLASSIFICATION_MODEL
+    ) -> Iterator[ProductClassificationThreshold]:
+        """
+        Fetch latest `Product's Classification Thresholds` for given ml_model_name.
+
+        Args:
+            ml_model_name: the name of the ml model for which the thresholds were calculated.
+
+        Returns:
+            Iterator[ProductClassificationThreshold]: `Iterator` of domain object representations
+        """
+        return self.get_product_classification_thresholds(
+            self.get_latest_timestamp(ProductClassificationThresholdsTable), ml_model_name
+        )

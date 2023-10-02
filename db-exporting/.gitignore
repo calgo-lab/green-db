@@ -1,0 +1,17 @@
+# Editor
+.DS_Store
+.vscode
+
+
+# Python
+*.pyc
+.mypy_cache
+.ruff_cache
+__pycache__
+*.iml
+.[v]env
+.ipynb_checkpoints
+dist
+build
+project.egg-info
+.poetry-cache

@@ -1,9 +1,27 @@
 START_JOB_CHART=../infrastructure/charts/start-job
 
+## Define `sed` command depending on operating system.
+
+ifeq ($(shell uname), Darwin)
+	# macOS
+	SED_INPLACE=sed -i '' -e
+else
+	# otherwise assume GNU sed
+	SED_INPLACE=sed -i -e
+endif
+
 check-docker-prerequisites:
 ifndef DOCKER_IMAGE_NAME
 	$(error DOCKER_IMAGE_NAME is not set)
 endif
+
+patch-version: patch-chart
+
+patch-chart:
+    # we do not have a poetry env for start-job so we use the core env to retrieve NEW_VERSION
+	$(eval OLD_VERSION=$(shell helm show chart ${START_JOB_CHART} | grep '^appVersion:' | awk '{print $$2}'))
+	$(eval NEW_VERSION=$(shell cd ../core; poetry version -s))
+	${SED_INPLACE} 's/${OLD_VERSION}/${NEW_VERSION}/' ${START_JOB_CHART}/Chart.yaml
 
 build-docker: check-docker-prerequisites
 	docker build -t ${DOCKER_IMAGE_NAME}:test -f Dockerfile ..

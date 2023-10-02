@@ -1,16 +1,19 @@
+from message_queue import MessageQueue
 from redis import Redis
 from rq import Connection, Worker
 
-from core.constants import WORKER_QUEUE_EXTRACT
+from core.constants import ALL_SCRAPING_TABLE_NAMES, WORKER_QUEUE_EXTRACT
 from core.redis import REDIS_HOST, REDIS_PASSWORD, REDIS_PORT, REDIS_USER
-from database.connection import GreenDB
+from database.connection import GreenDB, Scraping
 
 # TODO: This is a false positive of mypy
 from extract import extract_product  # type: ignore
 
-from . import CONNECTION_FOR_TABLE
+CONNECTION_FOR_TABLE = {name: Scraping(name) for name in ALL_SCRAPING_TABLE_NAMES}
+
 
 green_db_connection = GreenDB()
+message_queue = MessageQueue()
 
 
 def start() -> None:
@@ -38,7 +41,8 @@ def extract_and_write_to_green_db(table_name: str, row_id: int) -> None:
     scraped_page = CONNECTION_FOR_TABLE[table_name].get_scraped_page(id=row_id)
 
     if product := extract_product(table_name=table_name, scraped_page=scraped_page):
-        green_db_connection.write(product)
+        row = green_db_connection.write(product)
+        message_queue.add_inference(row_id=row.id)
 
     else:
         # TODO: what to do when extract fails? -> "failed" queue?

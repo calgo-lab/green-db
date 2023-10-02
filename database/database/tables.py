@@ -1,10 +1,23 @@
 from datetime import datetime
 from typing import Dict, List, Type
 
-from sqlalchemy import ARRAY, BIGINT, INTEGER, JSON, NUMERIC, TEXT, TIMESTAMP, VARCHAR, Column
+from sqlalchemy import (
+    ARRAY,
+    BIGINT,
+    INTEGER,
+    JSON,
+    NUMERIC,
+    TEXT,
+    TIMESTAMP,
+    VARCHAR,
+    Column,
+    ForeignKey,
+)
 
 from core.constants import (
     TABLE_NAME_GREEN_DB,
+    TABLE_NAME_PRODUCT_CLASSIFICATION,
+    TABLE_NAME_PRODUCT_CLASSIFICATION_THRESHOLDS,
     TABLE_NAME_SCRAPING_AMAZON_DE,
     TABLE_NAME_SCRAPING_AMAZON_FR,
     TABLE_NAME_SCRAPING_AMAZON_GB,
@@ -270,3 +283,46 @@ class SustainabilityLabelsTable(GreenDBBaseTable, __TableMixin):
     social_social_rights = Column(INTEGER, nullable=True)
     social_company_responsibility = Column(INTEGER, nullable=True)
     social_conflict_minerals = Column(INTEGER, nullable=True)
+
+
+class ProductClassificationTable(GreenDBBaseTable, __TableMixin):
+    """
+    Defines the Product Classification columns.
+
+    Args:
+        GreenDBBaseTable ([type]): `sqlalchemy` base class for the GreenDB database
+        __TableMixin ([type]): Mixin that implements some convenience methods
+    """
+
+    __tablename__ = TABLE_NAME_PRODUCT_CLASSIFICATION
+
+    id = Column(
+        INTEGER,
+        ForeignKey(f"{TABLE_NAME_GREEN_DB}.id"),
+        nullable=False,
+        autoincrement=False,
+        primary_key=True,
+    )
+    ml_model_name = Column(TEXT, nullable=False, primary_key=True)
+    predicted_category = Column(TEXT, nullable=False)
+    confidence = Column(NUMERIC, nullable=False)
+    all_predicted_probabilities = Column(JSON, nullable=False)
+
+
+class ProductClassificationThresholdsTable(GreenDBBaseTable, __TableMixin):
+    """
+    Defines the Product Classification Thresholds columns.
+
+    Args:
+        GreenDBBaseTable ([type]): `sqlalchemy` base class for the GreenDB database
+        __TableMixin ([type]): Mixin that implements some convenience methods
+    """
+
+    __tablename__ = TABLE_NAME_PRODUCT_CLASSIFICATION_THRESHOLDS
+
+    ml_model_name = Column(TEXT, nullable=False, primary_key=True)
+    timestamp = Column(TIMESTAMP, nullable=False, primary_key=True)
+    source = Column(TEXT, nullable=False, primary_key=True)
+    merchant = Column(TEXT, nullable=False, primary_key=True)
+    predicted_category = Column(TEXT, nullable=False, primary_key=True)
+    threshold = Column(NUMERIC, nullable=False)

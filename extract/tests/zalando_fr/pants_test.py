@@ -48,11 +48,11 @@ def test_zalando_fr_basic() -> None:
         category=category,
         gender=gender,
         consumer_lifestage=consumer_lifestage,
-        name="Pantalon classique - marine",
-        description="Pantalon classique hessnatur Pantalon classique - marine marine/bleu: € 159,95 chez Zalando (au 2022-04-22). Livraison et retours gratuits* et service client gratuit au 0800 797 34.",  # noqa
+        name="AUS REINER  - Pantalon classique - marine",
+        description=" hessnatur AUS REINER  - Pantalon classique - marine pour 179,95 € (2023-09-05) Livraison gratuite sur la plupart des commandes*",  # noqa
         brand="hessnatur",
         sustainability_labels=[CertificateType.OTHER],  # type: ignore[attr-defined]
-        price=159.95,
+        price=179.95,
         currency=CurrencyType.EUR,
         image_urls=[
             "https://img01.ztat.net/article/spp-media-p1/06b423a888294f4dbbb8efa96e468457/5507c3b658844293828db28c2e30ba08.jpg?imwidth=103",  # noqa

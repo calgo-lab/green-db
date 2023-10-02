@@ -1,0 +1,89 @@
+# Default values for product-classification.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: ghcr.io/calgo-lab/green-db/product-classification
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag:
+
+env:
+  - name: POSTGRES_SCRAPING_HOST
+    value: postgresql
+  - name: POSTGRES_SCRAPING_PORT
+    value: "5432"
+  - name: POSTGRES_SCRAPING_USER
+    valueFrom:
+      secretKeyRef:
+        name: scraping-secret
+        key: postgres-user
+  - name: POSTGRES_SCRAPING_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: scraping-secret
+        key: postgres-password
+  - name: POSTGRES_GREEN_DB_HOST
+    value: postgresql
+  - name: POSTGRES_GREEN_DB_PORT
+    value: "5432"
+  - name: POSTGRES_GREEN_DB_USER
+    valueFrom:
+      secretKeyRef:
+        name: green-db-secret
+        key: postgres-user
+  - name: POSTGRES_GREEN_DB_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: green-db-secret
+        key: postgres-password
+
+volumes:
+  name: model-volume
+  claimName: product-classification-pvc
+
+imagePullSecrets:
+  - name:  private-registry-auth
+nameOverride: ""
+fullnameOverride: ""
+
+podAnnotations: {}
+
+podSecurityContext:
+  {}
+  # fsGroup: 2000
+
+securityContext:
+  {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  name: client-port
+  type: ClusterIP
+  port: 8080
+  targetPort: 8282
+
+resources:
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  limits:
+    cpu: 32
+    memory: 32Gi
+  requests:
+    cpu: 16
+    memory: 8Gi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
