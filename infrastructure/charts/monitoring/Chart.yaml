@@ -3,4 +3,4 @@ name: monitoring
 description: A Helm chart to deploy project dashboard in monitoring on Kubernetes
 type: application
 version: 0.2.14
-appVersion: "0.2.14"
+appVersion: "0.2.13"
