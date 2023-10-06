@@ -8,7 +8,7 @@ image:
   repository: ghcr.io/calgo-lab/green-db/monitoring
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: latest
+  tag: 
 
 env:
   - name: POSTGRES_SCRAPING_HOST
