@@ -1,6 +1,7 @@
 import json
 from enum import Enum
 from typing import Any, Type
+from urllib.parse import urlparse
 
 from core.domain import ConsumerLifestageType, GenderType, ProductCategory
 from scraping.spiders._base import SETTINGS
@@ -12,6 +13,13 @@ def enum_has_value(enum: Type[Enum], value: Any) -> bool:
     except ValueError:
         return False
     return True
+
+
+def assert_is_valid_url(url: str) -> None:
+    assert isinstance(url, str)
+    assert "," not in url
+    result = urlparse(url)
+    assert result.scheme is not None and result.netloc is not None
 
 
 def test_startjob() -> None:
@@ -27,9 +35,10 @@ def test_startjob() -> None:
             meta_data = setting.get("meta_data")
 
             if isinstance(start_urls, list):
-                assert all([isinstance(start_url, str) for start_url in start_urls])
+                for start_url in start_urls:
+                    assert_is_valid_url(start_url)
             else:
-                assert isinstance(start_urls, str)
+                assert_is_valid_url(start_urls)
 
             if isinstance(category, tuple):
                 assert len(category) == 2
