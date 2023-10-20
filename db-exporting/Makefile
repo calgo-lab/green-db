@@ -31,7 +31,7 @@ ifndef DOCKER_IMAGE_NAME
 endif
 
 build-docker: check-docker-prerequisites
-	docker build -t ${DOCKER_IMAGE_NAME}:test -f Dockerfile ..
+	docker build -t ${DOCKER_IMAGE_NAME}:test -f Dockerfile .
 
 push-docker: check-docker-prerequisites
 	docker push ${DOCKER_IMAGE_NAME}:test
