@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "product-classification"
-version = "0.2.14"
+version = "0.2.15"
 description = ""
 license = "Apache-2.0"
 authors = ["Alex Flick <alex.flick@gmx.de>"]
