@@ -1,27 +1,61 @@
+import datetime
 import json
 from logging import getLogger
 from typing import Iterator
 from urllib.parse import urlsplit
 
-from scrapy_splash import SplashJsonResponse, SplashRequest
+from scrapy.http.request import Request as ScrapyHttpRequest
+from scrapy.http.response import Response as ScrapyHttpResponse
+from scrapy_playwright.page import PageMethod
 
 from core.constants import TABLE_NAME_SCRAPING_ZALANDO_DE
 
-from ..splash import minimal_script
 from ._base import BaseSpider
 
 logger = getLogger(__name__)
+
+excluded_resource_types = ["image", "media"]
+excluded_file_extensions = [".jpg", ".png", ".svg", ".jpeg"]
+
+def block_requests(request):
+    return (request.resource_type in excluded_resource_types) or \
+        any(extension in request.url for extension in excluded_file_extensions)
 
 
 class ZalandoSpider(BaseSpider):
     name = TABLE_NAME_SCRAPING_ZALANDO_DE
     source, _ = name.rsplit("_", 1)
     allowed_domains = ["zalando.de"]
-    custom_settings = {"DOWNLOAD_DELAY": 2}
+
+    custom_settings = {
+        "DOWNLOAD_DELAY": 2,
+        "DOWNLOAD_HANDLERS": {
+            "http": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
+            "https": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
+        },
+        "TWISTED_REACTOR": "twisted.internet.asyncioreactor.AsyncioSelectorReactor",
+        "LOG_LEVEL": "INFO",
+        # Abort requests which are not of type document e.g. images, scripts, etc.
+        # all types: https://playwright.dev/python/docs/api/class-request#request-resource-type
+        # Routing disables http caching (e.g. scripts are not saved)
+        "PLAYWRIGHT_ABORT_REQUEST": block_requests,
+    }
+
+    _playwright_meta = {
+        "playwright": True,
+        "playwright_page_methods": [
+            PageMethod("evaluate", "window.scrollBy(0, document.body.scrollHeight)"),
+            PageMethod("wait_for_load_state", "domcontentloaded"),
+        ],
+    }
+
+    def __init__(self, timestamp: datetime.datetime, **kwargs):  # type: ignore
+        super().__init__(timestamp, **kwargs)
+        self.StartRequest = ScrapyHttpRequest
 
     def parse_SERP(
-        self, response: SplashJsonResponse, is_first_page: bool = True
-    ) -> Iterator[SplashRequest]:
+        self, response: ScrapyHttpResponse, is_first_page: bool = True
+    ) -> Iterator[ScrapyHttpRequest]:
         if original_URL := response.meta.get("original_URL"):
             if urlsplit(response.url).path.strip("/") != urlsplit(original_URL).path.strip("/"):
                 # If Zalando do not have results for a given filter,
@@ -57,18 +91,11 @@ class ZalandoSpider(BaseSpider):
         logger.info(f"Number of products per page {len(all_product_links)} to be scraped")
 
         for product_link in all_product_links:
-            yield SplashRequest(
+            yield ScrapyHttpRequest(
                 url=product_link,
                 callback=self.parse_PRODUCT,
-                endpoint="execute",
                 priority=2,
-                meta=self.create_default_request_meta(response),
-                args={  # passed to Splash HTTP API
-                    "wait": 5,
-                    "lua_source": minimal_script,
-                    "timeout": 180,
-                    "allowed_content_type": "text/html",
-                },
+                meta=self._playwright_meta | self.create_default_request_meta(response),
             )
 
         # Pagination: Parse next SERP 'recursively'
@@ -76,19 +103,12 @@ class ZalandoSpider(BaseSpider):
 
         if (is_first_page and pagination) or len(pagination) == 2:
             next_page = response.urljoin(pagination[-1])
-            yield SplashRequest(
+            yield ScrapyHttpRequest(
                 url=next_page,
                 callback=self.parse_SERP,
                 cb_kwargs=dict(is_first_page=False),
-                meta=self.create_default_request_meta(response, original_url=next_page),
-                endpoint="execute",
+                meta=response.meta,
                 priority=1,
-                args={  # passed to Splash HTTP API
-                    "wait": 5,
-                    "lua_source": minimal_script,
-                    "timeout": 180,
-                    "allowed_content_type": "text/html",
-                },
             )
         else:
             logger.info(f"No further pages: {response.url}")
