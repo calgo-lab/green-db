@@ -12,4 +12,5 @@ env:
   - name: TZ
     value: Europe/Berlin
 
-imagePullSecrets: []
+imagePullSecrets:
+  - name: private-registry-auth
