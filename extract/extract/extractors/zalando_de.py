@@ -259,10 +259,10 @@ def get_sustainability_strings(parsed_page: ParsedPage) -> Iterator[str]:
             continue
         for json_value in json_values:
             match json_value:
-                case {"sustainabilityClusterKind": "certificates", "attributes": [*attributes]}:
-                    for attribute in attributes:
-                        if "label" in attribute:
-                            yield urllib.parse.unquote(attribute["label"])
+                case {"certificationsCluster": {'certificates': [*certificates], **other}}:
+                    for certificate in certificates:
+                        if isinstance(certificate, dict) and "label" in certificate.keys():
+                            yield urllib.parse.unquote(certificate.get("label"))
                 case {**json_object}:
                     json_values += json_object.values()
                 case [*json_array]:
