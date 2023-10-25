@@ -17,6 +17,7 @@ logger = getLogger(__name__)
 excluded_resource_types = ["image", "media"]
 excluded_file_extensions = [".jpg", ".png", ".svg", ".jpeg"]
 
+
 def block_requests(request):
     return (request.resource_type in excluded_resource_types) or \
         any(extension in request.url for extension in excluded_file_extensions)
@@ -39,6 +40,14 @@ class ZalandoSpider(BaseSpider):
         # all types: https://playwright.dev/python/docs/api/class-request#request-resource-type
         # Routing disables http caching (e.g. scripts are not saved)
         "PLAYWRIGHT_ABORT_REQUEST": block_requests,
+        #https://github.com/scrapy-plugins/scrapy-playwright#proxy-support
+        "PLAYWRIGHT_LAUNCH_OPTIONS": {
+            "proxy": {
+                "server": "http://squid:3128",
+                #"username": "user",
+                #"password": "pass",
+            }
+        }
     }
 
     _playwright_meta = {
@@ -54,7 +63,7 @@ class ZalandoSpider(BaseSpider):
         self.StartRequest = ScrapyHttpRequest
 
     def parse_SERP(
-        self, response: ScrapyHttpResponse, is_first_page: bool = True
+            self, response: ScrapyHttpResponse, is_first_page: bool = True
     ) -> Iterator[ScrapyHttpRequest]:
         if original_URL := response.meta.get("original_URL"):
             if urlsplit(response.url).path.strip("/") != urlsplit(original_URL).path.strip("/"):
