@@ -264,7 +264,7 @@ class BaseSpider(Spider):
         else:
             meta_information = response.meta.get("request_meta_information")
 
-        meta_information["original_URL"] = response.meta.get("original_URL", None)
+        #meta_information["original_URL"] = response.meta.get("original_URL")
 
         scraped_page = ScrapedPage(
             timestamp=self.timestamp,

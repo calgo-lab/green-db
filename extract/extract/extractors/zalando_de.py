@@ -154,7 +154,8 @@ _LABEL_MAPPING = {
     "Zum Wohl der Tierwelt": CertificateType.OTHER,
     "bluesign® APPROVED materials": CertificateType.BLUESIGN_APPROVED,
     "Livaeco (Birla Cellulose™)": CertificateType.OTHER,
-    "Forest Stewardship Council® (FSC) approved materials": certificateType.FOREST_STEWARDSHIP_COUNCIL,
+    "LIVA REVIVA (Birla Cellulose™)": CertificateType.OTHER,
+    "Forest Stewardship Council® (FSC) approved materials": CertificateType.FOREST_STEWARDSHIP_COUNCIL,
 }
 
 
