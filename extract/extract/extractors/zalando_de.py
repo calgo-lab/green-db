@@ -63,6 +63,7 @@ _LABEL_MAPPING = {
     "GOTS - made with organic materials": CertificateType.GOTS_MADE_WITH_ORGANIC_MATERIALS,
     "GOTS - organic": CertificateType.GOTS_ORGANIC,
     "Global Organic Textile Standard (GOTS) - Made with Organic": CertificateType.GOTS_MADE_WITH_ORGANIC_MATERIALS,  # noqa
+    "Global Organic Textile Standard (GOTS) Organic": CertificateType.GOTS_ORGANIC,
     "Global Organic Textile Standard (GOTS) - Organic": CertificateType.GOTS_ORGANIC,
     "Global Organic Textile Standard (GOTS) - Organic In conversion": CertificateType.OTHER,
     "Global Recycle Standard": CertificateType.GLOBAL_RECYCLED_STANDARD,
@@ -152,6 +153,8 @@ _LABEL_MAPPING = {
     "ZQ Crtified Merino Wool": CertificateType.OTHER,
     "Zum Wohl der Tierwelt": CertificateType.OTHER,
     "bluesign® APPROVED materials": CertificateType.BLUESIGN_APPROVED,
+    "Livaeco (Birla Cellulose™)": CertificateType.OTHER,
+    "Forest Stewardship Council® (FSC) approved materials": certificateType.FOREST_STEWARDSHIP_COUNCIL,
 }
 
 
@@ -267,3 +270,11 @@ def get_sustainability_strings(parsed_page: ParsedPage) -> Iterator[str]:
                     json_values += json_object.values()
                 case [*json_array]:
                     json_values += json_array
+
+    # extraction from rendered page
+    if certificates := parsed_page.beautiful_soup.css.select('[data-testid="claim__verification"]'):
+        for certificate in certificates:
+            yield certificate.css.select("span")[-1].text.split("the brand declared use of ")[-1]
+
+            #if certificates := soup.css.select('[data-testid="claim__verification"]'):
+            #    [print(c.css.select("span")[-1].text) for c in certificates]
