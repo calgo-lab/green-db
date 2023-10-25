@@ -1,15 +1,25 @@
+import datetime
 from logging import getLogger
 from typing import Iterator
 
-from scrapy_splash import SplashJsonResponse, SplashRequest
+from scrapy.http.request import Request as ScrapyHttpRequest
+from scrapy.http.response import Response as ScrapyHttpResponse
+from scrapy_playwright.page import PageMethod
 
 from core.constants import TABLE_NAME_SCRAPING_AMAZON_DE
 
-from ..splash import minimal_script
 from ..utils import strip_url
 from ._base import BaseSpider
 
 logger = getLogger(__name__)
+
+excluded_resource_types = ["image", "media"]
+excluded_file_extensions = [".jpg", ".png", ".svg", ".jpeg"]
+
+
+def block_requests(request):
+    return (request.resource_type in excluded_resource_types) or \
+        any(extension in request.url for extension in excluded_file_extensions)
 
 
 class AmazonSpider(BaseSpider):
@@ -36,9 +46,39 @@ class AmazonSpider(BaseSpider):
             "Pragma": "no-cache",
             "Cache-Control": "no-cache",
         },
+        "DOWNLOAD_HANDLERS": {
+            "http": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
+            "https": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
+        },
+        "TWISTED_REACTOR": "twisted.internet.asyncioreactor.AsyncioSelectorReactor",
+        "LOG_LEVEL": "INFO",
+        # Abort requests which are not of type document e.g. images, scripts, etc.
+        # all types: https://playwright.dev/python/docs/api/class-request#request-resource-type
+        # Routing disables http caching (e.g. scripts are not saved)
+        "PLAYWRIGHT_ABORT_REQUEST": block_requests,
+        # https://github.com/scrapy-plugins/scrapy-playwright#proxy-support
+        "PLAYWRIGHT_LAUNCH_OPTIONS": {
+            "proxy": {
+                "server": "http://squid:3128",
+                # "username": "user",
+                # "password": "pass",
+            }
+        }
     }
 
-    def parse_SERP(self, response: SplashJsonResponse) -> Iterator[SplashRequest]:
+    _playwright_meta = {
+        "playwright": True,
+        "playwright_page_methods": [
+            PageMethod("evaluate", "window.scrollBy(0, document.body.scrollHeight)"),
+            PageMethod("wait_for_load_state", "domcontentloaded"),
+        ],
+    }
+
+    def __init__(self, timestamp: datetime.datetime, **kwargs):  # type: ignore
+        super().__init__(timestamp, **kwargs)
+        self.StartRequest = ScrapyHttpRequest
+
+    def parse_SERP(self, response: ScrapyHttpResponse) -> Iterator[ScrapyHttpRequest]:
         """
         The `Scrapy` framework executes this method.
 
@@ -75,7 +115,7 @@ class AmazonSpider(BaseSpider):
 
         for url, price in zip(urls, prices):
             if "refinements=p_n_cpf_eligible" in url:
-                yield SplashRequest(
+                yield ScrapyHttpRequest(
                     url=strip_url(response.urljoin(url)),
                     callback=self.parse_PRODUCT,
                     meta={
@@ -84,15 +124,8 @@ class AmazonSpider(BaseSpider):
                         },
                         "dont_merge_cookies": True,
                     }
-                    | self.create_default_request_meta(response),
-                    endpoint="execute",
+                    | self._playwright_meta | self.create_default_request_meta(response),
                     priority=1,  # higher priority than SERP
-                    args={  # passed to Splash HTTP API
-                        "wait": self.request_timeout,
-                        "lua_source": minimal_script,
-                        "timeout": 180,
-                        "allowed_content_type": "text/html",
-                    },
                 )
 
         # Pagination
@@ -103,18 +136,11 @@ class AmazonSpider(BaseSpider):
 
             logger.info(f"Next page found, number {page_number} at {next_page}")
 
-            yield SplashRequest(
+            yield ScrapyHttpRequest(
                 url=next_page,
                 callback=self.parse_SERP,
                 meta=self.create_default_request_meta(response, original_url=next_page)
                 | {"dont_merge_cookies": True},
-                endpoint="execute",
-                args={  # passed to Splash HTTP API
-                    "wait": self.request_timeout,
-                    "lua_source": minimal_script,
-                    "timeout": 180,
-                    "allowed_content_type": "text/html",
-                },
             )
         else:
             logger.info(f"No further pages found for {response.url}")
