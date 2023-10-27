@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: squid-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  #storageClassName: shared
+  resources:
+    requests:
+      storage: 500M
