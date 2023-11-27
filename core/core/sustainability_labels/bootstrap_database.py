@@ -10,7 +10,7 @@ certificates = load_and_get_sustainability_labels()
 def _get_localized_certificate_attribute(
     certificate_information: Dict[str, Dict[str, Any]],
     attribute: str,
-    language_order: List[str] = ["de", "en", "fr"],
+    language_order: List[str] = ["en", "de", "fr"],
 ) -> str:
     """
     Helper function to retrieve an `attribute` from `certificate_information`
@@ -27,7 +27,7 @@ def _get_localized_certificate_attribute(
        str: of the corresponding attribute in one language.
     """
     for language in language_order:
-        if language in certificate_information["languages"].keys():
+        if language in certificate_information["languages"]:
             return certificate_information["languages"][language][attribute]
     return ""
 
@@ -58,5 +58,5 @@ sustainability_labels = [
         ),
         social_conflict_minerals=certificate_information.get("social_conflict_minerals", None),
     )
-    for certificate_id, certificate_information in load_and_get_sustainability_labels().items()
+    for certificate_id, certificate_information in certificates.items()
 ]
