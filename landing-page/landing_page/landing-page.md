@@ -49,6 +49,7 @@ GreenDB is a publicly available database of sustainable products, scraped from E
 ::: div.row div.ff
 * [Product search demo](https://search.demo.calgo-lab.de/){.link}
 * [Automated extraction of product information](https://product-classification.demo.calgo-lab.de/){.link}
+* [Monitoring](https://monitoring.demo.calgo-lab.de/){.link}
 
 :: section#publications div.container
 
